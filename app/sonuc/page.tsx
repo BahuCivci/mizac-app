@@ -7,6 +7,56 @@ import { Suspense, useState } from 'react';
 import { useLang } from '@/lib/lang-context';
 import { AdUnit } from '@/components/ad-unit';
 
+const uyumHaritasi: Record<MizacTip, { tip: MizacTip; puan: number }[]> = {
+  safravi: [
+    { tip: 'balgami', puan: 92 },
+    { tip: 'demevi', puan: 68 },
+    { tip: 'safravi', puan: 55 },
+    { tip: 'sevdavi', puan: 38 },
+  ],
+  demevi: [
+    { tip: 'sevdavi', puan: 90 },
+    { tip: 'safravi', puan: 72 },
+    { tip: 'demevi', puan: 65 },
+    { tip: 'balgami', puan: 48 },
+  ],
+  balgami: [
+    { tip: 'safravi', puan: 92 },
+    { tip: 'sevdavi', puan: 76 },
+    { tip: 'balgami', puan: 68 },
+    { tip: 'demevi', puan: 50 },
+  ],
+  sevdavi: [
+    { tip: 'demevi', puan: 90 },
+    { tip: 'balgami', puan: 74 },
+    { tip: 'sevdavi', puan: 62 },
+    { tip: 'safravi', puan: 42 },
+  ],
+};
+
+const unluler: Record<MizacTip, { isim: string; aciklama: string; aciklamaEn: string }[]> = {
+  safravi: [
+    { isim: 'İbn-i Sina', aciklama: 'Tıbbın babası, kararlı ve üretken', aciklamaEn: 'Father of medicine, decisive and productive' },
+    { isim: 'Hz. Ömer', aciklama: 'Adaletli ve güçlü lider', aciklamaEn: 'Just and powerful leader' },
+    { isim: 'Steve Jobs', aciklama: 'Vizyoner girişimci, mükemmeliyetçi', aciklamaEn: 'Visionary entrepreneur, perfectionist' },
+  ],
+  demevi: [
+    { isim: 'Hz. Mevlânâ', aciklama: 'Neşeli, sevgi dolu, ilham veren', aciklamaEn: 'Joyful, loving, inspiring' },
+    { isim: 'Leonardo da Vinci', aciklama: 'Yaratıcı dahi, çok yönlü sanatçı', aciklamaEn: 'Creative genius, versatile artist' },
+    { isim: 'Mozart', aciklama: 'Coşkulu ve üretken müzisyen', aciklamaEn: 'Enthusiastic and prolific musician' },
+  ],
+  balgami: [
+    { isim: 'Hz. İbrahim (a.s.)', aciklama: 'Sabırlı, tevekkül ehli, sakin', aciklamaEn: 'Patient, reliant on God, calm' },
+    { isim: 'Gandhi', aciklama: 'Barışçıl, sabırlı, uzlaşmacı', aciklamaEn: 'Peaceful, patient, conciliatory' },
+    { isim: 'Albert Einstein', aciklama: 'Derin düşünür, sakin ve meraklı', aciklamaEn: 'Deep thinker, calm and curious' },
+  ],
+  sevdavi: [
+    { isim: 'Beethoven', aciklama: 'Derin duygusal müzik dehası', aciklamaEn: 'Deep emotional musical genius' },
+    { isim: 'Hz. Adem (a.s.)', aciklama: 'Topraktan yaratılmış, yeryüzünün halifesi', aciklamaEn: 'Created from earth, vicegerent of the world' },
+    { isim: 'Kafka', aciklama: 'Derin düşünceli, melankolik yazar', aciklamaEn: 'Deep-thinking, melancholic writer' },
+  ],
+};
+
 function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof mizacProfiller)[MizacTip]; tr: boolean }) {
   const [copied, setCopied] = useState(false);
 
@@ -204,6 +254,63 @@ function SonucIcerik() {
         <div className="rounded-2xl p-6 mb-8" style={{ background: 'var(--cream)' }}>
           <h3 className="font-bold mb-2" style={{ color: 'var(--earth)' }}>{tr ? '💛 İlişkiler' : '💛 Relationships'}</h3>
           <p className="text-sm leading-relaxed opacity-80">{tr ? profil.iliski : profil.iliskiEn}</p>
+        </div>
+
+        {/* Uyumlu Mizaçlar */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h2 className="font-bold mb-4" style={{ color: 'var(--foreground)' }}>
+            {tr ? '💞 Mizaç Uyumu' : '💞 Temperament Compatibility'}
+          </h2>
+          <p className="text-sm opacity-60 mb-4">
+            {tr
+              ? 'Zıt mizaçlar birbirini dengeler; benzer mizaçlar daha iyi anlaşır.'
+              : 'Opposite temperaments balance each other; similar ones understand better.'}
+          </p>
+          <div className="space-y-3">
+            {uyumHaritasi[tip].map(({ tip: uyumTip, puan }) => {
+              const p = mizacProfiller[uyumTip];
+              return (
+                <div key={uyumTip} className="flex items-center gap-3">
+                  <span className="text-xl w-8 text-center">{p.elementSembol}</span>
+                  <div className="flex-1">
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="font-medium">{tr ? p.isim : p.isimEn}</span>
+                      <span className="opacity-60">%{puan}</span>
+                    </div>
+                    <div className="h-2 rounded-full overflow-hidden" style={{ background: '#e5e7eb' }}>
+                      <div
+                        className="h-full rounded-full"
+                        style={{ width: `${puan}%`, background: p.renk }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Ünlü Örnekler */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h2 className="font-bold mb-4" style={{ color: 'var(--foreground)' }}>
+            {tr ? '🌟 Sizinle Aynı Mizaçta Ünlüler' : '🌟 Famous People With Your Temperament'}
+          </h2>
+          <div className="space-y-3">
+            {unluler[tip].map((kisi) => (
+              <div key={kisi.isim} className="flex items-center gap-3 rounded-xl p-3 bg-white">
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                  style={{ background: profil.renk }}
+                >
+                  {kisi.isim[0]}
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{kisi.isim}</p>
+                  <p className="text-xs opacity-60">{tr ? kisi.aciklama : kisi.aciklamaEn}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Reklam */}

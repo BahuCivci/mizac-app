@@ -32,6 +32,13 @@ export function Header() {
           {tr ? '4 Mizaç' : '4 Types'}
         </Link>
         <Link
+          href="/hakkinda"
+          className="hidden sm:block text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
+          style={{ color: 'var(--foreground)' }}
+        >
+          {tr ? 'Hakkında' : 'About'}
+        </Link>
+        <Link
           href="/test"
           className="hidden sm:flex items-center gap-1 px-4 py-1.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105"
           style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}

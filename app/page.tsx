@@ -159,8 +159,19 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-8 text-center opacity-50 text-sm" style={{ borderColor: 'var(--gold-light)' }}>
-        <p>Mizaç · {tr ? 'İbn-i Sina Geleneğine Dayalı Mizaç Rehberi' : 'Temperament Guide Based on Ibn Sina\'s Tradition'}</p>
+      <footer className="border-t py-8 text-center text-sm" style={{ borderColor: 'var(--gold-light)' }}>
+        <div className="flex justify-center gap-6 mb-3">
+          <Link href="/mizaclar" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? '4 Mizaç' : '4 Types'}
+          </Link>
+          <Link href="/test" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Test' : 'Test'}
+          </Link>
+          <Link href="/hakkinda" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Hakkında' : 'About'}
+          </Link>
+        </div>
+        <p className="opacity-40">Mizaç · {tr ? 'İbn-i Sina Geleneğine Dayalı Mizaç Rehberi' : 'Temperament Guide Based on Ibn Sina\'s Tradition'}</p>
       </footer>
     </main>
   );

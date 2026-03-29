@@ -139,7 +139,7 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
         </div>
 
         {/* Kariyer */}
-        <div className="rounded-2xl p-6 mb-8" style={{ background: 'var(--cream)' }}>
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
           <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
             {tr ? '💼 Kariyer ve Meslek' : '💼 Career & Profession'}
           </h3>
@@ -154,6 +154,121 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
                 style={{ background: profil.renk + 'cc' }}
               >
                 {m}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Fiziksel Özellikler */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '🪞 Fiziksel Özellikler' : '🪞 Physical Characteristics'}
+          </h3>
+          <ul className="space-y-2">
+            {(tr ? profil.fiziksel : profil.fizikselEn).map((f) => (
+              <li key={f} className="text-sm flex gap-2 opacity-80">
+                <span style={{ color: profil.renk }}>·</span> {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Yasak ve Detoks */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="rounded-2xl p-6" style={{ background: '#fef9f0' }}>
+            <h3 className="font-bold mb-3" style={{ color: '#b45309' }}>
+              {tr ? '🚫 Kaçınılacak Gıdalar' : '🚫 Foods to Avoid'}
+            </h3>
+            <ul className="space-y-1">
+              {(tr ? profil.yasak : profil.yasakEn).map((y) => (
+                <li key={y} className="text-sm opacity-80">· {y}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="rounded-2xl p-6" style={{ background: '#f0fdf4' }}>
+            <h3 className="font-bold mb-3 text-green-700">
+              {tr ? '🌿 Detoks Kürleri' : '🌿 Detox Cures'}
+            </h3>
+            <ul className="space-y-1">
+              {(tr ? profil.detoks : profil.detoksEn).map((d) => (
+                <li key={d} className="text-sm opacity-80">· {d}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Sevgi Dili + Halife */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+          <div className="rounded-2xl p-6" style={{ background: 'var(--cream)' }}>
+            <h3 className="font-bold mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? '💝 Sevgi Dili' : '💝 Love Language'}
+            </h3>
+            <p className="text-sm leading-relaxed opacity-80">
+              {tr ? profil.sevgiDili : profil.sevgiDiliEn}
+            </p>
+          </div>
+          <div className="rounded-2xl p-6" style={{ background: 'var(--cream)' }}>
+            <h3 className="font-bold mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? '🌙 Halife Örneği' : '🌙 Companion Example'}
+            </h3>
+            <p className="text-sm leading-relaxed opacity-80">
+              {tr ? profil.halife : profil.halifeEn}
+            </p>
+          </div>
+        </div>
+
+        {/* Renk Önerileri */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-4" style={{ color: 'var(--earth)' }}>
+            {tr ? '🎨 Renk Önerileri' : '🎨 Color Recommendations'}
+          </h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-xs font-semibold text-green-700 mb-2 uppercase tracking-wider">
+                {tr ? '✓ Önerilen' : '✓ Recommended'}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {(tr ? profil.renkOnerilir : profil.renkOnerilirEn).map((r) => (
+                  <span key={r} className="text-xs px-2 py-1 rounded-full bg-white border border-green-200 text-green-800">{r}</span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-red-600 mb-2 uppercase tracking-wider">
+                {tr ? '✗ Önerilmeyen' : '✗ Not Recommended'}
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {(tr ? profil.renkOnerilmez : profil.renkOnerilmezEn).map((r) => (
+                  <span key={r} className="text-xs px-2 py-1 rounded-full bg-white border border-red-200 text-red-800">{r}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Mevsim/Vakit + Esmalar */}
+        <div className="rounded-2xl p-6 mb-8" style={{ background: 'var(--cream)' }}>
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <p className="text-xs font-semibold opacity-50 mb-1 uppercase tracking-wider">{tr ? 'Dikkat Edilecek Mevsim' : 'Season to Watch'}</p>
+              <p className="text-sm font-medium" style={{ color: profil.renk }}>{tr ? profil.mevsim : profil.mevsimEn}</p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold opacity-50 mb-1 uppercase tracking-wider">{tr ? 'Güçlü Vakit' : 'Peak Time'}</p>
+              <p className="text-sm font-medium" style={{ color: profil.renk }}>{tr ? profil.vakit : profil.vakitEn}</p>
+            </div>
+          </div>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '📿 Esmâü\'l-Hüsnâ Önerileri' : '📿 Recommended Divine Names'}
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {profil.esmalar.map((e) => (
+              <span
+                key={e}
+                className="text-sm px-3 py-1 rounded-full font-medium"
+                style={{ background: profil.renkAcik, color: profil.renk }}
+              >
+                {e}
               </span>
             ))}
           </div>

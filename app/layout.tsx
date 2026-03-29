@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { LangProvider } from "@/lib/lang-context";
-import { LangToggle } from "@/components/lang-toggle";
+import { Header } from "@/components/header";
 
 // AdSense client ID — ca-pub-XXXXXXXXXXXXXXXX ile değiştirin
 const ADSENSE_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX';
@@ -78,7 +78,7 @@ export default function RootLayout({
             strategy="afterInteractive"
           />
           <LangProvider>
-            <LangToggle />
+            <Header />
             {children}
           </LangProvider>
         </body>

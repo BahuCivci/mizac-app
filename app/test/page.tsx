@@ -57,7 +57,7 @@ export default function TestPage() {
       {/* Progress */}
       <div className="w-full max-w-xl mb-8">
         <div className="flex justify-between text-sm opacity-50 mb-2">
-          <span>Soru {aktifSoru + 1} / {sorular.length}</span>
+          <span>{lang === 'tr' ? 'Soru' : 'Question'} {aktifSoru + 1} / {sorular.length}</span>
           <span>%{Math.round(ilerleme)}</span>
         </div>
         <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--gold-light)' }}>

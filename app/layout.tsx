@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = 'https://mizac.app'; // domain değişince buraya yaz
+const siteUrl = 'https://mizac-app.vercel.app';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { mizacProfiller } from '@/lib/mizac-data';
 
-const siteUrl = 'https://mizac.app';
+const siteUrl = 'https://mizac-app.vercel.app';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const mizacPages = Object.keys(mizacProfiller).map((id) => ({

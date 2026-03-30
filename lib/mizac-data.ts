@@ -47,6 +47,18 @@ export interface MizacProfil {
   vakitEn: string;
   esmalar: string[];
   emoji: string;
+  kariyer: string[];
+  kariyerEn: string[];
+  hastaliklar: string[];
+  hastaliklarEn: string[];
+  cocukOzellikleri: string[];
+  cocukOzellikleriEn: string[];
+  duygular: string[];
+  duygularEn: string[];
+  yasDonem: string;
+  yasDonemEn: string;
+  agriTipi: string;
+  agriTipiEn: string;
 }
 
 export const mizacProfiller: Record<MizacTip, MizacProfil> = {
@@ -97,6 +109,18 @@ export const mizacProfiller: Record<MizacTip, MizacProfil> = {
     vakitEn: 'Late morning to noon',
     esmalar: ['Ya Hâlim', 'Ya Selim', 'Ya Gafûr', 'Ya Sabûr', 'Ya Hâkem', 'Ya Selam', 'Ya Mâlikel Mülk', 'Ya Muksit'],
     emoji: '🔥',
+    kariyer: ['İç mimar / dekoratör — görsel zekâları çok iyidir, ortamı kişiselleştirmeyi ve değiştirmeyi severler', 'Ticaret / girişimcilik — para hareketliliği çok olduğu için ticarette başarılıdırlar', 'Komutanlık / koçluk — disiplinli ve net duruşlarıyla liderlik rollerine uygundurlar', 'Avukatlık — inandıkları davayı sonuna kadar savunabilirler', 'Uygun olmayan: Masa başı ve hareketsiz işler; tatlı dille ikna gerektiren meslekler'],
+    kariyerEn: ['Interior designer / decorator — strong visual intelligence, love personalizing spaces', 'Trade / entrepreneurship — successful in business due to high energy and initiative', 'Command / coaching — disciplined and clear-principled, suited to leadership roles', 'Law — can defend what they believe in to the end', 'Not suited: Desk-bound sedentary jobs; roles requiring constant gentle persuasion'],
+    hastaliklar: ['Safra kesesi hastalıkları (taş, çamurlaşma) — en belirgin rahatsızlıktır', 'Mide hastalıkları — reflü, gastrit, mide yanması ve kramplar', 'Cilt rahatsızlıkları — sivilce, ani kızarıklıklar, saç derisi kaşıntısı', 'Alerjik rahatsızlıklar ve bahar alerjisi', 'Karaciğer ve safra yolu hastalıkları', 'Ayakta yanma hissi'],
+    hastaliklarEn: ['Gallbladder diseases (stones, sludge) — most prominent condition', 'Stomach diseases — reflux, gastritis, heartburn and cramps', 'Skin issues — acne, sudden redness, scalp itching', 'Allergic conditions and spring allergies', 'Liver and bile duct diseases', 'Burning sensation in feet'],
+    cocukOzellikleri: ['Bebek: Geceleri pek uyumayan, çığlık atarak ağlayan, kucak isteyen ama hareketten duramayan bebekler. Dış seslere hassastırlar, her seste irkilirler', 'Çocuk: Zayıf yapılı ama güçlü, çok hareketli ve inatçı; aynı zamanda merhametli. Yemekte seçici ve değişkendir', 'Okul: Öğretmenin en çok şikâyet ettiği, çok hareketli çocuk. Görsel dersler ve sporla öne çıkar. Oturabilmesi sağlandığında başarı kendiliğinden gelir', 'Uyarı: Safrasını bilmeden artırırsanız hiperaktif olur'],
+    cocukOzellikleriEn: ['Baby: Rarely sleeps at night, cries loudly, wants to be held but can\'t stay still. Startles at every sound', 'Child: Thin but strong, very energetic and stubborn; yet compassionate. Picky and changeable about food', 'School: The child teachers complain about most — very active. Excels in visual subjects and sports. Success comes naturally when sitting is managed', 'Warning: Increasing their bile unknowingly causes hyperactivity'],
+    duygular: ['Öfke ve gerilim — en bilinen duygu özelliğidir; çabuk tutuşur ama çabuk söner', 'Merhamet — öfkeli görünseler de merhametli yapılarını korurlar', 'Hırs ve rekabetçilik — güçlü bir rekabet duygusu taşırlar', 'Öfkeli bir yaşam safrayı artırır; kısır döngü oluşabilir'],
+    duygularEn: ['Anger and tension — most known emotional trait; flares quickly but passes fast', 'Compassion — despite appearing angry, they retain their compassionate nature', 'Ambition and competitiveness — carry a strong competitive drive', 'An angry lifestyle increases bile; a vicious cycle can form'],
+    yasDonem: 'Gençlik (12–40 yaş) — safravî mizaçla ilişkilendirilir; vücuttaki nem azalır, kuruma başlar, büyüme enine gerçekleşir',
+    yasDonemEn: 'Youth (12–40 years) — associated with choleric temperament; body moisture decreases, drying begins, growth becomes lateral',
+    agriTipi: 'Yanma — ağrı "cayır cayır yanıyor" şeklinde hissedilir',
+    agriTipiEn: 'Burning — pain felt as a searing, fiery sensation',
   },
   demevi: {
     id: 'demevi',
@@ -145,6 +169,18 @@ export const mizacProfiller: Record<MizacTip, MizacProfil> = {
     vakitEn: 'Morning (the time they struggle most)',
     esmalar: ['Ya Hasib', 'Ya Tevvâb', 'Ya Afüvv', 'Ya Muksid', 'Ya Hâdi', 'Ya Hafîz', 'Ya Semî', 'Er Raşid'],
     emoji: '💨',
+    kariyer: ['Öğretmenlik / rehber öğretmenlik — pozitif enerji ve sıcakkanlılıkla öğrencileri çeker', 'Tiyatrocu / sanatçı — rol yapma ve taklit etme yetenekleri çok gelişmiştir', 'Turist rehberi — iletişim ve konuşma becerileri çok güçlüdür', 'Emlâkçı / pazarlama — ikna kabiliyetleri yüksek olduğu için ürün ve hizmet satışında başarılıdırlar', 'Vaizlik / liderlik — bütüncül bakış açısı ve yorumlama yeteneği gerektiren alanlarda öne çıkarlar', 'Uygun olmayan: Matematik ağırlıklı ve çok fazla dikkat gerektiren meslekler'],
+    kariyerEn: ['Teaching / guidance counseling — draws students with positive energy and warmth', 'Actor / artist — highly developed talent for acting and imitation', 'Tour guide — very strong communication and speaking skills', 'Real estate / marketing — high persuasion ability leads to sales success', 'Preaching / leadership — excels in fields requiring holistic perspective and interpretation', 'Not suited: Math-heavy jobs or those requiring sustained intense focus'],
+    hastaliklar: ['Karaciğer ve kalp hastalıkları — kanla ilgili hastalıklar ağırlıklıdır', 'Çarpıntı — kalpleri ara ara aniden hızlanır, farkında olmayabilirler', 'Baş ağrısı ve migren — kan fazlalığı veya kirli kanın bir bölgede toplanması nedeniyle', 'Akne ve çıban — daha çok bacak ve kalça bölgelerinde görülür', 'Âdet problemleri, miyom ve hormon bozukluğu', 'Tansiyon rahatsızlıkları'],
+    hastaliklarEn: ['Liver and heart diseases — blood-related conditions are predominant', 'Palpitations — heart suddenly speeds up occasionally, may go unnoticed', 'Headache and migraine — due to excess blood or dirty blood pooling', 'Acne and boils — mostly on legs and hips', 'Menstrual problems, fibroids and hormonal imbalances', 'Blood pressure disorders'],
+    cocukOzellikleri: ['Bebek: Güleryüzlü, kendini sevdiren bebeklerdir. Saçları kıvır kıvır olmaya meyillidir. Herkese el sallayan, arkadaş canlısı; konuşmayı çabuk öğrenir', 'Çocuk: Sevecen, hareketli ve oyun seven. Aynanın karşısında şarkı söyler, taklit yapar. Süslenmeyi ve beğenilmeyi sever', 'Okul: Sınıfın popüleri; öğretmenlerin adını ezbere bildiği çocuk. Sözel derslerde başarılı, matematikten sıkıntı yaşar. 23 Nisan törenlerinde hep ön sırada', 'Uyarı: Demini bilmeden artırırsanız yasaklara meyli olur, merakının esiri olur'],
+    cocukOzellikleriEn: ['Baby: Smiley, lovable babies. Hair tends to curl. Waves at everyone, friendly; learns to talk quickly', 'Child: Affectionate, active, loves to play. Sings and imitates in front of mirrors. Loves dressing up and being admired', 'School: The class star; teacher knows their name by heart. Excels in verbal subjects, struggles with math. Always at the front in school ceremonies', 'Warning: Increasing their blood unknowingly makes them prone to rule-breaking and impulsiveness'],
+    duygular: ['Aşık olmak, arkadaşlık ve cömertlik — en bilinen duygu özelliğidir', 'Neşe ve maneviyat duygusu çok güçlüdür', 'Aşık olduğunda kanı artar; demevi neşesi yerine gelir ve insanlarla görüşmek ister', 'Sabırsızlık ve heyecan duyguları da ön plandadır'],
+    duygularEn: ['Being in love, friendship and generosity — most known emotional traits', 'Joy and spiritual feelings are very strong', 'When in love, blood increases; sanguine joy returns and they want to be with people', 'Impatience and excitement are also prominent feelings'],
+    yasDonem: 'Çocukluk (3–12 yaş) — demevî mizaçla ilişkilendirilir; vücut çok kan üretir, bu dönemdeki kaliteli kan ömür boyu kullanılır',
+    yasDonemEn: 'Childhood (3–12 years) — associated with sanguine temperament; body produces much blood, quality blood from this period lasts a lifetime',
+    agriTipi: 'Zonklama — ağrı zonklayarak hissedilir',
+    agriTipiEn: 'Throbbing — pain felt as a pulsating throb',
   },
   balgami: {
     id: 'balgami',
@@ -193,6 +229,18 @@ export const mizacProfiller: Record<MizacTip, MizacProfil> = {
     vakitEn: 'Night',
     esmalar: ['Ya Vedûd', 'Ya Kaviyy', 'Ya Metîn', 'Ya Muhyî', 'Ya Şekûr', 'Ya Bâri', 'Ya Bâsid'],
     emoji: '💧',
+    kariyer: ['Doktor / cerrah — çok zeki olduklarından tıp alanında kendilerini iyi geliştirirler', 'Mühendislik (makine, matematik) — hareketsiz ve zekâ gerektiren mühendislik dallarında başarılıdırlar', 'Muhasebe / mali müşavir / bankacı — kafaları hızlı çalıştığı için sayısal ve dikkat gerektiren işlerde öne çıkarlar', 'Masa başında zekâ ve dikkat gerektiren her meslek uygundur', 'Uygun olmayan: Bedenen çok efor gerektiren işler (garsonluk, inşaat işçiliği, futbol hakemliği vb.)'],
+    kariyerEn: ['Doctor / surgeon — highly intelligent, develop themselves well in medicine', 'Engineering (mechanical, math) — successful in engineering fields not requiring heavy physical work', 'Accounting / financial advisor / banking — quick thinkers who excel in numerical and attention-demanding roles', 'Any desk job requiring intelligence and focus is suitable', 'Not suited: Physically demanding jobs (waitstaff, construction, sports referee, etc.)'],
+    hastaliklar: ['Astım, bronşit, zatürre ve nefes darlığı — mukus akciğerleri etkileyerek solunum yolu hastalıklarına yol açar', 'Sinüzit ve kronik geniz akıntısı', 'Eklem ağrıları ve romatizma', 'Obezite ve kilo alma eğilimi', 'Ağız kokusu ve kabızlık — bağırsak atıklarından kaynaklanır', 'Göz kuruluğu, ter kokusu ve demir eksikliği'],
+    hastaliklarEn: ['Asthma, bronchitis, pneumonia and shortness of breath — mucus affects the lungs causing respiratory conditions', 'Sinusitis and chronic nasal discharge', 'Joint pain and rheumatism', 'Obesity and tendency to gain weight', 'Bad breath and constipation — from intestinal waste buildup', 'Eye dryness, body odor and iron deficiency'],
+    cocukOzellikleri: ['Bebek: Çok ağlamayan, uslu bebeklerdir. Tombul yapılıdır; bir yere oturtulunca beş dakika sonra aynı yerlerinde oyuncaklarıyla oynarlar', 'Çocuk: Kilolu, sakin, kavga etmeyen çocuklar. Çok zekidirler; bir hareketi bir kere görseler yaparlar. İçe kapanık ve alıngan ama temkinli', 'Okul: İki tip görülür — arka sırada kendini görünmez yapan ya da öne oturup görünmek istemeyen ama sayısal derslerde parlayan. Matematikten 99 alıp ağlayan çocuklar genelde bu gruptandır', 'Uyarı: Balgamını bilmeden artırırsanız tembel ve içine kapanık olur'],
+    cocukOzellikleriEn: ['Baby: Rarely cries, well-behaved babies. Chubby build; when placed somewhere, five minutes later still found in the same spot playing with toys', 'Child: Chubby, calm, non-confrontational. Very intelligent; can repeat a movement after seeing it once. Introverted and sensitive but cautious', 'School: Two types — one makes themselves invisible in the back row, the other sits in front but doesn\'t want attention yet excels in math. Kids who cry over getting 99% in math are usually this type', 'Warning: Increasing their phlegm unknowingly makes them lazy and withdrawn'],
+    duygular: ['Üzüntü ve geçmiş düşünceler — en bilinen duygu özelliğidir; kırgınlıklarını içine atar', 'Tedirginlik ve endişe duyguları ağır basar', 'Kendini ifade etmede güçlük ve utangaçlık; boğaz bölgesinden en çok sorun yaşarlar', 'Üzüldüklerinde balgamı artar; üzüntüyle hastalık arasında güçlü bir bağ vardır'],
+    duygularEn: ['Sadness and dwelling on the past — most known emotional trait; swallows grievances', 'Anxiety and worry feelings dominate', 'Difficulty expressing themselves and shyness; most issues arise around the throat area', 'When sad, phlegm increases; there is a strong link between sadness and illness'],
+    yasDonem: 'Bebeklik (0–3 yaş) — balgamî mizaçla ilişkilendirilir; tüm bebekler bu dönemde balgami özellikler taşır, anne karnındaki su ortamından gelirler',
+    yasDonemEn: 'Infancy (0–3 years) — associated with phlegmatic temperament; all babies carry phlegmatic traits in this period, coming from the watery womb environment',
+    agriTipi: 'Tutulma ve kilitlenme — ağrı "tutuluyor, kilitlenmiş" şeklinde hissedilir',
+    agriTipiEn: 'Stiffness and locking — pain felt as a gripping, locked-up sensation',
   },
   sevdavi: {
     id: 'sevdavi',
@@ -241,6 +289,18 @@ export const mizacProfiller: Record<MizacTip, MizacProfil> = {
     vakitEn: 'Late afternoon to evening',
     esmalar: ['Ya Vedûd', 'Ya Kaviyy', 'Ya Metîn', 'Ya Muhyî', 'Ya Şekûr', 'Ya Bâri', 'Ya Bâsid'],
     emoji: '🌿',
+    kariyer: ['Arşiv görevlisi / hafız — hafızaları çok kuvvetlidir, uzun süre hatırlayabilirler', 'Askerlik — verilen görevi dört dörtlük yerine getirirler', 'Muhasebe — dikkat ve matematik gerektiren işlerde başarılıdırlar', 'Hâkimlik / savcılık — tarafsız karar alabilirler; iyi sorgulayıcı yapıları vardır', 'Araştırmacılık / derin ilim — belirli bir yaştan sonra çok büyük eserler ortaya koyabilirler', 'Uygun olmayan: Çok aciliyet gerektiren işler (acil servis, ambulans vb.); ikna gerektiren meslekler'],
+    kariyerEn: ['Archive keeper / memorizer — very strong memory, can retain information for a long time', 'Military service — carry out given duties with complete thoroughness', 'Accounting — successful in jobs requiring attention and mathematical thinking', 'Judgeship / prosecution — can make impartial decisions; naturally good investigators', 'Research / deep scholarship — can produce great works after a certain age', 'Not suited: Jobs with high urgency (ER, ambulance); persuasion-based professions'],
+    hastaliklar: ['Bacak sendromları — geceleri bacaklar uyuşabilir; en yaygın rahatsızlıktır', 'İskelet ağrıları ve kronik vücut ağrıları — soğukluk kemik yapısını etkiler', 'Tırnak, saç ve diş problemleri', 'Demir eksikliği, vitamin ve mineral eksikliği, genel zayıflık', 'Yüzde solgunluk ve göz altı koyuluğu', 'Hemoroid ve varis', 'Hayvan tüyü alerjisi ve sese/ışığa hassasiyet'],
+    hastaliklarEn: ['Leg syndromes — legs may go numb at night; most common condition', 'Skeletal pain and chronic body aches — coldness affects bone structure', 'Nail, hair and tooth problems', 'Iron deficiency, vitamin and mineral deficiency, general weakness', 'Facial pallor and dark circles under eyes', 'Hemorrhoids and varicose veins', 'Animal fur allergy and sensitivity to sound/light'],
+    cocukOzellikleri: ['"Büyümüş de küçülmüş" çocuklardır — çocuksu hareketleri pek yoktur; büyüklerin konuşmalarına kulak kabartırlar', 'Yargılayıcı cümleler kurabilirler: "Ben anne olursam senin gibi olmayacağım"', 'Donuk ve sinsi bakarlar; gözaltlarında çukur ve koyuluk olur. Kıskanç ve inatçı olabilirler', 'Okul: Derse ilgisiz görünür ama soru sorulunca doğru cevap verir. Hafızaları kuvvetlidir', 'Ten renkleri esmere yakındır; ağlama şekilleri sızlanma gibidir', 'Uyarı: Sovdasını bilmeden artırırsanız yalnız, bencil ve uzak olur'],
+    cocukOzellikleriEn: ['"Old soul" children — rarely act childish; listen in on adult conversations', 'Can make judgmental statements: "When I\'m a mother I won\'t be like you"', 'Tend to have a blank or guarded look; dark circles and hollows under eyes. Can be jealous and stubborn', 'School: Appears disinterested but gives correct answers when asked. Strong memory', 'Skin tends toward darker/olive tones; crying sounds more like whimpering', 'Warning: Increasing their black bile unknowingly makes them lonely, selfish and distant'],
+    duygular: ['Yalnızlık, pişmanlık, güvensizlik ve hüzün — en bilinen duygu özellikleridir', 'Mantık, temkin ve erteleme duygusu ağır basar', 'Geçmişe takılma ve geçmişi düşünme eğilimi çok güçlüdür', 'Haset yapan biri hangi mizaçtan olursa olsun sevdavi özellikler gösterir; sevgi veremez, haz alamaz, ağlayamaz'],
+    duygularEn: ['Loneliness, regret, insecurity and sadness — most known emotional traits', 'Logic, caution and postponement feelings dominate', 'Very strong tendency to dwell on and revisit the past', 'Anyone who becomes envious — regardless of temperament — shows melancholic traits; cannot give love, feel pleasure or cry'],
+    yasDonem: 'Yaşlılık (60+ yaş) — sovdavî mizaçla ilişkilendirilir; yaşlandıkça herkes sovdalaşır, kemikler ağrır, içe kapanıklık artar',
+    yasDonemEn: 'Old age (60+ years) — associated with melancholic temperament; everyone becomes more melancholic with age, bones ache, introversion increases',
+    agriTipi: 'Sızı — ağrı "sızım sızım sızlıyor" şeklinde hissedilir',
+    agriTipiEn: 'Aching — pain felt as a deep, persistent dull ache',
   },
 };
 

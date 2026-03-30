@@ -1,35 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { MizacProfil, MizacTip } from '@/lib/mizac-data';
+import { MizacProfil } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
-
-const kariyerVerisi: Record<MizacTip, { meslekler: string[]; mesleklerEn: string[]; kariyer: string; kariyerEn: string }> = {
-  safravi: {
-    meslekler: ['Girişimci', 'Yönetici / CEO', 'Avukat', 'Sporcu', 'Politikacı', 'Cerrah'],
-    mesleklerEn: ['Entrepreneur', 'Executive / CEO', 'Lawyer', 'Athlete', 'Politician', 'Surgeon'],
-    kariyer: 'Safravî mizaçlılar liderlik gerektiren pozisyonlarda parlıyor. Hızlı karar verme yetenekleri ve yüksek enerjileriyle zorlu ortamlarda öne çıkarlar. Rekabeti severler ve meydan okumalar onları daha da motive eder.',
-    kariyerEn: 'Cholerics shine in positions requiring leadership. Their quick decision-making and high energy help them stand out in challenging environments. They love competition and challenges motivate them even more.',
-  },
-  demevi: {
-    meslekler: ['Satış / Pazarlama', 'Öğretmen', 'Aktör / Sunucu', 'Tasarımcı', 'Gazeteci', 'Halkla İlişkiler'],
-    mesleklerEn: ['Sales / Marketing', 'Teacher', 'Actor / Presenter', 'Designer', 'Journalist', 'Public Relations'],
-    kariyer: 'Demevî mizaçlılar insanlarla iletişim gerektiren alanlarda başarıya ulaşır. Yaratıcılıkları ve sosyal yetenekleri onları ekip çalışmalarında değerli kılar. Rutinden sıkıldıkları için çeşitlilik sunan işler idealdir.',
-    kariyerEn: 'Sanguines succeed in fields requiring communication. Their creativity and social skills make them valuable in teamwork. Since they get bored with routine, jobs offering variety are ideal.',
-  },
-  balgami: {
-    meslekler: ['Doktor / Hemşire', 'Terapist / Danışman', 'Muhasebeci', 'Mühendis', 'Diplomat', 'Öğretmen'],
-    mesleklerEn: ['Doctor / Nurse', 'Therapist / Counselor', 'Accountant', 'Engineer', 'Diplomat', 'Teacher'],
-    kariyer: 'Balgamî mizaçlılar sabır ve süreklilik gerektiren işlerde mükemmelleşir. İnsanlara yardım etmekten zevk alırlar ve uzun vadeli projelerde güvenilir bir ortak olurlar. Stresli ortamlarda dahi sakin kalmayı başarırlar.',
-    kariyerEn: 'Phlegmatics excel in jobs requiring patience and consistency. They enjoy helping people and become reliable partners in long-term projects. They manage to stay calm even in stressful environments.',
-  },
-  sevdavi: {
-    meslekler: ['Yazar / Şair', 'Araştırmacı / Bilim İnsanı', 'Mimar', 'Müzisyen', 'Felsefeci', 'Analist'],
-    mesleklerEn: ['Writer / Poet', 'Researcher / Scientist', 'Architect', 'Musician', 'Philosopher', 'Analyst'],
-    kariyer: 'Sevdavî mizaçlılar derinlik ve anlam arayışıyla öne çıkan işlerde başarılıdır. Analitik düşünce yapıları ve mükemmeliyetçilikleri araştırma ve yaratıcı alanlarda onları vazgeçilmez kılar.',
-    kariyerEn: 'Melancholics excel in work that demands depth and meaning. Their analytical thinking and perfectionism make them indispensable in research and creative fields.',
-  },
-};
 
 export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
   const { lang } = useLang();
@@ -98,7 +71,54 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
           </div>
         </div>
 
-        {/* Sağlık */}
+        {/* Duygular */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '🧠 Duygusal Dünya' : '🧠 Emotional World'}
+          </h3>
+          <ul className="space-y-2">
+            {(tr ? profil.duygular : profil.duygularEn).map((d) => (
+              <li key={d} className="text-sm flex gap-2 opacity-80">
+                <span style={{ color: profil.renk }}>·</span> {d}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Kariyer */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '💼 Kariyer ve Meslek' : '💼 Career & Profession'}
+          </h3>
+          <ul className="space-y-2">
+            {(tr ? profil.kariyer : profil.kariyerEn).map((k) => (
+              <li key={k} className="text-sm flex gap-2 opacity-80">
+                <span style={{ color: profil.renk }}>·</span> {k}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Hastalıklar */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '🩺 Mizaca Özgü Hastalıklar' : '🩺 Temperament-Specific Conditions'}
+          </h3>
+          <p className="text-xs opacity-50 mb-3">
+            {tr
+              ? `Ağrı tipi: ${profil.agriTipi}`
+              : `Pain type: ${profil.agriTipiEn}`}
+          </p>
+          <ul className="space-y-2">
+            {(tr ? profil.hastaliklar : profil.hastaliklarEn).map((h) => (
+              <li key={h} className="text-sm flex gap-2 opacity-80">
+                <span style={{ color: profil.renk }}>·</span> {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Sağlık Eğilimleri */}
         <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
           <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
             {tr ? '⚕ Sağlık Eğilimleri' : '⚕ Health Tendencies'}
@@ -111,6 +131,20 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
               </span>
             ))}
           </div>
+        </div>
+
+        {/* Çocuk Özellikleri */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
+            {tr ? '🧒 Çocukluk ve Bebeklik' : '🧒 Childhood & Infancy'}
+          </h3>
+          <ul className="space-y-3">
+            {(tr ? profil.cocukOzellikleri : profil.cocukOzellikleriEn).map((c) => (
+              <li key={c} className="text-sm flex gap-2 opacity-80">
+                <span style={{ color: profil.renk }}>·</span> {c}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Beslenme */}
@@ -136,27 +170,6 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
           <p className="text-sm leading-relaxed opacity-80">
             {tr ? profil.iliski : profil.iliskiEn}
           </p>
-        </div>
-
-        {/* Kariyer */}
-        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
-          <h3 className="font-bold mb-3" style={{ color: 'var(--earth)' }}>
-            {tr ? '💼 Kariyer ve Meslek' : '💼 Career & Profession'}
-          </h3>
-          <p className="text-sm leading-relaxed opacity-80 mb-4">
-            {tr ? kariyerVerisi[profil.id].kariyer : kariyerVerisi[profil.id].kariyerEn}
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {(tr ? kariyerVerisi[profil.id].meslekler : kariyerVerisi[profil.id].mesleklerEn).map((m) => (
-              <span
-                key={m}
-                className="text-sm px-3 py-1 rounded-full font-medium text-white"
-                style={{ background: profil.renk + 'cc' }}
-              >
-                {m}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* Fiziksel Özellikler */}
@@ -215,6 +228,16 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
               {tr ? profil.halife : profil.halifeEn}
             </p>
           </div>
+        </div>
+
+        {/* Yaş Dönemi */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: profil.renkAcik }}>
+          <h3 className="font-bold mb-2" style={{ color: profil.renk }}>
+            {tr ? '⏳ Yaş Dönemi' : '⏳ Life Stage'}
+          </h3>
+          <p className="text-sm leading-relaxed opacity-80">
+            {tr ? profil.yasDonem : profil.yasDonemEn}
+          </p>
         </div>
 
         {/* Renk Önerileri */}

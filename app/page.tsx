@@ -141,7 +141,33 @@ export default function Home() {
         <p className="text-center mb-10 opacity-60 text-sm">
           {tr ? 'Varlığın Tahlili kitabından alınan özgün içerikler' : 'Original content from the book Varlığın Tahlili'}
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Link href="/uyum"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fdf2f8', borderColor: '#f9a8d440' }}>
+            <div className="text-4xl mb-3">💞</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mizaç Uyumu' : 'Temperament Compatibility'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Hangi mizaçlar birbirleriyle uyumlu? İlişki, arkadaşlık ve iş hayatında uyum haritası.'
+                : 'Which temperaments are compatible? Compatibility map for relationships, friendship and work life.'}
+            </p>
+          </Link>
+          <Link href="/tarifler"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0fdf4', borderColor: '#86efac40' }}>
+            <div className="text-4xl mb-3">🍃</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mizaca Özel Tarifler' : 'Temperament Recipes'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Her mizaç için detoks tarifleri, şifalı çaylar ve sağlık önerileri.'
+                : 'Detox recipes, herbal teas and health recommendations for each temperament.'}
+            </p>
+          </Link>
           <Link href="/cocuk-mizaci"
             className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
             style={{ background: '#fef9f0', borderColor: 'var(--gold-light)' }}>
@@ -214,6 +240,12 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-5 mb-3">
           <Link href="/mizaclar" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
             {tr ? '4 Mizaç' : '4 Types'}
+          </Link>
+          <Link href="/uyum" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Uyum' : 'Compatibility'}
+          </Link>
+          <Link href="/tarifler" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Tarifler' : 'Recipes'}
           </Link>
           <Link href="/cocuk-mizaci" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
             {tr ? 'Çocuk Mizacı' : 'Child'}

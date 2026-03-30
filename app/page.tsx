@@ -133,6 +133,57 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Keşfet */}
+      <section className="max-w-5xl mx-auto px-6 py-16">
+        <h2 className="text-3xl font-bold text-center mb-2" style={{ color: 'var(--foreground)' }}>
+          {tr ? 'Daha Fazlasını Keşfet' : 'Explore More'}
+        </h2>
+        <p className="text-center mb-10 opacity-60 text-sm">
+          {tr ? 'Varlığın Tahlili kitabından alınan özgün içerikler' : 'Original content from the book Varlığın Tahlili'}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+          <Link href="/cocuk-mizaci"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fef9f0', borderColor: 'var(--gold-light)' }}>
+            <div className="text-4xl mb-3">🧒</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Çocuğunuzun Mizacı' : "Your Child's Temperament"}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Bebeklikten okul çağına, her mizacın çocukluk özellikleri ve ebeveyn rehberi.'
+                : 'From infancy to school age — childhood traits for each temperament with parent guidance.'}
+            </p>
+          </Link>
+          <Link href="/yas-mizaclari"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0fdf4', borderColor: '#86efac40' }}>
+            <div className="text-4xl mb-3">⏳</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Yaş Mizaçları' : 'Life Stage Temperaments'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Bebeklik, çocukluk, gençlik, yaşlılık — hayatın her dönemi farklı bir mizaçla akar.'
+                : 'Infancy, childhood, youth, old age — each life stage flows through a different temperament.'}
+            </p>
+          </Link>
+          <Link href="/nur-mizaci"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#faf5ff', borderColor: '#d8b4fe40' }}>
+            <div className="text-4xl mb-3">✨</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Nur Mizacı' : 'The Nur Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? '4 mizacın ötesinde, dengeli ve kemale ermiş hal. Nur mizacına ulaşmanın 8 yolu.'
+                : 'Beyond the 4 types — the balanced, perfected state. The 8 paths to Nur temperament.'}
+            </p>
+          </Link>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="max-w-3xl mx-auto px-6 py-16 text-center">
         <div
@@ -160,9 +211,18 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t py-8 text-center text-sm" style={{ borderColor: 'var(--gold-light)' }}>
-        <div className="flex justify-center gap-6 mb-3">
+        <div className="flex flex-wrap justify-center gap-5 mb-3">
           <Link href="/mizaclar" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
             {tr ? '4 Mizaç' : '4 Types'}
+          </Link>
+          <Link href="/cocuk-mizaci" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Çocuk Mizacı' : 'Child'}
+          </Link>
+          <Link href="/yas-mizaclari" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Yaş Mizaçları' : 'Life Stages'}
+          </Link>
+          <Link href="/nur-mizaci" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
+            {tr ? 'Nur Mizacı' : 'Nur'}
           </Link>
           <Link href="/test" className="opacity-60 hover:opacity-100 transition-opacity" style={{ color: 'var(--earth)' }}>
             {tr ? 'Test' : 'Test'}
@@ -171,7 +231,8 @@ export default function Home() {
             {tr ? 'Hakkında' : 'About'}
           </Link>
         </div>
-        <p className="opacity-40">Mizaç · {tr ? 'İbn-i Sina Geleneğine Dayalı Mizaç Rehberi' : 'Temperament Guide Based on Ibn Sina\'s Tradition'}</p>
+        <p className="opacity-40 mb-1">Mizaç · {tr ? 'İbn-i Sina Geleneğine Dayalı Mizaç Rehberi' : 'Temperament Guide Based on Ibn Sina\'s Tradition'}</p>
+        <p className="opacity-30 text-xs">{tr ? 'Varlığın Tahlili · Zeynep Işık Büyükbay' : 'Varlığın Tahlili · Zeynep Işık Büyükbay'}</p>
       </footer>
     </main>
   );

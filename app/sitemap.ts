@@ -14,7 +14,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
     { url: `${siteUrl}/test`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
-    { url: `${siteUrl}/mizaclar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${siteUrl}/mizaclar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/cocuk-mizaci`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${siteUrl}/yas-mizaclari`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${siteUrl}/nur-mizaci`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${siteUrl}/hakkinda`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
     ...mizacPages,
   ];
 }

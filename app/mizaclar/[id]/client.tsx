@@ -297,6 +297,15 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
           </div>
         </div>
 
+        {/* Kitap Crediti */}
+        <div className="rounded-xl p-4 mb-6 text-center border" style={{ borderColor: 'var(--gold-light)', background: 'var(--cream)' }}>
+          <p className="text-xs opacity-50 leading-relaxed">
+            {tr
+              ? '📖 Bu sayfadaki bilgiler Zeynep Işık Büyükbay\'ın "Varlığın Tahlili" kitabına dayanmaktadır.'
+              : '📖 The information on this page is based on "Varlığın Tahlili" by Zeynep Işık Büyükbay.'}
+          </p>
+        </div>
+
         {/* Nav */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/test"

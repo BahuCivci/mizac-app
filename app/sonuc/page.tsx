@@ -57,8 +57,140 @@ const unluler: Record<MizacTip, { isim: string; aciklama: string; aciklamaEn: st
   ],
 };
 
+function generateStoryCard(profil: (typeof mizacProfiller)[MizacTip], tr: boolean): Promise<Blob> {
+  return new Promise((resolve) => {
+    const W = 1080, H = 1920;
+    const canvas = document.createElement('canvas');
+    canvas.width = W;
+    canvas.height = H;
+    const ctx = canvas.getContext('2d')!;
+
+    // Arka plan gradient
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, profil.renkAcik);
+    bg.addColorStop(0.5, '#ffffff');
+    bg.addColorStop(1, profil.renkAcik);
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Dekoratif büyük çember (arka)
+    ctx.beginPath();
+    ctx.arc(W * 0.85, H * 0.15, 380, 0, Math.PI * 2);
+    ctx.fillStyle = profil.renk + '12';
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(W * 0.1, H * 0.8, 280, 0, Math.PI * 2);
+    ctx.fillStyle = profil.renk + '10';
+    ctx.fill();
+
+    // Üst branding çizgisi
+    ctx.fillStyle = profil.renk;
+    ctx.fillRect(80, 110, 920, 5);
+
+    // ✦ MIZAÇ branding
+    ctx.fillStyle = profil.renk;
+    ctx.font = 'bold 52px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦  M İ Z A Ç', W / 2, 90);
+
+    // Alt branding çizgisi
+    ctx.fillRect(80, 105, 920, 5);
+
+    // Element sembolü (emoji büyük)
+    ctx.font = '280px serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(profil.elementSembol, W / 2, 620);
+
+    // Mizaç adı (TR)
+    ctx.fillStyle = profil.renk;
+    ctx.font = 'bold 148px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(tr ? profil.isim : profil.isimEn, W / 2, 820);
+
+    // İkincil isim
+    ctx.fillStyle = '#00000060';
+    ctx.font = '56px Georgia, serif';
+    ctx.fillText(tr ? profil.isimEn : profil.isim, W / 2, 910);
+
+    // Element çizgisi
+    ctx.fillStyle = profil.renk + '40';
+    ctx.fillRect(240, 960, 600, 3);
+
+    // Element · Sıcaklık
+    ctx.fillStyle = '#00000070';
+    ctx.font = '48px Georgia, serif';
+    ctx.fillText(`${tr ? profil.element : profil.elementEn}  ·  ${profil.sicaklik} & ${profil.nem}`, W / 2, 1040);
+
+    // Anahtar kelimeler (pill şeklinde)
+    const kelimeler = (tr ? profil.anahtarKelimeler : profil.anahtarKelimelerEn).slice(0, 4);
+    const pillH = 72, pillR = 36, gap = 20;
+    const pillWidths = kelimeler.map((k) => {
+      ctx.font = 'bold 36px Arial, sans-serif';
+      return ctx.measureText(k).width + 60;
+    });
+    const totalPillW = pillWidths.reduce((a, b) => a + b, 0) + gap * (kelimeler.length - 1);
+    let px = (W - totalPillW) / 2;
+    const py = 1130;
+    kelimeler.forEach((k, i) => {
+      const pw = pillWidths[i];
+      ctx.beginPath();
+      ctx.roundRect(px, py, pw, pillH, pillR);
+      ctx.fillStyle = profil.renk;
+      ctx.fill();
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 36px Arial, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(k, px + pw / 2, py + 46);
+      px += pw + gap;
+    });
+
+    // Kısa açıklama
+    const aciklama = tr ? profil.kisaAciklama : profil.kisaAciklamaEn;
+    ctx.fillStyle = '#00000080';
+    ctx.font = '44px Georgia, serif';
+    ctx.textAlign = 'center';
+    // Word wrap
+    const words = aciklama.split(' ');
+    let line = '', lineY = 1310;
+    for (const word of words) {
+      const test = line + word + ' ';
+      if (ctx.measureText(test).width > 860 && line) {
+        ctx.fillText(line.trim(), W / 2, lineY);
+        line = word + ' ';
+        lineY += 64;
+      } else {
+        line = test;
+      }
+    }
+    ctx.fillText(line.trim(), W / 2, lineY);
+
+    // Ayırıcı
+    ctx.fillStyle = profil.renk + '30';
+    ctx.fillRect(200, 1600, 680, 3);
+
+    // CTA
+    ctx.fillStyle = '#00000060';
+    ctx.font = '44px Georgia, serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(tr ? 'Senin mizacın ne?' : 'What is your temperament?', W / 2, 1680);
+
+    // URL
+    ctx.fillStyle = profil.renk;
+    ctx.font = 'bold 48px Arial, sans-serif';
+    ctx.fillText('mizac-app.vercel.app', W / 2, 1760);
+
+    // Alt çizgi
+    ctx.fillStyle = profil.renk;
+    ctx.fillRect(80, 1810, 920, 5);
+
+    canvas.toBlob((blob) => resolve(blob!), 'image/png');
+  });
+}
+
 function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof mizacProfiller)[MizacTip]; tr: boolean }) {
   const [copied, setCopied] = useState(false);
+  const [kartYukleniyor, setKartYukleniyor] = useState(false);
 
   const shareText = tr
     ? `Mizaç testimde ${profil.isim} ${profil.elementSembol} çıktım! Sen de öğren 👇`
@@ -80,6 +212,31 @@ function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof miza
     setTimeout(() => setCopied(false), 2000);
   }
 
+  async function handleStoryIndir() {
+    setKartYukleniyor(true);
+    try {
+      const blob = await generateStoryCard(profil, tr);
+      const isim = tr ? profil.isim : profil.isimEn;
+
+      // Web Share API ile dosya paylaşımı (mobil)
+      if (navigator.canShare?.({ files: [new File([blob], 'mizac.png', { type: 'image/png' })] })) {
+        await navigator.share({
+          files: [new File([blob], `mizac-${isim}.png`, { type: 'image/png' })],
+          title: `Mizaç: ${isim}`,
+        });
+      } else {
+        // Desktop: direkt indir
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `mizac-${isim}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch {}
+    setKartYukleniyor(false);
+  }
+
   const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + shareUrl)}`;
   const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
 
@@ -93,6 +250,16 @@ function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof miza
       </p>
 
       <div className="flex flex-wrap justify-center gap-3">
+        {/* Story Kartı İndir */}
+        <button
+          onClick={handleStoryIndir}
+          disabled={kartYukleniyor}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 disabled:opacity-60"
+          style={{ background: `linear-gradient(135deg, ${profil.renk}, ${profil.renk}cc)` }}
+        >
+          {kartYukleniyor ? '⏳' : '📸'} {tr ? 'Story Kartı' : 'Story Card'}
+        </button>
+
         {/* Native Share (mobil) */}
         <button
           onClick={handleNativeShare}

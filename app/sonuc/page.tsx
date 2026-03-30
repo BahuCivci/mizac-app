@@ -3,7 +3,7 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useLang } from '@/lib/lang-context';
 import { AdUnit } from '@/components/ad-unit';
 
@@ -156,6 +156,16 @@ function SonucIcerik() {
   const sirali = (Object.entries(puanlar) as [MizacTip, number][])
     .sort(([, a], [, b]) => b - a);
 
+  const ikinciTip = sirali[1]?.[0] as MizacTip;
+  const ikinciProfil = mizacProfiller[ikinciTip];
+
+  // Sonucu localStorage'a kaydet
+  useEffect(() => {
+    if (tip && puanlarStr) {
+      localStorage.setItem('mizac_sonuc', JSON.stringify({ tip, puanlar, tarih: Date.now() }));
+    }
+  }, [tip, puanlarStr]);
+
   return (
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
       <div className="max-w-2xl mx-auto">
@@ -188,6 +198,36 @@ function SonucIcerik() {
             ))}
           </div>
         </div>
+
+        {/* İkinci Mizaç */}
+        {ikinciProfil && (
+          <div
+            className="rounded-2xl p-5 mb-6 flex items-center gap-4"
+            style={{ background: ikinciProfil.renkAcik, border: `1.5px solid ${ikinciProfil.renk}40` }}
+          >
+            <div className="text-4xl">{ikinciProfil.elementSembol}</div>
+            <div className="flex-1">
+              <p className="text-xs font-semibold opacity-50 uppercase tracking-widest mb-0.5">
+                {tr ? 'İkinci Mizacınız' : 'Your Secondary Temperament'}
+              </p>
+              <p className="font-bold text-lg" style={{ color: ikinciProfil.renk }}>
+                {tr ? ikinciProfil.isim : ikinciProfil.isimEn}
+              </p>
+              <p className="text-sm opacity-70 leading-snug mt-1">
+                {tr
+                  ? `${profil.isim} baskın mizacınız olmakla birlikte ${ikinciProfil.isim} özelliklerini de taşıyorsunuz. Bu "kayma" doğaldır.`
+                  : `While ${profil.isimEn} is your dominant temperament, you also carry traits of ${ikinciProfil.isimEn}. This "drift" is natural.`}
+              </p>
+            </div>
+            <Link
+              href={`/mizaclar/${ikinciTip}`}
+              className="text-xs px-3 py-1.5 rounded-full font-semibold text-white flex-shrink-0"
+              style={{ background: ikinciProfil.renk }}
+            >
+              {tr ? 'İncele' : 'Explore'}
+            </Link>
+          </div>
+        )}
 
         {/* Paylaş */}
         <ShareButtons tip={tip} profil={profil} tr={tr} />

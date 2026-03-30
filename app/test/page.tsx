@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { sorular, MizacTip } from '@/lib/mizac-data';
+import { sorular, MizacTip, mizacProfiller } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
+import Link from 'next/link';
 
 function puanlariHesapla(secimler: (number | undefined)[]): Record<MizacTip, number> {
   const toplamlar: Record<MizacTip, number> = { safravi: 0, demevi: 0, balgami: 0, sevdavi: 0 };
@@ -22,8 +23,16 @@ export default function TestPage() {
   const [aktifSoru, setAktifSoru] = useState(0);
   const [seciliSecenekler, setSeciliSecenekler] = useState<(number | undefined)[]>([]);
   const [animasyon, setAnimasyon] = useState(false);
+  const [oncekiSonuc, setOncekiSonuc] = useState<{ tip: MizacTip; tarih: number } | null>(null);
 
   const { lang } = useLang();
+
+  useEffect(() => {
+    try {
+      const kayit = localStorage.getItem('mizac_sonuc');
+      if (kayit) setOncekiSonuc(JSON.parse(kayit));
+    } catch {}
+  }, []);
   const soru = sorular[aktifSoru];
   const ilerleme = (aktifSoru / sorular.length) * 100;
   const tr = lang === 'tr';
@@ -55,9 +64,34 @@ export default function TestPage() {
     }
   }
 
+  const oncekiProfil = oncekiSonuc ? mizacProfiller[oncekiSonuc.tip] : null;
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-4 py-12"
       style={{ background: 'var(--background)' }}>
+
+      {/* Önceki sonuç banner */}
+      {oncekiProfil && aktifSoru === 0 && (
+        <div
+          className="w-full max-w-xl mb-4 rounded-2xl p-4 flex items-center gap-3"
+          style={{ background: oncekiProfil.renkAcik, border: `1.5px solid ${oncekiProfil.renk}40` }}
+        >
+          <span className="text-2xl">{oncekiProfil.elementSembol}</span>
+          <div className="flex-1 text-sm">
+            <span className="opacity-60">{tr ? 'Önceki sonucunuz:' : 'Your previous result:'} </span>
+            <span className="font-bold" style={{ color: oncekiProfil.renk }}>
+              {tr ? oncekiProfil.isim : oncekiProfil.isimEn}
+            </span>
+          </div>
+          <Link
+            href={`/sonuc?tip=${oncekiSonuc!.tip}&puanlar=${encodeURIComponent(JSON.stringify({ safravi: 0, demevi: 0, balgami: 0, sevdavi: 0 }))}`}
+            className="text-xs px-3 py-1.5 rounded-full font-semibold text-white flex-shrink-0"
+            style={{ background: oncekiProfil.renk }}
+          >
+            {tr ? 'Görüntüle' : 'View'}
+          </Link>
+        </div>
+      )}
 
       {/* Progress */}
       <div className="w-full max-w-xl mb-8">

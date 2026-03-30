@@ -36,6 +36,13 @@ export function Header() {
             {tr ? '4 Mizaç' : '4 Types'}
           </Link>
           <Link
+            href="/nur-mizaci"
+            className="hidden sm:block text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
+            style={{ color: 'var(--foreground)' }}
+          >
+            {tr ? 'Nur Mizacı' : 'Nur'}
+          </Link>
+          <Link
             href="/hakkinda"
             className="hidden sm:block text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
             style={{ color: 'var(--foreground)' }}
@@ -125,6 +132,14 @@ export function Header() {
             style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
           >
             {tr ? '4 Mizaç' : '4 Types'}
+          </Link>
+          <Link
+            href="/nur-mizaci"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Nur Mizacı' : 'Nur'}
           </Link>
           <Link
             href="/hakkinda"

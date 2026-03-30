@@ -142,6 +142,22 @@ export function Header() {
             {tr ? 'Nur Mizacı' : 'Nur'}
           </Link>
           <Link
+            href="/cocuk-mizaci"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Çocuk Mizacı' : 'Child Temperament'}
+          </Link>
+          <Link
+            href="/yas-mizaclari"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Yaş Mizaçları' : 'Life Stages'}
+          </Link>
+          <Link
             href="/hakkinda"
             onClick={() => setMenuAcik(false)}
             className="text-base font-medium py-2 border-b opacity-80"

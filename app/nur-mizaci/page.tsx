@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useLang } from '@/lib/lang-context';
 
 const yollar = [
@@ -49,28 +50,51 @@ const yollar = [
 export default function NurMizaciPage() {
   const { lang } = useLang();
   const tr = lang === 'tr';
+  const [email, setEmail] = useState('');
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function submitEmail(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setEmailStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip: 'nur-mizaci' }),
+      });
+      setEmailStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setEmailStatus('error');
+    }
+  }
 
   return (
     <main className="min-h-screen px-4 py-12" style={{ background: 'var(--background)' }}>
       <div className="max-w-2xl mx-auto">
 
         {/* Hero */}
-        <div className="text-center mb-12">
+        <div className="rounded-3xl px-8 py-14 text-center mb-10" style={{ background: 'linear-gradient(180deg, #0a0f07 0%, #0d1a0a 100%)' }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] mb-6" style={{ color: '#c4973a' }}>
+            {tr ? 'Nur Mizacı' : 'Nur Temperament'}
+          </p>
           <div
-            className="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl mb-5"
-            style={{ background: 'linear-gradient(135deg, var(--gold-light), white)', border: '2px solid var(--gold)' }}
+            className="inline-flex items-center justify-center w-20 h-20 rounded-full text-4xl mb-6"
+            style={{ background: '#c4973a20', border: '2px solid #c4973a50' }}
           >
             ✦
           </div>
-          <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--foreground)' }}>
-            {tr ? 'Nur Mizacı' : 'Nur Temperament'}
+          <h1 className="text-4xl font-bold mb-3" style={{ color: '#e8d5b0' }}>
+            {tr ? 'Mizacının zirvesi nerede?' : 'Where is your temperament\'s peak?'}
           </h1>
-          <p className="text-lg opacity-60 mb-4">
-            {tr ? 'Denge ve Olgunluğun Hali' : 'The State of Balance and Maturity'}
+          <p className="text-lg leading-relaxed mb-6" style={{ color: '#9a8a6a' }}>
+            {tr
+              ? 'Dört mizacın ötesinde bir hal var. Nur — denge, olgunluk ve her mizacın en güzel hali.'
+              : 'Beyond the four temperaments is a state. Nur — balance, maturity, the finest version of every temperament.'}
           </p>
           <div
             className="inline-block px-4 py-1.5 rounded-full text-sm font-semibold"
-            style={{ background: 'var(--gold-light)', color: 'var(--earth)' }}
+            style={{ background: '#c4973a20', color: '#c4973a', border: '1px solid #c4973a40' }}
           >
             {tr ? 'Hedef Mizaç · Ulaşılması Gereken' : 'Target Temperament · The Goal to Reach'}
           </div>
@@ -170,6 +194,51 @@ export default function NurMizaciPage() {
             </div>
           ))}
         </div>
+
+        {/* Email Capture */}
+        {emailStatus === 'success' ? (
+          <div className="rounded-3xl p-8 text-center mb-8" style={{ background: '#0d1a0a' }}>
+            <div className="text-4xl mb-3">📬</div>
+            <p className="font-bold text-white text-lg">{tr ? 'Eklendi!' : 'Added!'}</p>
+            <p className="text-sm mt-1" style={{ color: '#9a8a6a' }}>{tr ? 'Gelen kutunuzu kontrol edin.' : 'Check your inbox.'}</p>
+          </div>
+        ) : (
+          <div className="rounded-3xl p-8 mb-8" style={{ background: '#0d1a0a' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#c4973a' }}>
+              {tr ? 'Nur Yolculuğu' : 'The Nur Journey'}
+            </p>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#e8d5b0' }}>
+              {tr ? 'Her mizaç bu yolu yürüyebilir.' : 'Every temperament can walk this path.'}
+            </h3>
+            <p className="text-sm mb-6" style={{ color: '#9a8a6a' }}>
+              {tr
+                ? 'Mizaç terbiyesi ve nur yolculuğu hakkında her Pazartesi.'
+                : 'Weekly insights on temperament discipline and the nur journey.'}
+            </p>
+            <form onSubmit={submitEmail} className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
+                required
+                className="flex-1 px-4 py-3 rounded-full text-sm outline-none"
+                style={{ background: '#1a2a14', border: '1px solid #c4973a40', color: '#e8d5b0' }}
+              />
+              <button
+                type="submit"
+                disabled={emailStatus === 'loading'}
+                className="px-6 py-3 rounded-full text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90 disabled:opacity-60"
+                style={{ background: '#c4973a' }}
+              >
+                {emailStatus === 'loading' ? '⏳' : (tr ? 'Gönder' : 'Send')}
+              </button>
+            </form>
+            {emailStatus === 'error' && (
+              <p className="text-xs text-red-400 mt-2">{tr ? 'Bir hata oluştu.' : 'An error occurred.'}</p>
+            )}
+          </div>
+        )}
 
         {/* CTA */}
         <div className="text-center">

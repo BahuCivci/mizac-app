@@ -25,7 +25,7 @@ export default function OGImage() {
           position: 'absolute', bottom: 32,
           fontSize: 18, color: '#999', display: 'flex',
         }}>
-          mizac-app.vercel.app
+          mizac.xyz
         </div>
       </div>
     ),

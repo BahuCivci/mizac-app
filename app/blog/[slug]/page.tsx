@@ -1,0 +1,218 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import { blogYazilari, getBlogYazisi } from '@/lib/blog-data';
+import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+
+const siteUrl = 'https://mizac.xyz';
+
+export function generateStaticParams() {
+  return blogYazilari.map((y) => ({ slug: y.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const yazi = getBlogYazisi(slug);
+  if (!yazi) return {};
+
+  return {
+    title: yazi.baslik,
+    description: yazi.ozet,
+    keywords: yazi.etiketler,
+    openGraph: {
+      title: yazi.baslik,
+      description: yazi.ozet,
+      url: `${siteUrl}/blog/${slug}`,
+      type: 'article',
+      publishedTime: yazi.tarih,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: yazi.baslik,
+      description: yazi.ozet,
+    },
+    alternates: { canonical: `${siteUrl}/blog/${slug}` },
+  };
+}
+
+export default async function BlogYazisiPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const yazi = getBlogYazisi(slug);
+  if (!yazi) notFound();
+
+  const ilgiliProfil = yazi.ilgiliMizac ? mizacProfiller[yazi.ilgiliMizac as MizacTip] : null;
+
+  const articleSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: yazi.baslik,
+    description: yazi.ozet,
+    datePublished: yazi.tarih,
+    dateModified: yazi.tarih,
+    author: { '@type': 'Organization', name: 'Mizaç', url: siteUrl },
+    publisher: { '@type': 'Organization', name: 'Mizaç', url: siteUrl },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}/blog/${slug}` },
+    keywords: yazi.etiketler.join(', '),
+    inLanguage: 'tr',
+  };
+
+  const diger = blogYazilari
+    .filter((y) => y.slug !== slug)
+    .slice(0, 3);
+
+  return (
+    <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <div className="max-w-2xl mx-auto">
+
+        {/* Breadcrumb */}
+        <div className="flex items-center gap-2 text-sm opacity-50 mb-8">
+          <Link href="/" className="hover:opacity-100">Ana Sayfa</Link>
+          <span>/</span>
+          <Link href="/blog" className="hover:opacity-100">Blog</Link>
+          <span>/</span>
+          <span className="truncate">{yazi.baslik}</span>
+        </div>
+
+        {/* Başlık */}
+        <div
+          className="rounded-2xl p-8 mb-8"
+          style={{
+            background: ilgiliProfil
+              ? `linear-gradient(135deg, ${ilgiliProfil.renkAcik}, white)`
+              : 'linear-gradient(135deg, #fef9f0, white)',
+          }}
+        >
+          {ilgiliProfil && (
+            <div className="text-5xl mb-4">{ilgiliProfil.elementSembol}</div>
+          )}
+          <div className="flex flex-wrap gap-2 mb-3">
+            {yazi.etiketler.slice(0, 3).map((e) => (
+              <span
+                key={e}
+                className="text-xs px-2 py-0.5 rounded-full text-white"
+                style={{ background: ilgiliProfil ? ilgiliProfil.renk : 'var(--earth)' }}
+              >
+                {e}
+              </span>
+            ))}
+          </div>
+          <h1 className="text-3xl font-bold mb-3" style={{ color: 'var(--foreground)' }}>
+            {yazi.baslik}
+          </h1>
+          <p className="opacity-70 leading-relaxed mb-3">{yazi.ozet}</p>
+          <p className="text-xs opacity-40">{yazi.okumaSuresi} dk okuma · {yazi.tarih}</p>
+        </div>
+
+        {/* İçerik */}
+        <article className="prose-custom space-y-5 mb-12">
+          {yazi.icerik.map((bolum, i) => {
+            if (bolum.tip === 'h2') {
+              return (
+                <h2 key={i} className="text-2xl font-bold mt-8 mb-3" style={{ color: 'var(--foreground)' }}>
+                  {bolum.metin}
+                </h2>
+              );
+            }
+            if (bolum.tip === 'h3') {
+              return (
+                <h3 key={i} className="text-xl font-semibold mt-6 mb-2" style={{ color: 'var(--earth)' }}>
+                  {bolum.metin}
+                </h3>
+              );
+            }
+            if (bolum.tip === 'p') {
+              return (
+                <p key={i} className="leading-relaxed opacity-80 text-base">
+                  {bolum.metin}
+                </p>
+              );
+            }
+            if (bolum.tip === 'ul' && bolum.maddeler) {
+              return (
+                <ul key={i} className="space-y-2 pl-4">
+                  {bolum.maddeler.map((m, j) => (
+                    <li key={j} className="text-sm opacity-80 leading-relaxed">
+                      <span className="mr-2" style={{ color: ilgiliProfil ? ilgiliProfil.renk : 'var(--gold)' }}>✦</span>
+                      {m}
+                    </li>
+                  ))}
+                </ul>
+              );
+            }
+            if (bolum.tip === 'cta') {
+              return (
+                <div
+                  key={i}
+                  className="rounded-2xl p-6 text-center mt-8"
+                  style={{ background: 'linear-gradient(135deg, var(--cream), var(--gold-light))' }}
+                >
+                  <p className="font-semibold mb-4 opacity-80">{bolum.metin}</p>
+                  <Link
+                    href={bolum.href || '/test'}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all hover:scale-105"
+                    style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}
+                  >
+                    ✦ {bolum.buton}
+                  </Link>
+                </div>
+              );
+            }
+            return null;
+          })}
+        </article>
+
+        {/* İlgili mizaç detay linki */}
+        {ilgiliProfil && (
+          <div
+            className="rounded-2xl p-5 mb-8 flex items-center gap-4"
+            style={{ background: ilgiliProfil.renkAcik, border: `1.5px solid ${ilgiliProfil.renk}40` }}
+          >
+            <div className="text-4xl">{ilgiliProfil.elementSembol}</div>
+            <div className="flex-1">
+              <p className="font-bold" style={{ color: ilgiliProfil.renk }}>{ilgiliProfil.isim} Profili</p>
+              <p className="text-sm opacity-70">Sağlık, kariyer, ilişki ve daha fazlası</p>
+            </div>
+            <Link
+              href={`/mizaclar/${ilgiliProfil.id}`}
+              className="text-sm px-4 py-2 rounded-full font-semibold text-white shrink-0"
+              style={{ background: ilgiliProfil.renk }}
+            >
+              Detaylı İncele
+            </Link>
+          </div>
+        )}
+
+        {/* Diğer yazılar */}
+        <div>
+          <h2 className="font-bold text-lg mb-4" style={{ color: 'var(--foreground)' }}>
+            Diğer Yazılar
+          </h2>
+          <div className="space-y-3">
+            {diger.map((d) => {
+              const dp = d.ilgiliMizac ? mizacProfiller[d.ilgiliMizac as MizacTip] : null;
+              return (
+                <Link
+                  key={d.slug}
+                  href={`/blog/${d.slug}`}
+                  className="flex items-center gap-3 rounded-xl p-4 border transition-all hover:scale-[1.01] hover:shadow-md"
+                  style={{ background: dp ? dp.renkAcik : 'var(--cream)', borderColor: 'var(--gold-light)' }}
+                >
+                  <span className="text-2xl">{dp ? dp.elementSembol : '✦'}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm truncate" style={{ color: 'var(--foreground)' }}>{d.baslik}</p>
+                    <p className="text-xs opacity-50 mt-0.5">{d.okumaSuresi} dk okuma</p>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+      </div>
+    </main>
+  );
+}

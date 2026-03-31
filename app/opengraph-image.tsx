@@ -43,7 +43,7 @@ export default function OGImage() {
           position: 'absolute', bottom: 32,
           fontSize: 18, color: '#8b6914', opacity: 0.6, display: 'flex',
         }}>
-          mizac-app.vercel.app · İbn-i Sina Geleneği
+          mizac.xyz · İbn-i Sina Geleneği
         </div>
       </div>
     ),

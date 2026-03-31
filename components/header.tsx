@@ -43,6 +43,13 @@ export function Header() {
             {tr ? 'Nur Mizacı' : 'Nur'}
           </Link>
           <Link
+            href="/blog"
+            className="hidden sm:block text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
+            style={{ color: 'var(--foreground)' }}
+          >
+            Blog
+          </Link>
+          <Link
             href="/hakkinda"
             className="hidden sm:block text-sm font-medium opacity-70 hover:opacity-100 transition-opacity"
             style={{ color: 'var(--foreground)' }}
@@ -118,7 +125,7 @@ export function Header() {
       {/* Mobil menü */}
       {menuAcik && (
         <div
-          className="sm:hidden fixed top-[49px] left-0 right-0 z-40 border-b px-4 py-4 flex flex-col gap-3"
+          className="sm:hidden fixed top-12 left-0 right-0 z-40 border-b px-4 py-4 flex flex-col gap-3"
           style={{
             background: 'rgba(250, 247, 242, 0.98)',
             backdropFilter: 'blur(12px)',
@@ -172,6 +179,86 @@ export function Header() {
             style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
           >
             {tr ? 'Yaş Mizaçları' : 'Life Stages'}
+          </Link>
+          <Link
+            href="/dort-halife"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Dört Halife' : 'Four Caliphs'}
+          </Link>
+          <Link
+            href="/meslekler"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Meslekler' : 'Careers'}
+          </Link>
+          <Link
+            href="/varligin-mizaci"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Varlığın Mizacı' : 'Nature\'s Temperament'}
+          </Link>
+          <Link
+            href="/hastaliklar"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Hastalıklar' : 'Health'}
+          </Link>
+          <Link
+            href="/esma-sifa"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Esmaü\'l-Hüsna' : 'Divine Names'}
+          </Link>
+          <Link
+            href="/nefes"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Nefes' : 'Breathing'}
+          </Link>
+          <Link
+            href="/gida-kavrami"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Gıda Kavramı' : 'Nourishment'}
+          </Link>
+          <Link
+            href="/hizli-test"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'Hızlı Test (10 Soru)' : 'Quick Test (10 Q)'}
+          </Link>
+          <Link
+            href="/sss"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            {tr ? 'SSS' : 'FAQ'}
+          </Link>
+          <Link
+            href="/blog"
+            onClick={() => setMenuAcik(false)}
+            className="text-base font-medium py-2 border-b opacity-80"
+            style={{ color: 'var(--foreground)', borderColor: 'var(--gold-light)' }}
+          >
+            Blog
           </Link>
           <Link
             href="/hakkinda"

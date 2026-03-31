@@ -56,7 +56,7 @@ export default async function OGImage({ params }: { params: Promise<{ id: string
           position: 'absolute', bottom: 32,
           fontSize: 18, color: '#999', display: 'flex',
         }}>
-          mizac-app.vercel.app
+          mizac.xyz
         </div>
       </div>
     ),

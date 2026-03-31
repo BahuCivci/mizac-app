@@ -142,6 +142,19 @@ export default function Home() {
           {tr ? 'Varlığın Tahlili kitabından alınan özgün içerikler' : 'Original content from the book Varlığın Tahlili'}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Link href="/hizli-test"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: 'linear-gradient(135deg, #fef9f0, #fef3c7)', borderColor: '#c4973a40' }}>
+            <div className="text-4xl mb-3">⚡</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Hızlı Test — 10 Soru' : 'Quick Test — 10 Questions'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? '2 dakikada mizacını öğren. Emoji seçenekli, mobil dostu hızlı karakter testi.'
+                : 'Discover your temperament in 2 minutes. Mobile-friendly quick test with emoji choices.'}
+            </p>
+          </Link>
           <Link href="/uyum"
             className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
             style={{ background: '#fdf2f8', borderColor: '#f9a8d440' }}>
@@ -205,6 +218,97 @@ export default function Home() {
               {tr
                 ? '4 mizacın ötesinde, dengeli ve kemale ermiş hal. Nur mizacına ulaşmanın 8 yolu.'
                 : 'Beyond the 4 types — the balanced, perfected state. The 8 paths to Nur temperament.'}
+            </p>
+          </Link>
+          <Link href="/dort-halife"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fef3c7', borderColor: '#fcd34d40' }}>
+            <div className="text-4xl mb-3">🕌</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Dört Halifenin Mizacı' : 'Four Caliphs'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Hz. Ebubekir, Ömer, Osman ve Ali — dört halifenin mizaç analizi ve tarihsel izleri.'
+                : 'Abu Bakr, Umar, Uthman and Ali — temperament analysis of the four caliphs.'}
+            </p>
+          </Link>
+          <Link href="/meslekler"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0f9ff', borderColor: '#7dd3fc40' }}>
+            <div className="text-4xl mb-3">💼</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mizaç ve Kariyer' : 'Temperament & Career'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Her mizaç için ideal meslekler. Hangi iş ortamı sana göre? İbn-i Sina geleneğiyle kariyer rehberi.'
+                : 'Ideal careers for each temperament. Career guide based on Ibn Sina tradition.'}
+            </p>
+          </Link>
+          <Link href="/varligin-mizaci"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0fdf4', borderColor: '#6ee7b740' }}>
+            <div className="text-4xl mb-3">🌿</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Varlığın Mizacı' : "Nature's Temperament"}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Renkler, kumaşlar, metaller, mekânlar, mevsimler — her şeyin bir mizacı var.'
+                : 'Colors, fabrics, metals, spaces, seasons — everything has a temperament.'}
+            </p>
+          </Link>
+          <Link href="/hastaliklar"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fff1f2', borderColor: '#fda4af40' }}>
+            <div className="text-4xl mb-3">🫀</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mizaç ve Hastalık' : 'Temperament & Health'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Her mizacın zayıf noktaları, yatkın olduğu hastalıklar ve ağrı tipleri.'
+                : 'Weak points, prone illnesses and pain types for each temperament.'}
+            </p>
+          </Link>
+          <Link href="/esma-sifa"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#ecfdf5', borderColor: '#6ee7b740' }}>
+            <div className="text-4xl mb-3">📿</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? "Esmaü'l-Hüsna ile Şifa" : "Healing with Divine Names"}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? "Allah'ın 99 ismi ve organ haritası. Mizacına göre şifa olan esmalar."
+                : "99 Names of Allah and organ map. Divine names for healing by temperament."}
+            </p>
+          </Link>
+          <Link href="/nefes"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#eff6ff', borderColor: '#93c5fd40' }}>
+            <div className="text-4xl mb-3">🌬️</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Nefes Egzersizleri' : 'Breathing Exercises'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Mizacına göre nefes teknikleri. Safravi için soğutucu, balgami için ısıtıcı nefes.'
+                : 'Breathing techniques by temperament. Cooling for fire, warming for water.'}
+            </p>
+          </Link>
+          <Link href="/gida-kavrami"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fffbeb', borderColor: '#fcd34d40' }}>
+            <div className="text-4xl mb-3">🍊</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Gıda Kavramı' : 'The Concept of Nourishment'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Gıda yalnızca tabağınızdaki değildir. Görsel, işitsel, duygusal — 6 çeşit gıda.'
+                : 'Food is not only what is on your plate. Visual, auditory, emotional — 6 types of nourishment.'}
             </p>
           </Link>
         </div>

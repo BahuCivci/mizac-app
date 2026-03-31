@@ -178,7 +178,7 @@ function generateStoryCard(profil: (typeof mizacProfiller)[MizacTip], tr: boolea
     // URL
     ctx.fillStyle = profil.renk;
     ctx.font = 'bold 48px Arial, sans-serif';
-    ctx.fillText('mizac-app.vercel.app', W / 2, 1760);
+    ctx.fillText('mizac.xyz', W / 2, 1760);
 
     // Alt çizgi
     ctx.fillStyle = profil.renk;
@@ -186,6 +186,77 @@ function generateStoryCard(profil: (typeof mizacProfiller)[MizacTip], tr: boolea
 
     canvas.toBlob((blob) => resolve(blob!), 'image/png');
   });
+}
+
+function EmailCapture({ tip, profil, tr }: { tip: MizacTip; profil: (typeof mizacProfiller)[MizacTip]; tr: boolean }) {
+  const [email, setEmail] = useState('');
+  const [durum, setDurum] = useState<'bos' | 'yukleniyor' | 'tamam' | 'hata'>('bos');
+
+  async function gonder(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setDurum('yukleniyor');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip }),
+      });
+      setDurum(res.ok ? 'tamam' : 'hata');
+    } catch {
+      setDurum('hata');
+    }
+  }
+
+  if (durum === 'tamam') {
+    return (
+      <div className="rounded-2xl p-6 mb-6 text-center" style={{ background: profil.renkAcik, border: `1.5px solid ${profil.renk}40` }}>
+        <div className="text-3xl mb-2">📬</div>
+        <p className="font-bold" style={{ color: profil.renk }}>
+          {tr ? 'Profiliniz gönderildi!' : 'Profile sent!'}
+        </p>
+        <p className="text-sm opacity-60 mt-1">
+          {tr ? 'Gelen kutunuzu kontrol edin.' : 'Check your inbox.'}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl p-6 mb-6" style={{ background: profil.renkAcik, border: `1.5px solid ${profil.renk}40` }}>
+      <div className="text-2xl mb-2">{profil.elementSembol}</div>
+      <h3 className="font-bold text-base mb-1" style={{ color: profil.renk }}>
+        {tr ? 'Profilinizi kaybedin mi?' : 'Keep your profile'}
+      </h3>
+      <p className="text-sm opacity-70 mb-4">
+        {tr
+          ? `Mizacınızı emaile alalım — sağlık tavsiyeleri, beslenme rehberi ve her Pazartesi yeni içerik.`
+          : `Get your profile by email — health tips, nutrition guide, and new content every Monday.`}
+      </p>
+      <form onSubmit={gonder} className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
+          required
+          className="flex-1 px-4 py-2.5 rounded-full text-sm border outline-none"
+          style={{ borderColor: `${profil.renk}60`, background: 'white' }}
+        />
+        <button
+          type="submit"
+          disabled={durum === 'yukleniyor'}
+          className="px-5 py-2.5 rounded-full text-sm font-semibold text-white transition-all hover:scale-105 disabled:opacity-60 shrink-0"
+          style={{ background: profil.renk }}
+        >
+          {durum === 'yukleniyor' ? '⏳' : (tr ? 'Gönder' : 'Send')}
+        </button>
+      </form>
+      {durum === 'hata' && (
+        <p className="text-xs text-red-500 mt-2">{tr ? 'Bir hata oluştu, tekrar deneyin.' : 'An error occurred, please try again.'}</p>
+      )}
+    </div>
+  );
 }
 
 function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof mizacProfiller)[MizacTip]; tr: boolean }) {
@@ -196,7 +267,7 @@ function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof miza
     ? `Mizaç testimde ${profil.isim} ${profil.elementSembol} çıktım! Sen de öğren 👇`
     : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test! Find yours 👇`;
 
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareUrl = `https://mizac.xyz/sonuc/${tip}`;
 
   async function handleNativeShare() {
     if (navigator.share) {
@@ -326,6 +397,13 @@ function SonucIcerik() {
   const ikinciTip = sirali[1]?.[0] as MizacTip;
   const ikinciProfil = mizacProfiller[ikinciTip];
 
+  const mirrorCopy: Record<MizacTip, string> = {
+    safravi: 'Beklemek seni öldürür. "Neden kimse hızlı hareket etmiyor?" diye düşünürsün — ve haklısın. Çevrendeki yavaşlık seni yorar çünkü sen bir şeyi görüyorsun: ne yapılması gerektiğini. Bu berraklık hem gücün hem de ağırlığın.',
+    demevi: 'Odaya girince bir şey değişir. İnsanlar sana çekilir — sen farkında bile olmazsın. Ama akşam yalnız kaldığında o sevinç nerede? Demevi mizaç: görünürde neşeli, içinde işlenmemiş duygular.',
+    balgami: 'Kimse seni acele ettiremez. Bu bir zayıflık değil — bu bir güç. Ama bazen sen de soruyorsun: "Neden hiçbir şey beni heyecanlandırmıyor?" Balgami mizaç: sakin dışarıda, karmaşık içeride.',
+    sevdavi: 'Her şeyi hissediyorsun — fazla hissediyorsun. Bir müzik seni ağlatabilir. Yanlış bir söz günlerce aklında kalır. Bu hassasiyet seni hem derinlikli hem de yorgun kılar.',
+  };
+
   // Sonucu localStorage'a kaydet
   useEffect(() => {
     if (tip && puanlarStr) {
@@ -337,28 +415,31 @@ function SonucIcerik() {
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
       <div className="max-w-2xl mx-auto">
 
-        {/* Başlık */}
+        {/* Başlık — Dramatik Açılış */}
         <div
           className="rounded-3xl p-10 text-center mb-8"
-          style={{ background: `linear-gradient(135deg, ${profil.renkAcik}, white)` }}
+          style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}
         >
-          <div className="text-7xl mb-4">{profil.elementSembol}</div>
-          <p className="text-sm font-medium opacity-50 mb-1 uppercase tracking-widest">
-            {tr ? 'Mizacınız' : 'Your Temperament'}
+          <p className="text-xs font-medium uppercase tracking-[0.3em] mb-6" style={{ color: profil.renk }}>
+            {tr ? 'Mizaç Testi Sonucu' : 'Temperament Test Result'}
           </p>
-          <h1 className="text-5xl font-bold mb-2" style={{ color: profil.renk }}>
+          <div className="text-9xl mb-6">{profil.elementSembol}</div>
+          <p className="text-sm font-medium mb-2 uppercase tracking-widest" style={{ color: '#9a8a6a' }}>
+            {tr ? 'Sen' : 'You are'}
+          </p>
+          <h1 className="text-6xl font-bold mb-3" style={{ color: profil.renk }}>
             {tr ? profil.isim : profil.isimEn}
           </h1>
-          <p className="text-xl opacity-60 mb-4">{profil.element} · {profil.elementEn}</p>
-          <p className="text-lg leading-relaxed opacity-80 max-w-md mx-auto">
+          <p className="text-base mb-6" style={{ color: '#5a4a2a' }}>{profil.element} · {profil.elementEn}</p>
+          <p className="text-lg leading-relaxed max-w-md mx-auto mb-8" style={{ color: '#c8b87a' }}>
             {tr ? profil.kisaAciklama : profil.kisaAciklamaEn}
           </p>
-          <div className="flex flex-wrap justify-center gap-2 mt-6">
+          <div className="flex flex-wrap justify-center gap-2">
             {(tr ? profil.anahtarKelimeler : profil.anahtarKelimelerEn).map((kelime) => (
               <span
                 key={kelime}
-                className="px-3 py-1 rounded-full text-sm font-medium text-white"
-                style={{ background: profil.renk }}
+                className="px-4 py-1.5 rounded-full text-sm font-medium"
+                style={{ background: profil.renk + '25', color: profil.renk, border: `1px solid ${profil.renk}50` }}
               >
                 {kelime}
               </span>
@@ -388,13 +469,26 @@ function SonucIcerik() {
             </div>
             <Link
               href={`/mizaclar/${ikinciTip}`}
-              className="text-xs px-3 py-1.5 rounded-full font-semibold text-white flex-shrink-0"
+              className="text-xs px-3 py-1.5 rounded-full font-semibold text-white shrink-0"
               style={{ background: ikinciProfil.renk }}
             >
               {tr ? 'İncele' : 'Explore'}
             </Link>
           </div>
         )}
+
+        {/* Ayna Bölümü */}
+        <div className="rounded-3xl p-8 mb-6" style={{ background: '#1a1207' }}>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: profil.renk }}>
+            {tr ? '✦ Seni tanıyoruz' : '✦ We know you'}
+          </p>
+          <p className="text-xl font-serif leading-relaxed italic" style={{ color: '#e8d5b0' }}>
+            &ldquo;{mirrorCopy[tip]}&rdquo;
+          </p>
+        </div>
+
+        {/* Email Capture */}
+        <EmailCapture tip={tip} profil={profil} tr={tr} />
 
         {/* Paylaş */}
         <ShareButtons tip={tip} profil={profil} tr={tr} />
@@ -506,7 +600,7 @@ function SonucIcerik() {
             {unluler[tip].map((kisi) => (
               <div key={kisi.isim} className="flex items-center gap-3 rounded-xl p-3 bg-white">
                 <div
-                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                  className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0"
                   style={{ background: profil.renk }}
                 >
                   {kisi.isim[0]}
@@ -522,6 +616,89 @@ function SonucIcerik() {
 
         {/* Reklam */}
         <AdUnit slot="1234567890" format="horizontal" className="mb-6 rounded-xl overflow-hidden" />
+
+        {/* Kitap */}
+        <div className="rounded-2xl p-5 mb-6 flex gap-4 items-center bg-amber-50 border border-amber-200">
+          <div className="text-4xl shrink-0">📖</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-xs font-bold text-amber-700 uppercase tracking-widest mb-0.5">
+              {tr ? 'Bu bilgilerin kaynağı' : 'Source of this knowledge'}
+            </p>
+            <p className="font-bold text-stone-800 text-sm leading-snug">Varlığın Tahlili</p>
+            <p className="text-stone-500 text-xs">Zeynep Işık Büyükbay</p>
+          </div>
+          <a
+            href="https://www.idefix.com/arama?q=varl%C4%B1%C4%9F%C4%B1n+tahlili"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 px-4 py-2 rounded-full text-xs font-bold text-white bg-amber-600 hover:bg-amber-500 transition-colors"
+          >
+            {tr ? 'Kitabı Bul' : 'Find Book'}
+          </a>
+        </div>
+
+        {/* PDF Upsell */}
+        <div
+          className="rounded-3xl p-8 mb-6"
+          style={{ background: 'linear-gradient(135deg, #1a1207, #0f0a04)', border: `1.5px solid ${profil.renk}30` }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: profil.renk }}>
+            {tr ? 'Yakında · ₺99' : 'Coming Soon · ₺99'}
+          </p>
+          <h3 className="text-xl font-bold mb-2 text-white">
+            {tr ? 'Derin Mizaç Raporu' : 'Deep Temperament Report'}
+          </h3>
+          <p className="text-sm mb-5" style={{ color: '#9a8a6a' }}>
+            {tr
+              ? `${profil.isim} mizacınıza özel, 20+ sayfalık kapsamlı PDF analiz.`
+              : `20+ page comprehensive PDF analysis tailored to your ${profil.isimEn} temperament.`}
+          </p>
+          <ul className="space-y-2 mb-6">
+            {(tr
+              ? ['✦ Organ–duygu haritanız', '✦ Haftalık sağlık protokolü', '✦ İlişki ve kariyer uyum analizi', "✦ Esmaü'l-Hüsna zikirleriniz", '✦ Beslenme ve detoks takvimi']
+              : ['✦ Your organ–emotion map', '✦ Weekly health protocol', '✦ Relationship & career compatibility', '✦ Your personal divine names', '✦ Nutrition & detox calendar']
+            ).map((item) => (
+              <li key={item} className="text-sm" style={{ color: '#c4973a' }}>{item}</li>
+            ))}
+          </ul>
+          <button
+            className="w-full py-3 rounded-full font-semibold text-sm text-white transition-all hover:opacity-90"
+            style={{ background: profil.renk }}
+            onClick={() => alert(tr ? 'Çok yakında! Email listenize eklendikten sonra haber vereceğiz.' : "Coming soon! We'll notify you once you're on the email list.")}
+          >
+            {tr ? 'Çıkınca Haber Ver' : 'Notify Me When Ready'}
+          </button>
+        </div>
+
+        {/* Yeni İçerik Keşfet */}
+        <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+          <h2 className="font-bold mb-1" style={{ color: 'var(--foreground)' }}>
+            {tr ? '📚 Mizacınla Keşfedeceklerın' : '📚 Explore With Your Temperament'}
+          </h2>
+          <p className="text-sm opacity-60 mb-4">
+            {tr ? 'Mizacına göre özelleştirilmiş içerikler.' : 'Content personalized for your temperament.'}
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { href: '/hastaliklar', ikon: '🫀', tr: 'Hastalık Haritası', en: 'Health Map' },
+              { href: '/esma-sifa', ikon: '📿', tr: "Esmaü'l-Hüsna", en: 'Divine Names' },
+              { href: '/nefes', ikon: '🌬️', tr: 'Nefes Egzersizleri', en: 'Breathing' },
+              { href: '/gida-kavrami', ikon: '🍊', tr: 'Gıda Kavramı', en: 'Nourishment' },
+              { href: '/meslekler', ikon: '💼', tr: 'Kariyer Rehberi', en: 'Careers' },
+              { href: '/varligin-mizaci', ikon: '🌿', tr: "Varlığın Mizacı", en: "Nature's Temperament" },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="flex items-center gap-2 rounded-xl p-3 bg-white hover:shadow-sm transition-all text-sm font-medium"
+                style={{ color: 'var(--earth)' }}
+              >
+                <span className="text-lg">{item.ikon}</span>
+                <span>{tr ? item.tr : item.en}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
 
         {/* Butonlar */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

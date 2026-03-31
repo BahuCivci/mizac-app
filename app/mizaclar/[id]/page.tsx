@@ -27,5 +27,5 @@ export default async function MizacDetayPage({ params }: { params: Promise<{ id:
   const { id } = await params;
   const profil = mizacProfiller[id as MizacTip];
   if (!profil) notFound();
-  return <MizacDetayClient profil={profil} />;
+  return <MizacDetayClient profil={profil} tip={id as MizacTip} />;
 }

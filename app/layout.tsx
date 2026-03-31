@@ -4,9 +4,12 @@ import Script from "next/script";
 import "./globals.css";
 import { LangProvider } from "@/lib/lang-context";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
+import { Analytics } from "@vercel/analytics/react";
 
 // AdSense client ID — ca-pub-XXXXXXXXXXXXXXXX ile değiştirin
 const ADSENSE_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX';
+const GA_ID = 'G-N8NNVEMSEQ';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +21,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = 'https://mizac-app.vercel.app';
+const siteUrl = 'https://mizac.xyz';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -42,13 +45,13 @@ export const metadata: Metadata = {
     siteName: 'Mizaç',
     title: 'Mizaç · Mizacını Keşfet',
     description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi. Hangi elementi taşıyorsun?',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Mizaç Testi' }],
+    images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Mizaç Testi' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mizaç · Mizacını Keşfet',
     description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
-    images: ['/og-image.png'],
+    images: ['/opengraph-image'],
   },
   robots: {
     index: true,
@@ -57,6 +60,20 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+  },
+};
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Mizaç',
+  url: siteUrl,
+  description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
+  inLanguage: ['tr', 'en'],
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteUrl}/blog?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
   },
 };
 
@@ -70,7 +87,20 @@ export default function RootLayout({
       lang="tr"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
+          </Script>
           <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
@@ -80,7 +110,9 @@ export default function RootLayout({
           <LangProvider>
             <Header />
             {children}
+            <Footer />
           </LangProvider>
+          <Analytics />
         </body>
     </html>
   );

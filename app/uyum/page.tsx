@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useLang } from '@/lib/lang-context';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { EmailCapture } from '@/components/email-capture';
 
 const uyumVerisi: Record<MizacTip, Record<MizacTip, { puan: number; baslik: string; baslikEn: string; aciklama: string; aciklamaEn: string; gucler: string[]; guclerEn: string[]; zorluklar: string[]; zorluklarEn: string[] }>> = {
   safravi: {
@@ -191,21 +192,35 @@ export default function UyumPage() {
   const [secilen, setSecilen] = useState<MizacTip | null>(null);
 
   return (
-    <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
-      <div className="max-w-3xl mx-auto">
+    <main className="min-h-screen" style={{ background: 'var(--background)' }}>
 
-        {/* Başlık */}
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">💞</div>
-          <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--earth)' }}>
-            {tr ? 'Mizaç Uyumu' : 'Temperament Compatibility'}
+      {/* Hero */}
+      <section className="py-20 px-4 text-center" style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}>
+        <div className="max-w-2xl mx-auto">
+          <p className="text-xs tracking-widest uppercase mb-6" style={{ color: '#c4973a' }}>
+            {tr ? 'Mizaç · İlişki Bilimi' : 'Temperament · Relationship Science'}
+          </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+            {tr ? (
+              <>Bu ilişki neden hep<br /><span style={{ color: '#c4973a' }}>aynı noktada takılıyor?</span></>
+            ) : (
+              <>Why does this relationship<br /><span style={{ color: '#c4973a' }}>always get stuck at the same point?</span></>
+            )}
           </h1>
-          <p className="text-lg opacity-60 max-w-xl mx-auto leading-relaxed">
+          <p className="text-lg leading-relaxed mb-4" style={{ color: '#9a8060' }}>
             {tr
-              ? 'Hangi mizaçlar birbirleriyle uyumlu? İlişkide, arkadaşlıkta ve iş hayatında mizaçların etkisi.'
-              : 'Which temperaments are compatible? The impact of temperaments in relationships, friendships and work life.'}
+              ? 'Çünkü iki farklı mizaç, iki farklı dünya. Birinin hızı diğerini yoruyor, birinin sessizliği diğerini endişelendiriyor.'
+              : 'Because two different temperaments mean two different worlds. One\'s speed exhausts the other, one\'s silence worries the other.'}
+          </p>
+          <p className="text-sm" style={{ color: '#6b5230' }}>
+            {tr
+              ? 'İbn-i Sina geleneği, uyumun şans değil bilim olduğunu söylüyor.'
+              : 'Ibn Sina\'s tradition says compatibility is science, not chance.'}
           </p>
         </div>
+      </section>
+
+      <div className="max-w-3xl mx-auto px-4 py-12">
 
         {/* Mizaç seç */}
         <div className="rounded-2xl p-5 mb-8" style={{ background: 'var(--cream)' }}>
@@ -338,10 +353,46 @@ export default function UyumPage() {
           </div>
         )}
 
+        {/* Detaylı Karşılaştırmalar */}
+        <div className="mt-10 rounded-2xl p-5" style={{ background: 'var(--cream)' }}>
+          <h2 className="font-bold text-sm uppercase tracking-widest opacity-50 mb-4 text-center">
+            {tr ? 'Detaylı Karşılaştırmalar' : 'Detailed Comparisons'}
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {[
+              { slug: 'safravi-vs-balgami', label: '🔥 × 🌊', isim: tr ? 'Safravî × Balgamî' : 'Choleric × Phlegmatic', puan: 92 },
+              { slug: 'demevi-vs-sevdavi', label: '💧 × 🌍', isim: tr ? 'Demevî × Sevdavî' : 'Sanguine × Melancholic', puan: 90 },
+              { slug: 'balgami-vs-sevdavi', label: '🌊 × 🌍', isim: tr ? 'Balgamî × Sevdavî' : 'Phlegmatic × Melancholic', puan: 76 },
+              { slug: 'safravi-vs-demevi', label: '🔥 × 💧', isim: tr ? 'Safravî × Demevî' : 'Choleric × Sanguine', puan: 68 },
+              { slug: 'demevi-vs-balgami', label: '💧 × 🌊', isim: tr ? 'Demevî × Balgamî' : 'Sanguine × Phlegmatic', puan: 48 },
+              { slug: 'safravi-vs-sevdavi', label: '🔥 × 🌍', isim: tr ? 'Safravî × Sevdavî' : 'Choleric × Melancholic', puan: 38 },
+            ].map((item) => (
+              <Link
+                key={item.slug}
+                href={`/karsilastir/${item.slug}`}
+                className="flex flex-col items-center text-center rounded-xl p-3 bg-white hover:shadow-sm transition-all border border-stone-100"
+              >
+                <span className="text-lg mb-1">{item.label}</span>
+                <span className="text-xs font-semibold text-stone-600 leading-tight">{item.isim}</span>
+                <span className="text-xs font-bold mt-1" style={{ color: UyumRengi(item.puan) }}>%{item.puan}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Email capture */}
+        <div className="mt-10">
+          <EmailCapture
+            title={tr ? 'İlişkinde mizacını kullan' : 'Use temperament in your relationships'}
+            subtitle={tr ? 'Her Pazartesi — uyum, iletişim ve denge üzerine. Ücretsiz.' : 'Every Monday — on compatibility, communication and balance. Free.'}
+            cta={tr ? 'Gönder' : 'Send'}
+          />
+        </div>
+
         {/* CTA */}
-        <div className="text-center mt-10">
+        <div className="text-center mt-8">
           <p className="text-sm opacity-50 mb-4">
-            {tr ? 'Kendi mizacınızı henüz öğrenmediniz mi?' : 'Haven\'t discovered your temperament yet?'}
+            {tr ? 'Kendi mizacını henüz öğrenmedin mi?' : 'Haven\'t discovered your temperament yet?'}
           </p>
           <Link href="/test"
             className="inline-block px-8 py-3 rounded-full font-semibold text-white transition-all hover:scale-105"

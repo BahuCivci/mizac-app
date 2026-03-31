@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
 import { useLang } from '@/lib/lang-context';
 import { mizacProfiller } from '@/lib/mizac-data';
 
@@ -70,6 +71,75 @@ const ortaYas = {
   },
 };
 
+function EmailCaptureYas({ tr }: { tr: boolean }) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip: 'yas-mizaclari' }),
+      });
+      setStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="rounded-3xl p-8 text-center mb-8" style={{ background: '#1a1207' }}>
+        <div className="text-4xl mb-3">📬</div>
+        <p className="font-bold text-white text-lg">{tr ? 'Eklendi!' : 'Added!'}</p>
+        <p className="text-sm mt-1" style={{ color: '#9a8a6a' }}>{tr ? 'Gelen kutunuzu kontrol edin.' : 'Check your inbox.'}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-3xl p-8 mb-8" style={{ background: '#1a1207' }}>
+      <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#c4973a' }}>
+        {tr ? 'Yaş ve Mizaç Rehberi' : 'Life Stage Guide'}
+      </p>
+      <h3 className="text-xl font-bold text-white mb-2">
+        {tr ? 'Hangi dönemdesin?' : 'Which stage are you in?'}
+      </h3>
+      <p className="text-sm mb-6" style={{ color: '#9a8a6a' }}>
+        {tr
+          ? 'Yaşa göre değişen sağlık, ilişki ve ruh hali rehberi — her Pazartesi.'
+          : 'Health, relationship and mood guidance by life stage — every Monday.'}
+      </p>
+      <form onSubmit={submit} className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
+          required
+          className="flex-1 px-4 py-3 rounded-full text-sm outline-none"
+          style={{ background: '#2a1f0a', border: '1px solid #c4973a40', color: '#e8d5b0' }}
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="px-6 py-3 rounded-full text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90 disabled:opacity-60"
+          style={{ background: '#c4973a' }}
+        >
+          {status === 'loading' ? '⏳' : (tr ? 'Gönder' : 'Send')}
+        </button>
+      </form>
+      {status === 'error' && (
+        <p className="text-xs text-red-400 mt-2">{tr ? 'Bir hata oluştu.' : 'An error occurred.'}</p>
+      )}
+    </div>
+  );
+}
+
 export default function YasMizaclariPage() {
   const { lang } = useLang();
   const tr = lang === 'tr';
@@ -78,16 +148,19 @@ export default function YasMizaclariPage() {
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
       <div className="max-w-3xl mx-auto">
 
-        {/* Başlık */}
-        <div className="text-center mb-12">
-          <div className="text-6xl mb-4">⏳</div>
-          <h1 className="text-4xl font-bold mb-3" style={{ color: 'var(--earth)' }}>
+        {/* Hero */}
+        <div className="rounded-3xl px-8 py-14 text-center mb-10" style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] mb-6" style={{ color: '#c4973a' }}>
             {tr ? 'Yaş Mizaçları' : 'Life Stage Temperaments'}
+          </p>
+          <div className="text-7xl mb-6">⏳</div>
+          <h1 className="text-4xl font-bold mb-4" style={{ color: '#e8d5b0' }}>
+            {tr ? 'Her yaşın bir mizacı var.' : 'Every age has a temperament.'}
           </h1>
-          <p className="text-lg opacity-60 max-w-xl mx-auto leading-relaxed">
+          <p className="text-lg leading-relaxed max-w-xl mx-auto" style={{ color: '#9a8a6a' }}>
             {tr
-              ? 'İnsan hayatının her dönemi farklı bir mizaçla yaşanır. Bu bilgi; kendinizi, çocuklarınızı ve yaşlıları anlamlandırmanızı kolaylaştırır.'
-              : 'Each period of human life is lived through a different temperament. This knowledge makes it easier to understand yourself, your children and the elderly.'}
+              ? 'Bebekliğin sakinliği, gençliğin ateşi, yaşlılığın derinliği — bunlar tesadüf değil, mizacın yaş boyunca dönüşümü.'
+              : "The calm of infancy, the fire of youth, the depth of old age — not coincidence, but temperament's transformation across age."}
           </p>
         </div>
 
@@ -151,6 +224,9 @@ export default function YasMizaclariPage() {
             {tr ? ortaYas.tr.aciklama : ortaYas.en.aciklama}
           </p>
         </div>
+
+        {/* Email Capture */}
+        <EmailCaptureYas tr={tr} />
 
         {/* CTA */}
         <div className="text-center">

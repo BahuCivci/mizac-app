@@ -1,12 +1,38 @@
 'use client';
 
 import Link from 'next/link';
-import { MizacProfil } from '@/lib/mizac-data';
+import { useState } from 'react';
+import { MizacProfil, MizacTip } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
 
-export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
+const mirrorCopy: Record<MizacTip, string> = {
+  safravi: 'Öfkelendiğinde genellikle haklısındır. Ama bunu kimse söylemez — çünkü ses tonu her şeyi gölgeler. Doğruyu görüyorsun, dünya senin hızında gitmiyor — bu hem gücün hem de yükün.',
+  demevi: 'İnsanlar seni sever. Her ortamda tutunursun. Ama akşam yalnız kaldığında o neşe nerede gidiyor? Demevî içi işlenmemiş duygularla doludur — kimse bunu söylemez.',
+  balgami: 'Sabretmeyi biliyorsun. Kimse seni zorlayamaz. Ama bazen sen de merak ediyorsun: "Aslında ben ne istiyorum?" Balgamî mizaç dışarıdan sakin, içeriden gizemlidir.',
+  sevdavi: 'Hissediyorsun — derin, çok derin. Bir müzik seni ağlatır, yanlış bir söz günlerce aklında kalır. Bu hassasiyet seni hem sanatçı hem yorgun kılar.',
+};
+
+export default function MizacDetayClient({ profil, tip }: { profil: MizacProfil; tip: MizacTip }) {
   const { lang } = useLang();
   const tr = lang === 'tr';
+  const [email, setEmail] = useState('');
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function submitEmail(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setEmailStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip }),
+      });
+      setEmailStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setEmailStatus('error');
+    }
+  }
 
   return (
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
@@ -15,26 +41,37 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
         {/* Hero */}
         <div
           className="rounded-3xl p-10 text-center mb-8"
-          style={{ background: `linear-gradient(135deg, ${profil.renkAcik}, white)` }}
+          style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}
         >
-          <div className="text-7xl mb-4">{profil.elementSembol}</div>
-          <h1 className="text-5xl font-bold mb-1" style={{ color: profil.renk }}>
+          <p className="text-xs font-medium uppercase tracking-[0.3em] mb-6" style={{ color: profil.renk }}>
+            {tr ? 'Mizaç Profili' : 'Temperament Profile'}
+          </p>
+          <div className="text-8xl mb-6">{profil.elementSembol}</div>
+          <h1 className="text-5xl font-bold mb-2" style={{ color: profil.renk }}>
             {tr ? profil.isim : profil.isimEn}
           </h1>
-          <p className="text-xl opacity-50 mb-2">{tr ? profil.isimEn : profil.isim}</p>
-          <div className="flex justify-center gap-4 text-sm opacity-60 mb-6">
-            <span>{tr ? 'Element' : 'Element'}: <strong>{tr ? profil.element : profil.elementEn}</strong></span>
-            <span>·</span>
-            <span>{profil.sicaklik} & {profil.nem}</span>
-          </div>
+          <p className="text-base mb-6" style={{ color: '#5a4a2a' }}>{tr ? profil.isimEn : profil.isim} · {tr ? profil.element : profil.elementEn}</p>
+          <p className="text-lg leading-relaxed max-w-md mx-auto mb-8" style={{ color: '#c8b87a' }}>
+            {tr ? profil.kisaAciklama : profil.kisaAciklamaEn}
+          </p>
           <div className="flex flex-wrap justify-center gap-2">
             {(tr ? profil.anahtarKelimeler : profil.anahtarKelimelerEn).map((k) => (
-              <span key={k} className="px-3 py-1 rounded-full text-sm font-medium text-white"
-                style={{ background: profil.renk }}>
+              <span key={k} className="px-4 py-1.5 rounded-full text-sm font-medium"
+                style={{ background: profil.renk + '25', color: profil.renk, border: `1px solid ${profil.renk}50` }}>
                 {k}
               </span>
             ))}
           </div>
+        </div>
+
+        {/* Mirror Copy */}
+        <div className="rounded-3xl p-8 mb-6" style={{ background: '#1a1207' }}>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: profil.renk }}>
+            {tr ? '✦ Seni tanıyoruz' : '✦ We know you'}
+          </p>
+          <p className="text-xl font-serif leading-relaxed italic" style={{ color: '#e8d5b0' }}>
+            &ldquo;{mirrorCopy[tip]}&rdquo;
+          </p>
         </div>
 
         {/* Açıklama */}
@@ -305,6 +342,53 @@ export default function MizacDetayClient({ profil }: { profil: MizacProfil }) {
               : '📖 The information on this page is based on "Varlığın Tahlili" by Zeynep Işık Büyükbay.'}
           </p>
         </div>
+
+        {/* Email Capture */}
+        {emailStatus === 'success' ? (
+          <div className="rounded-3xl p-8 text-center mb-6" style={{ background: '#1a1207' }}>
+            <div className="text-4xl mb-3">📬</div>
+            <p className="font-bold text-white text-lg">{tr ? 'Eklendi!' : 'Added!'}</p>
+            <p className="text-sm mt-1" style={{ color: '#9a8a6a' }}>{tr ? 'Gelen kutunuzu kontrol edin.' : 'Check your inbox.'}</p>
+          </div>
+        ) : (
+          <div className="rounded-3xl p-8 mb-6" style={{ background: '#1a1207' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: profil.renk }}>
+              {tr ? 'Haftalık Rehber' : 'Weekly Guide'}
+            </p>
+            <h3 className="text-xl font-bold mb-2" style={{ color: '#e8d5b0' }}>
+              {tr
+                ? `${profil.isim} mizacına özel içerik.`
+                : `Content tailored to the ${profil.isimEn} temperament.`}
+            </h3>
+            <p className="text-sm mb-6" style={{ color: '#9a8a6a' }}>
+              {tr
+                ? 'Sağlık, beslenme, ilişki ve kariyer tavsiyeleri — her Pazartesi.'
+                : 'Health, nutrition, relationship and career insights — every Monday.'}
+            </p>
+            <form onSubmit={submitEmail} className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
+                required
+                className="flex-1 px-4 py-3 rounded-full text-sm outline-none"
+                style={{ background: '#2a1f0a', border: '1px solid #c4973a40', color: '#e8d5b0' }}
+              />
+              <button
+                type="submit"
+                disabled={emailStatus === 'loading'}
+                className="px-6 py-3 rounded-full text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90 disabled:opacity-60"
+                style={{ background: profil.renk }}
+              >
+                {emailStatus === 'loading' ? '⏳' : (tr ? 'Gönder' : 'Send')}
+              </button>
+            </form>
+            {emailStatus === 'error' && (
+              <p className="text-xs text-red-400 mt-2">{tr ? 'Bir hata oluştu.' : 'An error occurred.'}</p>
+            )}
+          </div>
+        )}
 
         {/* Nav */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

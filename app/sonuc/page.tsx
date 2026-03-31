@@ -375,6 +375,57 @@ function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof miza
   );
 }
 
+function PdfWaitlist({ tip, renk, tr }: { tip: MizacTip; renk: string; tr: boolean }) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip: `pdf-waitlist-${tip}` }),
+      });
+      setStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="text-center py-3">
+        <p className="font-semibold text-white">📬 {tr ? 'Listeye eklendi! Çıkınca haber vereceğiz.' : 'Added! We\'ll notify you when it\'s ready.'}</p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="flex gap-2">
+      <input
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
+        required
+        className="flex-1 px-4 py-3 rounded-full text-sm outline-none"
+        style={{ background: '#2a1f0a', border: '1px solid #c4973a40', color: '#e8d5b0' }}
+      />
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="px-5 py-3 rounded-full text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90 disabled:opacity-60"
+        style={{ background: renk }}
+      >
+        {status === 'loading' ? '⏳' : (tr ? 'Haber Ver' : 'Notify Me')}
+      </button>
+    </form>
+  );
+}
+
 function SonucIcerik() {
   const params = useSearchParams();
   const tip = params.get('tip') as MizacTip;
@@ -489,6 +540,45 @@ function SonucIcerik() {
 
         {/* Email Capture */}
         <EmailCapture tip={tip} profil={profil} tr={tr} />
+
+        {/* Viral: Arkadaşını Test Et */}
+        <div className="rounded-3xl p-8 mb-6" style={{ background: profil.renkAcik, border: `2px solid ${profil.renk}30` }}>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: profil.renk }}>
+            {tr ? '✦ Arkadaşını test et' : '✦ Test your friend'}
+          </p>
+          <h3 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
+            {tr ? 'Arkadaşının mizacını tahmin edebilir misin?' : 'Can you guess your friend\'s temperament?'}
+          </h3>
+          <p className="text-sm leading-relaxed mb-5 opacity-70">
+            {tr
+              ? `Sen ${profil.isim} çıktın. Peki ya onlar? Testi gönder, sonucu birlikte karşılaştırın.`
+              : `You got ${profil.isimEn}. What about them? Send the test, compare results together.`}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-3">
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent((tr
+                ? `Mizaç testinde ${profil.isim} ${profil.elementSembol} çıktım! Sen ne çıkarsın? 👇\nhttps://mizac.xyz/test`
+                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test! What would you get? 👇\nhttps://mizac.xyz/test`))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center py-3 rounded-full font-semibold text-white text-sm transition-all hover:opacity-90"
+              style={{ background: '#25D366' }}
+            >
+              WhatsApp&apos;tan Gönder
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent((tr
+                ? `Mizaç testinde ${profil.isim} ${profil.elementSembol} çıktım. Sen ne çıkarsın? @mizac_xyz`
+                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test. What about you?`))}&url=${encodeURIComponent('https://mizac.xyz/test')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center py-3 rounded-full font-semibold text-white text-sm transition-all hover:opacity-90"
+              style={{ background: '#000' }}
+            >
+              𝕏 Twitter&apos;da Paylaş
+            </a>
+          </div>
+        </div>
 
         {/* Paylaş */}
         <ShareButtons tip={tip} profil={profil} tr={tr} />
@@ -661,14 +751,30 @@ function SonucIcerik() {
               <li key={item} className="text-sm" style={{ color: '#c4973a' }}>{item}</li>
             ))}
           </ul>
-          <button
-            className="w-full py-3 rounded-full font-semibold text-sm text-white transition-all hover:opacity-90"
-            style={{ background: profil.renk }}
-            onClick={() => alert(tr ? 'Çok yakında! Email listenize eklendikten sonra haber vereceğiz.' : "Coming soon! We'll notify you once you're on the email list.")}
-          >
-            {tr ? 'Çıkınca Haber Ver' : 'Notify Me When Ready'}
-          </button>
+          <PdfWaitlist tip={tip} renk={profil.renk} tr={tr} />
         </div>
+
+        {/* WhatsApp Topluluk */}
+        <a
+          href="https://chat.whatsapp.com/mizac"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-4 rounded-2xl p-5 mb-6 transition-all hover:opacity-90"
+          style={{ background: '#25D36615', border: '1.5px solid #25D36630' }}
+        >
+          <div className="text-3xl shrink-0">💬</div>
+          <div className="flex-1">
+            <p className="font-bold text-sm mb-0.5" style={{ color: '#1da851' }}>
+              {tr ? 'Mizaç Topluluğuna Katıl' : 'Join the Temperament Community'}
+            </p>
+            <p className="text-xs opacity-60">
+              {tr ? 'Aynı mizaçtaki insanlarla tanış · Sorular sor · Deneyim paylaş' : 'Meet people with the same temperament · Ask questions · Share experiences'}
+            </p>
+          </div>
+          <span className="text-xs font-semibold px-3 py-1.5 rounded-full shrink-0" style={{ background: '#25D366', color: 'white' }}>
+            {tr ? 'Katıl →' : 'Join →'}
+          </span>
+        </a>
 
         {/* Yeni İçerik Keşfet */}
         <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>

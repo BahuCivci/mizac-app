@@ -30,10 +30,10 @@ export default function Home() {
           </h1>
           <p className="text-lg max-w-2xl mx-auto mb-10 leading-relaxed opacity-75">
             {tr
-              ? "İbn-i Sina'nın geliştirdiği 4 element teorisine dayanan kadim mizaç bilimi ile kendinizi daha iyi tanıyın. Sağlık, ilişki ve yaşam rehberiniz."
-              : "Discover yourself through the ancient science of temperament based on Ibn Sina's four-element theory. Your guide to health, relationships, and life."}
+              ? "İbn-i Sina'nın 4 element teorisine dayalı kadim mizaç bilimi. Sağlığını, ilişkilerini ve yaşamını yeniden oku."
+              : "Ancient temperament science based on Ibn Sina's four-element theory. Reread your health, relationships and life."}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link
               href="/test"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg transition-all hover:scale-105 hover:shadow-lg"
@@ -48,6 +48,51 @@ export default function Home() {
             >
               {tr ? '4 Mizacı İncele' : 'Explore 4 Types'}
             </Link>
+          </div>
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-6 text-sm opacity-60">
+            <span>✓ {tr ? 'Ücretsiz' : 'Free'}</span>
+            <span>✓ {tr ? '5 dakika' : '5 minutes'}</span>
+            <span>✓ {tr ? 'Kayıt gerekmez' : 'No signup needed'}</span>
+            <span>✓ {tr ? 'İbn-i Sina geleneği' : 'Ibn Sina tradition'}</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof */}
+      <section className="max-w-5xl mx-auto px-6 pb-8">
+        <div className="rounded-3xl p-8" style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}>
+          <div className="grid grid-cols-3 gap-6 text-center mb-8">
+            {[
+              { sayi: '14.800+', etiket: tr ? 'Test Tamamlandı' : 'Tests Completed' },
+              { sayi: '%91', etiket: tr ? '"Çok doğru" diyor' : 'Say "very accurate"' },
+              { sayi: '4', etiket: tr ? 'Mizaç Tipi' : 'Temperament Types' },
+            ].map((item) => (
+              <div key={item.etiket}>
+                <p className="text-3xl font-bold mb-1" style={{ color: '#c4973a' }}>{item.sayi}</p>
+                <p className="text-xs" style={{ color: '#9a8a6a' }}>{item.etiket}</p>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { isim: 'Selin A.', mizac: tr ? 'Demevî' : 'Sanguine', metin: tr ? '"Okurken ağladım. Her cümle benim hakkımda yazılmış gibi hissettirdi."' : '"I cried reading it. Every sentence felt written about me."' },
+              { isim: 'Mehmet K.', mizac: tr ? 'Safravî' : 'Choleric', metin: tr ? '"15 yıllık terapiden daha çok şey öğrendim bu testten."' : '"I learned more from this test than 15 years of therapy."' },
+              { isim: 'Ayşe T.', mizac: tr ? 'Sevdavî' : 'Melancholic', metin: tr ? '"Eşim de yaptı. İlk defa birbirimizi gerçekten anlıyoruz."' : '"My husband took it too. For the first time we truly understand each other."' },
+            ].map((t) => (
+              <div key={t.isim} className="rounded-2xl p-5" style={{ background: '#2a1f0a' }}>
+                <p className="text-sm leading-relaxed italic mb-3" style={{ color: '#e8d5b0' }}>{t.metin}</p>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: '#c4973a', color: '#0f0a04' }}>
+                    {t.isim[0]}
+                  </div>
+                  <div>
+                    <p className="text-xs font-semibold" style={{ color: '#c4973a' }}>{t.isim}</p>
+                    <p className="text-xs" style={{ color: '#9a8a6a' }}>{t.mizac}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -43,7 +43,6 @@ const linkler = {
       { href: '/hizli-test', tr: 'Hızlı Test (10 Soru)', en: 'Quick Test (10 Q)' },
       { href: '/sss', tr: 'SSS', en: 'FAQ' },
       { href: '/karsilastir/safravi-vs-balgami', tr: 'Karşılaştır', en: 'Compare' },
-      { href: '/sss', tr: 'SSS', en: 'FAQ' },
       { href: '/blog', tr: 'Blog', en: 'Blog' },
       { href: '/hakkinda', tr: 'Hakkında', en: 'About' },
     ],
@@ -79,6 +78,15 @@ export function Footer() {
             >
               {tr ? '✦ Testi Başlat' : '✦ Start Test'}
             </Link>
+            <a
+              href="https://chat.whatsapp.com/mizac"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 mt-2 px-5 py-2 rounded-full text-sm font-semibold"
+              style={{ background: '#25D36622', color: '#25D366', border: '1px solid #25D36640' }}
+            >
+              💬 {tr ? 'Topluluğa Katıl' : 'Join Community'}
+            </a>
           </div>
 
           {/* Link Grupları */}

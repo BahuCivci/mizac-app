@@ -109,6 +109,65 @@ const sorular = [
 
 type Puanlar = Record<MizacTip, number>;
 
+function HizliTestEmail({ tip, renk }: { tip: MizacTip; renk: string }) {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, tip }),
+      });
+      setStatus(res.ok ? 'success' : 'error');
+    } catch {
+      setStatus('error');
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <div className="rounded-2xl p-5 text-center mb-4" style={{ background: '#1a1207' }}>
+        <p className="font-semibold text-white">📬 Gönderildi! Tam profiliniz emailde.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-2xl p-5 mb-4" style={{ background: '#1a1207' }}>
+      <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: renk }}>
+        Tam profili emaile al
+      </p>
+      <p className="text-xs mb-4" style={{ color: '#9a8a6a' }}>
+        50 soruluk detaylı analiz + beslenme rehberi gönderelim.
+      </p>
+      <form onSubmit={submit} className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email@adresiniz.com"
+          required
+          className="flex-1 px-3 py-2.5 rounded-full text-sm outline-none"
+          style={{ background: '#2a1f0a', border: '1px solid #c4973a40', color: '#e8d5b0' }}
+        />
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="px-4 py-2.5 rounded-full text-xs font-semibold text-white shrink-0 disabled:opacity-60"
+          style={{ background: renk }}
+        >
+          {status === 'loading' ? '⏳' : 'Gönder'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
 function hesapla(secimler: (number | undefined)[]): Puanlar {
   const t: Puanlar = { safravi: 0, demevi: 0, balgami: 0, sevdavi: 0 };
   secimler.forEach((s, i) => {
@@ -153,15 +212,19 @@ export default function HizliTestPage() {
         <div className="max-w-md mx-auto">
           <div
             className="rounded-3xl p-8 text-center mb-6"
-            style={{ background: `linear-gradient(135deg, ${profil.renkAcik}, white)` }}
+            style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}
           >
-            <div className="text-6xl mb-3">{profil.elementSembol}</div>
-            <p className="text-xs font-bold opacity-40 uppercase tracking-widest mb-1">Mizacın</p>
-            <h1 className="text-4xl font-bold mb-2" style={{ color: profil.renk }}>{profil.isim}</h1>
-            <p className="text-stone-600 text-sm leading-relaxed max-w-xs mx-auto">{profil.kisaAciklama}</p>
-            <div className="flex flex-wrap justify-center gap-1.5 mt-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] mb-4" style={{ color: profil.renk }}>
+              ⚡ Hızlı Test Sonucu
+            </p>
+            <div className="text-7xl mb-4">{profil.elementSembol}</div>
+            <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#9a8a6a' }}>Mizacın</p>
+            <h1 className="text-4xl font-bold mb-3" style={{ color: profil.renk }}>{profil.isim}</h1>
+            <p className="text-sm leading-relaxed max-w-xs mx-auto mb-5" style={{ color: '#c8b87a' }}>{profil.kisaAciklama}</p>
+            <div className="flex flex-wrap justify-center gap-1.5">
               {profil.anahtarKelimeler.slice(0, 4).map((k) => (
-                <span key={k} className="text-xs px-2.5 py-1 rounded-full text-white" style={{ background: profil.renk }}>
+                <span key={k} className="text-xs px-3 py-1 rounded-full font-medium"
+                  style={{ background: profil.renk + '25', color: profil.renk, border: `1px solid ${profil.renk}50` }}>
                   {k}
                 </span>
               ))}
@@ -205,6 +268,9 @@ export default function HizliTestPage() {
               ✦ 50 Soruluk Detaylı Testi Yap
             </Link>
           </div>
+
+          {/* Email Capture */}
+          <HizliTestEmail tip={sonuc.tip} renk={profil.renk} />
 
           {/* WhatsApp Paylaş */}
           <button

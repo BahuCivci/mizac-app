@@ -14,14 +14,18 @@ export default function BlogPage() {
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
       <div className="max-w-3xl mx-auto">
 
-        {/* Başlık */}
-        <div className="text-center mb-12">
-          <div className="text-4xl mb-3">✦</div>
-          <h1 className="text-4xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
+        {/* Hero */}
+        <div className="rounded-3xl px-8 py-14 text-center mb-12"
+          style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] mb-5" style={{ color: '#c4973a' }}>
             Mizaç Blog
+          </p>
+          <div className="text-5xl mb-5">✦</div>
+          <h1 className="text-4xl font-bold mb-4" style={{ color: '#e8d5b0' }}>
+            Kendini okumayı öğren.
           </h1>
-          <p className="opacity-60 text-sm">
-            İbn-i Sina geleneğine dayalı mizaç bilgisi
+          <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: '#9a8a6a' }}>
+            Öfken neden o organa gidiyor, çocuğun neden o şekilde tepki veriyor, yanlış mizaçla neden yoruluyorsun — cevaplar burada.
           </p>
         </div>
 

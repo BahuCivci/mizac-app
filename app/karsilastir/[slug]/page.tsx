@@ -1,6 +1,8 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 import { notFound } from 'next/navigation';
+import { KarsilastirEmailCapture } from './email-capture-client';
 
 const uyumVerisi: Record<MizacTip, Record<MizacTip, { puan: number; baslik: string; aciklama: string; gucler: string[]; zorluklar: string[] }>> = {
   safravi: {
@@ -40,6 +42,24 @@ const kombinasyonlar = [
 
 export function generateStaticParams() {
   return kombinasyonlar.map((k) => ({ slug: k.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const kombo = kombinasyonlar.find((k) => k.slug === slug);
+  if (!kombo) return {};
+  const a = mizacProfiller[kombo.a];
+  const b = mizacProfiller[kombo.b];
+  const uyum = uyumVerisi[kombo.a][kombo.b];
+  return {
+    title: `${a.isim} ve ${b.isim} Uyumu — %${uyum.puan} · Mizaç`,
+    description: `${a.isim} ile ${b.isim} mizaçları arasındaki uyum skoru, güçlü yönler ve zorluklar. İbn-i Sina geleneğiyle mizaç karşılaştırması.`,
+    alternates: { canonical: `https://mizac.xyz/karsilastir/${slug}` },
+    openGraph: {
+      title: `${a.elementSembol} ${a.isim} × ${b.elementSembol} ${b.isim} — %${uyum.puan} Uyum`,
+      description: uyum.aciklama,
+    },
+  };
 }
 
 function UyumRenk(puan: number) {
@@ -189,6 +209,9 @@ export default async function KarsilastirPage({ params }: { params: Promise<{ sl
             })}
           </div>
         </div>
+
+        {/* Email Capture */}
+        <KarsilastirEmailCapture slug={slug} isimA={profilA.isim} isimB={profilB.isim} />
 
         {/* CTA */}
         <div className="rounded-3xl p-8 text-center bg-stone-800 text-white">

@@ -4,8 +4,12 @@
     "allow": [
       "Bash(npm run lint)",
       "Bash(npm run build)",
+      "Bash(npm run test)",
+      "Bash(npm run test:*)",
       "Bash(npx tsc --noEmit)",
       "Bash(npx tsc --noEmit --skipLibCheck)",
+      "Bash(npx playwright test*)",
+      "Bash(npx playwright show-report)",
       "Bash(git status)",
       "Bash(git diff)",
       "Bash(git log:*)",
@@ -22,8 +26,15 @@
       "/Users/bahu/Documents/mizac-app/app",
       "/Users/bahu/Documents/mizac-app/lib",
       "/Users/bahu/Documents/mizac-app/components",
+      "/Users/bahu/Documents/mizac-app/tests",
       "/Users/bahu/Documents/mizac/ocr_output"
     ]
+  },
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["@playwright/mcp@latest", "--browser", "chromium"]
+    }
   },
   "hooks": {
     "PreToolUse": [

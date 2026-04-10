@@ -48,10 +48,10 @@ test.describe('Formlar ve linkler', () => {
 
   test('Dil değiştirme çalışıyor', async ({ page }) => {
     await page.goto('/');
-    await page.getByRole('button', { name: 'EN' }).click();
-    await expect(page.getByText('Start the Test', { exact: false }).first()).toBeVisible();
-    await page.getByRole('button', { name: 'TR' }).click();
-    await expect(page.getByText('Testi Başlat', { exact: false }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'EN' }).first().click();
+    await expect(page.locator('main').getByText('Start the Test', { exact: false }).first()).toBeVisible();
+    await page.getByRole('button', { name: 'TR' }).first().click();
+    await expect(page.locator('main').getByText('Testi Başlat', { exact: false }).first()).toBeVisible();
   });
 
   test('Mobil hamburger menü açılıyor', async ({ page }) => {

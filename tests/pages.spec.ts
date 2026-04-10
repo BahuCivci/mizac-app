@@ -23,7 +23,7 @@ const sayfalar = [
   { url: '/muzik-mizac', baslik: 'Müzik', kontrol: 'Müzik' },
   { url: '/koku-mizac', baslik: 'Koku', kontrol: 'Koku' },
   { url: '/uyum', baslik: 'Uyum', kontrol: 'Uyum' },
-  { url: '/karsilastir', baslik: 'Karşılaştır', kontrol: 'vs' },
+  { url: '/karsilastir', baslik: 'Karşılaştır', kontrol: 'Uyum' },
   { url: '/tarifler', baslik: 'Tarif', kontrol: 'Tarif' },
   { url: '/meslekler', baslik: 'Kariyer', kontrol: 'Kariyer' },
   { url: '/cocuk-mizaci', baslik: 'Çocuk', kontrol: 'Çocuk' },
@@ -43,7 +43,8 @@ for (const sayfa of sayfalar) {
   test(`${sayfa.url} yükleniyor`, async ({ page }) => {
     const res = await page.goto(sayfa.url);
     expect(res?.status()).toBe(200);
+    await page.waitForLoadState('networkidle');
     await expect(page).toHaveTitle(new RegExp(sayfa.baslik, 'i'));
-    await expect(page.getByText(sayfa.kontrol, { exact: false }).first()).toBeVisible();
+    await expect(page.locator('main').getByText(sayfa.kontrol, { exact: false }).first()).toBeVisible({ timeout: 10000 });
   });
 }

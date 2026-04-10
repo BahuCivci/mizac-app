@@ -375,54 +375,44 @@ function ShareButtons({ tip, profil, tr }: { tip: MizacTip; profil: (typeof miza
   );
 }
 
-function PdfWaitlist({ tip, renk, tr }: { tip: MizacTip; renk: string; tr: boolean }) {
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+function PdfSatinAl({ tip, renk, tr }: { tip: MizacTip; renk: string; tr: boolean }) {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!email) return;
-    setStatus('loading');
+  async function handleClick() {
+    setLoading(true);
+    setError('');
     try {
-      const res = await fetch('/api/subscribe', {
+      const res = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, tip: `pdf-waitlist-${tip}` }),
+        body: JSON.stringify({ tip }),
       });
-      setStatus(res.ok ? 'success' : 'error');
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setError(tr ? 'Bir hata oluştu, tekrar deneyin.' : 'Something went wrong, please try again.');
+        setLoading(false);
+      }
     } catch {
-      setStatus('error');
+      setError(tr ? 'Bağlantı hatası, tekrar deneyin.' : 'Connection error, please try again.');
+      setLoading(false);
     }
   }
 
-  if (status === 'success') {
-    return (
-      <div className="text-center py-3">
-        <p className="font-semibold text-white">📬 {tr ? 'Listeye eklendi! Çıkınca haber vereceğiz.' : 'Added! We\'ll notify you when it\'s ready.'}</p>
-      </div>
-    );
-  }
-
   return (
-    <form onSubmit={submit} className="flex gap-2">
-      <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder={tr ? 'email@adresiniz.com' : 'your@email.com'}
-        required
-        className="flex-1 px-4 py-3 rounded-full text-sm outline-none"
-        style={{ background: '#2a1f0a', border: '1px solid #c4973a40', color: '#e8d5b0' }}
-      />
+    <div>
       <button
-        type="submit"
-        disabled={status === 'loading'}
-        className="px-5 py-3 rounded-full text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90 disabled:opacity-60"
-        style={{ background: renk }}
+        onClick={handleClick}
+        disabled={loading}
+        className="w-full py-4 rounded-full text-base font-bold text-white transition-all hover:opacity-90 disabled:opacity-60"
+        style={{ background: `linear-gradient(135deg, #7c4a1e, ${renk})` }}
       >
-        {status === 'loading' ? '⏳' : (tr ? 'Haber Ver' : 'Notify Me')}
+        {loading ? (tr ? 'Yönlendiriliyor...' : 'Redirecting...') : (tr ? '✦ Satın Al — ₺99' : '✦ Buy Now — ₺99')}
       </button>
-    </form>
+      {error && <p className="text-xs text-center mt-2" style={{ color: '#e57373' }}>{error}</p>}
+    </div>
   );
 }
 
@@ -821,7 +811,7 @@ function SonucIcerik() {
           style={{ background: 'linear-gradient(135deg, #1a1207, #0f0a04)', border: `1.5px solid ${profil.renk}30` }}
         >
           <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: profil.renk }}>
-            {tr ? 'Yakında · ₺99' : 'Coming Soon · ₺99'}
+            {tr ? '₺99 · PDF Rapor' : '₺99 · PDF Report'}
           </p>
           <h3 className="text-xl font-bold mb-2 text-white">
             {tr ? 'Derin Mizaç Raporu' : 'Deep Temperament Report'}
@@ -839,7 +829,7 @@ function SonucIcerik() {
               <li key={item} className="text-sm" style={{ color: '#c4973a' }}>{item}</li>
             ))}
           </ul>
-          <PdfWaitlist tip={tip} renk={profil.renk} tr={tr} />
+          <PdfSatinAl tip={tip} renk={profil.renk} tr={tr} />
         </div>
 
         {/* SSS Linki */}

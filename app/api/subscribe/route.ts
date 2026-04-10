@@ -15,14 +15,18 @@ export async function POST(req: NextRequest) {
 
     const profil = tip ? mizacProfiller[tip as MizacTip] : null;
 
-    // Resend Audience'a ekle
+    // Resend Audience'a ekle (hata olsa da email göndermeye devam et)
     if (AUDIENCE_ID) {
-      await resend.contacts.create({
-        email,
-        audienceId: AUDIENCE_ID,
-        unsubscribed: false,
-        ...(profil ? { firstName: profil.isim } : {}),
-      });
+      try {
+        await resend.contacts.create({
+          email,
+          audienceId: AUDIENCE_ID,
+          unsubscribed: false,
+          ...(profil ? { firstName: profil.isim } : {}),
+        });
+      } catch {
+        // Zaten kayıtlı olabilir — devam et
+      }
     }
 
     // Hoş geldin emaili gönder

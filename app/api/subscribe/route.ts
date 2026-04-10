@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || '';
-
 export async function POST(req: NextRequest) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || '';
   try {
     const { email, tip } = await req.json();
 

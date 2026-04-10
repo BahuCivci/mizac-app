@@ -7,11 +7,11 @@ import { MizacTip, MizacProfil, mizacProfiller } from '@/lib/mizac-data';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const resend = new Resend(process.env.RESEND_API_KEY);
 const siteUrl = 'https://mizac.xyz';
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const rawBody = await req.text();
   const sig = req.headers.get('stripe-signature');
 

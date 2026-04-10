@@ -4,10 +4,10 @@ import { MizacTip, mizacProfiller } from '@/lib/mizac-data';
 
 export const runtime = 'nodejs';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const siteUrl = 'https://mizac.xyz';
 
 export async function POST(req: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   try {
     const { tip } = await req.json() as { tip: MizacTip };
 

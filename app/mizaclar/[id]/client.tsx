@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { MizacProfil, MizacTip } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
+import { blogYazilari } from '@/lib/blog-data';
 
 const mirrorCopy: Record<MizacTip, string> = {
   safravi: 'Öfkelendiğinde genellikle haklısındır. Ama bunu kimse söylemez — çünkü ses tonu her şeyi gölgeler. Doğruyu görüyorsun, dünya senin hızında gitmiyor — bu hem gücün hem de yükün.',
@@ -389,6 +390,33 @@ export default function MizacDetayClient({ profil, tip }: { profil: MizacProfil;
             )}
           </div>
         )}
+
+        {/* İlgili Blog Yazıları */}
+        {(() => {
+          const ilgiliYazilar = blogYazilari.filter((y) => y.ilgiliMizac === tip).slice(0, 3);
+          if (ilgiliYazilar.length === 0) return null;
+          return (
+            <div className="mb-8">
+              <h2 className="font-bold text-lg mb-4" style={{ color: 'var(--foreground)' }}>
+                {tr ? `${profil.isim} Hakkında Yazılar` : `Articles about ${profil.isimEn}`}
+              </h2>
+              <div className="space-y-3">
+                {ilgiliYazilar.map((yazi) => (
+                  <Link key={yazi.slug} href={`/blog/${yazi.slug}`}
+                    className="flex items-center gap-3 rounded-xl p-4 border transition-all hover:scale-[1.01] hover:shadow-md"
+                    style={{ background: profil.renkAcik, borderColor: profil.renk + '30' }}>
+                    <span className="text-2xl shrink-0">{profil.elementSembol}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm leading-snug" style={{ color: 'var(--foreground)' }}>{yazi.baslik}</p>
+                      <p className="text-xs opacity-50 mt-0.5">{yazi.okumaSuresi} dk okuma</p>
+                    </div>
+                    <span className="text-sm opacity-30 shrink-0">→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Nav */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

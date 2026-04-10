@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { mizacProfiller } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
+import { EmailCapture } from '@/components/email-capture';
 
 export default function MizaclarPage() {
   const profiller = Object.values(mizacProfiller);
@@ -59,7 +60,15 @@ export default function MizaclarPage() {
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <div className="mt-12 mb-8">
+          <EmailCapture
+            title={tr ? 'Mizaç rehberin e-postana gelsin' : 'Get your temperament guide by email'}
+            subtitle={tr ? 'Mizacınla ilgili sağlık, beslenme ve ilişki içerikleri — her Pazartesi.' : 'Health, nutrition, and relationship content for your temperament — every Monday.'}
+            tip="mizaclar"
+          />
+        </div>
+
+        <div className="text-center">
           <Link
             href="/test"
             className="inline-flex items-center gap-2 px-8 py-4 rounded-full text-white font-semibold text-lg transition-all hover:scale-105"

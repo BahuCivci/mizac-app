@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { blogYazilari, getBlogYazisi } from '@/lib/blog-data';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { BlogEmailCapture } from './email-capture-client';
+import { BlogShareBar } from './share-client';
+import { ReadingProgress } from './reading-progress-client';
 
 const siteUrl = 'https://mizac.xyz';
 
@@ -60,12 +63,21 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
     .filter((y) => y.slug !== slug)
     .slice(0, 3);
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Ana Sayfa', item: siteUrl },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${siteUrl}/blog` },
+      { '@type': 'ListItem', position: 3, name: yazi.baslik, item: `${siteUrl}/blog/${slug}` },
+    ],
+  };
+
   return (
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <ReadingProgress renk={ilgiliProfil?.renk} />
       <div className="max-w-2xl mx-auto">
 
         {/* Breadcrumb */}
@@ -106,6 +118,9 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
           <p className="opacity-70 leading-relaxed mb-3">{yazi.ozet}</p>
           <p className="text-xs opacity-40">{yazi.okumaSuresi} dk okuma · {yazi.tarih}</p>
         </div>
+
+        {/* Share bar */}
+        <BlogShareBar baslik={yazi.baslik} slug={slug} />
 
         {/* İçerik */}
         <article className="prose-custom space-y-5 mb-12">
@@ -148,13 +163,13 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
                 <div
                   key={i}
                   className="rounded-2xl p-6 text-center mt-8"
-                  style={{ background: 'linear-gradient(135deg, var(--cream), var(--gold-light))' }}
+                  style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}
                 >
-                  <p className="font-semibold mb-4 opacity-80">{bolum.metin}</p>
+                  <p className="font-semibold mb-4" style={{ color: '#c8b87a' }}>{bolum.metin}</p>
                   <Link
                     href={bolum.href || '/test'}
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all hover:scale-105"
-                    style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}
+                    style={{ background: 'linear-gradient(135deg, #8b5e1e, #c4973a)' }}
                   >
                     ✦ {bolum.buton}
                   </Link>
@@ -185,6 +200,11 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
             </Link>
           </div>
         )}
+
+        {/* Email capture */}
+        <div className="mb-8">
+          <BlogEmailCapture mizacRenk={ilgiliProfil?.renk} />
+        </div>
 
         {/* Diğer yazılar */}
         <div>

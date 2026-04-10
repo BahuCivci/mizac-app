@@ -123,6 +123,40 @@ const sorular = [
     ],
   },
   {
+    kategori: 'Çocuk & Aile',
+    liste: [
+      {
+        soru: 'Kaç yaşından itibaren mizaç testi yapılabilir?',
+        cevap: 'Mizaç testi genellikle 16 yaş ve üzeri için tasarlanmıştır. Daha küçük çocuklarda doğrudan test yerine gözlem önerilir: uyku düzeni, iştah, sosyal tepkiler ve ağlama biçimleri mizacı ele verir. Bebeklikten itibaren belirgin olan mizaç, 7-8 yaşından sonra tutarlı bir profil oluşturur.',
+      },
+      {
+        soru: 'Eşim ve ben farklı mizaçtaysak evliliğimiz zor mu olur?',
+        cevap: 'Farklı mizaçlar aslında ilişkiyi zenginleştirir — eksik kaldığınız yerleri birbirinizde tamamlarsınız. Zorluğun kaynağı fark değil, farkındalık eksikliğidir. Partnerinizin niçin öyle davrandığını anladığınızda çatışmalar çözüme kavuşur. Safravî–Balgamî ve Demevî–Sevdavî çiftleri bu yüzden istatistiksel olarak en kararlı ilişkileri kurar.',
+      },
+      {
+        soru: 'Annem Safravî, babam Balgamî — ben ne çıkarım?',
+        cevap: 'Mizaç kalıtsal bir bileşen içerse de doğrudan Mendel kalıtımı gibi aktarılmaz. Ebeveyn mizaçları, beslenme, doğum şartları ve erken çocukluk deneyimleri hepsi katkıda bulunur. Bu yüzden iki Balgamî ebeveynin Safravî çocuğu olabilir. Kendi testinizin sonucu her zaman anketinizden çıkan veridir.',
+      },
+    ],
+  },
+  {
+    kategori: 'Beslenme & Sağlık',
+    liste: [
+      {
+        soru: 'Oruç tutmak mizaca göre farklı mı etkilir?',
+        cevap: 'Evet. Safravî mizaçlılar oruçta sinirlilik ve baş ağrısı yaşayabilir; soğuk su ve soğutucu besinlerle iftar açmaları önerilir. Demevîler genellikle oruca iyi adapte olur. Balgamîler metabolizmaları yavaşlayabileceğinden hafif egzersizle desteklemelidir. Sevdavîler ise enerji düşüklüğüne dikkat etmelidir; kuruyemiş ve hurmayı eksik bırakmamalıdırlar.',
+      },
+      {
+        soru: 'Stres yönetimi mizaca göre nasıl değişir?',
+        cevap: 'Safravî strese öfkeyle tepki verir — soğuma teknikleri ve yüzme/egzersiz yardımcı olur. Demevî strese sosyalleşerek kaçar; zaman zaman yalnız kalıp duygularını işlemesi gerekir. Balgamî stresi içe gömer; ifade sanatları ve günlük tutmak faydalıdır. Sevdavî strese izolasyonla tepki verir; düzenli güneş ışığı ve hareket kritik önem taşır.',
+      },
+      {
+        soru: 'Uyku saatleri mizaca göre değişir mi?',
+        cevap: 'Evet. Safravîler sabahçıdır ve az uyku ile yüksek verimle çalışır (6-7 saat yeterli). Demevîler uzun ve derin uyku ister (8-9 saat), geç kalkar. Balgamîler sabah kalkışta güçlük çeker ve en uzun uyuyan tiptir (8-10 saat). Sevdavîler ise uyku kalitesi düşük olduğundan az uyusa bile yorgun uyanabilir; 7-8 saate rağmen yorgunluk hissedebilirler.',
+      },
+    ],
+  },
+  {
     kategori: 'Test & Sonuçlar',
     liste: [
       {
@@ -153,6 +187,40 @@ const sorular = [
       {
         soru: 'Nefes egzersizi mizaca göre değişir mi?',
         cevap: 'Evet, yanlış nefes tekniği dengesizliği artırabilir. Safravî için soğutucu Sitali nefesi, Balgamî için ısıtıcı Kapalabhati (ateş nefesi), Demevî için dengeleyen Box Breathing, Sevdavî için topraklayıcı 4-7-8 tekniği önerilir. Her mizaç için adım adım nefes teknikleri Nefes sayfamızda bulunur.',
+      },
+    ],
+  },
+  {
+    kategori: 'Hıltlar & Denge',
+    liste: [
+      {
+        soru: 'Hılt nedir, kaç çeşit hılt vardır?',
+        cevap: 'Hılt, İbn-i Sina tıbbında vücudun temel sıvılarını ifade eder. Dört hılt vardır: Kan (demevî, sıcak-nemli), Safra (safravî, sıcak-kuru), Balgam (balgamî, soğuk-nemli) ve Sevda (sevdavî, soğuk-kuru). Her hılt bir elementi, bir mevsimi ve bir organ grubunu temsil eder.',
+      },
+      {
+        soru: 'Hılt dengesizliğini nasıl anlarım?',
+        cevap: 'Hangi hılt fazlaysa o hıltın belirtileri ortaya çıkar: Safra fazlalığı öfke, yanma, sarılık; Kan fazlalığı çarpıntı, yüz kızarması; Balgam fazlalığı tembellik, ödem, soğuk algınlığı; Sevda fazlalığı kaygı, uykusuzluk, melankoli. Kronik belirtiler var ise mizaç ve hılt değerlendirmesi faydalı olabilir.',
+      },
+      {
+        soru: 'Şifalı bitkiler kullanırken dikkat edilmesi gereken nedir?',
+        cevap: 'Yanlış seçilen bitki dengesizliği artırabilir. Örneğin zencefil balgamî için ideal iken safravî için öfkeyi tetikleyebilir. İlaç kullanıyorsanız bitkisel ürünlerin etkileşimine dikkat edin — mutlaka hekiminize danışın. Bilgimiz genel rehber niteliğindedir, tıbbi tavsiye değildir.',
+      },
+    ],
+  },
+  {
+    kategori: 'Namaz, Rüya & Bilinç',
+    liste: [
+      {
+        soru: 'Namaz vakitleri gerçekten hılt döngüsüyle bağlantılı mı?',
+        cevap: 'İbn-i Sina\'nın hılt teorisinde gün içinde hıltların yoğunluğu değişir: Sabah kan hıltı aktifleşir, öğle safrası zirvede olur, akşam sevda yükselir, gece balgam hakimdir. Beş vakit namaz bu döngülerle örtüşen bir ritimde olup her vakit kişinin o andaki hılt durumuna etki eder.',
+      },
+      {
+        soru: 'Rüyalarım sürekli aynı temayı işliyorsa ne anlama gelir?',
+        cevap: 'İbn-i Sina\'ya göre tekrar eden rüya temaları hılt dengesinin verdiği sinyallerdir: Sürekli ateş/çatışma rüyaları safra fazlalığını, su/deniz rüyaları balgam fazlalığını, karanlık/kayıp rüyaları sevda fazlalığını gösterebilir. Uyku düzeninizi, yatmadan önceki alışkanlıklarınızı ve mizacınızı birlikte değerlendirin.',
+      },
+      {
+        soru: 'Hz. Peygamber\'in nebevî sağlık tavsiyeleri bilimsel midir?',
+        cevap: 'Çörekotu\'nun (Nigella sativa) anti-inflamatuvar etkisi, balın antimikrobiyal özellikleri ve zeytinyağının kardiyoprotektif faydaları modern araştırmalarla desteklenmektedir. Oruç ve hacamatın bazı etkileri de incelenmektedir. Ancak bu bilgiler genel sağlık bilgisi düzeyinde değerlendirilmeli; tedavi amacıyla kullanılmadan önce hekime danışılmalıdır.',
       },
     ],
   },
@@ -229,9 +297,9 @@ export default function SSSPage() {
   const toggle = (id: string) => setAcik(acik === id ? null : id);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
+    <main className="min-h-screen bg-linear-to-b from-stone-50 to-white">
       {/* Hero */}
-      <section className="py-14 px-4 text-center bg-gradient-to-b from-stone-900 to-stone-800 text-white">
+      <section className="py-14 px-4 text-center bg-linear-to-b from-stone-900 to-stone-800 text-white">
         <div className="max-w-2xl mx-auto">
           <p className="text-stone-400 text-sm tracking-widest uppercase mb-3">Sık Sorulan Sorular</p>
           <h1 className="text-4xl font-bold mb-3">Mizaç Hakkında Her Şey</h1>

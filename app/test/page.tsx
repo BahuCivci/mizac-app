@@ -28,12 +28,47 @@ export default function TestPage() {
 
   const { lang } = useLang();
 
+  const [kayitliIlerleme, setKayitliIlerleme] = useState<{ secimler: (number | undefined)[]; soru: number } | null>(null);
+
+  // Önceki sonuç + kayıtlı ilerleme yükle
   useEffect(() => {
     try {
       const kayit = localStorage.getItem('mizac_sonuc');
       if (kayit) setOncekiSonuc(JSON.parse(kayit));
+
+      const ilerleme = localStorage.getItem('mizac_test_ilerleme');
+      if (ilerleme) {
+        const parsed = JSON.parse(ilerleme);
+        setKayitliIlerleme(parsed);
+      }
     } catch {}
   }, []);
+
+  function devamEt() {
+    if (!kayitliIlerleme) return;
+    setSeciliSecenekler(kayitliIlerleme.secimler);
+    setAktifSoru(kayitliIlerleme.soru);
+    setBasladi(true);
+  }
+
+  function yenidenBasla() {
+    try { localStorage.removeItem('mizac_test_ilerleme'); } catch {}
+    setKayitliIlerleme(null);
+    setSeciliSecenekler([]);
+    setAktifSoru(0);
+    setBasladi(true);
+  }
+
+  // İlerlemeyi kaydet
+  useEffect(() => {
+    if (!basladi) return;
+    try {
+      localStorage.setItem('mizac_test_ilerleme', JSON.stringify({
+        secimler: seciliSecenekler,
+        soru: aktifSoru,
+      }));
+    } catch {}
+  }, [seciliSecenekler, aktifSoru, basladi]);
   const soru = sorular[aktifSoru];
   const ilerleme = (aktifSoru / sorular.length) * 100;
   const tr = lang === 'tr';
@@ -54,6 +89,7 @@ export default function TestPage() {
           puanlar[a] > puanlar[b] ? a : b
         );
         const puanStr = encodeURIComponent(JSON.stringify(puanlar));
+        try { localStorage.removeItem('mizac_test_ilerleme'); } catch {}
         router.push(`/sonuc?tip=${kazanan}&puanlar=${puanStr}`);
       }
     }, 400);
@@ -64,6 +100,22 @@ export default function TestPage() {
       setAktifSoru(aktifSoru - 1);
     }
   }
+
+  // Klavye navigasyonu: 1/2/3/4 tuşları ile cevap seç
+  useEffect(() => {
+    if (!basladi || animasyon) return;
+    function handleKey(e: KeyboardEvent) {
+      const num = parseInt(e.key);
+      if (num >= 1 && num <= soru.secenekler.length) {
+        secenekSec(num - 1);
+      }
+      if (e.key === 'ArrowLeft' && aktifSoru > 0) {
+        geriGit();
+      }
+    }
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [basladi, animasyon, aktifSoru, soru]);
 
   const oncekiProfil = oncekiSonuc ? mizacProfiller[oncekiSonuc.tip] : null;
 
@@ -97,13 +149,40 @@ export default function TestPage() {
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => setBasladi(true)}
-              className="w-full py-4 rounded-full font-bold text-lg text-white transition-all hover:scale-105 hover:opacity-90"
-              style={{ background: 'linear-gradient(135deg, #8b5e1e, #c4973a)' }}
-            >
-              ✦ {tr ? 'Testi Başlat' : 'Start the Test'}
-            </button>
+            {kayitliIlerleme ? (
+              <div className="space-y-3">
+                <div className="rounded-2xl px-5 py-3 text-sm mb-1" style={{ background: '#2a1f0a' }}>
+                  <span style={{ color: '#c4973a' }}>⏸ </span>
+                  <span style={{ color: '#9a8a6a' }}>
+                    {tr
+                      ? `${kayitliIlerleme.soru + 1}. soruda kaldın — kaldığın yerden devam et`
+                      : `You left off at question ${kayitliIlerleme.soru + 1} — continue where you left off`}
+                  </span>
+                </div>
+                <button
+                  onClick={devamEt}
+                  className="w-full py-4 rounded-full font-bold text-lg transition-all hover:scale-105"
+                  style={{ background: 'linear-gradient(135deg, #8b5e1e, #c4973a)', color: 'white' }}
+                >
+                  ✦ {tr ? 'Kaldığım Yerden Devam Et' : 'Continue Where I Left Off'}
+                </button>
+                <button
+                  onClick={yenidenBasla}
+                  className="w-full py-3 rounded-full font-semibold text-sm transition-all hover:opacity-80 border"
+                  style={{ borderColor: '#3d2c0e', color: '#9a8a6a', background: 'transparent' }}
+                >
+                  {tr ? 'Baştan Başla' : 'Start Over'}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setBasladi(true)}
+                className="w-full py-4 rounded-full font-bold text-lg text-white transition-all hover:scale-105 hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #8b5e1e, #c4973a)' }}
+              >
+                ✦ {tr ? 'Testi Başlat' : 'Start the Test'}
+              </button>
+            )}
           </div>
           {/* Önceki sonuç */}
           {oncekiProfil && (
@@ -170,6 +249,19 @@ export default function TestPage() {
         </div>
       </div>
 
+      {/* Q25 Milestone */}
+      {aktifSoru === Math.floor(sorular.length / 2) && (
+        <div
+          className="w-full max-w-xl rounded-2xl p-4 mb-4 text-center"
+          style={{ background: '#1a1207', border: '1px solid #c4973a30' }}
+        >
+          <p className="font-semibold text-sm" style={{ color: '#c4973a' }}>✦ Yarısına geldin!</p>
+          <p className="text-xs mt-0.5" style={{ color: '#6b5230' }}>
+            {tr ? 'Harika gidiyorsun — son yarı kaldı.' : 'You\'re halfway there — keep going!'}
+          </p>
+        </div>
+      )}
+
       {/* Soru Kartı */}
       <div
         className="w-full max-w-xl rounded-3xl p-8 shadow-lg mb-6 transition-all duration-300"
@@ -196,11 +288,14 @@ export default function TestPage() {
                 color: 'var(--foreground)',
               }}
             >
-              <span className="mr-2 opacity-50">{['A', 'B', 'C', 'D'][i]})</span>
+              <span className="mr-2 opacity-50">{i + 1})</span>
               {tr ? s.metin : s.metinEn}
             </button>
           ))}
         </div>
+        <p className="text-xs text-center mt-3 opacity-30">
+          {tr ? 'Klavye: 1 · 2 · 3 · 4 | ← Geri' : 'Keyboard: 1 · 2 · 3 · 4 | ← Back'}
+        </p>
       </div>
 
       {/* Geri butonu */}

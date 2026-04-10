@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 import { Suspense, useState, useEffect } from 'react';
 import { useLang } from '@/lib/lang-context';
-import { AdUnit } from '@/components/ad-unit';
+import { blogYazilari } from '@/lib/blog-data';
 
 const uyumHaritasi: Record<MizacTip, { tip: MizacTip; puan: number }[]> = {
   safravi: [
@@ -498,6 +498,29 @@ function SonucIcerik() {
           </div>
         </div>
 
+        {/* Kalıcı Link */}
+        <Link
+          href={`/sonuc/${tip}`}
+          className="flex items-center gap-3 rounded-2xl p-4 mb-6 transition-all hover:opacity-90"
+          style={{ background: '#1a1207', border: '1px solid #c4973a20' }}
+        >
+          <span className="text-xl">🔗</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold" style={{ color: '#c4973a' }}>
+              {tr ? 'Bu sonucu kaydet' : 'Save this result'}
+            </p>
+            <p className="text-xs truncate" style={{ color: '#4a3520' }}>
+              mizac.xyz/sonuc/{tip}
+            </p>
+          </div>
+          <span
+            className="text-xs px-3 py-1.5 rounded-full font-semibold text-white shrink-0"
+            style={{ background: '#c4973a' }}
+          >
+            {tr ? 'Kalıcı Sayfa →' : 'Permalink →'}
+          </span>
+        </Link>
+
         {/* İkinci Mizaç */}
         {ikinciProfil && (
           <div
@@ -557,8 +580,8 @@ function SonucIcerik() {
           <div className="flex flex-col sm:flex-row gap-3">
             <a
               href={`https://wa.me/?text=${encodeURIComponent((tr
-                ? `Mizaç testinde ${profil.isim} ${profil.elementSembol} çıktım! Sen ne çıkarsın? 👇\nhttps://mizac.xyz/test`
-                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test! What would you get? 👇\nhttps://mizac.xyz/test`))}`}
+                ? `Mizaç testinde ${profil.isim} ${profil.elementSembol} çıktım! Sen ne çıkarsın? 👇\nhttps://mizac.xyz/test?utm_source=whatsapp&utm_medium=share&utm_campaign=result_${tip}`
+                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test! What would you get? 👇\nhttps://mizac.xyz/test?utm_source=whatsapp&utm_medium=share&utm_campaign=result_${tip}`))}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 text-center py-3 rounded-full font-semibold text-white text-sm transition-all hover:opacity-90"
@@ -569,7 +592,7 @@ function SonucIcerik() {
             <a
               href={`https://twitter.com/intent/tweet?text=${encodeURIComponent((tr
                 ? `Mizaç testinde ${profil.isim} ${profil.elementSembol} çıktım. Sen ne çıkarsın? @mizac_xyz`
-                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test. What about you?`))}&url=${encodeURIComponent('https://mizac.xyz/test')}`}
+                : `I got ${profil.isimEn} ${profil.elementSembol} on the temperament test. What about you?`))}&url=${encodeURIComponent(`https://mizac.xyz/test?utm_source=twitter&utm_medium=share&utm_campaign=result_${tip}`)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex-1 text-center py-3 rounded-full font-semibold text-white text-sm transition-all hover:opacity-90"
@@ -579,6 +602,52 @@ function SonucIcerik() {
             </a>
           </div>
         </div>
+
+        {/* Uyum Haritası */}
+        {(() => {
+          const order: MizacTip[] = ['safravi', 'demevi', 'balgami', 'sevdavi'];
+          return (
+            <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: profil.renk }}>
+                {tr ? 'Mizaç Uyumu' : 'Temperament Compatibility'}
+              </p>
+              <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--foreground)' }}>
+                {tr
+                  ? `${profil.elementSembol} ${profil.isim} hangi mizaçlarla uyumlu?`
+                  : `Who is ${profil.isimEn} most compatible with?`}
+              </h3>
+              <div className="space-y-2 mb-3">
+                {uyumHaritasi[tip].slice(0, 3).map(({ tip: digerTip, puan }) => {
+                  const diger = mizacProfiller[digerTip];
+                  const [x, y] = [tip, digerTip].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+                  const slug = `${x}-vs-${y}`;
+                  const renkHex = puan >= 80 ? '#16a34a' : puan >= 60 ? '#2563eb' : puan >= 45 ? '#d97706' : '#dc2626';
+                  return (
+                    <Link key={digerTip} href={`/karsilastir/${slug}`}
+                      className="flex items-center gap-3 p-3 rounded-xl bg-white hover:shadow-sm transition-all border"
+                      style={{ borderColor: diger.renk + '30' }}>
+                      <span className="text-2xl shrink-0">{diger.elementSembol}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm" style={{ color: diger.renk }}>{tr ? diger.isim : diger.isimEn}</p>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-sm font-bold" style={{ color: renkHex }}>%{puan}</span>
+                        <div className="h-1 w-14 rounded-full mt-1" style={{ background: '#e5d5b0' }}>
+                          <div className="h-1 rounded-full" style={{ width: `${puan}%`, background: renkHex }} />
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+              <Link href="/karsilastir"
+                className="block text-center text-xs transition-opacity hover:opacity-100 opacity-50"
+                style={{ color: 'var(--earth)' }}>
+                {tr ? 'Tüm uyum kombinasyonlarını gör →' : 'See all compatibility combinations →'}
+              </Link>
+            </div>
+          );
+        })()}
 
         {/* Paylaş */}
         <ShareButtons tip={tip} profil={profil} tr={tr} />
@@ -704,8 +773,27 @@ function SonucIcerik() {
           </div>
         </div>
 
-        {/* Reklam */}
-        <AdUnit slot="1234567890" format="horizontal" className="mb-6 rounded-xl overflow-hidden" />
+        {/* Topluluk */}
+        <div className="rounded-2xl p-5 mb-6 flex gap-4 items-center" style={{ background: '#25D366' + '18', border: '1px solid #25D36640' }}>
+          <div className="text-3xl shrink-0">💬</div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-bold mb-0.5" style={{ color: '#128C7E' }}>
+              {tr ? 'Mizaç Topluluğuna Katıl' : 'Join the Mizaç Community'}
+            </p>
+            <p className="text-xs opacity-70">
+              {tr ? 'WhatsApp grubunda mizacını keşfedenlerle tanış.' : 'Meet others exploring their temperament on WhatsApp.'}
+            </p>
+          </div>
+          <a
+            href="https://chat.whatsapp.com/JgAiXSGm0wW7z0pQERCaaI"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 px-4 py-2 rounded-full text-white text-sm font-bold transition-all hover:opacity-90"
+            style={{ background: '#25D366' }}
+          >
+            {tr ? 'Katıl' : 'Join'}
+          </a>
+        </div>
 
         {/* Kitap */}
         <div className="rounded-2xl p-5 mb-6 flex gap-4 items-center bg-amber-50 border border-amber-200">
@@ -754,27 +842,25 @@ function SonucIcerik() {
           <PdfWaitlist tip={tip} renk={profil.renk} tr={tr} />
         </div>
 
-        {/* WhatsApp Topluluk */}
-        <a
-          href="https://chat.whatsapp.com/mizac"
-          target="_blank"
-          rel="noopener noreferrer"
+        {/* SSS Linki */}
+        <Link
+          href="/sss"
           className="flex items-center gap-4 rounded-2xl p-5 mb-6 transition-all hover:opacity-90"
-          style={{ background: '#25D36615', border: '1.5px solid #25D36630' }}
+          style={{ background: 'var(--cream)', border: '1.5px solid var(--gold-light)' }}
         >
-          <div className="text-3xl shrink-0">💬</div>
+          <div className="text-3xl shrink-0">❓</div>
           <div className="flex-1">
-            <p className="font-bold text-sm mb-0.5" style={{ color: '#1da851' }}>
-              {tr ? 'Mizaç Topluluğuna Katıl' : 'Join the Temperament Community'}
+            <p className="font-bold text-sm mb-0.5" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mizaç hakkında merak ettiklerin' : 'Everything you wondered about temperament'}
             </p>
             <p className="text-xs opacity-60">
-              {tr ? 'Aynı mizaçtaki insanlarla tanış · Sorular sor · Deneyim paylaş' : 'Meet people with the same temperament · Ask questions · Share experiences'}
+              {tr ? 'Sık sorulan sorular · Sağlık · Uyum · Beslenme' : 'FAQ · Health · Compatibility · Nutrition'}
             </p>
           </div>
-          <span className="text-xs font-semibold px-3 py-1.5 rounded-full shrink-0" style={{ background: '#25D366', color: 'white' }}>
-            {tr ? 'Katıl →' : 'Join →'}
+          <span className="text-xs font-semibold px-3 py-1.5 rounded-full text-white shrink-0" style={{ background: 'var(--gold)' }}>
+            {tr ? 'SSS →' : 'FAQ →'}
           </span>
-        </a>
+        </Link>
 
         {/* Yeni İçerik Keşfet */}
         <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
@@ -791,7 +877,7 @@ function SonucIcerik() {
               { href: '/nefes', ikon: '🌬️', tr: 'Nefes Egzersizleri', en: 'Breathing' },
               { href: '/gida-kavrami', ikon: '🍊', tr: 'Gıda Kavramı', en: 'Nourishment' },
               { href: '/meslekler', ikon: '💼', tr: 'Kariyer Rehberi', en: 'Careers' },
-              { href: '/varligin-mizaci', ikon: '🌿', tr: "Varlığın Mizacı", en: "Nature's Temperament" },
+              { href: '/blog', ikon: '✦', tr: 'Mizaç Blog', en: 'Blog' },
             ].map((item) => (
               <Link
                 key={item.href}
@@ -805,6 +891,39 @@ function SonucIcerik() {
             ))}
           </div>
         </div>
+
+        {/* İlgili Blog Yazıları */}
+        {(() => {
+          const ilgiliYazilar = blogYazilari.filter((y) => y.ilgiliMizac === tip).slice(0, 3);
+          if (ilgiliYazilar.length === 0) return null;
+          return (
+            <div className="rounded-2xl p-6 mb-6" style={{ background: 'var(--cream)' }}>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: profil.renk }}>
+                ✦ {tr ? 'Senin İçin Yazılar' : 'Articles For You'}
+              </p>
+              <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--foreground)' }}>
+                {tr ? `${profil.elementSembol} ${profil.isim} hakkında` : `About ${profil.isimEn}`}
+              </h3>
+              <div className="space-y-2">
+                {ilgiliYazilar.map((yazi) => (
+                  <a
+                    key={yazi.slug}
+                    href={`/blog/${yazi.slug}`}
+                    className="flex items-center gap-3 rounded-xl p-3 bg-white hover:shadow-sm transition-all border"
+                    style={{ borderColor: profil.renk + '20' }}
+                  >
+                    <span className="text-xl shrink-0">{profil.elementSembol}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm truncate" style={{ color: 'var(--foreground)' }}>{yazi.baslik}</p>
+                      <p className="text-xs opacity-50 mt-0.5">{yazi.okumaSuresi} dk okuma</p>
+                    </div>
+                    <span className="text-xs opacity-40 shrink-0">→</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          );
+        })()}
 
         {/* Butonlar */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">

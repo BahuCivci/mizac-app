@@ -1,16 +1,46 @@
 'use client';
 
 import Link from "next/link";
-import { mizacProfiller } from "@/lib/mizac-data";
+import { useState, useEffect } from "react";
+import { mizacProfiller, MizacTip } from "@/lib/mizac-data";
 import { useLang } from "@/lib/lang-context";
+import { EmailCapture } from "@/components/email-capture";
 
 export default function Home() {
   const profiller = Object.values(mizacProfiller);
   const { lang } = useLang();
   const tr = lang === 'tr';
+  const [oncekiSonuc, setOncekiSonuc] = useState<{ tip: MizacTip } | null>(null);
+
+  useEffect(() => {
+    try {
+      const kayit = localStorage.getItem('mizac_sonuc');
+      if (kayit) setOncekiSonuc(JSON.parse(kayit));
+    } catch {}
+  }, []);
 
   return (
     <main className="min-h-screen" style={{ background: 'var(--background)' }}>
+
+      {/* Dönüş Ziyaretçisi Kişiselleştirme */}
+      {oncekiSonuc && (() => {
+        const p = mizacProfiller[oncekiSonuc.tip];
+        return (
+          <div className="w-full py-3 px-4 text-center text-sm flex items-center justify-center gap-3 flex-wrap"
+            style={{ background: p.renkAcik, borderBottom: `1px solid ${p.renk}30` }}>
+            <span className="text-lg">{p.elementSembol}</span>
+            <span style={{ color: p.renk }} className="font-semibold">
+              {tr ? `Hoş geldin, ${p.isim}` : `Welcome back, ${p.isimEn}`}
+            </span>
+            <Link href={`/sonuc?tip=${oncekiSonuc.tip}&puanlar=${encodeURIComponent(JSON.stringify({ safravi: 0, demevi: 0, balgami: 0, sevdavi: 0 }))}`}
+              className="text-xs px-3 py-1 rounded-full font-semibold text-white"
+              style={{ background: p.renk }}>
+              {tr ? 'Profilini Gör →' : 'View Profile →'}
+            </Link>
+          </div>
+        );
+      })()}
+
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div
@@ -48,6 +78,15 @@ export default function Home() {
             >
               {tr ? '4 Mizacı İncele' : 'Explore 4 Types'}
             </Link>
+            <a
+              href="https://chat.whatsapp.com/JgAiXSGm0wW7z0pQERCaaI"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-semibold text-lg text-white transition-all hover:scale-105"
+              style={{ background: '#25D366' }}
+            >
+              💬 {tr ? 'Topluluğa Katıl' : 'Join Community'}
+            </a>
           </div>
           {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-6 text-sm opacity-60">
@@ -356,31 +395,161 @@ export default function Home() {
                 : 'Food is not only what is on your plate. Visual, auditory, emotional — 6 types of nourishment.'}
             </p>
           </Link>
+          <Link href="/hiltlar"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fdf0f3', borderColor: '#e05a7a30' }}>
+            <div className="text-4xl mb-3">🫀</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Dört Hılt' : 'Four Humors'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Kan, safra, balgam ve sevda — İbn-i Sina\'nın beden sıvıları teorisi ve mizaçla ilişkisi.'
+                : 'Blood, bile, phlegm and black bile — Ibn Sina\'s theory of body fluids and temperament.'}
+            </p>
+          </Link>
+          <Link href="/bitkiler"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0fdf4', borderColor: '#6ee7b740' }}>
+            <div className="text-4xl mb-3">🌿</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Şifalı Bitkiler' : 'Medicinal Herbs'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Hangi bitki seni dengeler, hangi bitki dengesini bozar? Mizaca göre bitki rehberi.'
+                : 'Which herb balances you, which disturbs? Herb guide by temperament.'}
+            </p>
+          </Link>
+          <Link href="/peygamber-mizaci"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fef9f0', borderColor: '#c4973a30' }}>
+            <div className="text-4xl mb-3">🌙</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Hz. Peygamber\'in Mizacı' : 'The Prophet\'s Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Nebevî denge, sağlık alışkanlıkları ve mutedil mizacın sırrı.'
+                : 'The prophetic balance, health habits and the secret of the perfect temperament.'}
+            </p>
+          </Link>
+          <Link href="/organ-duygu"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f3f0f8', borderColor: '#7b5ea730' }}>
+            <div className="text-4xl mb-3">🧠</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Organ & Duygu Haritası' : 'Organ & Emotion Map'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Her organın bir duygusu var. İbn-i Sina\'nın beden-ruh haritası.'
+                : 'Every organ holds an emotion. Ibn Sina\'s body-soul map.'}
+            </p>
+          </Link>
+          <Link href="/namaz-mizac"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fef9f0', borderColor: '#c4973a30' }}>
+            <div className="text-4xl mb-3">🕌</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Namaz Vakitleri & Mizaç' : 'Prayer Times & Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Beş vakit namazın hılt teorisiyle ilişkisi. Her vakit hangi hılt aktiftir?'
+                : 'The relationship between five daily prayers and the humor theory.'}
+            </p>
+          </Link>
+          <Link href="/ruya-mizac"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f3f0f8', borderColor: '#7b5ea730' }}>
+            <div className="text-4xl mb-3">🌙</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Rüya & Mizaç' : 'Dreams & Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Rüyalarınız mizacınızı ele verir. İbn-i Sina\'ya göre 4 mizacın rüya örüntüleri.'
+                : 'Your dreams reveal your temperament. Dream patterns of the 4 types.'}
+            </p>
+          </Link>
+          <Link href="/mevsim-mizac"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#f0fdf4', borderColor: '#86efac40' }}>
+            <div className="text-4xl mb-3">🌿</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Mevsim & Mizaç' : 'Seasons & Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'İlkbahar kan, yaz safra, sonbahar sevda, kış balgam mevsimidir. Mevsimsel denge rehberi.'
+                : 'Spring is blood, summer bile, autumn black bile, winter phlegm. Seasonal balance guide.'}
+            </p>
+          </Link>
+          <Link href="/muzik-mizac"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fef9f0', borderColor: '#c4973a30' }}>
+            <div className="text-4xl mb-3">🎵</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Müzik & Mizaç' : 'Music & Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'İbn-i Sina\'ya göre müzik bir ilaçtır. Hangi makam hangi mizacı dengeler?'
+                : 'According to Ibn Sina, music is medicine. Which maqam balances which temperament?'}
+            </p>
+          </Link>
+          <Link href="/koku-mizac"
+            className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
+            style={{ background: '#fdf0f3', borderColor: '#e05a7a30' }}>
+            <div className="text-4xl mb-3">🌸</div>
+            <h3 className="font-bold text-lg mb-2" style={{ color: 'var(--earth)' }}>
+              {tr ? 'Koku & Mizaç' : 'Scent & Temperament'}
+            </h3>
+            <p className="text-sm opacity-70 leading-relaxed">
+              {tr
+                ? 'Doğru koku doğrudan hılt dengesini etkiler. Mizacınıza göre buhur ve esans rehberi.'
+                : 'The right scent directly affects humor balance. Incense and essential oil guide by temperament.'}
+            </p>
+          </Link>
         </div>
+      </section>
+
+      {/* Email Capture */}
+      <section className="max-w-3xl mx-auto px-6 pb-8">
+        <EmailCapture
+          title={tr ? 'Mizaç rehberin haftalık gelsin' : 'Get your weekly temperament guide'}
+          subtitle={tr ? 'Sağlık, ilişki ve bilinç hakkında — her Pazartesi. Ücretsiz.' : 'About health, relationships and consciousness — every Monday. Free.'}
+          cta={tr ? 'Ücretsiz Al' : 'Subscribe Free'}
+          tip="homepage"
+        />
       </section>
 
       {/* CTA */}
       <section className="max-w-3xl mx-auto px-6 py-16 text-center">
         <div
           className="rounded-3xl p-10"
-          style={{ background: 'linear-gradient(135deg, var(--cream), var(--gold-light))' }}
+          style={{ background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 100%)' }}
         >
           <div className="text-4xl mb-4">🌙</div>
-          <h2 className="text-3xl font-bold mb-4" style={{ color: 'var(--foreground)' }}>
-            {tr ? 'Mizacınızı öğrenin, hayatınızı keşfedin' : 'Know your temperament, transform your life'}
+          <h2 className="text-3xl font-bold mb-4" style={{ color: '#e8d5b0' }}>
+            {tr ? 'Kendini yanlış okumayı bırak.' : 'Stop misreading yourself.'}
           </h2>
-          <p className="opacity-70 mb-8 text-lg">
+          <p className="text-base mb-8 leading-relaxed" style={{ color: '#9a8a6a' }}>
             {tr
-              ? '50 soruluk testimizi tamamlayın, kişisel mizaç profilinizi alın.'
-              : 'Complete our 50-question test and receive your personal temperament profile.'}
+              ? 'Yorgunluğun neden kaynaklandığını, öfkeni neyin tetiklediğini, sağlığının neden bozulduğunu — mizacın her şeyi açıklar.'
+              : 'Why you tire, what triggers your anger, why your health breaks — your temperament explains everything.'}
           </p>
           <Link
             href="/test"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-full text-white font-bold text-lg transition-all hover:scale-105"
-            style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}
+            className="inline-flex items-center gap-2 px-10 py-4 rounded-full font-bold text-lg transition-all hover:scale-105"
+            style={{ background: '#c4973a', color: '#0f0a04' }}
           >
             ✦ {tr ? 'Ücretsiz Testi Başlat' : 'Start Free Test'}
           </Link>
+          <p className="text-xs mt-4" style={{ color: '#6b5230' }}>
+            {tr ? '50 soru · ~8 dakika · Kayıt gerekmez' : '50 questions · ~8 minutes · No signup'}
+          </p>
         </div>
       </section>
 

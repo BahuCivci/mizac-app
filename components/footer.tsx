@@ -29,11 +29,23 @@ const linkler = {
   sifa: {
     baslik: { tr: 'Şifa & Sağlık', en: 'Healing & Health' },
     liste: [
+      { href: '/hiltlar', tr: 'Dört Hılt', en: 'Four Humors' },
+      { href: '/bitkiler', tr: 'Şifalı Bitkiler', en: 'Medicinal Herbs' },
       { href: '/hastaliklar', tr: 'Hastalıklar', en: 'Health & Illness' },
-      { href: '/esma-sifa', tr: "Esmaü'l-Hüsna", en: 'Divine Names' },
+      { href: '/organ-duygu', tr: 'Organ & Duygu', en: 'Organ & Emotion' },
       { href: '/nefes', tr: 'Nefes Egzersizleri', en: 'Breathing' },
-      { href: '/gida-kavrami', tr: 'Gıda Kavramı', en: 'Nourishment' },
       { href: '/varligin-mizaci', tr: "Varlığın Mizacı", en: "Nature's Temperament" },
+    ],
+  },
+  islami: {
+    baslik: { tr: 'İslam & Mizaç', en: 'Islam & Temperament' },
+    liste: [
+      { href: '/peygamber-mizaci', tr: 'Hz. Peygamber\'in Mizacı', en: 'The Prophet\'s Temperament' },
+      { href: '/namaz-mizac', tr: 'Namaz & Mizaç', en: 'Prayer & Temperament' },
+      { href: '/ruya-mizac', tr: 'Rüya & Mizaç', en: 'Dreams & Temperament' },
+      { href: '/mevsim-mizac', tr: 'Mevsim & Mizaç', en: 'Seasons & Temperament' },
+      { href: '/muzik-mizac', tr: 'Müzik & Mizaç', en: 'Music & Temperament' },
+      { href: '/koku-mizac', tr: 'Koku & Mizaç', en: 'Scent & Temperament' },
     ],
   },
   kesfet: {
@@ -42,7 +54,7 @@ const linkler = {
       { href: '/test', tr: 'Mizaç Testi', en: 'Temperament Test' },
       { href: '/hizli-test', tr: 'Hızlı Test (10 Soru)', en: 'Quick Test (10 Q)' },
       { href: '/sss', tr: 'SSS', en: 'FAQ' },
-      { href: '/karsilastir/safravi-vs-balgami', tr: 'Karşılaştır', en: 'Compare' },
+      { href: '/karsilastir', tr: 'Mizaç Uyumu', en: 'Compatibility' },
       { href: '/blog', tr: 'Blog', en: 'Blog' },
       { href: '/hakkinda', tr: 'Hakkında', en: 'About' },
     ],
@@ -79,18 +91,18 @@ export function Footer() {
               {tr ? '✦ Testi Başlat' : '✦ Start Test'}
             </Link>
             <a
-              href="https://chat.whatsapp.com/mizac"
+              href="https://chat.whatsapp.com/JgAiXSGm0wW7z0pQERCaaI"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 mt-2 px-5 py-2 rounded-full text-sm font-semibold"
-              style={{ background: '#25D36622', color: '#25D366', border: '1px solid #25D36640' }}
+              className="inline-flex items-center gap-2 mt-3 px-5 py-2 rounded-full text-sm font-semibold"
+              style={{ background: '#25D366', color: 'white' }}
             >
               💬 {tr ? 'Topluluğa Katıl' : 'Join Community'}
             </a>
           </div>
 
           {/* Link Grupları */}
-          <div className="md:w-3/4 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="md:w-3/4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {Object.values(linkler).map((grup) => (
               <div key={grup.baslik.tr}>
                 <h3 className="text-xs font-bold tracking-widest uppercase mb-3" style={{ color: '#c4973a' }}>
@@ -119,11 +131,13 @@ export function Footer() {
           <p className="text-xs" style={{ color: '#6b5230' }}>
             © {new Date().getFullYear()} mizac.xyz — {tr ? 'Tüm hakları saklıdır.' : 'All rights reserved.'}
           </p>
-          <p className="text-xs" style={{ color: '#6b5230' }}>
-            {tr
-              ? 'İbn-i Sina geleneğine dayalı · Tıbbi tavsiye değildir'
-              : 'Based on Ibn Sina tradition · Not medical advice'}
-          </p>
+          <div className="flex gap-4 text-xs" style={{ color: '#6b5230' }}>
+            <Link href="/gizlilik" className="hover:text-amber-600 transition-colors">
+              {tr ? 'Gizlilik Politikası' : 'Privacy Policy'}
+            </Link>
+            <span>·</span>
+            <span>{tr ? 'İbn-i Sina geleneğine dayalı · Tıbbi tavsiye değildir' : 'Not medical advice'}</span>
+          </div>
         </div>
       </div>
     </footer>

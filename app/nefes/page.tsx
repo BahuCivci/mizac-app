@@ -265,10 +265,12 @@ export default function NefesPage() {
             Yanlış teknik dengesizliği artırır — doğruyu bul.
           </p>
 
-          <div className="flex gap-3 justify-center flex-wrap mb-8">
+          <div className="flex gap-3 justify-center flex-wrap mb-8" role="tablist">
             {nefesler.map((n) => (
               <button
                 key={n.id}
+                role="tab"
+                aria-selected={aktif === n.id}
                 onClick={() => { setAktif(n.id); setAcikTeknik(0); }}
                 className="px-5 py-2.5 rounded-full font-semibold text-sm transition-all"
                 style={{

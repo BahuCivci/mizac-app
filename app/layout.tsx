@@ -63,18 +63,43 @@ export const metadata: Metadata = {
   },
 };
 
-const websiteSchema = {
+const siteSchema = {
   '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Mizaç',
-  url: siteUrl,
-  description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
-  inLanguage: ['tr', 'en'],
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: `${siteUrl}/blog?q={search_term_string}`,
-    'query-input': 'required name=search_term_string',
-  },
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: 'Mizaç',
+      url: siteUrl,
+      description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
+      inLanguage: ['tr', 'en'],
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: `${siteUrl}/blog?q={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+      },
+    },
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'Mizaç',
+      url: siteUrl,
+      description: 'İbn-i Sina geleneğine dayalı mizaç testi, sağlık rehberi ve ilişki uyum analizi.',
+      sameAs: ['https://twitter.com/mizac_xyz'],
+    },
+    {
+      '@type': 'WebApplication',
+      '@id': `${siteUrl}/#webapp`,
+      name: 'Mizaç Testi',
+      url: `${siteUrl}/test`,
+      applicationCategory: 'HealthApplication',
+      applicationSubCategory: 'PersonalityTest',
+      operatingSystem: 'All',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'TRY' },
+      description: 'İbn-i Sina geleneğine dayalı 50 soruluk ücretsiz mizaç testi.',
+      inLanguage: ['tr', 'en'],
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -88,9 +113,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <link rel="alternate" type="application/rss+xml" title="Mizaç Blog RSS" href={`${siteUrl}/rss`} />
+        <link rel="alternate" hrefLang="tr" href={siteUrl} />
+        <link rel="alternate" hrefLang="en" href={siteUrl} />
+        <link rel="alternate" hrefLang="x-default" href={siteUrl} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
       </head>
       <body className="min-h-full flex flex-col">
@@ -101,12 +130,13 @@ export default function RootLayout({
           <Script id="ga-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
           </Script>
-          <Script
+          {/* AdSense — ADSENSE_CLIENT gerçek ID ile güncellendikten sonra etkinleştirin */}
+          {/* <Script
             async
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
             crossOrigin="anonymous"
             strategy="afterInteractive"
-          />
+          /> */}
           <LangProvider>
             <Header />
             {children}

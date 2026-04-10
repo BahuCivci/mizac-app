@@ -9,8 +9,8 @@ export async function generateStaticParams() {
   return ids.map((id) => ({ id }));
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const { id } = params;
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
   const profil = await getMizacProfile(id as MizacTip);
   if (!profil) return {};
   return {
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   };
 }
 
-export default async function MizacDetayPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function MizacDetayPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const profil = await getMizacProfile(id as MizacTip);
   if (!profil) notFound();
   return <MizacDetayClient profil={profil} tip={id as MizacTip} />;

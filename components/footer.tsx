@@ -35,6 +35,8 @@ const linkler = {
       { href: '/organ-duygu', tr: 'Organ & Duygu', en: 'Organ & Emotion' },
       { href: '/nefes', tr: 'Nefes Egzersizleri', en: 'Breathing' },
       { href: '/varligin-mizaci', tr: "Varlığın Mizacı", en: "Nature's Temperament" },
+      { href: '/esma-sifa', tr: 'Esma ile Şifa', en: 'Healing with Names' },
+      { href: '/gida-kavrami', tr: 'Gıda Kavramı', en: 'Food Concept' },
     ],
   },
   islami: {

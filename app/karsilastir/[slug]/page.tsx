@@ -83,9 +83,9 @@ export default async function KarsilastirPage({ params }: { params: Promise<{ sl
   const diger = kombinasyonlar.filter((k) => k.slug !== slug);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-stone-50 to-white">
+    <main className="min-h-screen bg-linear-to-b from-stone-50 to-white">
       {/* Hero */}
-      <section className="py-14 px-4 text-center bg-gradient-to-b from-stone-900 to-stone-800 text-white">
+      <section className="py-14 px-4 text-center bg-linear-to-b from-stone-900 to-stone-800 text-white">
         <div className="max-w-3xl mx-auto">
           <p className="text-stone-400 text-sm tracking-widest uppercase mb-4">Mizaç Karşılaştırma</p>
           <div className="flex items-center justify-center gap-4 mb-4">

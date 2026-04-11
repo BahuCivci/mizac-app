@@ -406,11 +406,22 @@ function PdfSatinAl({ tip, renk, tr }: { tip: MizacTip; renk: string; tr: boolea
       <button
         onClick={handleClick}
         disabled={loading}
-        className="w-full py-4 rounded-full text-base font-bold text-white transition-all hover:opacity-90 disabled:opacity-60"
+        className="w-full py-4 rounded-full text-base font-bold text-white transition-all hover:opacity-90 disabled:opacity-60 hover:shadow-lg"
         style={{ background: `linear-gradient(135deg, #7c4a1e, ${renk})` }}
       >
-        {loading ? (tr ? 'Yönlendiriliyor...' : 'Redirecting...') : (tr ? '✦ Satın Al — ₺99' : '✦ Buy Now — ₺99')}
+        {loading ? (tr ? '⏳ Ödeme sayfasına yönlendiriliyorsunuz...' : 'Redirecting to payment...') : (tr ? '✦ Raporumu İndir — ₺99' : '✦ Download My Report — ₺99')}
       </button>
+      <div className="flex items-center justify-center gap-4 mt-3 flex-wrap">
+        <span className="text-xs flex items-center gap-1" style={{ color: '#6b5230' }}>
+          🔒 {tr ? 'Güvenli ödeme' : 'Secure payment'}
+        </span>
+        <span className="text-xs flex items-center gap-1" style={{ color: '#6b5230' }}>
+          📧 {tr ? 'Anında e-posta ile teslim' : 'Instant email delivery'}
+        </span>
+        <span className="text-xs flex items-center gap-1" style={{ color: '#6b5230' }}>
+          ↩️ {tr ? '7 gün iade garantisi' : '7-day refund guarantee'}
+        </span>
+      </div>
       {error && <p className="text-xs text-center mt-2" style={{ color: '#e57373' }}>{error}</p>}
     </div>
   );
@@ -445,12 +456,20 @@ function SonucIcerik() {
     sevdavi: 'Her şeyi hissediyorsun — fazla hissediyorsun. Bir müzik seni ağlatabilir. Yanlış bir söz günlerce aklında kalır. Bu hassasiyet seni hem derinlikli hem de yorgun kılar.',
   };
 
+  const [showSticky, setShowSticky] = useState(false);
+
   // Sonucu localStorage'a kaydet
   useEffect(() => {
     if (tip && puanlarStr) {
       localStorage.setItem('mizac_sonuc', JSON.stringify({ tip, puanlar, tarih: Date.now() }));
     }
   }, [tip, puanlarStr]);
+
+  useEffect(() => {
+    const onScroll = () => setShowSticky(window.scrollY > 500);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   return (
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>
@@ -487,6 +506,27 @@ function SonucIcerik() {
             ))}
           </div>
         </div>
+
+        {/* PDF Mini Teaser */}
+        <a
+          href="#pdf-rapor"
+          className="flex items-center gap-4 rounded-2xl p-4 mb-4 transition-all hover:opacity-90"
+          style={{ background: 'linear-gradient(135deg, #1a1207, #0f0a04)', border: `1px solid ${profil.renk}50` }}
+        >
+          <div className="text-3xl shrink-0">📄</div>
+          <div className="flex-1 min-w-0">
+            <p className="font-bold text-sm text-white leading-snug">
+              {tr ? `${profil.isim} Derin Mizaç Raporu` : `${profil.isimEn} Deep Temperament Report`}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: '#9a8060' }}>
+              {tr ? '20+ sayfa · Organ haritası · Sağlık protokolü · Kariyer analizi' : '20+ pages · Organ map · Health protocol · Career analysis'}
+            </p>
+          </div>
+          <div className="shrink-0 text-right">
+            <p className="text-xs line-through" style={{ color: '#6b5230' }}>₺199</p>
+            <p className="text-sm font-bold" style={{ color: profil.renk }}>₺99 →</p>
+          </div>
+        </a>
 
         {/* Kalıcı Link */}
         <Link
@@ -607,7 +647,7 @@ function SonucIcerik() {
                   : `Who is ${profil.isimEn} most compatible with?`}
               </h3>
               <div className="space-y-2 mb-3">
-                {uyumHaritasi[tip].slice(0, 3).map(({ tip: digerTip, puan }) => {
+                {uyumHaritasi[tip].filter(({ tip: digerTip }) => digerTip !== tip).slice(0, 3).map(({ tip: digerTip, puan }) => {
                   const diger = mizacProfiller[digerTip];
                   const [x, y] = [tip, digerTip].sort((a, b) => order.indexOf(a) - order.indexOf(b));
                   const slug = `${x}-vs-${y}`;
@@ -807,26 +847,55 @@ function SonucIcerik() {
 
         {/* PDF Upsell */}
         <div
+          id="pdf-rapor"
           className="rounded-3xl p-8 mb-6"
-          style={{ background: 'linear-gradient(135deg, #1a1207, #0f0a04)', border: `1.5px solid ${profil.renk}30` }}
+          style={{ background: 'linear-gradient(135deg, #1a1207, #0f0a04)', border: `1.5px solid ${profil.renk}50` }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: profil.renk }}>
-            {tr ? '₺99 · PDF Rapor' : '₺99 · PDF Report'}
-          </p>
-          <h3 className="text-xl font-bold mb-2 text-white">
-            {tr ? 'Derin Mizaç Raporu' : 'Deep Temperament Report'}
-          </h3>
+          {/* Sosyal kanıt badge */}
+          <div className="flex items-center gap-2 mb-4">
+            <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ background: profil.renk + '25', color: profil.renk }}>
+              🔥 {tr ? 'Bu ay en çok satılan' : 'Best seller this month'}
+            </span>
+            <span className="text-xs" style={{ color: '#6b5230' }}>· 200+ {tr ? 'rapor teslim edildi' : 'reports delivered'}</span>
+          </div>
+
+          {/* Fiyat + başlık */}
+          <div className="flex items-start justify-between gap-4 mb-2">
+            <h3 className="text-xl font-bold text-white leading-snug">
+              {tr ? `${profil.isim} Derin Mizaç Raporu` : `${profil.isimEn} Deep Temperament Report`}
+            </h3>
+            <div className="text-right shrink-0">
+              <p className="text-xs line-through" style={{ color: '#4a3520' }}>₺199</p>
+              <p className="text-xl font-bold" style={{ color: profil.renk }}>₺99</p>
+            </div>
+          </div>
           <p className="text-sm mb-5" style={{ color: '#9a8a6a' }}>
             {tr
-              ? `${profil.isim} mizacınıza özel, 20+ sayfalık kapsamlı PDF analiz.`
-              : `20+ page comprehensive PDF analysis tailored to your ${profil.isimEn} temperament.`}
+              ? `Yalnızca ${profil.isim} mizacına özel, 20+ sayfa derinlemesine PDF analiz.`
+              : `Exclusively tailored to ${profil.isimEn} temperament. 20+ pages of in-depth PDF analysis.`}
           </p>
-          <ul className="space-y-2 mb-6">
+
+          <ul className="space-y-2.5 mb-6">
             {(tr
-              ? ['✦ Organ–duygu haritanız', '✦ Haftalık sağlık protokolü', '✦ İlişki ve kariyer uyum analizi', "✦ Esmaü'l-Hüsna zikirleriniz", '✦ Beslenme ve detoks takvimi']
-              : ['✦ Your organ–emotion map', '✦ Weekly health protocol', '✦ Relationship & career compatibility', '✦ Your personal divine names', '✦ Nutrition & detox calendar']
-            ).map((item) => (
-              <li key={item} className="text-sm" style={{ color: '#c4973a' }}>{item}</li>
+              ? [
+                  ['✦ Organ–duygu haritanız', 'Hangi organ hangi duyguyu taşır'],
+                  ['✦ Haftalık sağlık protokolü', 'Mizacına özel günlük rutin'],
+                  ['✦ İlişki ve kariyer uyum analizi', 'Kim ile, hangi alanda parlarsın'],
+                  ["✦ Esmaü'l-Hüsna zikirleriniz", 'Mizacınla rezonansa giren isimler'],
+                  ['✦ Beslenme ve detoks takvimi', 'Ne yemeli, neden kaçınmalı'],
+                ]
+              : [
+                  ['✦ Your organ–emotion map', 'Which organ holds which emotion'],
+                  ['✦ Weekly health protocol', 'Daily routine tailored to your type'],
+                  ['✦ Relationship & career compatibility', 'Where and with whom you thrive'],
+                  ['✦ Your personal divine names', 'Names in resonance with your temperament'],
+                  ['✦ Nutrition & detox calendar', 'What to eat and what to avoid'],
+                ]
+            ).map(([item, sub]) => (
+              <li key={item} className="flex flex-col">
+                <span className="text-sm font-medium" style={{ color: '#c4973a' }}>{item}</span>
+                <span className="text-xs" style={{ color: '#6b5230' }}>{sub}</span>
+              </li>
             ))}
           </ul>
           <PdfSatinAl tip={tip} renk={profil.renk} tr={tr} />
@@ -933,6 +1002,23 @@ function SonucIcerik() {
           </Link>
         </div>
       </div>
+
+      {/* Sticky Mobile CTA */}
+      {showSticky && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 px-4 pb-4 pt-6 sm:hidden"
+          style={{ background: 'linear-gradient(to top, #0f0a04 70%, transparent)' }}
+        >
+          <a
+            href="#pdf-rapor"
+            className="flex items-center justify-between w-full px-6 py-4 rounded-full font-bold text-white text-sm transition-all hover:opacity-90 shadow-2xl"
+            style={{ background: `linear-gradient(135deg, #7c4a1e, ${profil.renk})` }}
+          >
+            <span>✦ {tr ? 'Derin Raporumu İndir' : 'Download My Report'}</span>
+            <span className="opacity-80">₺99 →</span>
+          </a>
+        </div>
+      )}
     </main>
   );
 }

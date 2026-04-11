@@ -1,0 +1,19 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - link [ref=e6] [cursor=pointer]:
+      - /url: https://www.lemonsqueezy.com
+      - img [ref=e7]
+    - heading "Confirm your email address" [level=1] [ref=e13]
+    - paragraph [ref=e14]: Please check your email for a confirmation link. Didn't receive the email? We'll send you another.
+    - button "Resend Confirmation Email" [ref=e16] [cursor=pointer]:
+      - generic [ref=e17]: Resend Confirmation Email
+  - generic [ref=e18]:
+    - img [ref=e19]
+    - img [ref=e21]
+    - img [ref=e23]
+    - img [ref=e25]
+    - generic [ref=e28]:
+      - paragraph [ref=e29]: “Imagine having a team of designers, developers, email marketers, and tax accountants behind you. That’s how Lemon Squeezy feels, letting you focus on creating your digital products.”
+      - generic [ref=e31]:
+        - heading "Shahadat Rahman" [level=4] [ref=e32]
+        - text: "@HiShahadat"

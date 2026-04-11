@@ -1,0 +1,156 @@
+- generic:
+  - generic:
+    - navigation:
+      - complementary:
+        - generic:
+          - button:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - text: s
+                - generic:
+                  - generic: safra943
+            - generic:
+              - img
+        - navigation:
+          - list:
+            - listitem:
+              - link:
+                - /url: /emails
+                - generic:
+                  - img
+                - text: Emails
+            - listitem:
+              - link:
+                - /url: /broadcasts
+                - generic:
+                  - img
+                - text: Broadcasts
+            - listitem:
+              - link:
+                - /url: /templates
+                - generic:
+                  - img
+                - text: Templates
+            - listitem:
+              - link:
+                - /url: /audience
+                - generic:
+                  - img
+                - text: Audience
+            - listitem:
+              - link:
+                - /url: /metrics
+                - generic:
+                  - img
+                - text: Metrics
+            - listitem:
+              - link:
+                - /url: /domains
+                - generic:
+                  - img
+                - text: Domains
+            - listitem:
+              - link:
+                - /url: /logs
+                - generic:
+                  - img
+                - text: Logs
+            - listitem:
+              - link:
+                - /url: /api-keys
+                - generic:
+                  - img
+                - text: API Keys
+            - listitem:
+              - link:
+                - /url: /webhooks
+                - generic:
+                  - img
+                - text: Webhooks
+            - listitem:
+              - link:
+                - /url: /settings
+                - generic:
+                  - img
+                - text: Settings
+        - button:
+          - generic:
+            - generic:
+              - generic:
+                - generic: s
+              - generic: safra943@gmail.com
+          - generic:
+            - img
+    - generic:
+      - generic:
+        - generic:
+          - button:
+            - generic: Feedback
+            - generic:
+              - generic: F
+          - link:
+            - /url: /help
+            - text: Help
+          - link:
+            - /url: https://resend.com/docs/dashboard/api-keys/introduction
+            - text: Docs
+      - generic:
+        - generic:
+          - heading [level=1]: API Keys
+          - generic:
+            - button [expanded]:
+              - generic:
+                - img
+              - generic: Create API Key
+            - button:
+              - generic:
+                - img
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                - textbox:
+                  - /placeholder: Search...
+              - combobox:
+                - generic: All Permissions
+                - img
+            - button:
+              - generic:
+                - generic:
+                  - img
+          - generic:
+            - generic:
+              - heading [level=2]: No API keys yet
+              - generic: Generate an API key to authenticate requests and send emails through the API.
+              - generic:
+                - button:
+                  - generic:
+                    - img
+                  - generic: Create API Key
+  - region "Notifications alt+T"
+  - alert: API Keys · Resend
+  - dialog "View API Key" [active] [ref=e589]:
+    - heading "View API Key" [level=2] [ref=e590]
+    - alert [ref=e591]:
+      - img [ref=e593]
+      - generic [ref=e596]: You can only see this key once. Store it safely.
+    - generic [ref=e597]:
+      - generic [ref=e598]: API Key
+      - generic [ref=e599]:
+        - textbox "API Key" [ref=e600]: re_SxLmBehP_NuQ93XUrXW41CW88zNcc19TV
+        - generic [ref=e601]:
+          - button "Show value" [ref=e602] [cursor=pointer]:
+            - img [ref=e603]
+          - button "Copy to clipboard" [ref=e606] [cursor=pointer]:
+            - img [ref=e608]
+    - button "Done" [ref=e611] [cursor=pointer]:
+      - generic [ref=e612]: Done
+    - button "Close dialog" [ref=e585] [cursor=pointer]:
+      - img [ref=e586]

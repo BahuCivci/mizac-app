@@ -1,0 +1,253 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e1616]: Öğe seçilmedi
+  - generic [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - link "İçeriğe atla" [ref=e14] [cursor=pointer]:
+          - /url: ""
+        - link "Gmail ürününü ekran okuyucularla birlikte kullanma" [ref=e15] [cursor=pointer]:
+          - /url: ""
+      - heading [level=1] [ref=e17]:
+        - banner [ref=e18]:
+          - generic [ref=e19]:
+            - generic [ref=e20]:
+              - button "Ana menü" [expanded] [ref=e21] [cursor=pointer]:
+                - img [ref=e22]
+              - link "Gmail" [ref=e26] [cursor=pointer]:
+                - /url: "#inbox"
+                - img [ref=e27]
+            - generic [ref=e28]:
+              - search [ref=e30]:
+                - heading "Arama" [level=2] [ref=e1459]
+                - table [ref=e1617]:
+                  - rowgroup [ref=e1618]:
+                    - row "from:lemonsqueezy" [ref=e1619]:
+                      - cell "from:lemonsqueezy" [ref=e1620]:
+                        - textbox "Postalarda arayın" [ref=e1621]: from:lemonsqueezy
+                - button "Gelişmiş arama seçenekleri" [ref=e1460] [cursor=pointer]:
+                  - img [ref=e1461]
+                - button "Aramayı temizle" [ref=e1622] [cursor=pointer]:
+                  - img [ref=e1623]
+                - button "Postalarda arayın" [disabled] [ref=e35] [cursor=pointer]:
+                  - img [ref=e36]
+              - generic [ref=e39]:
+                - button "Destek" [ref=e1627] [cursor=pointer]:
+                  - img [ref=e1628]
+                - button "Ayarlar" [ref=e1464] [cursor=pointer]:
+                  - img [ref=e1465]
+                - generic [ref=e1468]:
+                  - generic:
+                    - button "Gemini'a sorun" [ref=e1471] [cursor=pointer]:
+                      - img [ref=e1474]
+                    - tooltip [ref=e1477]: Gemini'a sorun
+            - generic [ref=e45]:
+              - button "Google uygulamaları" [ref=e49] [cursor=pointer]:
+                - img [ref=e50]
+              - 'button "Google Hesabı: Bahu k (safra943@gmail.com)" [ref=e55] [cursor=pointer]':
+                - img [ref=e57]
+                - img [ref=e63]
+      - alert [ref=e66]
+    - generic [ref=e69]:
+      - navigation [ref=e70]:
+        - button "Oluştur" [ref=e73] [cursor=pointer]
+        - generic [ref=e79]:
+          - generic "Etiketler" [ref=e81]:
+            - heading "Etiketler" [level=2] [ref=e82]
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - generic [ref=e86]:
+                  - generic [ref=e1482]:
+                    - link "Gelen Kutusu 11323 okunmamış ileti" [ref=e1484] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#inbox
+                      - text: Gelen Kutusu
+                    - generic [ref=e1485]: "11.323"
+                  - link "Yıldızlı" [ref=e1492] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#starred
+                  - link "Ertelenenler" [ref=e1499] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#snoozed
+                  - link "Önemli" [ref=e1506] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#imp
+                  - link "Gönderilmiş Postalar" [ref=e1513] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#sent
+                  - generic [ref=e1518]:
+                    - link "Taslaklar 1 okunmamış ileti" [ref=e1520] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#drafts
+                      - text: Taslaklar
+                    - generic [ref=e1521]: "1"
+                - generic [ref=e132]:
+                  - generic [ref=e1526]:
+                    - link "Satın Alma İşlemleri 143 okunmamış ileti menüsü var" [ref=e1528] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/purchases
+                      - text: Satın Alma İşlemleri
+                    - generic [ref=e1529]: "143"
+                  - generic [ref=e1534]:
+                    - link "Sosyal 171 okunmamış ileti menüsü var" [ref=e1536] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/social
+                      - text: Sosyal
+                    - generic [ref=e1537]: "171"
+                  - generic [ref=e1542]:
+                    - link "Güncellemeler 4469 okunmamış ileti menüsü var" [ref=e1544] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/updates
+                      - text: Güncellemeler
+                    - generic [ref=e1545]: "4.469"
+                  - generic [ref=e1550]:
+                    - link "Forumlar 95 okunmamış ileti menüsü var" [ref=e1552] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/forums
+                      - text: Forumlar
+                    - generic [ref=e1553]: "95"
+                  - generic [ref=e1558]:
+                    - link "Tanıtımlar 6288 okunmamış ileti menüsü var" [ref=e1560] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/promotions
+                      - text: Tanıtımlar
+                    - generic [ref=e1561]: "6.288"
+              - button "Daha fazla etiket" [ref=e174] [cursor=pointer]:
+                - generic [ref=e175]: Diğer
+          - generic [ref=e178]:
+            - heading "Etiketler" [ref=e179]
+            - button "Yeni etiket oluştur" [ref=e180] [cursor=pointer]
+          - generic "Etiketler" [ref=e182]:
+            - heading "Etiketler" [level=2] [ref=e183]
+            - generic [ref=e187]:
+              - link "[Gmail]/bahu.civci@gmail.com menüsü var" [ref=e1568] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/%5BGmail%5D/bahu.civci@gmail.com
+                - text: "[Gmail]/bahu.civci@gmail.com"
+              - link "bahu.civci@gmail.com menüsü var" [ref=e1575] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/bahu.civci@gmail.com
+                - text: bahu.civci@gmail.com
+              - link "Notes menüsü var" [ref=e1582] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/Notes
+                - text: Notes
+      - generic [ref=e212]:
+        - generic [ref=e1732]:
+          - generic [ref=e1734]:
+            - button "Arama Sonuçları'na geri dön" [ref=e1736] [cursor=pointer]
+            - generic [ref=e1739]:
+              - button "Arşivle" [ref=e1740] [cursor=pointer]
+              - button "Spam bildir" [ref=e1743] [cursor=pointer]
+              - button "Sil" [ref=e1746] [cursor=pointer]
+            - generic [ref=e1749]:
+              - button "Okunmadı olarak işaretle" [ref=e1750] [cursor=pointer]:
+                - img [ref=e1752]
+              - button "Gelen Kutusuna taşı" [ref=e1754] [cursor=pointer]
+            - button "Diğer e-posta seçenekleri" [ref=e1758] [cursor=pointer]
+          - generic [ref=e1763]:
+            - generic [ref=e1764]: 1 ileti dizisinden 1.
+            - button "Daha yeni" [disabled] [ref=e1765]
+            - button "Daha eski" [disabled] [ref=e1766]
+        - main [ref=e1767]:
+          - generic [ref=e1769]:
+            - generic [ref=e1771]:
+              - generic [ref=e1773]:
+                - generic [ref=e1774]:
+                  - button "Yazdır" [ref=e1775] [cursor=pointer]:
+                    - img [ref=e1778]
+                  - tooltip [ref=e1781]: Yazdır
+                - generic [ref=e1782]:
+                  - button "Yeni pencerede" [ref=e1783] [cursor=pointer]:
+                    - img [ref=e1786]
+                  - tooltip [ref=e1789]: Yeni pencerede
+              - generic [ref=e1791]:
+                - heading "Verify Email Address" [level=2] [ref=e1792]
+                - generic [ref=e1793]:
+                  - button "Google'ın sistemlerine göre önemli." [ref=e1795] [cursor=pointer]:
+                    - img [ref=e1797]
+                  - generic [ref=e1800] [cursor=pointer]:
+                    - generic [ref=e1801]:
+                      - button "Gelen Kutusu etiketine sahip tüm iletileri ara" [ref=e1803]: Gelen Kutusu
+                      - tooltip [ref=e1804]: Gelen Kutusu etiketine sahip tüm iletileri ara
+                    - generic [ref=e1805]:
+                      - button "Gelen Kutusu etiketini bu ileti dizisinden kaldır" [ref=e1807]: ×
+                      - tooltip [ref=e1808]: Gelen Kutusu etiketini bu ileti dizisinden kaldır
+            - list [ref=e1811]:
+              - listitem [ref=e1812]:
+                - generic [ref=e1818]:
+                  - img [ref=e1822]
+                  - generic [ref=e1823]:
+                    - table [ref=e1825]:
+                      - rowgroup [ref=e1826]:
+                        - row "Lemon Squeezy hello@lemonsqueezy-mail.com 13:03 (2 dakika önce) Yıldızlı değil Tepki ekle Yanıtla Diğer ileti seçenekleri" [ref=e1827]:
+                          - cell "Lemon Squeezy hello@lemonsqueezy-mail.com" [ref=e1828]:
+                            - table [ref=e1829]:
+                              - rowgroup [ref=e1830]:
+                                - row "Lemon Squeezy hello@lemonsqueezy-mail.com" [ref=e1831]:
+                                  - cell "Lemon Squeezy hello@lemonsqueezy-mail.com" [ref=e1832]:
+                                    - heading "Lemon Squeezy hello@lemonsqueezy-mail.com" [level=3] [ref=e1833]:
+                                      - gridcell "Lemon Squeezy hello@lemonsqueezy-mail.com" [ref=e1834]:
+                                        - generic [ref=e1835]: Lemon Squeezy
+                                        - generic [ref=e1836]: <hello@lemonsqueezy-mail.com>
+                                    - heading [level=3]
+                          - cell "13:03 (2 dakika önce) Yıldızlı değil" [ref=e1837]:
+                            - generic [ref=e1838]:
+                              - gridcell "13:03 (2 dakika önce)" [ref=e1839]
+                              - checkbox "Yıldızlı değil" [ref=e1841] [cursor=pointer]
+                          - cell
+                          - cell "Tepki ekle Yanıtla Diğer ileti seçenekleri" [ref=e1843]:
+                            - generic [ref=e1845]:
+                              - button "Tepki ekle" [ref=e1846] [cursor=pointer]:
+                                - img [ref=e1849]
+                              - tooltip [ref=e1852]: Tepki ekle
+                            - generic [ref=e1853]:
+                              - button "Yanıtla" [ref=e1854] [cursor=pointer]:
+                                - img [ref=e1857]
+                              - tooltip [ref=e1860]: Yanıtla
+                            - generic "Diğer ileti seçenekleri" [ref=e1861]:
+                              - generic [ref=e1863]:
+                                - button "Diğer ileti seçenekleri" [ref=e1864] [cursor=pointer]:
+                                  - img [ref=e1866]
+                                - tooltip [ref=e1869]: Diğer
+                        - 'row "Alıcı: ben Ayrıntıları göster" [ref=e1870]':
+                          - 'cell "Alıcı: ben Ayrıntıları göster" [ref=e1871]':
+                            - table [ref=e1872]:
+                              - rowgroup [ref=e1873]:
+                                - 'row "Alıcı: ben Ayrıntıları göster" [ref=e1874]':
+                                  - 'cell "Alıcı: ben Ayrıntıları göster" [ref=e1875]':
+                                    - generic [ref=e1877]: "Alıcı: ben"
+                                    - button "Ayrıntıları göster" [ref=e1878]
+                    - generic [ref=e1883]:
+                      - link "Lemon Squeezy" [ref=e1884] [cursor=pointer]:
+                        - /url: https://url9196.lemonsqueezy-mail.com/ls/click?upn=u001.5P5E5ZdLNcqQ8CduXpF-2BvreIM6c-2FqnpJkf67qEodl1DFAmXuVOIZJBK7LO-2FsMOMjNNHf_DmBcO3BLHPVzDQ7bgtlM11awDsE-2BkbLkBNdb2ocGq4-2FlXYtFEv731hMRRdGXDhYAb7FrtvtedCNUmYek5GiTXzZBYwhywNvi0SciNmH41etciuKmtrglV4eUAcu-2BTu0B1H-2B-2B4YdZhiRVItaZAFznZrRI4nMFUPGA-2BamjPLAPI-2BunU8Hag7UmAKIbfAtOS3cW1FWVk-2F5KBqaU3-2FqfrSg6EA-3D-3D
+                        - img "Lemon Squeezy" [ref=e1885]
+                      - heading "Verify your email address" [level=1] [ref=e1886]
+                      - paragraph [ref=e1887]: You know the drill. Click the link below to verify your email address.
+                      - link "Verify email address →" [active] [ref=e1888] [cursor=pointer]:
+                        - /url: https://url9196.lemonsqueezy-mail.com/ls/click?upn=u001.5P5E5ZdLNcqQ8CduXpF-2BvlyJzvgm8462LPphdSHEfMamE-2F7XPA7x0v4pzub8H79Pmpvhgss-2BfEZ4wMaD9SuGh-2BLi5PrCu3zpeRWHrjp5xIky2E6XeOv-2B-2BA4J9qYFejZCh64IJ8Gsgbb1kY0Y29zsuCKGhiHmlM8EP9nuXThmC5OMK-2FksaquzJhOBCMCbhAv6fACK5C54EaSFQqJSJpKMl5ZF4dyQc2WDFdIEPaqbEJqI2n0aUsMqBsxFgzDAQ1YvKbzf8Wsh40LpmMi-2FzbGtfw-3D-3DX8_h_DmBcO3BLHPVzDQ7bgtlM11awDsE-2BkbLkBNdb2ocGq4-2FlXYtFEv731hMRRdGXDhYAvaEvkhae5a9Cxe0gUUj5aQ2kSIrXyYqrFacfIhIWXlDYeGLGbduohB16KZZshF8UNFFdJQYfCTwPh4xVkWFjuR5LysLUZEnjOS8SV2GM7476wak3smtXXUw5I5nP-2Bawfu4I5NiVsjaArbQwla1Ez3Q-3D-3D
+                      - paragraph [ref=e1889]:
+                        - text: Stay zesty,
+                        - link "@lemonsqueezy" [ref=e1890] [cursor=pointer]:
+                          - /url: https://url9196.lemonsqueezy-mail.com/ls/click?upn=u001.5P5E5ZdLNcqQ8CduXpF-2Bvm8pJyhBGAoNf3zWABJVSLEAl-2Bs8bjhguyOguFkwVsPppaOb_DmBcO3BLHPVzDQ7bgtlM11awDsE-2BkbLkBNdb2ocGq4-2FlXYtFEv731hMRRdGXDhYAK83XEQ4qJybNvvGfKkcE2QyPDlxSZoiSEauxsD9U5T5tf8QOycdvqZDWzNrEvV0HgeJcPJXhIp2lDZlghkxcx4pnYmoG9wVzMAfSAbGE-2FqJKbxc5TOLjSDL8dhPHPsdFynEmbIO2jzmS5nWXOIdY6w-3D-3D
+                      - paragraph [ref=e1891]:
+                        - text: "If you have any trouble with the button above, you can copy and paste the link below into your browser:"
+                        - link "https://auth.lemonsqueezy.com/email/verify/6879609/05c0c1a6a1f059ac3d39257efcd93b9a23db1a06?expires=1775905431&signature=12c88a2d79a30421577e2f143b41e5f979a983d33cb67dbc2b98deeee790ff34" [ref=e1892] [cursor=pointer]:
+                          - /url: https://url9196.lemonsqueezy-mail.com/ls/click?upn=u001.5P5E5ZdLNcqQ8CduXpF-2BvlyJzvgm8462LPphdSHEfMamE-2F7XPA7x0v4pzub8H79Pmpvhgss-2BfEZ4wMaD9SuGh-2BLi5PrCu3zpeRWHrjp5xIky2E6XeOv-2B-2BA4J9qYFejZCh64IJ8Gsgbb1kY0Y29zsuCKGhiHmlM8EP9nuXThmC5OMK-2FksaquzJhOBCMCbhAv6fACK5C54EaSFQqJSJpKMl5ZF4dyQc2WDFdIEPaqbEJqI2n0aUsMqBsxFgzDAQ1YvKbzf8Wsh40LpmMi-2FzbGtfw-3D-3DXyT9_DmBcO3BLHPVzDQ7bgtlM11awDsE-2BkbLkBNdb2ocGq4-2FlXYtFEv731hMRRdGXDhYAokrpGhTeukcjJGbfmaUn3oZzDZXr7NLAeGsbgYQRU22iYucad7JbItH7FYAiFiYTofFvVbZQkjkokvbJXPoqV0hSNbY-2Bo2cWnW24eyPVhhUhMLGmsrqxBFbi5TvWuoI-2FdNkByEhzcC1z01xFP9s7tA-3D-3D
+                          - text: https://auth.lemonsqueezy.com/
+                          - text: email/verify/6879609/
+                          - text: 05c0c1a6a1f059ac3d39257efcd93b
+                          - text: 9a23db1a06?expires=1775905431&
+                          - text: signature=
+                          - text: 12c88a2d79a30421577e2f143b41e5
+                          - text: f979a983d33cb67dbc2b98deeee790
+                          - text: ff34
+                      - paragraph [ref=e1893]:
+                        - text: © 2026 Sold through Link, LLC f/k/a Lemon Squeezy LLC.
+                        - text: 354 Oyster Point Blvd South San Francisco, CA 94080, USA
+            - generic [ref=e1899]:
+              - link "Yanıtla" [ref=e1900] [cursor=pointer]
+              - link "Yönlendir" [ref=e1901] [cursor=pointer]
+              - generic [ref=e1903]:
+                - button "Tepki ekle" [ref=e1904] [cursor=pointer]:
+                  - img [ref=e1907]
+                - tooltip [ref=e1910]: Tepki ekle
+      - generic [ref=e1601]:
+        - complementary "Yan panel" [ref=e1602]:
+          - tablist [ref=e1604]:
+            - tab "Takvim"
+            - tab "Keep"
+            - tab "Görevler"
+            - tab "Kişiler"
+            - separator [disabled] [ref=e1609]
+            - tab "Eklenti Yükleyin"
+        - generic:
+          - button "Yan paneli gizle":
+            - img [ref=e1612] [cursor=pointer]

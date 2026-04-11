@@ -1,0 +1,170 @@
+- generic:
+  - generic:
+    - navigation:
+      - complementary:
+        - generic:
+          - button:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - text: s
+                - generic:
+                  - generic: safra943
+            - generic:
+              - img
+        - navigation:
+          - list:
+            - listitem:
+              - link:
+                - /url: /emails
+                - generic:
+                  - img
+                - text: Emails
+            - listitem:
+              - link:
+                - /url: /broadcasts
+                - generic:
+                  - img
+                - text: Broadcasts
+            - listitem:
+              - link:
+                - /url: /templates
+                - generic:
+                  - img
+                - text: Templates
+            - listitem:
+              - link:
+                - /url: /audience
+                - generic:
+                  - img
+                - text: Audience
+            - listitem:
+              - link:
+                - /url: /metrics
+                - generic:
+                  - img
+                - text: Metrics
+            - listitem:
+              - link:
+                - /url: /domains
+                - generic:
+                  - img
+                - text: Domains
+            - listitem:
+              - link:
+                - /url: /logs
+                - generic:
+                  - img
+                - text: Logs
+            - listitem:
+              - link:
+                - /url: /api-keys
+                - generic:
+                  - img
+                - text: API Keys
+            - listitem:
+              - link:
+                - /url: /webhooks
+                - generic:
+                  - img
+                - text: Webhooks
+            - listitem:
+              - link:
+                - /url: /settings
+                - generic:
+                  - img
+                - text: Settings
+        - button:
+          - generic:
+            - generic:
+              - generic:
+                - generic: s
+              - generic: safra943@gmail.com
+          - generic:
+            - img
+    - generic:
+      - generic:
+        - generic:
+          - button:
+            - generic: Feedback
+            - generic:
+              - generic: F
+          - link:
+            - /url: /help
+            - text: Help
+          - link:
+            - /url: https://resend.com/docs/dashboard/api-keys/introduction
+            - text: Docs
+      - generic:
+        - generic:
+          - heading [level=1]: API Keys
+          - generic:
+            - button [expanded]:
+              - generic:
+                - img
+              - generic: Create API Key
+            - button:
+              - generic:
+                - img
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                - textbox:
+                  - /placeholder: Search...
+              - combobox:
+                - generic: All Permissions
+                - img
+            - button:
+              - generic:
+                - generic:
+                  - img
+          - generic:
+            - generic:
+              - heading [level=2]: No API keys yet
+              - generic: Generate an API key to authenticate requests and send emails through the API.
+              - generic:
+                - button:
+                  - generic:
+                    - img
+                  - generic: Create API Key
+  - region "Notifications alt+T"
+  - alert: API Keys · Resend
+  - dialog "Add API Key" [ref=e552]:
+    - heading "Add API Key" [level=2] [ref=e553]
+    - generic [ref=e554]:
+      - generic [ref=e555]:
+        - generic [ref=e556]: Name
+        - textbox "Name" [active] [ref=e557]:
+          - /placeholder: Your API Key name
+      - generic [ref=e558]:
+        - generic [ref=e559]:
+          - generic [ref=e560]: Permission
+          - img [ref=e561]
+        - combobox [ref=e564] [cursor=pointer]:
+          - generic: Full access
+          - img [ref=e565]
+        - combobox [ref=e567]
+      - generic [ref=e568]:
+        - generic [ref=e569]: Domain
+        - combobox [disabled] [ref=e570]:
+          - generic [ref=e571]:
+            - generic [ref=e572]: All Domains
+            - img [ref=e573]
+      - generic [ref=e575]:
+        - button "Add ⌘ ↩" [disabled] [ref=e576]:
+          - generic [ref=e577]: Add
+          - generic [ref=e578]:
+            - generic [ref=e579]: ⌘
+            - generic [ref=e580]: ↩
+        - button "Cancel Esc" [ref=e581] [cursor=pointer]:
+          - generic [ref=e582]: Cancel
+          - generic [ref=e584]: Esc
+    - button "Close dialog" [ref=e585] [cursor=pointer]:
+      - img [ref=e586]

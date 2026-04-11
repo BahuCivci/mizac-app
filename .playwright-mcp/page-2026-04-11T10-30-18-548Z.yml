@@ -1,0 +1,109 @@
+- generic [ref=e1]:
+  - main [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e9]:
+        - generic:
+          - generic:
+            - generic [ref=e15]: Lemon Squeezy
+            - generic [ref=e17]: Lemon Squeezy partners with Stripe for secure financial services.
+      - generic [ref=e68]:
+        - generic [ref=e70]:
+          - generic [ref=e71]:
+            - heading "Let's get started" [level=1] [ref=e72]
+            - generic [ref=e73]: Have a Stripe account? You can use the same email address.
+          - generic [ref=e75]:
+            - generic [ref=e76]:
+              - generic [ref=e77]: Email address
+              - textbox "Email address" [disabled] [ref=e79]: safra943@gmail.com
+            - group "Phone number" [ref=e80]:
+              - text: Phone number
+              - generic [ref=e81]:
+                - text: Message and data rates may apply. By continuing, you agree to our
+                - link "Terms of Service" [ref=e82] [cursor=pointer]:
+                  - /url: https://stripe.com/TR/connect-account/legal
+                - text: and
+                - link "Privacy Policy" [ref=e83] [cursor=pointer]:
+                  - /url: https://stripe.com/TR/privacy
+                - text: .
+              - generic [ref=e84]:
+                - generic [ref=e85]:
+                  - generic [ref=e86]: Country
+                  - button "Phone number Country" [ref=e88] [cursor=pointer]:
+                    - img [ref=e89]
+                    - img [ref=e94]
+                - generic [ref=e96]:
+                  - generic "Country calling code" [ref=e97]: "+90"
+                  - textbox "Phone number" [active] [ref=e100]:
+                    - /placeholder: 501 234 56 78
+        - generic [ref=e101]:
+          - button "Submit" [ref=e102] [cursor=pointer]
+          - button "Use a different email address" [ref=e103] [cursor=pointer]
+    - generic [ref=e38]:
+      - generic:
+        - generic:
+          - generic "Stripe" [ref=e40]:
+            - img [ref=e41]
+          - generic [ref=e43]:
+            - link "Help" [ref=e44] [cursor=pointer]:
+              - /url: https://support.stripe.com/embedded-connect
+              - generic [ref=e47]: Help
+            - link "Terms" [ref=e48] [cursor=pointer]:
+              - /url: https://stripe.com/TR/connect-account/legal
+              - generic [ref=e51]: Terms
+            - link "Privacy" [ref=e52] [cursor=pointer]:
+              - /url: https://stripe.com/TR/privacy
+              - generic [ref=e55]: Privacy
+          - generic [ref=e59]:
+            - button [ref=e60] [cursor=pointer]:
+              - generic [ref=e62]:
+                - img [ref=e64]
+                - generic [ref=e66]: English (GB)
+            - combobox [ref=e67] [cursor=pointer]:
+              - option "Auto-detect"
+              - option "Bahasa Indonesia"
+              - option "čeština"
+              - option "Dansk"
+              - option "Deutsch"
+              - option "Eesti"
+              - option "English (Australia)"
+              - option "English (Canada)"
+              - option "English (India)"
+              - option "English (Ireland)"
+              - option "English (New Zealand)"
+              - option "English (Singapore)"
+              - option "English (United Kingdom)" [selected]
+              - option "English (United States)"
+              - option "Español (América Latina)"
+              - option "Español (España)"
+              - option "Français (Canada)"
+              - option "Français (France)"
+              - option "Hrvatski"
+              - option "Italiano"
+              - option "Latviešu"
+              - option "Lietuvių"
+              - option "Magyar"
+              - option "Malti"
+              - option "Melayu"
+              - option "Nederlands (Nederland)"
+              - option "Norsk bokmål"
+              - option "Polski"
+              - option "Português (Brasil)"
+              - option "Português (Portugal)"
+              - option "Română"
+              - option "Slovenčina"
+              - option "Slovenščina"
+              - option "Suomi"
+              - option "Svenska"
+              - option "Tiếng Việt"
+              - option "Türkçe"
+              - option "Wikang Filipino"
+              - option "Ελληνικά"
+              - option "български"
+              - option "ไทย"
+              - option "한국어"
+              - option "中文(简体)"
+              - option "日本語"
+              - option "繁體中文(台灣)"
+              - option "繁體中文(香港)"
+  - generic:
+    - iframe

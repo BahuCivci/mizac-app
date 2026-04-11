@@ -1,0 +1,81 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e7]:
+    - generic [ref=e9]:
+      - link [ref=e11] [cursor=pointer]:
+        - /url: https://app.lemonsqueezy.com/dashboard
+        - img [ref=e12]
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - link "Home" [ref=e16] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/dashboard
+            - img [ref=e18]
+            - generic [ref=e22]: Home
+          - link "Store" [ref=e23] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e25]
+            - generic [ref=e28]: Store
+            - img [ref=e30]
+          - link "Email" [ref=e32] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e34]
+            - generic [ref=e36]: Email
+            - img [ref=e38]
+          - link "Affiliates" [ref=e40] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e42]
+            - generic [ref=e44]: Affiliates
+            - img [ref=e46]
+          - link "Settings" [ref=e48] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e50]
+            - generic [ref=e53]: Settings
+            - img [ref=e55]
+          - link "Design" [ref=e57] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/design
+            - img [ref=e59]
+            - generic [ref=e61]: Design
+            - img [ref=e63]
+          - link "Setup" [ref=e65] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/setup
+            - img [ref=e67]
+            - generic [ref=e71]: Setup
+            - img [ref=e74]
+        - generic [ref=e77]:
+          - paragraph [ref=e78]: Fill out your business details to activate your store and accept live payments
+          - link "Activate your store" [ref=e79] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/settings/general/identity
+            - generic [ref=e80]: Activate your store
+      - generic [ref=e82]:
+        - button "Mizaç Mizaç" [ref=e84] [cursor=pointer]:
+          - generic "Mizaç" [ref=e87]:
+            - img [ref=e88]:
+              - generic [ref=e90]: M
+          - generic "Mizaç" [ref=e91]
+          - img [ref=e93]
+        - separator [ref=e95]
+        - generic [ref=e96] [cursor=pointer]:
+          - generic [ref=e97]: Test mode
+          - checkbox [checked] [ref=e100]
+    - generic [ref=e101]:
+      - generic [ref=e103]:
+        - heading "Home" [level=2] [ref=e105]
+        - generic [ref=e106]:
+          - img [ref=e107]
+          - generic [ref=e110]:
+            - generic [ref=e111]:
+              - link "Enable two-factor authentication" [ref=e112] [cursor=pointer]:
+                - /url: https://app.lemonsqueezy.com/settings/account/two-factor
+              - text: for additional security to your account.
+              - link "Help↗" [ref=e113] [cursor=pointer]:
+                - /url: https://docs.lemonsqueezy.com/help/getting-started/two-step-authentication
+            - button "Dismiss" [ref=e115] [cursor=pointer]
+        - img [ref=e117]
+      - generic [ref=e122]:
+        - button "Search" [ref=e124] [cursor=pointer]:
+          - img [ref=e125]
+        - button "Activity" [ref=e128] [cursor=pointer]:
+          - img [ref=e129]
+        - button [ref=e133] [cursor=pointer]:
+          - img [ref=e134]
+  - iframe [ref=e136]:
+    

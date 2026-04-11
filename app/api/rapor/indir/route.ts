@@ -12,7 +12,7 @@ export const maxDuration = 60; // Vercel Pro: 60s timeout
 interface JwtPayload {
   tip: MizacTip;
   email: string;
-  sessionId: string;
+  orderId: string;
 }
 
 export async function GET(req: NextRequest) {

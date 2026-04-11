@@ -1,0 +1,230 @@
+- generic [ref=e1]:
+  - generic [ref=e7]:
+    - generic [ref=e9]:
+      - link [ref=e11] [cursor=pointer]:
+        - /url: https://app.lemonsqueezy.com/dashboard
+        - img [ref=e12]
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - link "Home" [ref=e16] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/dashboard
+            - img [ref=e18]
+            - generic [ref=e22]: Home
+          - link "Store" [ref=e23] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e25]
+            - generic [ref=e28]: Store
+            - img [ref=e30]
+          - link "Email" [ref=e32] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e34]
+            - generic [ref=e36]: Email
+            - img [ref=e38]
+          - link "Affiliates" [ref=e40] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e42]
+            - generic [ref=e44]: Affiliates
+            - img [ref=e46]
+          - link "Settings" [ref=e48] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e50]
+            - generic [ref=e53]: Settings
+            - img [ref=e55]
+          - generic [ref=e57]:
+            - link "General" [ref=e58] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/general
+              - generic [ref=e59]: General
+            - link "Domains" [ref=e60] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/domains
+              - generic [ref=e61]: Domains
+            - link "Integrations" [ref=e62] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/integrations
+              - generic [ref=e63]: Integrations
+            - link "Webhooks" [ref=e64] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/webhooks
+              - generic [ref=e65]: Webhooks
+            - link "Email" [ref=e66] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/email
+              - generic [ref=e67]: Email
+            - link "Affiliates" [ref=e68] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/affiliates
+              - generic [ref=e69]: Affiliates
+            - link "Recovery" [ref=e70] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/recovery
+              - generic [ref=e71]: Recovery
+            - link "Plans" [ref=e72] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/plan
+              - generic [ref=e73]: Plans
+            - link "Billing" [ref=e74] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/billing
+              - generic [ref=e75]: Billing
+            - link "Payouts" [ref=e76] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/payouts
+              - generic [ref=e77]: Payouts
+            - link "Team" [ref=e78] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/team
+              - generic [ref=e79]: Team
+            - link "Stores" [ref=e80] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/stores
+              - generic [ref=e81]: Stores
+            - link "API" [ref=e82] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/api
+              - generic [ref=e83]: API
+          - link "Design" [ref=e84] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/design
+            - img [ref=e86]
+            - generic [ref=e88]: Design
+            - img [ref=e90]
+          - link "Setup" [ref=e92] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/setup
+            - img [ref=e94]
+            - generic [ref=e98]: Setup
+            - img [ref=e101]
+        - generic [ref=e104]:
+          - paragraph [ref=e105]: Fill out your business details to activate your store and accept live payments
+          - link "Activate your store" [ref=e106] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/settings/general/identity
+            - generic [ref=e107]: Activate your store
+      - generic [ref=e109]:
+        - button "Mizaç Mizaç" [ref=e111] [cursor=pointer]:
+          - generic "Mizaç" [ref=e114]:
+            - img [ref=e115]:
+              - generic [ref=e117]: M
+          - generic "Mizaç" [ref=e118]
+          - img [ref=e120]
+        - separator [ref=e122]
+        - generic [ref=e123] [cursor=pointer]:
+          - generic [ref=e124]: Test mode
+          - checkbox [checked] [ref=e127]
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - heading "Settings" [level=2] [ref=e131]
+        - generic [ref=e132]:
+          - generic [ref=e133]:
+            - heading "Store activation" [level=2] [ref=e134]
+            - paragraph [ref=e135]: Activate your store to accept live sales
+          - button "Save changes" [ref=e138] [cursor=pointer]
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - heading "Identity verification" [level=3] [ref=e141]
+            - paragraph [ref=e142]: Add your details to verify your identity
+          - generic [ref=e144]:
+            - button "Verify your identity" [ref=e145] [cursor=pointer]
+            - generic [ref=e147]: Action Required
+        - generic [ref=e148]:
+          - generic [ref=e150]:
+            - heading "Store settings" [level=2] [ref=e151]
+            - paragraph [ref=e152]: View and update your store details
+          - generic [ref=e153]:
+            - heading "Logo" [level=3] [ref=e155]
+            - generic [ref=e157]:
+              - generic "Mizaç" [ref=e160]:
+                - img [ref=e161]:
+                  - generic [ref=e163]: M
+              - button "Choose" [ref=e165] [cursor=pointer]
+              - generic [ref=e166]: JPG, GIF or PNG. 1MB Max.
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - heading "Store name *" [level=3] [ref=e169]
+              - paragraph [ref=e170]: Appears on receipts, invoices, and more
+            - textbox [ref=e172]: Mizaç
+          - generic [ref=e173]:
+            - generic [ref=e174]:
+              - heading "Store URL *" [level=3] [ref=e175]
+              - paragraph [ref=e176]: Your store is visible at this address
+            - generic [ref=e178]:
+              - textbox [ref=e179]: mizac
+              - generic: .lemonsqueezy.com
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - heading "Contact email *" [level=3] [ref=e182]
+              - paragraph [ref=e183]: Where customers can contact you for support. Appears on receipts and invoices.
+            - generic [ref=e185]:
+              - generic:
+                - img
+              - textbox [ref=e186]: safra943@gmail.com
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - heading "Currency *" [level=3] [ref=e189]
+              - paragraph [ref=e190]: Your store's main currency
+            - combobox "Search for option" [ref=e193]:
+              - generic [ref=e194]:
+                - generic [ref=e197]: TRY - Turkish Lira
+                - searchbox [ref=e198]
+          - generic [ref=e201]:
+            - heading "Payment settings" [level=2] [ref=e202]
+            - paragraph [ref=e203]: Manage your payment settings
+          - generic [ref=e204]:
+            - generic [ref=e205]:
+              - heading "Tax-inclusive pricing" [level=3] [ref=e206]
+              - paragraph [ref=e207]:
+                - text: Should prices include sales tax and be deducted from the total, or calculated separately and charged on top? ·
+                - link "Help↗" [ref=e208] [cursor=pointer]:
+                  - /url: https://docs.lemonsqueezy.com/help/payments/sales-tax-vat#tax-inclusive-pricing
+            - generic [ref=e210]:
+              - checkbox [ref=e211] [cursor=pointer]
+              - generic [ref=e212] [cursor=pointer]: Enable tax-inclusive pricing
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - heading "Apple Pay" [level=3] [ref=e215]
+              - paragraph [ref=e216]: Allow customers to pay using Apple Pay
+            - generic [ref=e218]:
+              - checkbox [checked] [ref=e219] [cursor=pointer]
+              - generic [ref=e220] [cursor=pointer]: Accept Apple Pay payments
+          - generic [ref=e221]:
+            - generic [ref=e222]:
+              - heading "Google Pay" [level=3] [ref=e223]
+              - paragraph [ref=e224]: Allow customers to pay using Google Pay
+            - generic [ref=e226]:
+              - checkbox [checked] [ref=e227] [cursor=pointer]
+              - generic [ref=e228] [cursor=pointer]: Accept Google Pay payments
+          - generic [ref=e229]:
+            - generic [ref=e230]:
+              - heading "PayPal Subscriptions" [level=3] [ref=e231]
+              - paragraph [ref=e232]:
+                - text: Allow customers to subscribe using PayPal ·
+                - link "Help↗" [ref=e233] [cursor=pointer]:
+                  - /url: https://docs.lemonsqueezy.com/help/orders/paypal-subscriptions
+            - generic [ref=e235]:
+              - checkbox [checked] [ref=e236] [cursor=pointer]
+              - generic [ref=e237] [cursor=pointer]: Accept PayPal subscriptions
+          - generic [ref=e238]:
+            - generic [ref=e239]:
+              - heading "Subscription renewal emails" [level=3] [ref=e240]
+              - paragraph [ref=e241]: Send customers email receipts for subscription payments
+            - generic [ref=e243]:
+              - checkbox [checked] [ref=e244] [cursor=pointer]
+              - generic [ref=e245] [cursor=pointer]: Enable subscription renewal emails
+          - generic [ref=e246]:
+            - generic [ref=e247]:
+              - heading "Free trial ends soon emails" [level=3] [ref=e248]
+              - paragraph [ref=e249]: Remind customers before their free trial expires
+            - generic [ref=e251]:
+              - checkbox [checked] [ref=e252] [cursor=pointer]
+              - generic [ref=e253] [cursor=pointer]: Enable free trial ends soon emails
+      - generic [ref=e254]:
+        - button "Search" [ref=e256] [cursor=pointer]:
+          - img [ref=e257]
+        - button "Activity" [ref=e260] [cursor=pointer]:
+          - img [ref=e261]
+        - button [ref=e265] [cursor=pointer]:
+          - img [ref=e266]
+    - generic [ref=e272]:
+      - generic [ref=e273]:
+        - heading "Identity verification" [level=1] [ref=e274]
+        - button [ref=e276] [cursor=pointer]:
+          - img [ref=e278]
+      - paragraph [ref=e280]:
+        - text: Add your details to verify your identity ·
+        - link "Help↗" [ref=e281] [cursor=pointer]:
+          - /url: https://docs.lemonsqueezy.com/help/getting-started/verify-your-identity
+      - iframe [active] [ref=e287]:
+        - generic [ref=f148e16]:
+          - generic [ref=f148e17]:
+            - generic [ref=f148e18]: Add information to start accepting money
+            - generic [ref=f148e19]: Lemon Squeezy partners with Stripe to help you receive payments and keep your personal bank and details secure.
+          - button "Adding information..." [disabled] [active] [ref=f148e22] [cursor=pointer]:
+            - text: Adding information...
+            - status [ref=f148e23]
+  - iframe [ref=e288]:
+    

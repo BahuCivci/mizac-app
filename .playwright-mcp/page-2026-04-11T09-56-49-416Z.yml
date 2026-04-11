@@ -1,0 +1,39 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - progressbar [ref=e6]
+      - main [ref=e89]:
+        - generic [ref=e90]:
+          - generic [ref=e93]:
+            - img [ref=e95]
+            - generic [ref=e100]: Sign in with Google
+          - generic [ref=e101]:
+            - heading "Welcome" [level=1] [ref=e102]
+            - generic [ref=e106]:
+              - img [ref=e108]
+              - generic [ref=e111]: safra943@gmail.com
+        - generic [ref=e117]:
+          - heading "Verifying it’s you..." [level=2] [ref=e119]:
+            - generic [ref=e120]: Verifying it’s you...
+          - generic [ref=e123]: Complete sign-in using your passkey
+        - button "Try another way" [ref=e129]:
+          - generic [ref=e132]: Try another way
+    - contentinfo [ref=e74]:
+      - combobox "Change language English (United States)" [ref=e78] [cursor=pointer]:
+        - generic:
+          - generic: English (United States)
+        - generic:
+          - img
+      - list [ref=e80]:
+        - listitem [ref=e81]:
+          - link "Help" [ref=e82] [cursor=pointer]:
+            - /url: https://support.google.com/accounts?hl=en-US&p=account_iph
+        - listitem [ref=e83]:
+          - link "Privacy" [ref=e84] [cursor=pointer]:
+            - /url: https://accounts.google.com/TOS?loc=TR&hl=en-US&privacy=true
+        - listitem [ref=e85]:
+          - link "Terms" [ref=e86] [cursor=pointer]:
+            - /url: https://accounts.google.com/TOS?loc=TR&hl=en-US
+  - iframe [ref=e87]:
+    
+  - generic [ref=e135]: Welcome

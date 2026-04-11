@@ -1,0 +1,146 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - complementary [ref=e4]:
+        - button "s safra943" [ref=e6] [cursor=pointer]:
+          - generic [ref=e8]:
+            - generic [ref=e10]:
+              - img [ref=e11]
+              - text: s
+            - generic [ref=e26]: safra943
+          - img [ref=e28]
+        - navigation [ref=e31]:
+          - list [ref=e32]:
+            - listitem [ref=e33]:
+              - link "Emails" [ref=e34] [cursor=pointer]:
+                - /url: /emails
+                - img [ref=e36]
+                - text: Emails
+            - listitem [ref=e42]:
+              - link "Broadcasts" [ref=e43] [cursor=pointer]:
+                - /url: /broadcasts
+                - img [ref=e45]
+                - text: Broadcasts
+            - listitem [ref=e51]:
+              - link "Templates" [ref=e52] [cursor=pointer]:
+                - /url: /templates
+                - img [ref=e54]
+                - text: Templates
+            - listitem [ref=e60]:
+              - link "Audience" [ref=e61] [cursor=pointer]:
+                - /url: /audience
+                - img [ref=e63]
+                - text: Audience
+            - listitem [ref=e79]:
+              - link "Metrics" [ref=e80] [cursor=pointer]:
+                - /url: /metrics
+                - img [ref=e82]
+                - text: Metrics
+            - listitem [ref=e92]:
+              - link "Domains" [ref=e93] [cursor=pointer]:
+                - /url: /domains
+                - img [ref=e95]
+                - text: Domains
+            - listitem [ref=e101]:
+              - link "Logs" [ref=e102] [cursor=pointer]:
+                - /url: /logs
+                - img [ref=e104]
+                - text: Logs
+            - listitem [ref=e114]:
+              - link "API Keys" [ref=e115] [cursor=pointer]:
+                - /url: /api-keys
+                - img [ref=e117]
+                - text: API Keys
+            - listitem [ref=e125]:
+              - link "Webhooks" [ref=e126] [cursor=pointer]:
+                - /url: /webhooks
+                - img [ref=e128]
+                - text: Webhooks
+            - listitem [ref=e137]:
+              - link "Settings" [ref=e138] [cursor=pointer]:
+                - /url: /settings
+                - img [ref=e140]
+                - text: Settings
+        - button "s safra943@gmail.com" [ref=e150] [cursor=pointer]:
+          - generic [ref=e152]:
+            - generic [ref=e154]: s
+            - generic [ref=e155]: safra943@gmail.com
+          - img [ref=e157]
+    - generic [ref=e161]:
+      - generic [ref=e163]:
+        - button "Feedback F" [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]: Feedback
+          - generic [ref=e167]: F
+        - link "Help" [ref=e168] [cursor=pointer]:
+          - /url: /help
+        - link "Docs" [ref=e169] [cursor=pointer]:
+          - /url: https://resend.com/docs/dashboard/api-keys/introduction
+      - generic [ref=e170]:
+        - generic [ref=e358]:
+          - heading "API Keys" [level=1] [ref=e359]
+          - generic [ref=e360]:
+            - button "Create API Key" [active] [ref=e361] [cursor=pointer]:
+              - img [ref=e363]
+              - generic [ref=e364]: Create API Key
+            - button "Open API drawer" [ref=e365] [cursor=pointer]:
+              - img [ref=e367]
+        - generic [ref=e377]:
+          - generic [ref=e378]:
+            - generic [ref=e379]:
+              - generic [ref=e380]:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                - textbox "Search..." [ref=e381]
+              - combobox [ref=e382] [cursor=pointer]:
+                - generic: All Permissions
+                - img [ref=e383]
+            - button [ref=e385] [cursor=pointer]:
+              - img [ref=e388]
+          - generic [ref=e613]:
+            - table [ref=e616]:
+              - rowgroup [ref=e617]:
+                - row "Name Token Permission Last Used Created" [ref=e618]:
+                  - columnheader "Name" [ref=e619]:
+                    - generic [ref=e620]:
+                      - checkbox [ref=e622]
+                      - text: Name
+                  - columnheader "Token" [ref=e623]
+                  - columnheader "Permission" [ref=e624]
+                  - columnheader "Last Used" [ref=e625]
+                  - columnheader "Created" [ref=e626]
+                  - columnheader [ref=e627]
+              - rowgroup [ref=e628]:
+                - row "mizac-app re_SxLmBehP... Full access No activity less than a minute ago More actions" [ref=e629]:
+                  - cell "mizac-app" [ref=e630]:
+                    - generic [ref=e631]:
+                      - checkbox [ref=e633]
+                      - link [ref=e634] [cursor=pointer]:
+                        - /url: /api-keys/8ec1d166-3750-4dc2-aa14-6252fd6d8339
+                        - generic [ref=e635]:
+                          - img [ref=e636]
+                          - img [ref=e667]
+                      - link "mizac-app" [ref=e671] [cursor=pointer]:
+                        - /url: /api-keys/8ec1d166-3750-4dc2-aa14-6252fd6d8339
+                  - cell "re_SxLmBehP..." [ref=e672]:
+                    - button "re_SxLmBehP..." [ref=e673]:
+                      - generic [ref=e674]: re_SxLmBehP...
+                  - cell "Full access" [ref=e675]
+                  - cell "No activity" [ref=e676]
+                  - cell "less than a minute ago" [ref=e677]:
+                    - time [ref=e678]: less than a minute ago
+                  - cell "More actions" [ref=e679]:
+                    - button "More actions" [ref=e680] [cursor=pointer]:
+                      - img [ref=e681]
+            - generic [ref=e686]:
+              - text: Page 1 – 1 of 1 keys –
+              - generic [ref=e687]:
+                - combobox "Items per page" [ref=e688] [cursor=pointer]:
+                  - option "40 items" [selected]
+                  - option "80 items"
+                  - option "120 items"
+                - img
+  - region "Notifications alt+T"
+  - img
+  - alert [ref=e349]: API Keys · Resend

@@ -1,0 +1,31 @@
+[    1314ms] [ERROR] TypeError: Cannot read properties of undefined (reading 'props')
+    at Proxy.sentry (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/app-B7Yhjz6C.js:110:209153)
+    at Vn.fn (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:9:9413)
+    at Vn.run (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:9:1517)
+    at get value (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:9:9658)
+    at Object.get [as sentry] (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:26276)
+    at Object.get (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:23775)
+    at o (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:27238)
+    at It (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:1997)
+    at Vn.f [as fn] (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:12771)
+    at Vn.run (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:9:1517)
+    at ao (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:13468)
+    at xn (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:12381)
+    at vp (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:27292)
+    at og (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:26326)
+    at jp (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:18764)
+    at Ig (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:18213)
+    at Lp (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:17847)
+    at H (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:4314)
+    at $ (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:4207)
+    at g (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:1156)
+    at rc (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:24:9415)
+    at mount (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:16:29763)
+    at t.mount (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:28:18199)
+    at setup (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/app-B7Yhjz6C.js:110:209689)
+    at https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:104:15458
+    at async h$ (https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/useCheckoutState-4oXk4w_o.js:104:15290) @ https://assets.lemonsqueezy.com/75fe1b45d5855b1a8177bf76e25edd130b354d97/build/assets/app-B7Yhjz6C.js:71
+[    1440ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://o4505075539902464.ingest.us.sentry.io/api/4505075559825408/security/?sentry_key=e137a5ec37cf03e1ed168b772c98c0bc:0
+[    1466ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://o4505075539902464.ingest.us.sentry.io/api/4505076398489600/envelope/?sentry_version=7&sentry_key=9b4670a486538110e9a1969dbceb8446&sentry_client=sentry.javascript.vue%2F10.32.1:0
+[    1606ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://o4505075539902464.ingest.us.sentry.io/api/4505076398489600/envelope/?sentry_version=7&sentry_key=9b4670a486538110e9a1969dbceb8446&sentry_client=sentry.javascript.vue%2F10.32.1:0
+[    1606ms] [ERROR] Failed to load resource: net::ERR_NAME_NOT_RESOLVED @ https://o4505075539902464.ingest.us.sentry.io/api/4505076398489600/envelope/?sentry_version=7&sentry_key=9b4670a486538110e9a1969dbceb8446&sentry_client=sentry.javascript.vue%2F10.32.1:0

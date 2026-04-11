@@ -1,0 +1,97 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e7]:
+    - generic [ref=e9]:
+      - link [ref=e11] [cursor=pointer]:
+        - /url: https://app.lemonsqueezy.com/dashboard
+        - img [ref=e12]
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - link "Home" [ref=e16] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/dashboard
+            - img [ref=e18]
+            - generic [ref=e22]: Home
+          - link "Store" [ref=e23] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e25]
+            - generic [ref=e28]: Store
+            - img [ref=e30]
+          - generic [ref=e32]:
+            - link "Products" [ref=e33] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/products
+              - generic [ref=e34]: Products
+            - link "Orders" [ref=e35] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/orders
+              - generic [ref=e36]: Orders
+            - link "Subscriptions" [ref=e37] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/subscriptions
+              - generic [ref=e38]: Subscriptions
+            - link "Customers" [ref=e39] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/customers
+              - generic [ref=e40]: Customers
+            - link "Discounts" [ref=e41] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/discounts
+              - generic [ref=e42]: Discounts
+            - link "Licenses" [ref=e43] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/licenses
+              - generic [ref=e44]: Licenses
+          - link "Email" [ref=e45] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e47]
+            - generic [ref=e49]: Email
+            - img [ref=e51]
+          - link "Affiliates" [ref=e53] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e55]
+            - generic [ref=e57]: Affiliates
+            - img [ref=e59]
+          - link "Settings" [ref=e61] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e63]
+            - generic [ref=e66]: Settings
+            - img [ref=e68]
+          - link "Design" [ref=e70] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/design
+            - img [ref=e72]
+            - generic [ref=e74]: Design
+            - img [ref=e76]
+          - link "Setup" [ref=e78] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/setup
+            - img [ref=e80]
+            - generic [ref=e84]: Setup
+            - img [ref=e87]
+        - generic [ref=e90]:
+          - paragraph [ref=e91]: Fill out your business details to activate your store and accept live payments
+          - link "Activate your store" [ref=e92] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/settings/general/identity
+            - generic [ref=e93]: Activate your store
+      - generic [ref=e95]:
+        - button "Mizaç Mizaç" [ref=e97] [cursor=pointer]:
+          - generic "Mizaç" [ref=e100]:
+            - img [ref=e101]:
+              - generic [ref=e103]: M
+          - generic "Mizaç" [ref=e104]
+          - img [ref=e106]
+        - separator [ref=e108]
+        - generic [ref=e109] [cursor=pointer]:
+          - generic [ref=e110]: Test mode
+          - checkbox [checked] [ref=e113]
+    - generic [ref=e114]:
+      - generic [ref=e116]:
+        - heading "Products" [level=2] [ref=e118]
+        - generic [ref=e120]:
+          - heading "Create your first product" [level=1] [ref=e121]
+          - paragraph [ref=e122]:
+            - text: Adding products to your store is easy peasy.
+            - text: Create products in minutes and start making sales.
+          - button "New Product" [ref=e124] [cursor=pointer]:
+            - img [ref=e126]
+            - text: New Product
+      - generic [ref=e128]:
+        - button "Search" [ref=e130] [cursor=pointer]:
+          - img [ref=e131]
+        - button "Activity" [ref=e134] [cursor=pointer]:
+          - img [ref=e135]
+        - button [ref=e139] [cursor=pointer]:
+          - img [ref=e140]
+  - iframe [ref=e142]:
+    

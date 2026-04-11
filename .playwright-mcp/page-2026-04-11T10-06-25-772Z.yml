@@ -1,0 +1,1284 @@
+- generic [ref=e1]:
+  - iframe [ref=e2]:
+    
+  - generic [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - link "İçeriğe atla" [ref=e14] [cursor=pointer]:
+          - /url: ""
+        - link "Gmail ürününü ekran okuyucularla birlikte kullanma" [ref=e15] [cursor=pointer]:
+          - /url: ""
+      - heading [level=1] [ref=e17]:
+        - banner [ref=e18]:
+          - generic [ref=e19]:
+            - generic [ref=e20]:
+              - button "Ana menü" [expanded] [ref=e21] [cursor=pointer]:
+                - img [ref=e22]
+              - link "Gmail" [ref=e26] [cursor=pointer]:
+                - /url: "#inbox"
+                - img [ref=e27]
+            - generic [ref=e28]:
+              - search [ref=e30]:
+                - heading "Arama" [level=2] [ref=e1459]
+                - combobox "Postalarda arayın" [ref=e32]
+                - button "Gelişmiş arama seçenekleri" [ref=e1460] [cursor=pointer]:
+                  - img [ref=e1461]
+                - button "Postalarda arayın" [disabled] [ref=e35] [cursor=pointer]:
+                  - img [ref=e36]
+              - generic [ref=e39]:
+                - button [ref=e40] [cursor=pointer]:
+                  - img [ref=e41]
+                - button "Ayarlar" [ref=e1464] [cursor=pointer]:
+                  - img [ref=e1465]
+                - generic [ref=e1468]:
+                  - generic:
+                    - button "Gemini'a sorun" [ref=e1471] [cursor=pointer]:
+                      - img [ref=e1474]
+                    - tooltip [ref=e1477]: Gemini'a sorun
+            - generic [ref=e45]:
+              - button "Google uygulamaları" [ref=e49] [cursor=pointer]:
+                - img [ref=e50]
+              - 'button "Google Hesabı: Bahu k (safra943@gmail.com)" [ref=e55] [cursor=pointer]':
+                - img [ref=e57]
+                - img [ref=e63]
+      - alert [ref=e66]
+    - generic [ref=e69]:
+      - navigation [ref=e70]:
+        - button "Oluştur" [ref=e73] [cursor=pointer]
+        - generic [ref=e79]:
+          - generic "Etiketler" [ref=e81]:
+            - heading "Etiketler" [level=2] [ref=e82]
+            - generic [ref=e83]:
+              - generic [ref=e84]:
+                - generic [ref=e86]:
+                  - generic [ref=e1482]:
+                    - link "Gelen Kutusu 11323 okunmamış ileti" [ref=e1484] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#inbox
+                      - text: Gelen Kutusu
+                    - generic [ref=e1485]: "11.323"
+                  - link "Yıldızlı" [ref=e1492] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#starred
+                  - link "Ertelenenler" [ref=e1499] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#snoozed
+                  - link "Önemli" [ref=e1506] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#imp
+                  - link "Gönderilmiş Postalar" [ref=e1513] [cursor=pointer]:
+                    - /url: https://mail.google.com/mail/u/0/#sent
+                  - generic [ref=e1518]:
+                    - link "Taslaklar 1 okunmamış ileti" [ref=e1520] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#drafts
+                      - text: Taslaklar
+                    - generic [ref=e1521]: "1"
+                - generic [ref=e132]:
+                  - generic [ref=e1526]:
+                    - link "Satın Alma İşlemleri 143 okunmamış ileti menüsü var" [ref=e1528] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/purchases
+                      - text: Satın Alma İşlemleri
+                    - generic [ref=e1529]: "143"
+                  - generic [ref=e1534]:
+                    - link "Sosyal 171 okunmamış ileti menüsü var" [ref=e1536] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/social
+                      - text: Sosyal
+                    - generic [ref=e1537]: "171"
+                  - generic [ref=e1542]:
+                    - link "Güncellemeler 4469 okunmamış ileti menüsü var" [ref=e1544] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/updates
+                      - text: Güncellemeler
+                    - generic [ref=e1545]: "4.469"
+                  - generic [ref=e1550]:
+                    - link "Forumlar 95 okunmamış ileti menüsü var" [ref=e1552] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/forums
+                      - text: Forumlar
+                    - generic [ref=e1553]: "95"
+                  - generic [ref=e1558]:
+                    - link "Tanıtımlar 6288 okunmamış ileti menüsü var" [ref=e1560] [cursor=pointer]:
+                      - /url: https://mail.google.com/mail/u/0/#category/promotions
+                      - text: Tanıtımlar
+                    - generic [ref=e1561]: "6.288"
+              - button "Daha fazla etiket" [ref=e174] [cursor=pointer]:
+                - generic [ref=e175]: Diğer
+          - generic [ref=e178]:
+            - heading "Etiketler" [ref=e179]
+            - button "Yeni etiket oluştur" [ref=e180] [cursor=pointer]
+          - generic "Etiketler" [ref=e182]:
+            - heading "Etiketler" [level=2] [ref=e183]
+            - generic [ref=e187]:
+              - link "[Gmail]/bahu.civci@gmail.com menüsü var" [ref=e1568] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/%5BGmail%5D/bahu.civci@gmail.com
+                - text: "[Gmail]/bahu.civci@gmail.com"
+              - link "bahu.civci@gmail.com menüsü var" [ref=e1575] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/bahu.civci@gmail.com
+                - text: bahu.civci@gmail.com
+              - link "Notes menüsü var" [ref=e1582] [cursor=pointer]:
+                - /url: https://mail.google.com/mail/u/0/#label/Notes
+                - text: Notes
+      - generic [ref=e212]:
+        - generic [ref=e215]:
+          - generic [ref=e218]:
+            - button "Seçin" [ref=e220] [cursor=pointer]:
+              - checkbox [ref=e222]
+            - button "Yenile" [ref=e225] [cursor=pointer]
+            - button "Diğer e-posta seçenekleri" [ref=e229] [cursor=pointer]
+          - generic [ref=e234]:
+            - button "Daha fazla ileti gösterir" [ref=e235] [cursor=pointer]:
+              - generic [ref=e236]:
+                - text: 13.773 satırdan
+                - generic [ref=e237]: 1–50
+                - text: arası
+            - button "Daha yeni" [disabled] [ref=e238]
+            - button "Daha eski" [ref=e239] [cursor=pointer]
+        - generic [ref=e241]:
+          - main [ref=e244]:
+            - heading "İleti Dizileri" [level=2] [ref=e246]
+            - grid [ref=e250]:
+              - rowgroup [ref=e251]:
+                - row "Lemon Squeezy, Verify Email Address, 13:03, Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button." [ref=e252] [cursor=pointer]:
+                  - gridcell [ref=e253]
+                  - gridcell "Lemon Squeezy, Verify Email Address, 13:03, Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button." [ref=e254]:
+                    - checkbox "Lemon Squeezy, Verify Email Address, 13:03, Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button." [ref=e255]
+                  - gridcell "Yıldızlı değil" [ref=e256]:
+                    - button "Yıldızlı değil" [ref=e257]
+                  - gridcell "Google'ın sihrine göre önemli." [ref=e258]:
+                    - switch "Google'ın sihrine göre önemli." [checked] [ref=e259]
+                  - gridcell "Lemon Squeezy" [ref=e261]:
+                    - generic [ref=e263]: Lemon Squeezy
+                  - gridcell "Verify Email Address - Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button" [ref=e264]:
+                    - link "Verify Email Address - Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button" [ref=e265]:
+                      - generic [ref=e266]:
+                        - generic [ref=e268]: Verify Email Address
+                        - generic [ref=e269]:
+                          - generic [ref=e270]: "-"
+                          - text: Lemon Squeezy Verify your email address You know the drill. Click the link below to verify your email address. Verify email address → Stay zesty, @lemonsqueezy If you have any trouble with the button
+                  - gridcell [ref=e271]
+                  - gridcell "11 Nis 2026 Cmt 13:03" [ref=e272]:
+                    - generic "11 Nis 2026 Cmt 13:03" [ref=e273]: 13:03
+                  - gridcell
+                - row "Google, Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin, 12:59, Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌." [ref=e274] [cursor=pointer]:
+                  - gridcell [ref=e275]
+                  - gridcell "Google, Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin, 12:59, Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌." [ref=e276]:
+                    - checkbox "Google, Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin, 12:59, Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌." [ref=e277]
+                  - gridcell "Yıldızlı değil" [ref=e278]:
+                    - button "Yıldızlı değil" [ref=e279]
+                  - gridcell "Google'ın sihrine göre önemli." [ref=e280]:
+                    - switch "Google'ın sihrine göre önemli." [checked] [ref=e281]
+                  - gridcell "Google" [ref=e283]:
+                    - generic [ref=e285]: Google
+                  - gridcell "Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin - Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌" [ref=e286]:
+                    - link "Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin - Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌" [ref=e288]:
+                      - generic [ref=e289]:
+                        - generic [ref=e291]: Sayın Bahu, lütfen Google Hesabı ayarlarınızı inceleyin
+                        - generic [ref=e292]:
+                          - generic [ref=e293]: "-"
+                          - text: Merhaba Bahu, yeni kişisel bilgisayarınızda Google'a hoş geldiniz. İşte başlamanız için bazı faydalı bilgiler. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌
+                  - gridcell [ref=e294]
+                  - gridcell "11 Nis 2026 Cmt 12:59" [ref=e295]:
+                    - generic "11 Nis 2026 Cmt 12:59" [ref=e296]: 12:59
+                  - gridcell
+                - row "okunmadı, Chelsea with IFTTT, What 2,000 gamers automated this week 👀, 12:03, Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e297] [cursor=pointer]:
+                  - gridcell [ref=e298]
+                  - gridcell "okunmadı, Chelsea with IFTTT, What 2,000 gamers automated this week 👀, 12:03, Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e299]:
+                    - checkbox "okunmadı, Chelsea with IFTTT, What 2,000 gamers automated this week 👀, 12:03, Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e300]
+                  - gridcell "Yıldızlı değil" [ref=e301]:
+                    - button "Yıldızlı değil" [ref=e302]
+                  - gridcell "Önemsiz" [ref=e303]:
+                    - switch "Önemsiz" [ref=e304]
+                  - gridcell "Chelsea with IFTTT" [ref=e306]:
+                    - generic [ref=e308]: Chelsea with IFTTT
+                  - gridcell "What 2,000 gamers automated this week 👀 - Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏" [ref=e309]:
+                    - link "What 2,000 gamers automated this week 👀 - Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏" [ref=e311]:
+                      - generic [ref=e312]:
+                        - generic [ref=e315]:
+                          - text: What 2,000 gamers automated this week
+                          - img "👀" [ref=e316]
+                        - generic [ref=e317]:
+                          - generic [ref=e318]: "-"
+                          - text: Raid alerts, stream announcements, deal tracking — your setup is missing these. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏
+                  - gridcell [ref=e319]
+                  - gridcell "11 Nis 2026 Cmt 12:03" [ref=e320]:
+                    - generic "11 Nis 2026 Cmt 12:03" [ref=e321]: 12:03
+                  - gridcell
+                - row "okunmadı, Daffne, Saçlarında profesyonel dokunuş, 12:01, Herbatint ile tanış ✨ Saçlarına Hak Ettiği Özeni Ver 💫 Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından." [ref=e322] [cursor=pointer]:
+                  - gridcell [ref=e323]
+                  - gridcell "okunmadı, Daffne, Saçlarında profesyonel dokunuş, 12:01, Herbatint ile tanış ✨ Saçlarına Hak Ettiği Özeni Ver 💫 Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından." [ref=e324]:
+                    - checkbox "okunmadı, Daffne, Saçlarında profesyonel dokunuş, 12:01, Herbatint ile tanış ✨ Saçlarına Hak Ettiği Özeni Ver 💫 Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından." [ref=e325]
+                  - gridcell "Yıldızlı değil" [ref=e326]:
+                    - button "Yıldızlı değil" [ref=e327]
+                  - gridcell "Önemsiz" [ref=e328]:
+                    - switch "Önemsiz" [ref=e329]
+                  - gridcell "Daffne" [ref=e331]:
+                    - generic [ref=e333]: Daffne
+                  - gridcell "Saçlarında profesyonel dokunuş - Herbatint ile tanış ✨ Saçlarına Hak Ettiği Özeni Ver 💫 Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından E-posta listesinden çık" [ref=e1584]:
+                    - generic [ref=e335]:
+                      - link "Saçlarında profesyonel dokunuş - Herbatint ile tanış ✨ Saçlarına Hak Ettiği Özeni Ver 💫 Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından" [ref=e336]:
+                        - generic [ref=e337]:
+                          - generic [ref=e339]: Saçlarında profesyonel dokunuş
+                          - generic [ref=e340]:
+                            - generic [ref=e341]: "-"
+                            - text: Herbatint ile tanış
+                            - img "✨" [ref=e342]
+                            - text: Saçlarına Hak Ettiği Özeni Ver
+                            - img "💫" [ref=e343]
+                            - text: Saç rengin sadece bir görünüm değil, aynı zamanda senin tarzının en güçlü yansımalarından biri. Herbatint ile şimdi, evde konfor alanından
+                      - button "E-posta listesinden çık" [ref=e1586]:
+                        - generic [ref=e1587]: E-posta listesinden çık
+                  - gridcell [ref=e1588]:
+                    - toolbar [ref=e1589]:
+                      - listitem [ref=e1590]
+                      - listitem [ref=e1591]
+                      - listitem [ref=e1592]
+                      - listitem [ref=e1593]
+                  - gridcell
+                - row "okunmadı, Dermoeczanem.com | ., The Ordinary Güneş Serumu İle Tanışın 💛, 11:52, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına." [ref=e347] [cursor=pointer]:
+                  - gridcell [ref=e348]
+                  - gridcell "okunmadı, Dermoeczanem.com | ., The Ordinary Güneş Serumu İle Tanışın 💛, 11:52, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına." [ref=e349]:
+                    - checkbox "okunmadı, Dermoeczanem.com | ., The Ordinary Güneş Serumu İle Tanışın 💛, 11:52, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına." [ref=e350]
+                  - gridcell "Yıldızlı değil" [ref=e351]:
+                    - button "Yıldızlı değil" [ref=e352]
+                  - gridcell "Önemsiz" [ref=e353]:
+                    - switch "Önemsiz" [ref=e354]
+                  - gridcell "Dermoeczanem.com | ." [ref=e356]:
+                    - generic [ref=e358]: Dermoeczanem.com | .
+                  - gridcell "The Ordinary Güneş Serumu İle Tanışın 💛 - Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına" [ref=e359]:
+                    - link "The Ordinary Güneş Serumu İle Tanışın 💛 - Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına" [ref=e361]:
+                      - generic [ref=e362]:
+                        - generic [ref=e365]:
+                          - text: The Ordinary Güneş Serumu İle Tanışın
+                          - img "💛" [ref=e366]
+                        - generic [ref=e367]:
+                          - generic [ref=e368]: "-"
+                          - text: Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Kampanya ve indirim oranları stoklarla sınırlıdır. Dermogrup A.Ş bu konu ile ilgili değişiklik yapma hakkına
+                  - gridcell [ref=e369]
+                  - gridcell "11 Nis 2026 Cmt 11:52" [ref=e370]:
+                    - generic "11 Nis 2026 Cmt 11:52" [ref=e371]: 11:52
+                  - gridcell
+                - 'row "okunmadı, Tazedirekt, 1400₺''ye 200₺ indirim! 💚, 10:15, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e372] [cursor=pointer]':
+                  - gridcell [ref=e373]
+                  - 'gridcell "okunmadı, Tazedirekt, 1400₺''ye 200₺ indirim! 💚, 10:15, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e374]':
+                    - 'checkbox "okunmadı, Tazedirekt, 1400₺''ye 200₺ indirim! 💚, 10:15, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e375]'
+                  - gridcell "Yıldızlı değil" [ref=e376]:
+                    - button "Yıldızlı değil" [ref=e377]
+                  - gridcell "Önemsiz" [ref=e378]:
+                    - switch "Önemsiz" [ref=e379]
+                  - gridcell "Tazedirekt" [ref=e381]:
+                    - generic [ref=e383]: Tazedirekt
+                  - 'gridcell "1400₺''ye 200₺ indirim! 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e384]':
+                    - 'link "1400₺''ye 200₺ indirim! 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e386]':
+                      - generic [ref=e387]:
+                        - generic [ref=e390]:
+                          - text: 1400₺'ye 200₺ indirim!
+                          - img "💚" [ref=e391]
+                        - generic [ref=e392]:
+                          - generic [ref=e393]: "-"
+                          - text: "To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal"
+                  - gridcell [ref=e394]
+                  - gridcell "11 Nis 2026 Cmt 10:15" [ref=e395]:
+                    - generic "11 Nis 2026 Cmt 10:15" [ref=e396]: 10:15
+                  - gridcell
+                - 'row "okunmadı, Zaurbek, 12 hours until we go live, 08:00, Bahu, we go live in 12 hours. Quick reminder of what you''re getting: In the masterclass: → The client acquisition playbook that''s working right now → Real case studies with proven results →." [ref=e397] [cursor=pointer]':
+                  - gridcell [ref=e398]
+                  - 'gridcell "okunmadı, Zaurbek, 12 hours until we go live, 08:00, Bahu, we go live in 12 hours. Quick reminder of what you''re getting: In the masterclass: → The client acquisition playbook that''s working right now → Real case studies with proven results →." [ref=e399]':
+                    - 'checkbox "okunmadı, Zaurbek, 12 hours until we go live, 08:00, Bahu, we go live in 12 hours. Quick reminder of what you''re getting: In the masterclass: → The client acquisition playbook that''s working right now → Real case studies with proven results →." [ref=e400]'
+                  - gridcell "Yıldızlı değil" [ref=e401]:
+                    - button "Yıldızlı değil" [ref=e402]
+                  - gridcell "Önemsiz" [ref=e403]:
+                    - switch "Önemsiz" [ref=e404]
+                  - gridcell "Zaurbek" [ref=e406]:
+                    - generic [ref=e408]: Zaurbek
+                  - 'gridcell "12 hours until we go live - Bahu, we go live in 12 hours. Quick reminder of what you''re getting: In the masterclass: → The client acquisition playbook that''s working right now → Real case studies with proven results →" [ref=e409]':
+                    - 'link "12 hours until we go live - Bahu, we go live in 12 hours. Quick reminder of what you''re getting: In the masterclass: → The client acquisition playbook that''s working right now → Real case studies with proven results →" [ref=e410]':
+                      - generic [ref=e411]:
+                        - generic [ref=e413]: 12 hours until we go live
+                        - generic [ref=e414]:
+                          - generic [ref=e415]: "-"
+                          - text: "Bahu, we go live in 12 hours. Quick reminder of what you're getting: In the masterclass: → The client acquisition playbook that's working right now → Real case studies with proven results →"
+                  - gridcell [ref=e416]
+                  - gridcell "11 Nis 2026 Cmt 08:00" [ref=e417]:
+                    - generic "11 Nis 2026 Cmt 08:00" [ref=e418]: 08:00
+                  - gridcell
+                - row "okunmadı, Medium Daily Digest, A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate, 07:40, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended." [ref=e419] [cursor=pointer]:
+                  - gridcell [ref=e420]
+                  - gridcell "okunmadı, Medium Daily Digest, A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate, 07:40, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended." [ref=e421]:
+                    - checkbox "okunmadı, Medium Daily Digest, A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate, 07:40, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended." [ref=e422]
+                  - gridcell "Yıldızlı değil" [ref=e423]:
+                    - button "Yıldızlı değil" [ref=e424]
+                  - gridcell "Önemsiz" [ref=e425]:
+                    - switch "Önemsiz" [ref=e426]
+                  - gridcell "Medium Daily Digest" [ref=e428]:
+                    - generic [ref=e430]: Medium Daily Digest
+                  - gridcell "A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended" [ref=e431]:
+                    - link "A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended" [ref=e433]:
+                      - generic [ref=e434]:
+                        - generic [ref=e436]: A Beautiful, Unintended Consequence of AI Slop | Laurel W in Contemplate
+                        - generic:
+                          - generic [ref=e438]: "-"
+                          - text: Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Laurel W Laurel WinContemplate A Beautiful, Unintended Consequence of AI Slop A Beautiful, Unintended
+                  - gridcell [ref=e439]
+                  - gridcell "11 Nis 2026 Cmt 07:40" [ref=e440]:
+                    - generic "11 Nis 2026 Cmt 07:40" [ref=e441]: 07:40
+                  - gridcell
+                - row "okunmadı, HeyGen, You’re in. Seedance 2.0 is now live for everyone!, 06:38, No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone,." [ref=e442] [cursor=pointer]:
+                  - gridcell [ref=e443]
+                  - gridcell "okunmadı, HeyGen, You’re in. Seedance 2.0 is now live for everyone!, 06:38, No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone,." [ref=e444]:
+                    - checkbox "okunmadı, HeyGen, You’re in. Seedance 2.0 is now live for everyone!, 06:38, No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone,." [ref=e445]
+                  - gridcell "Yıldızlı değil" [ref=e446]:
+                    - button "Yıldızlı değil" [ref=e447]
+                  - gridcell "Önemsiz" [ref=e448]:
+                    - switch "Önemsiz" [ref=e449]
+                  - gridcell "HeyGen" [ref=e451]:
+                    - generic [ref=e453]: HeyGen
+                  - gridcell "You’re in. Seedance 2.0 is now live for everyone! - No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone," [ref=e454]:
+                    - link "You’re in. Seedance 2.0 is now live for everyone! - No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone," [ref=e456]:
+                      - generic [ref=e457]:
+                        - generic [ref=e459]: You’re in. Seedance 2.0 is now live for everyone!
+                        - generic [ref=e460]:
+                          - generic [ref=e461]: "-"
+                          - text: No waitlist, no regional rollout, no limits. Full access to Seedance 2.0 starting today. ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ ‌ Hi Bahu, You asked. We shipped. Seedance 2.0 is now available to everyone,
+                  - gridcell [ref=e462]
+                  - gridcell "11 Nis 2026 Cmt 06:38" [ref=e463]:
+                    - generic "11 Nis 2026 Cmt 06:38" [ref=e464]: 06:38
+                  - gridcell
+                - 'row "okunmadı, Ankara Startup: Id., 📅 Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"?, 05:00, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/." [ref=e465] [cursor=pointer]':
+                  - gridcell [ref=e466]
+                  - 'gridcell "okunmadı, Ankara Startup: Id., 📅 Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"?, 05:00, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/." [ref=e467]':
+                    - 'checkbox "okunmadı, Ankara Startup: Id., 📅 Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"?, 05:00, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/." [ref=e468]'
+                  - gridcell "Yıldızlı değil" [ref=e469]:
+                    - button "Yıldızlı değil" [ref=e470]
+                  - gridcell "Önemsiz" [ref=e471]:
+                    - switch "Önemsiz" [ref=e472]
+                  - 'gridcell "Ankara Startup: Id." [ref=e474]':
+                    - generic [ref=e476]: "Ankara Startup: Id."
+                  - 'gridcell "📅 Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/" [ref=e477]':
+                    - 'link "📅 Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/" [ref=e479]':
+                      - generic [ref=e480]:
+                        - generic [ref=e483]:
+                          - img "📅" [ref=e484]
+                          - text: "Friday: Can you make \"Workshop: How to Fix the Side Effects of Sitting All Day\"?"
+                        - generic:
+                          - generic [ref=e485]: "-"
+                          - text: "Ankara Startup: Idea to IPO invites you to keep connecting Meetup Friday > Workshop: How to Fix the Side Effects of Sitting All Day Ankara Startup: Idea to IPO Friday, April 17, 2026 3:30 AM Europe/"
+                  - gridcell [ref=e486]
+                  - gridcell "11 Nis 2026 Cmt 05:00" [ref=e487]:
+                    - generic "11 Nis 2026 Cmt 05:00" [ref=e488]: 05:00
+                  - gridcell
+                - row "okunmadı, Pegasus, ✈️ Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim! 💛, 10 Nis, BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız." [ref=e489] [cursor=pointer]:
+                  - gridcell [ref=e490]
+                  - gridcell "okunmadı, Pegasus, ✈️ Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim! 💛, 10 Nis, BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız." [ref=e491]:
+                    - checkbox "okunmadı, Pegasus, ✈️ Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim! 💛, 10 Nis, BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız." [ref=e492]
+                  - gridcell "Yıldızlı değil" [ref=e493]:
+                    - button "Yıldızlı değil" [ref=e494]
+                  - gridcell "Önemsiz" [ref=e495]:
+                    - switch "Önemsiz" [ref=e496]
+                  - gridcell "Pegasus" [ref=e498]:
+                    - generic [ref=e500]: Pegasus
+                  - gridcell "✈️ Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim! 💛 - BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız" [ref=e501]:
+                    - link "✈️ Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim! 💛 - BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız" [ref=e503]:
+                      - generic [ref=e504]:
+                        - generic [ref=e507]:
+                          - img "✈️" [ref=e508]
+                          - text: Bahunur,yurt dışı uçuşlarım vergiler hariç %25 indirim!
+                          - img "💛" [ref=e509]
+                        - generic [ref=e510]:
+                          - generic [ref=e511]: "-"
+                          - text: BolBollulara özel, 27 Nisan - 19 Haziran 2026 tarihleri arasındaki yurt dışı uçuşlarda vergiler hariç %25 indirim! Üstelik tüm ek bagajlar da %25 indirimli! Bu e-postayı görüntüleyemiyorsanız
+                  - gridcell [ref=e512]
+                  - gridcell "10 Nis 2026 Cum 20:05" [ref=e513]:
+                    - generic "10 Nis 2026 Cum 20:05" [ref=e514]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Zaurbek, Tomorrow: Your AI business roadmap, 10 Nis, Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here''s what you''ll learn: → How to land your first 3 clients without ads, cold outreach, or." [ref=e515] [cursor=pointer]':
+                  - gridcell [ref=e516]
+                  - 'gridcell "okunmadı, Zaurbek, Tomorrow: Your AI business roadmap, 10 Nis, Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here''s what you''ll learn: → How to land your first 3 clients without ads, cold outreach, or." [ref=e517]':
+                    - 'checkbox "okunmadı, Zaurbek, Tomorrow: Your AI business roadmap, 10 Nis, Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here''s what you''ll learn: → How to land your first 3 clients without ads, cold outreach, or." [ref=e518]'
+                  - gridcell "Yıldızlı değil" [ref=e519]:
+                    - button "Yıldızlı değil" [ref=e520]
+                  - gridcell "Önemsiz" [ref=e521]:
+                    - switch "Önemsiz" [ref=e522]
+                  - gridcell "Zaurbek" [ref=e524]:
+                    - generic [ref=e526]: Zaurbek
+                  - 'gridcell "Tomorrow: Your AI business roadmap - Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here''s what you''ll learn: → How to land your first 3 clients without ads, cold outreach, or" [ref=e527]':
+                    - 'link "Tomorrow: Your AI business roadmap - Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here''s what you''ll learn: → How to land your first 3 clients without ads, cold outreach, or" [ref=e528]':
+                      - generic [ref=e529]:
+                        - generic [ref=e531]: "Tomorrow: Your AI business roadmap"
+                        - generic [ref=e532]:
+                          - generic [ref=e533]: "-"
+                          - text: "Bahu, The Masterclass kicks off TOMORROW. This is where you get clarity on exactly what to do next. Here's what you'll learn: → How to land your first 3 clients without ads, cold outreach, or"
+                  - gridcell [ref=e534]
+                  - gridcell "10 Nis 2026 Cum 20:01" [ref=e535]:
+                    - generic "10 Nis 2026 Cum 20:01" [ref=e536]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, The Economist Today, Why a big country like Italy acts as if it were small, 10 Nis, Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no." [ref=e537] [cursor=pointer]':
+                  - gridcell [ref=e538]
+                  - 'gridcell "okunmadı, The Economist Today, Why a big country like Italy acts as if it were small, 10 Nis, Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no." [ref=e539]':
+                    - 'checkbox "okunmadı, The Economist Today, Why a big country like Italy acts as if it were small, 10 Nis, Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no." [ref=e540]'
+                  - gridcell "Yıldızlı değil" [ref=e541]:
+                    - button "Yıldızlı değil" [ref=e542]
+                  - gridcell "Önemsiz" [ref=e543]:
+                    - switch "Önemsiz" [ref=e544]
+                  - gridcell "The Economist Today" [ref=e546]:
+                    - generic [ref=e548]: The Economist Today
+                  - 'gridcell "Why a big country like Italy acts as if it were small - Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no" [ref=e549]':
+                    - 'link "Why a big country like Italy acts as if it were small - Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no" [ref=e551]':
+                      - generic [ref=e552]:
+                        - generic [ref=e554]: Why a big country like Italy acts as if it were small
+                        - generic [ref=e555]:
+                          - generic [ref=e556]: "-"
+                          - text: "Also: Viktor Orban is bashing Ukraine for votes The Economist April 10th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Patrick Lane Senior digital editor Italy is no"
+                  - gridcell [ref=e557]
+                  - gridcell "10 Nis 2026 Cum 19:37" [ref=e558]:
+                    - generic "10 Nis 2026 Cum 19:37" [ref=e559]: 10 Nis
+                  - gridcell
+                - row "okunmadı, IFTTT, 7 automations for people who hate mornings ☀️, 10 Nis, Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less." [ref=e560] [cursor=pointer]:
+                  - gridcell [ref=e561]
+                  - gridcell "okunmadı, IFTTT, 7 automations for people who hate mornings ☀️, 10 Nis, Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less." [ref=e562]:
+                    - checkbox "okunmadı, IFTTT, 7 automations for people who hate mornings ☀️, 10 Nis, Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less." [ref=e563]
+                  - gridcell "Yıldızlı değil" [ref=e564]:
+                    - button "Yıldızlı değil" [ref=e565]
+                  - gridcell "Önemsiz" [ref=e566]:
+                    - switch "Önemsiz" [ref=e567]
+                  - gridcell "IFTTT" [ref=e569]:
+                    - generic [ref=e571]: IFTTT
+                  - gridcell "7 automations for people who hate mornings ☀️ - Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less" [ref=e572]:
+                    - link "7 automations for people who hate mornings ☀️ - Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less" [ref=e573]:
+                      - generic [ref=e574]:
+                        - generic [ref=e577]:
+                          - text: 7 automations for people who hate mornings
+                          - img "☀️" [ref=e578]
+                        - generic [ref=e579]:
+                          - generic [ref=e580]: "-"
+                          - text: Your morning routine is about to get a whole lot easier. Outsource your AM Nobody's at their best before 9AM. So if you can't stop mornings from showing up, you might as well make them less
+                  - gridcell [ref=e581]
+                  - gridcell "10 Nis 2026 Cum 19:19" [ref=e582]:
+                    - generic "10 Nis 2026 Cum 19:19" [ref=e583]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Yemeksepeti, Siparişiniz için teşekkür ederiz!, 10 Nis, Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara." [ref=e584] [cursor=pointer]':
+                  - gridcell [ref=e585]
+                  - 'gridcell "okunmadı, Yemeksepeti, Siparişiniz için teşekkür ederiz!, 10 Nis, Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara." [ref=e586]':
+                    - 'checkbox "okunmadı, Yemeksepeti, Siparişiniz için teşekkür ederiz!, 10 Nis, Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara." [ref=e587]'
+                  - gridcell "Yıldızlı değil" [ref=e588]:
+                    - button "Yıldızlı değil" [ref=e589]
+                  - gridcell "Önemsiz" [ref=e590]:
+                    - switch "Önemsiz" [ref=e591]
+                  - gridcell "Yemeksepeti" [ref=e593]:
+                    - generic [ref=e595]: Yemeksepeti
+                  - 'gridcell "Siparişiniz için teşekkür ederiz! - Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara" [ref=e596]':
+                    - 'link "Siparişiniz için teşekkür ederiz! - Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara" [ref=e597]':
+                      - generic [ref=e598]:
+                        - generic [ref=e600]: Siparişiniz için teşekkür ederiz!
+                        - generic [ref=e601]:
+                          - generic [ref=e602]: "-"
+                          - text: "Sipariş detayları: Satıcı: Kebaphan Sipariş zamanı: 10.04.2026 18:23:13 Sipariş numarası: yiav-2615-sne4 Ödeme Yöntemi: Online Kredi/Banka Kartı Teslimat Bilgileri: İsim: Bahu Civci Adres: 06490 Ankara"
+                  - gridcell [ref=e603]
+                  - gridcell "10 Nis 2026 Cum 18:23" [ref=e604]:
+                    - generic "10 Nis 2026 Cum 18:23" [ref=e605]: 10 Nis
+                  - gridcell
+                - row "okunmadı, Artlist, Seedance 2.0 is available for everyone on Artlist, 10 Nis, Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌." [ref=e606] [cursor=pointer]:
+                  - gridcell [ref=e607]
+                  - gridcell "okunmadı, Artlist, Seedance 2.0 is available for everyone on Artlist, 10 Nis, Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌." [ref=e608]:
+                    - checkbox "okunmadı, Artlist, Seedance 2.0 is available for everyone on Artlist, 10 Nis, Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌." [ref=e609]
+                  - gridcell "Yıldızlı değil" [ref=e610]:
+                    - button "Yıldızlı değil" [ref=e611]
+                  - gridcell "Önemsiz" [ref=e612]:
+                    - switch "Önemsiz" [ref=e613]
+                  - gridcell "Artlist" [ref=e615]:
+                    - generic [ref=e617]: Artlist
+                  - gridcell "Seedance 2.0 is available for everyone on Artlist - Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌" [ref=e618]:
+                    - link "Seedance 2.0 is available for everyone on Artlist - Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌" [ref=e620]:
+                      - generic [ref=e621]:
+                        - generic [ref=e623]: Seedance 2.0 is available for everyone on Artlist
+                        - generic [ref=e624]:
+                          - generic [ref=e625]: "-"
+                          - text: Transform into an AI director with Seedance 2.0's pro-level control ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌ ͏ ‌
+                  - gridcell [ref=e626]
+                  - gridcell "10 Nis 2026 Cum 16:29" [ref=e627]:
+                    - generic "10 Nis 2026 Cum 16:29" [ref=e628]: 10 Nis
+                  - gridcell
+                - row "okunmadı, Ucuzabilet, ⏰2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!⏰, 10 Nis, Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi." [ref=e629] [cursor=pointer]:
+                  - gridcell [ref=e630]
+                  - gridcell "okunmadı, Ucuzabilet, ⏰2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!⏰, 10 Nis, Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi." [ref=e631]:
+                    - checkbox "okunmadı, Ucuzabilet, ⏰2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!⏰, 10 Nis, Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi." [ref=e632]
+                  - gridcell "Yıldızlı değil" [ref=e633]:
+                    - button "Yıldızlı değil" [ref=e634]
+                  - gridcell "Önemsiz" [ref=e635]:
+                    - switch "Önemsiz" [ref=e636]
+                  - gridcell "Ucuzabilet" [ref=e638]:
+                    - generic [ref=e640]: Ucuzabilet
+                  - gridcell "⏰2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!⏰ - Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi" [ref=e641]:
+                    - link "⏰2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!⏰ - Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi" [ref=e643]:
+                      - generic [ref=e644]:
+                        - generic [ref=e647]:
+                          - img "⏰" [ref=e648]
+                          - text: 2 Çocuk İçin Ücretsiz Konaklama Fırsatı Seni Bekliyor!
+                          - img "⏰" [ref=e649]
+                        - generic [ref=e650]:
+                          - generic [ref=e651]: "-"
+                          - text: Ailece tatilin tam zamanı! Ucuzabilet ile avantajlısın! E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz. Üyelik Bilgilerinizi
+                  - gridcell [ref=e652]
+                  - gridcell "10 Nis 2026 Cum 16:07" [ref=e653]:
+                    - generic "10 Nis 2026 Cum 16:07" [ref=e654]: 10 Nis
+                  - gridcell
+                - row "okunmadı, info@melisulas.com, İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim, 10 Nis, Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır." [ref=e655] [cursor=pointer]:
+                  - gridcell [ref=e656]
+                  - gridcell "okunmadı, info@melisulas.com, İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim, 10 Nis, Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır." [ref=e657]:
+                    - checkbox "okunmadı, info@melisulas.com, İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim, 10 Nis, Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır." [ref=e658]
+                  - gridcell "Yıldızlı değil" [ref=e659]:
+                    - button "Yıldızlı değil" [ref=e660]
+                  - gridcell "Önemsiz" [ref=e661]:
+                    - switch "Önemsiz" [ref=e662]
+                  - gridcell "info@melisulas.com" [ref=e664]:
+                    - generic [ref=e666]: info@melisulas.com
+                  - gridcell "İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim - Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır" [ref=e667]:
+                    - link "İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim - Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır" [ref=e668]:
+                      - generic [ref=e669]:
+                        - generic [ref=e671]: İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim
+                        - generic:
+                          - generic [ref=e672]: "-"
+                          - text: Büyük oynamayı daima severim. İnsanları gerçek potansiyellerine ulaştırmakla ilgili mentörlüğümde hiç mütevazi değilim. Benim enerji alanımda olmanın bile, kişilere nasıl etkiler yaptığını 12 yıldır
+                  - gridcell [ref=e673]
+                  - gridcell "10 Nis 2026 Cum 15:39" [ref=e674]:
+                    - generic "10 Nis 2026 Cum 15:39" [ref=e675]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Zaurbek Stark, Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com), eki var, 10 Nis, Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra." [ref=e676] [cursor=pointer]':
+                  - gridcell [ref=e677]
+                  - 'gridcell "okunmadı, Zaurbek Stark, Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com), eki var, 10 Nis, Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra." [ref=e678]':
+                    - 'checkbox "okunmadı, Zaurbek Stark, Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com), eki var, 10 Nis, Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra." [ref=e679]'
+                  - gridcell "Yıldızlı değil" [ref=e680]:
+                    - button "Yıldızlı değil" [ref=e681]
+                  - gridcell "Önemsiz" [ref=e682]:
+                    - switch "Önemsiz" [ref=e683]
+                  - gridcell "Zaurbek Stark" [ref=e685]:
+                    - generic [ref=e687]: Zaurbek Stark
+                  - 'gridcell "Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com) - Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra" [ref=e688]':
+                    - 'link "Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com) - Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra" [ref=e690]':
+                      - generic [ref=e691]:
+                        - generic [ref=e693]: "Bilinmeyen bir gönderenden davetiye: Bahu - Halal AI Agency 2026 Masterclass, Cmt 11 Nis 2026 20:00 - 21:00 (GMT+3) (safra943@gmail.com)"
+                        - generic:
+                          - generic [ref=e694]: "-"
+                          - text: Bahu - Halal AI Agency 2026 Masterclass Bu etkinlik henüz takviminize eklenmemiş zaurbek@ummahaccelerator.com ile daha önce etkileşimde bulunmadınız. Bu davetiyeyi ve gönderenin bundan sonra
+                  - gridcell "Takvim etkinliği" [ref=e695]:
+                    - img "Takvim etkinliği" [ref=e696]
+                  - gridcell "10 Nis 2026 Cum 13:38" [ref=e697]:
+                    - generic "10 Nis 2026 Cum 13:38" [ref=e698]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Zaurbek, Welcome to the Masterclass + Your Attendee-Only Toolkit, 10 Nis, Assalamu Alaykum Bahu, You''re officially in - your spot for the Masterclass is locked. Here''s what you''re getting as an attendee: Your Attendee-Only Toolkit (available only to those who." [ref=e699] [cursor=pointer]':
+                  - gridcell [ref=e700]
+                  - 'gridcell "okunmadı, Zaurbek, Welcome to the Masterclass + Your Attendee-Only Toolkit, 10 Nis, Assalamu Alaykum Bahu, You''re officially in - your spot for the Masterclass is locked. Here''s what you''re getting as an attendee: Your Attendee-Only Toolkit (available only to those who." [ref=e701]':
+                    - 'checkbox "okunmadı, Zaurbek, Welcome to the Masterclass + Your Attendee-Only Toolkit, 10 Nis, Assalamu Alaykum Bahu, You''re officially in - your spot for the Masterclass is locked. Here''s what you''re getting as an attendee: Your Attendee-Only Toolkit (available only to those who." [ref=e702]'
+                  - gridcell "Yıldızlı değil" [ref=e703]:
+                    - button "Yıldızlı değil" [ref=e704]
+                  - gridcell "Önemsiz" [ref=e705]:
+                    - switch "Önemsiz" [ref=e706]
+                  - gridcell "Zaurbek" [ref=e708]:
+                    - generic [ref=e710]: Zaurbek
+                  - 'gridcell "Welcome to the Masterclass + Your Attendee-Only Toolkit - Assalamu Alaykum Bahu, You''re officially in - your spot for the Masterclass is locked. Here''s what you''re getting as an attendee: Your Attendee-Only Toolkit (available only to those who" [ref=e711]':
+                    - 'link "Welcome to the Masterclass + Your Attendee-Only Toolkit - Assalamu Alaykum Bahu, You''re officially in - your spot for the Masterclass is locked. Here''s what you''re getting as an attendee: Your Attendee-Only Toolkit (available only to those who" [ref=e712]':
+                      - generic [ref=e713]:
+                        - generic [ref=e715]: Welcome to the Masterclass + Your Attendee-Only Toolkit
+                        - generic [ref=e716]:
+                          - generic [ref=e717]: "-"
+                          - text: "Assalamu Alaykum Bahu, You're officially in - your spot for the Masterclass is locked. Here's what you're getting as an attendee: Your Attendee-Only Toolkit (available only to those who"
+                  - gridcell [ref=e718]
+                  - gridcell "10 Nis 2026 Cum 13:38" [ref=e719]:
+                    - generic "10 Nis 2026 Cum 13:38" [ref=e720]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Daffne, Kaçırma!, 10 Nis, 1500 TL''ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete." [ref=e721] [cursor=pointer]':
+                  - gridcell [ref=e722]
+                  - 'gridcell "okunmadı, Daffne, Kaçırma!, 10 Nis, 1500 TL''ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete." [ref=e723]':
+                    - 'checkbox "okunmadı, Daffne, Kaçırma!, 10 Nis, 1500 TL''ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete." [ref=e724]'
+                  - gridcell "Yıldızlı değil" [ref=e725]:
+                    - button "Yıldızlı değil" [ref=e726]
+                  - gridcell "Önemsiz" [ref=e727]:
+                    - switch "Önemsiz" [ref=e728]
+                  - gridcell "Daffne" [ref=e730]:
+                    - generic [ref=e732]: Daffne
+                  - 'gridcell "Kaçırma! - 1500 TL''ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete" [ref=e733]':
+                    - 'link "Kaçırma! - 1500 TL''ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete" [ref=e735]':
+                      - generic [ref=e736]:
+                        - generic [ref=e738]: Kaçırma!
+                        - generic [ref=e739]:
+                          - generic [ref=e740]: "-"
+                          - text: "1500 TL'ye 75 TL İndirim Başladı Alışverişlerinize 75 TL İndirim Ayrıcalığı Şimdi tam zamanı: 1500 TL ve üzeri alışverişlerinizde 75 TL indirim kazanabilirsiniz. İhtiyacınız olan ürünleri sepete"
+                  - gridcell [ref=e741]
+                  - gridcell "10 Nis 2026 Cum 13:31" [ref=e742]:
+                    - generic "10 Nis 2026 Cum 13:31" [ref=e743]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Tazedirekt, Kırmızı etlerde %20 indirim! 🥩, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e744] [cursor=pointer]':
+                  - gridcell [ref=e745]
+                  - 'gridcell "okunmadı, Tazedirekt, Kırmızı etlerde %20 indirim! 🥩, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e746]':
+                    - 'checkbox "okunmadı, Tazedirekt, Kırmızı etlerde %20 indirim! 🥩, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e747]'
+                  - gridcell "Yıldızlı değil" [ref=e748]:
+                    - button "Yıldızlı değil" [ref=e749]
+                  - gridcell "Önemsiz" [ref=e750]:
+                    - switch "Önemsiz" [ref=e751]
+                  - gridcell "Tazedirekt" [ref=e753]:
+                    - generic [ref=e755]: Tazedirekt
+                  - 'gridcell "Kırmızı etlerde %20 indirim! 🥩 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e756]':
+                    - 'link "Kırmızı etlerde %20 indirim! 🥩 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e758]':
+                      - generic [ref=e759]:
+                        - generic [ref=e762]:
+                          - text: Kırmızı etlerde %20 indirim!
+                          - img "🥩" [ref=e763]
+                        - generic [ref=e764]:
+                          - generic [ref=e765]: "-"
+                          - text: "To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal"
+                  - gridcell [ref=e766]
+                  - gridcell "10 Nis 2026 Cum 13:14" [ref=e767]:
+                    - generic "10 Nis 2026 Cum 13:14" [ref=e768]: 10 Nis
+                  - gridcell
+                - row "okunmadı, Dermoeczanem.com | ., Festival Fırsatlarını Kaçırma ❤️, 10 Nis, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size." [ref=e769] [cursor=pointer]:
+                  - gridcell [ref=e770]
+                  - gridcell "okunmadı, Dermoeczanem.com | ., Festival Fırsatlarını Kaçırma ❤️, 10 Nis, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size." [ref=e771]:
+                    - checkbox "okunmadı, Dermoeczanem.com | ., Festival Fırsatlarını Kaçırma ❤️, 10 Nis, Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size." [ref=e772]
+                  - gridcell "Yıldızlı değil" [ref=e773]:
+                    - button "Yıldızlı değil" [ref=e774]
+                  - gridcell "Önemsiz" [ref=e775]:
+                    - switch "Önemsiz" [ref=e776]
+                  - gridcell "Dermoeczanem.com | ." [ref=e778]:
+                    - generic [ref=e780]: Dermoeczanem.com | .
+                  - gridcell "Festival Fırsatlarını Kaçırma ❤️ - Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size" [ref=e781]:
+                    - link "Festival Fırsatlarını Kaçırma ❤️ - Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size" [ref=e783]:
+                      - generic [ref=e784]:
+                        - generic [ref=e787]:
+                          - text: Festival Fırsatlarını Kaçırma
+                          - img "❤️" [ref=e788]
+                        - generic [ref=e789]:
+                          - generic [ref=e790]: "-"
+                          - text: Düzgün göremiyorsanız tıklayın. Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Sosyal Medyada Bizi Takip Edin! Üyelik Bilgileriniz İzinsiz Gönderim Bildir Üyelikten Ayrıl Bu mesaj size
+                  - gridcell [ref=e791]
+                  - gridcell "10 Nis 2026 Cum 11:57" [ref=e792]:
+                    - generic "10 Nis 2026 Cum 11:57" [ref=e793]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Tazedirekt, Ayrılmaz İkililer Festivali 💚, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e794] [cursor=pointer]':
+                  - gridcell [ref=e795]
+                  - 'gridcell "okunmadı, Tazedirekt, Ayrılmaz İkililer Festivali 💚, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e796]':
+                    - 'checkbox "okunmadı, Tazedirekt, Ayrılmaz İkililer Festivali 💚, 10 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e797]'
+                  - gridcell "Yıldızlı değil" [ref=e798]:
+                    - button "Yıldızlı değil" [ref=e799]
+                  - gridcell "Önemsiz" [ref=e800]:
+                    - switch "Önemsiz" [ref=e801]
+                  - gridcell "Tazedirekt" [ref=e803]:
+                    - generic [ref=e805]: Tazedirekt
+                  - 'gridcell "Ayrılmaz İkililer Festivali 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e806]':
+                    - 'link "Ayrılmaz İkililer Festivali 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e808]':
+                      - generic [ref=e809]:
+                        - generic [ref=e812]:
+                          - text: Ayrılmaz İkililer Festivali
+                          - img "💚" [ref=e813]
+                        - generic [ref=e814]:
+                          - generic [ref=e815]: "-"
+                          - text: "To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal"
+                  - gridcell [ref=e816]
+                  - gridcell "10 Nis 2026 Cum 11:09" [ref=e817]:
+                    - generic "10 Nis 2026 Cum 11:09" [ref=e818]: 10 Nis
+                  - gridcell
+                - row "okunmadı, Going Zeero, Yeni Going Zeero'ları çok seveceksin!, 10 Nis, Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌." [ref=e819] [cursor=pointer]:
+                  - gridcell [ref=e820]
+                  - gridcell "okunmadı, Going Zeero, Yeni Going Zeero'ları çok seveceksin!, 10 Nis, Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌." [ref=e821]:
+                    - checkbox "okunmadı, Going Zeero, Yeni Going Zeero'ları çok seveceksin!, 10 Nis, Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌." [ref=e822]
+                  - gridcell "Yıldızlı değil" [ref=e823]:
+                    - button "Yıldızlı değil" [ref=e824]
+                  - gridcell "Önemsiz" [ref=e825]:
+                    - switch "Önemsiz" [ref=e826]
+                  - gridcell "Going Zeero" [ref=e828]:
+                    - generic [ref=e830]: Going Zeero
+                  - gridcell "Yeni Going Zeero'ları çok seveceksin! - Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌" [ref=e831]:
+                    - link "Yeni Going Zeero'ları çok seveceksin! - Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌" [ref=e833]:
+                      - generic [ref=e834]:
+                        - generic [ref=e836]: Yeni Going Zeero'ları çok seveceksin!
+                        - generic [ref=e837]:
+                          - generic [ref=e838]: "-"
+                          - text: Yepyeni, Taptaze, Zeero ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌
+                  - gridcell [ref=e839]
+                  - gridcell "10 Nis 2026 Cum 10:00" [ref=e840]:
+                    - generic "10 Nis 2026 Cum 10:00" [ref=e841]: 10 Nis
+                  - gridcell
+                - row "okunmadı, The DataCamp Team, How top teams are putting Claude to work, 10 Nis, From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e842] [cursor=pointer]:
+                  - gridcell [ref=e843]
+                  - gridcell "okunmadı, The DataCamp Team, How top teams are putting Claude to work, 10 Nis, From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e844]:
+                    - checkbox "okunmadı, The DataCamp Team, How top teams are putting Claude to work, 10 Nis, From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏." [ref=e845]
+                  - gridcell "Yıldızlı değil" [ref=e846]:
+                    - button "Yıldızlı değil" [ref=e847]
+                  - gridcell "Önemsiz" [ref=e848]:
+                    - switch "Önemsiz" [ref=e849]
+                  - gridcell "The DataCamp Team" [ref=e851]:
+                    - generic [ref=e853]: The DataCamp Team
+                  - gridcell "How top teams are putting Claude to work - From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏" [ref=e854]:
+                    - link "How top teams are putting Claude to work - From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏" [ref=e856]:
+                      - generic [ref=e857]:
+                        - generic [ref=e859]: How top teams are putting Claude to work
+                        - generic [ref=e860]:
+                          - generic [ref=e861]: "-"
+                          - text: From quick wins to repeatable AI workflows. Expert-led Claude sessions, April 20–25. ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏ ͏
+                  - gridcell [ref=e862]
+                  - gridcell "10 Nis 2026 Cum 09:49" [ref=e863]:
+                    - generic "10 Nis 2026 Cum 09:49" [ref=e864]: 10 Nis
+                  - gridcell
+                - row "okunmadı, Medium Daily Digest, When AI stops being a tool and becomes a job requirement | Enrique Dans, 10 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When." [ref=e865] [cursor=pointer]:
+                  - gridcell [ref=e866]
+                  - gridcell "okunmadı, Medium Daily Digest, When AI stops being a tool and becomes a job requirement | Enrique Dans, 10 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When." [ref=e867]:
+                    - checkbox "okunmadı, Medium Daily Digest, When AI stops being a tool and becomes a job requirement | Enrique Dans, 10 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When." [ref=e868]
+                  - gridcell "Yıldızlı değil" [ref=e869]:
+                    - button "Yıldızlı değil" [ref=e870]
+                  - gridcell "Önemsiz" [ref=e871]:
+                    - switch "Önemsiz" [ref=e872]
+                  - gridcell "Medium Daily Digest" [ref=e874]:
+                    - generic [ref=e876]: Medium Daily Digest
+                  - gridcell "When AI stops being a tool and becomes a job requirement | Enrique Dans - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When" [ref=e877]:
+                    - link "When AI stops being a tool and becomes a job requirement | Enrique Dans - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When" [ref=e879]:
+                      - generic [ref=e880]:
+                        - generic [ref=e882]: When AI stops being a tool and becomes a job requirement | Enrique Dans
+                        - generic:
+                          - generic [ref=e884]: "-"
+                          - text: Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Enrique Dans Enrique DansinEnrique Dans When AI stops being a tool and becomes a job requirement When
+                  - gridcell [ref=e885]
+                  - gridcell "10 Nis 2026 Cum 07:40" [ref=e886]:
+                    - generic "10 Nis 2026 Cum 07:40" [ref=e887]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:." [ref=e888] [cursor=pointer]':
+                  - gridcell [ref=e889]
+                  - 'gridcell "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:." [ref=e890]':
+                    - 'checkbox "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:." [ref=e891]'
+                  - gridcell "Yıldızlı değil" [ref=e892]:
+                    - button "Yıldızlı değil" [ref=e893]
+                  - gridcell "Önemsiz" [ref=e894]:
+                    - switch "Önemsiz" [ref=e895]
+                  - 'gridcell "Ankara Startup: Id." [ref=e897]':
+                    - generic [ref=e899]: "Ankara Startup: Id."
+                  - 'gridcell "📅 Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:" [ref=e900]':
+                    - 'link "📅 Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:" [ref=e902]':
+                      - generic [ref=e903]:
+                        - generic [ref=e906]:
+                          - img "📅" [ref=e907]
+                          - text: "Thursday: Can you make \"FREE! Pitch Practice: How to Pitch to Investors and Get the Deal \"?"
+                        - generic:
+                          - generic [ref=e908]: "-"
+                          - text: "Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > FREE! Pitch Practice: How to Pitch to Investors and Get the Deal Ankara Startup: Idea to IPO Thursday, April 16, 2026 5:"
+                  - gridcell [ref=e909]
+                  - gridcell "10 Nis 2026 Cum 06:26" [ref=e910]:
+                    - generic "10 Nis 2026 Cum 06:26" [ref=e911]: 10 Nis
+                  - gridcell
+                - 'row "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"How to Interview Like a Human in an AI World\"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul." [ref=e912] [cursor=pointer]':
+                  - gridcell [ref=e913]
+                  - 'gridcell "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"How to Interview Like a Human in an AI World\"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul." [ref=e914]':
+                    - 'checkbox "okunmadı, Ankara Startup: Id., 📅 Thursday: Can you make \"How to Interview Like a Human in an AI World\"?, 10 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul." [ref=e915]'
+                  - gridcell "Yıldızlı değil" [ref=e916]:
+                    - button "Yıldızlı değil" [ref=e917]
+                  - gridcell "Önemsiz" [ref=e918]:
+                    - switch "Önemsiz" [ref=e919]
+                  - 'gridcell "Ankara Startup: Id." [ref=e921]':
+                    - generic [ref=e923]: "Ankara Startup: Id."
+                  - 'gridcell "📅 Thursday: Can you make \"How to Interview Like a Human in an AI World\"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul" [ref=e924]':
+                    - 'link "📅 Thursday: Can you make \"How to Interview Like a Human in an AI World\"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul" [ref=e926]':
+                      - generic [ref=e927]:
+                        - generic [ref=e930]:
+                          - img "📅" [ref=e931]
+                          - text: "Thursday: Can you make \"How to Interview Like a Human in an AI World\"?"
+                        - generic:
+                          - generic [ref=e932]: "-"
+                          - text: "Ankara Startup: Idea to IPO invites you to keep connecting Meetup Thursday > How to Interview Like a Human in an AI World Ankara Startup: Idea to IPO Thursday, April 16, 2026 3:00 AM Europe/Istanbul"
+                  - gridcell [ref=e933]
+                  - gridcell "10 Nis 2026 Cum 04:09" [ref=e934]:
+                    - generic "10 Nis 2026 Cum 04:09" [ref=e935]: 10 Nis
+                  - gridcell
+                - row "okunmadı, VideoGen, Share and edit videos with your team, 9 Nis, Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts." [ref=e936] [cursor=pointer]:
+                  - gridcell [ref=e937]
+                  - gridcell "okunmadı, VideoGen, Share and edit videos with your team, 9 Nis, Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts." [ref=e938]:
+                    - checkbox "okunmadı, VideoGen, Share and edit videos with your team, 9 Nis, Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts." [ref=e939]
+                  - gridcell "Yıldızlı değil" [ref=e940]:
+                    - button "Yıldızlı değil" [ref=e941]
+                  - gridcell "Önemsiz" [ref=e942]:
+                    - switch "Önemsiz" [ref=e943]
+                  - gridcell "VideoGen" [ref=e945]:
+                    - generic [ref=e947]: VideoGen
+                  - gridcell "Share and edit videos with your team - Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts" [ref=e948]:
+                    - link "Share and edit videos with your team - Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts" [ref=e950]:
+                      - generic [ref=e951]:
+                        - generic [ref=e953]: Share and edit videos with your team
+                        - generic [ref=e954]:
+                          - generic [ref=e955]: "-"
+                          - text: Bahu k, VideoGen 3.3 is here with collaborative editing, visual direction, and more! Share projects, edit together Invite teammates to work on the same project simultaneously. No more version conflicts
+                  - gridcell [ref=e956]
+                  - gridcell "9 Nis 2026 Per 22:40" [ref=e957]:
+                    - generic "9 Nis 2026 Per 22:40" [ref=e958]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, Edward Carr at The ., Donald Trump is the war’s biggest loser, 9 Nis, Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like." [ref=e959] [cursor=pointer]':
+                  - gridcell [ref=e960]
+                  - 'gridcell "okunmadı, Edward Carr at The ., Donald Trump is the war’s biggest loser, 9 Nis, Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like." [ref=e961]':
+                    - 'checkbox "okunmadı, Edward Carr at The ., Donald Trump is the war’s biggest loser, 9 Nis, Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like." [ref=e962]'
+                  - gridcell "Yıldızlı değil" [ref=e963]:
+                    - button "Yıldızlı değil" [ref=e964]
+                  - gridcell "Önemsiz" [ref=e965]:
+                    - switch "Önemsiz" [ref=e966]
+                  - gridcell "Edward Carr at The ." [ref=e968]:
+                    - generic [ref=e970]: Edward Carr at The .
+                  - 'gridcell "Donald Trump is the war’s biggest loser - Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like" [ref=e971]':
+                    - 'link "Donald Trump is the war’s biggest loser - Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like" [ref=e973]':
+                      - generic [ref=e974]:
+                        - generic [ref=e976]: Donald Trump is the war’s biggest loser
+                        - generic [ref=e977]:
+                          - generic [ref=e978]: "-"
+                          - text: "Also: Global democracy is in better shape than you think The Economist April 9th 2026 The Economist This Week Highlights from the latest issue desktop mobile Ed Carr Deputy editor There is nothing like"
+                  - gridcell [ref=e979]
+                  - gridcell "9 Nis 2026 Per 21:49" [ref=e980]:
+                    - generic "9 Nis 2026 Per 21:49" [ref=e981]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, Ankara Startup: Id., 📅 Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"?, 9 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/." [ref=e982] [cursor=pointer]':
+                  - gridcell [ref=e983]
+                  - 'gridcell "okunmadı, Ankara Startup: Id., 📅 Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"?, 9 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/." [ref=e984]':
+                    - 'checkbox "okunmadı, Ankara Startup: Id., 📅 Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"?, 9 Nis, Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/." [ref=e985]'
+                  - gridcell "Yıldızlı değil" [ref=e986]:
+                    - button "Yıldızlı değil" [ref=e987]
+                  - gridcell "Önemsiz" [ref=e988]:
+                    - switch "Önemsiz" [ref=e989]
+                  - 'gridcell "Ankara Startup: Id." [ref=e991]':
+                    - generic [ref=e993]: "Ankara Startup: Id."
+                  - 'gridcell "📅 Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/" [ref=e994]':
+                    - 'link "📅 Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"? - Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/" [ref=e996]':
+                      - generic [ref=e997]:
+                        - generic [ref=e1000]:
+                          - img "📅" [ref=e1001]
+                          - text: "Wednesday: Can you make \"Silicon Valley Business Networking (Online) \"?"
+                        - generic:
+                          - generic [ref=e1002]: "-"
+                          - text: "Ankara Startup: Idea to IPO invites you to keep connecting Meetup Wednesday > Silicon Valley Business Networking (Online) Ankara Startup: Idea to IPO Wednesday, April 15, 2026 8:00 PM Europe/"
+                  - gridcell [ref=e1003]
+                  - gridcell "9 Nis 2026 Per 21:12" [ref=e1004]:
+                    - generic "9 Nis 2026 Per 21:12" [ref=e1005]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Codecademy, Last chance to save on Pro, 9 Nis, Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to." [ref=e1006] [cursor=pointer]:
+                  - gridcell [ref=e1007]
+                  - gridcell "okunmadı, Codecademy, Last chance to save on Pro, 9 Nis, Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to." [ref=e1008]:
+                    - checkbox "okunmadı, Codecademy, Last chance to save on Pro, 9 Nis, Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to." [ref=e1009]
+                  - gridcell "Yıldızlı değil" [ref=e1010]:
+                    - button "Yıldızlı değil" [ref=e1011]
+                  - gridcell "Önemsiz" [ref=e1012]:
+                    - switch "Önemsiz" [ref=e1013]
+                  - gridcell "Codecademy" [ref=e1015]:
+                    - generic [ref=e1017]: Codecademy
+                  - gridcell "Last chance to save on Pro - Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to" [ref=e1018]:
+                    - link "Last chance to save on Pro - Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to" [ref=e1020]:
+                      - generic [ref=e1021]:
+                        - generic [ref=e1023]: Last chance to save on Pro
+                        - generic [ref=e1024]:
+                          - generic [ref=e1025]: "-"
+                          - text: Don't miss out on 50% off. LAST CHANCE 50% off It's your last chance to get 50% off a year of Pro and unlock everything you need to build in‑demand skills — from AI and data lessons to
+                  - gridcell [ref=e1026]
+                  - gridcell "9 Nis 2026 Per 20:18" [ref=e1027]:
+                    - generic "9 Nis 2026 Per 20:18" [ref=e1028]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, The Economist Today, A ceasefire will not prevent the Iran war’s economic harm, 9 Nis, Also: How dangerous is Mythos, Anthropic''s new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor." [ref=e1029] [cursor=pointer]':
+                  - gridcell [ref=e1030]
+                  - 'gridcell "okunmadı, The Economist Today, A ceasefire will not prevent the Iran war’s economic harm, 9 Nis, Also: How dangerous is Mythos, Anthropic''s new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor." [ref=e1031]':
+                    - 'checkbox "okunmadı, The Economist Today, A ceasefire will not prevent the Iran war’s economic harm, 9 Nis, Also: How dangerous is Mythos, Anthropic''s new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor." [ref=e1032]'
+                  - gridcell "Yıldızlı değil" [ref=e1033]:
+                    - button "Yıldızlı değil" [ref=e1034]
+                  - gridcell "Önemsiz" [ref=e1035]:
+                    - switch "Önemsiz" [ref=e1036]
+                  - gridcell "The Economist Today" [ref=e1038]:
+                    - generic [ref=e1040]: The Economist Today
+                  - 'gridcell "A ceasefire will not prevent the Iran war’s economic harm - Also: How dangerous is Mythos, Anthropic''s new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor" [ref=e1041]':
+                    - 'link "A ceasefire will not prevent the Iran war’s economic harm - Also: How dangerous is Mythos, Anthropic''s new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor" [ref=e1043]':
+                      - generic [ref=e1044]:
+                        - generic [ref=e1046]: A ceasefire will not prevent the Iran war’s economic harm
+                        - generic [ref=e1047]:
+                          - generic [ref=e1048]: "-"
+                          - text: "Also: How dangerous is Mythos, Anthropic's new AI model? The Economist April 9th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Lane Greene Senior digital editor"
+                  - gridcell [ref=e1049]
+                  - gridcell "9 Nis 2026 Per 19:38" [ref=e1050]:
+                    - generic "9 Nis 2026 Per 19:38" [ref=e1051]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, Türkiye Yapay Zeka ., 📅 Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\", 9 Nis, Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi." [ref=e1052] [cursor=pointer]':
+                  - gridcell [ref=e1053]
+                  - 'gridcell "okunmadı, Türkiye Yapay Zeka ., 📅 Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\", 9 Nis, Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi." [ref=e1054]':
+                    - 'checkbox "okunmadı, Türkiye Yapay Zeka ., 📅 Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\", 9 Nis, Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi." [ref=e1055]'
+                  - gridcell "Yıldızlı değil" [ref=e1056]:
+                    - button "Yıldızlı değil" [ref=e1057]
+                  - gridcell "Önemsiz" [ref=e1058]:
+                    - switch "Önemsiz" [ref=e1059]
+                  - gridcell "Türkiye Yapay Zeka ." [ref=e1061]:
+                    - generic [ref=e1063]: Türkiye Yapay Zeka .
+                  - 'gridcell "📅 Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\" - Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi" [ref=e1064]':
+                    - 'link "📅 Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\" - Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi" [ref=e1066]':
+                      - generic [ref=e1067]:
+                        - generic [ref=e1070]:
+                          - img "📅" [ref=e1071]
+                          - text: "Wednesday: Join 24 Üyeler at \"TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü\""
+                        - generic:
+                          - generic [ref=e1072]: "-"
+                          - text: "Türkiye Yapay Zeka İnisiyatifi invites you to keep connecting Meetup Wednesday > TRAI Meet-Up #104: Yapay Zeka Çağında Veri Merkezi, Bulut ve Altyapı Dönüşümü Türkiye Yapay Zeka İnisiyatifi"
+                  - gridcell [ref=e1073]
+                  - gridcell "9 Nis 2026 Per 17:36" [ref=e1074]:
+                    - generic "9 Nis 2026 Per 17:36" [ref=e1075]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Roboflow, Gemma 4 in Roboflow Playground, 9 Nis, Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow." [ref=e1076] [cursor=pointer]:
+                  - gridcell [ref=e1077]
+                  - gridcell "okunmadı, Roboflow, Gemma 4 in Roboflow Playground, 9 Nis, Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow." [ref=e1078]:
+                    - checkbox "okunmadı, Roboflow, Gemma 4 in Roboflow Playground, 9 Nis, Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow." [ref=e1079]
+                  - gridcell "Yıldızlı değil" [ref=e1080]:
+                    - button "Yıldızlı değil" [ref=e1081]
+                  - gridcell "Önemsiz" [ref=e1082]:
+                    - switch "Önemsiz" [ref=e1083]
+                  - gridcell "Roboflow" [ref=e1085]:
+                    - generic [ref=e1087]: Roboflow
+                  - gridcell "Gemma 4 in Roboflow Playground - Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow" [ref=e1088]:
+                    - link "Gemma 4 in Roboflow Playground - Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow" [ref=e1090]:
+                      - generic [ref=e1091]:
+                        - generic [ref=e1093]: Gemma 4 in Roboflow Playground
+                        - generic [ref=e1094]:
+                          - generic [ref=e1095]: "-"
+                          - text: Compare Google's latest Gemma 4 model against other models Gemma 4 Now in Playground [tool] We've added the new Gemma 4 variants, including the 31B Dense and 26B MoE models, to Roboflow
+                  - gridcell [ref=e1096]
+                  - gridcell "9 Nis 2026 Per 17:15" [ref=e1097]:
+                    - generic "9 Nis 2026 Per 17:15" [ref=e1098]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Ucuzabilet, ⏰Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!⏰, 9 Nis, Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz.." [ref=e1099] [cursor=pointer]:
+                  - gridcell [ref=e1100]
+                  - gridcell "okunmadı, Ucuzabilet, ⏰Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!⏰, 9 Nis, Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz.." [ref=e1101]:
+                    - checkbox "okunmadı, Ucuzabilet, ⏰Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!⏰, 9 Nis, Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz.." [ref=e1102]
+                  - gridcell "Yıldızlı değil" [ref=e1103]:
+                    - button "Yıldızlı değil" [ref=e1104]
+                  - gridcell "Önemsiz" [ref=e1105]:
+                    - switch "Önemsiz" [ref=e1106]
+                  - gridcell "Ucuzabilet" [ref=e1108]:
+                    - generic [ref=e1110]: Ucuzabilet
+                  - gridcell "⏰Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!⏰ - Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz." [ref=e1111]:
+                    - link "⏰Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!⏰ - Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz." [ref=e1113]:
+                      - generic [ref=e1114]:
+                        - generic [ref=e1117]:
+                          - img "⏰" [ref=e1118]
+                          - text: Hemen Üye Ol, Araç Kiralamada 100 TL İndirim Kazan!
+                          - img "⏰" [ref=e1119]
+                        - generic [ref=e1120]:
+                          - generic [ref=e1121]: "-"
+                          - text: Rotanı nereye çevireceksin? Hem avantajlı hem de konforlu bir yolculuk... E-bültenimizin Gelen Kutunuza düştüğünden emin olmak için ucuzabilet@e.ucuzabilet.com adresini Adres Defterinize ekleyiniz.
+                  - gridcell [ref=e1122]
+                  - gridcell "9 Nis 2026 Per 15:24" [ref=e1123]:
+                    - generic "9 Nis 2026 Per 15:24" [ref=e1124]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Pegasus, Bahunur, sana özel %40 indirim! ✈️, 9 Nis, Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı." [ref=e1125] [cursor=pointer]:
+                  - gridcell [ref=e1126]
+                  - gridcell "okunmadı, Pegasus, Bahunur, sana özel %40 indirim! ✈️, 9 Nis, Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı." [ref=e1127]:
+                    - checkbox "okunmadı, Pegasus, Bahunur, sana özel %40 indirim! ✈️, 9 Nis, Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı." [ref=e1128]
+                  - gridcell "Yıldızlı değil" [ref=e1129]:
+                    - button "Yıldızlı değil" [ref=e1130]
+                  - gridcell "Önemsiz" [ref=e1131]:
+                    - switch "Önemsiz" [ref=e1132]
+                  - gridcell "Pegasus" [ref=e1134]:
+                    - generic [ref=e1136]: Pegasus
+                  - gridcell "Bahunur, sana özel %40 indirim! ✈️ - Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı" [ref=e1137]:
+                    - link "Bahunur, sana özel %40 indirim! ✈️ - Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı" [ref=e1139]:
+                      - generic [ref=e1140]:
+                        - generic [ref=e1143]:
+                          - text: Bahunur, sana özel %40 indirim!
+                          - img "✈️" [ref=e1144]
+                        - generic [ref=e1145]:
+                          - generic [ref=e1146]: "-"
+                          - text: Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı! Bu e-postayı görüntüleyemiyorsanız tıklayınız. Seçili Avrupa hatlarını sana özel %40 indirimle keşfetmenin şimdi tam zamanı
+                  - gridcell [ref=e1147]
+                  - gridcell "9 Nis 2026 Per 12:02" [ref=e1148]:
+                    - generic "9 Nis 2026 Per 12:02" [ref=e1149]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, Migros Yemek, Migros Yemek''ten Sipariş Ver, Migros Hemen''den 250 TL İndirim Kazan! 🧡, 9 Nis, To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından." [ref=e1150] [cursor=pointer]':
+                  - gridcell [ref=e1151]
+                  - 'gridcell "okunmadı, Migros Yemek, Migros Yemek''ten Sipariş Ver, Migros Hemen''den 250 TL İndirim Kazan! 🧡, 9 Nis, To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından." [ref=e1152]':
+                    - 'checkbox "okunmadı, Migros Yemek, Migros Yemek''ten Sipariş Ver, Migros Hemen''den 250 TL İndirim Kazan! 🧡, 9 Nis, To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından." [ref=e1153]'
+                  - gridcell "Yıldızlı değil" [ref=e1154]:
+                    - button "Yıldızlı değil" [ref=e1155]
+                  - gridcell "Önemsiz" [ref=e1156]:
+                    - switch "Önemsiz" [ref=e1157]
+                  - gridcell "Migros Yemek" [ref=e1159]:
+                    - generic [ref=e1161]: Migros Yemek
+                  - 'gridcell "Migros Yemek''ten Sipariş Ver, Migros Hemen''den 250 TL İndirim Kazan! 🧡 - To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından" [ref=e1162]':
+                    - 'link "Migros Yemek''ten Sipariş Ver, Migros Hemen''den 250 TL İndirim Kazan! 🧡 - To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından" [ref=e1164]':
+                      - generic [ref=e1165]:
+                        - generic [ref=e1168]:
+                          - text: Migros Yemek'ten Sipariş Ver, Migros Hemen'den 250 TL İndirim Kazan!
+                          - img "🧡" [ref=e1169]
+                        - generic:
+                          - generic [ref=e1171]: "-"
+                          - text: "To view this email as a web page, go here. Migros Yemek Mersis no: 0295111611300001 Adres: Atatürk Mah, Turgut Özal Bulvarı No No:7, 34758 Ataşehir / İstanbul Bu mesaj size Migros Yemek tarafından"
+                  - gridcell [ref=e1172]
+                  - gridcell "9 Nis 2026 Per 11:55" [ref=e1173]:
+                    - generic "9 Nis 2026 Per 11:55" [ref=e1174]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, Tazedirekt, Konservelerde 2 alın 1 ödeyin! 💚, 9 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e1175] [cursor=pointer]':
+                  - gridcell [ref=e1176]
+                  - 'gridcell "okunmadı, Tazedirekt, Konservelerde 2 alın 1 ödeyin! 💚, 9 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e1177]':
+                    - 'checkbox "okunmadı, Tazedirekt, Konservelerde 2 alın 1 ödeyin! 💚, 9 Nis, To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal." [ref=e1178]'
+                  - gridcell "Yıldızlı değil" [ref=e1179]:
+                    - button "Yıldızlı değil" [ref=e1180]
+                  - gridcell "Önemsiz" [ref=e1181]:
+                    - switch "Önemsiz" [ref=e1182]
+                  - gridcell "Tazedirekt" [ref=e1184]:
+                    - generic [ref=e1186]: Tazedirekt
+                  - 'gridcell "Konservelerde 2 alın 1 ödeyin! 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e1187]':
+                    - 'link "Konservelerde 2 alın 1 ödeyin! 💚 - To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal" [ref=e1189]':
+                      - generic [ref=e1190]:
+                        - generic [ref=e1193]:
+                          - text: Konservelerde 2 alın 1 ödeyin!
+                          - img "💚" [ref=e1194]
+                        - generic [ref=e1195]:
+                          - generic [ref=e1196]: "-"
+                          - text: "To view this email as a web page, go here. Facebook Instagram X YouTube This email was sent to: safra943@gmail.com This email was sent by: Dijital Platform Gıda Hizmetleri A.Ş. Atatürk Mah, Turgut Özal"
+                  - gridcell [ref=e1197]
+                  - gridcell "9 Nis 2026 Per 11:54" [ref=e1198]:
+                    - generic "9 Nis 2026 Per 11:54" [ref=e1199]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Daffne, Haftanın Çok Satanları!, 9 Nis, İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin." [ref=e1200] [cursor=pointer]:
+                  - gridcell [ref=e1201]
+                  - gridcell "okunmadı, Daffne, Haftanın Çok Satanları!, 9 Nis, İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin." [ref=e1202]:
+                    - checkbox "okunmadı, Daffne, Haftanın Çok Satanları!, 9 Nis, İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin." [ref=e1203]
+                  - gridcell "Yıldızlı değil" [ref=e1204]:
+                    - button "Yıldızlı değil" [ref=e1205]
+                  - gridcell "Önemsiz" [ref=e1206]:
+                    - switch "Önemsiz" [ref=e1207]
+                  - gridcell "Daffne" [ref=e1209]:
+                    - generic [ref=e1211]: Daffne
+                  - gridcell "Haftanın Çok Satanları! - İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin" [ref=e1212]:
+                    - link "Haftanın Çok Satanları! - İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin" [ref=e1214]:
+                      - generic [ref=e1215]:
+                        - generic [ref=e1217]: Haftanın Çok Satanları!
+                        - generic [ref=e1218]:
+                          - generic [ref=e1219]: "-"
+                          - text: İncelemek için tıkla! CİLT BAKIMI GÜNEŞ BAKIMI SAÇ BAKIMI KİŞİSEL BAKIM ANNE & BEBEK VİTAMİN & SAGLIK AVANTAJLI SETLER Haftanın Çok Satanları Nutraxin Vitamin D3 K2 Sprey 30 Ml Nutraxin Vitamin
+                  - gridcell [ref=e1220]
+                  - gridcell "9 Nis 2026 Per 11:35" [ref=e1221]:
+                    - generic "9 Nis 2026 Per 11:35" [ref=e1222]: 9 Nis
+                  - gridcell
+                - row "okunmadı, A101, 📣 Aldın Aldın'da bu hafta, 9 Nis, Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak." [ref=e1223] [cursor=pointer]:
+                  - gridcell [ref=e1224]
+                  - gridcell "okunmadı, A101, 📣 Aldın Aldın'da bu hafta, 9 Nis, Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak." [ref=e1225]:
+                    - checkbox "okunmadı, A101, 📣 Aldın Aldın'da bu hafta, 9 Nis, Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak." [ref=e1226]
+                  - gridcell "Yıldızlı değil" [ref=e1227]:
+                    - button "Yıldızlı değil" [ref=e1228]
+                  - gridcell "Önemsiz" [ref=e1229]:
+                    - switch "Önemsiz" [ref=e1230]
+                  - gridcell "A101" [ref=e1232]:
+                    - generic [ref=e1234]: A101
+                  - gridcell "📣 Aldın Aldın'da bu hafta - Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak" [ref=e1235]:
+                    - link "📣 Aldın Aldın'da bu hafta - Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak" [ref=e1237]:
+                      - generic [ref=e1238]:
+                        - generic [ref=e1241]:
+                          - img "📣" [ref=e1242]
+                          - text: Aldın Aldın'da bu hafta
+                        - generic [ref=e1243]:
+                          - generic [ref=e1244]: "-"
+                          - text: Bu e-postayı düzgün görüntüleyemiyorsanız, Mobil / Web görüntüleme için lütfen buraya tıklayınız. Elektronik Ev & Yaşam Giyim & Aksesuar Kitap & Kırtasiye Anne &. Bebek & Oyuncak
+                  - gridcell [ref=e1245]
+                  - gridcell "9 Nis 2026 Per 11:34" [ref=e1246]:
+                    - generic "9 Nis 2026 Per 11:34" [ref=e1247]: 9 Nis
+                  - gridcell
+                - row "okunmadı, info@melisulas.com, Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana ❤️‍🔥, 9 Nis, Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var 🥳💥 ❤️‍🔥 Duygusal Yemeye Son - GRUP." [ref=e1248] [cursor=pointer]:
+                  - gridcell [ref=e1249]
+                  - gridcell "okunmadı, info@melisulas.com, Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana ❤️‍🔥, 9 Nis, Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var 🥳💥 ❤️‍🔥 Duygusal Yemeye Son - GRUP." [ref=e1250]:
+                    - checkbox "okunmadı, info@melisulas.com, Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana ❤️‍🔥, 9 Nis, Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var 🥳💥 ❤️‍🔥 Duygusal Yemeye Son - GRUP." [ref=e1251]
+                  - gridcell "Yıldızlı değil" [ref=e1252]:
+                    - button "Yıldızlı değil" [ref=e1253]
+                  - gridcell "Önemsiz" [ref=e1254]:
+                    - switch "Önemsiz" [ref=e1255]
+                  - gridcell "info@melisulas.com" [ref=e1257]:
+                    - generic [ref=e1259]: info@melisulas.com
+                  - gridcell "Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana ❤️‍🔥 - Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var 🥳💥 ❤️‍🔥 Duygusal Yemeye Son - GRUP" [ref=e1260]:
+                    - link "Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana ❤️‍🔥 - Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var 🥳💥 ❤️‍🔥 Duygusal Yemeye Son - GRUP" [ref=e1261]:
+                      - generic [ref=e1262]:
+                        - generic [ref=e1265]:
+                          - text: Grup Programı Açılıyoor! Avantajlı öncelik ve müthiş bir hediyem var sana
+                          - img "❤️‍🔥" [ref=e1266]
+                        - generic:
+                          - generic [ref=e1267]: "-"
+                          - text: Ön Kayıt avantajlı ve sana öezl hediyeli Grup Programı Açılıyor! Bireysel olarak gönderdiğiniz mesajlardan aldığım yetkiye dayanarak size önemli bir müjdem var
+                          - img "🥳" [ref=e1268]
+                          - img "💥" [ref=e1269]
+                          - img "❤️‍🔥" [ref=e1270]
+                          - text: Duygusal Yemeye Son - GRUP
+                  - gridcell [ref=e1271]
+                  - gridcell "9 Nis 2026 Per 10:54" [ref=e1272]:
+                    - generic "9 Nis 2026 Per 10:54" [ref=e1273]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Daffne, Daha iyi hissetmenin nazik yolu 💚, 9 Nis, Venatura Kendin İçin Küçük Bir İyilik Zamanı 💚 Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham." [ref=e1274] [cursor=pointer]:
+                  - gridcell [ref=e1275]
+                  - gridcell "okunmadı, Daffne, Daha iyi hissetmenin nazik yolu 💚, 9 Nis, Venatura Kendin İçin Küçük Bir İyilik Zamanı 💚 Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham." [ref=e1276]:
+                    - checkbox "okunmadı, Daffne, Daha iyi hissetmenin nazik yolu 💚, 9 Nis, Venatura Kendin İçin Küçük Bir İyilik Zamanı 💚 Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham." [ref=e1277]
+                  - gridcell "Yıldızlı değil" [ref=e1278]:
+                    - button "Yıldızlı değil" [ref=e1279]
+                  - gridcell "Önemsiz" [ref=e1280]:
+                    - switch "Önemsiz" [ref=e1281]
+                  - gridcell "Daffne" [ref=e1283]:
+                    - generic [ref=e1285]: Daffne
+                  - gridcell "Daha iyi hissetmenin nazik yolu 💚 - Venatura Kendin İçin Küçük Bir İyilik Zamanı 💚 Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham" [ref=e1286]:
+                    - link "Daha iyi hissetmenin nazik yolu 💚 - Venatura Kendin İçin Küçük Bir İyilik Zamanı 💚 Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham" [ref=e1288]:
+                      - generic [ref=e1289]:
+                        - generic [ref=e1292]:
+                          - text: Daha iyi hissetmenin nazik yolu
+                          - img "💚" [ref=e1293]
+                        - generic [ref=e1294]:
+                          - generic [ref=e1295]: "-"
+                          - text: Venatura Kendin İçin Küçük Bir İyilik Zamanı
+                          - img "💚" [ref=e1296]
+                          - text: Güzellik, bazen yalnızca bir bakım değil; kendine ayırdığın sakin bir an, duyularını harekete geçiren zarif bir ritüeldir. NUXE, bu anlayıştan ilham
+                  - gridcell [ref=e1297]
+                  - gridcell "9 Nis 2026 Per 10:01" [ref=e1298]:
+                    - generic "9 Nis 2026 Per 10:01" [ref=e1299]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Medium Daily Digest, Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict, 9 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite." [ref=e1300] [cursor=pointer]:
+                  - gridcell [ref=e1301]
+                  - gridcell "okunmadı, Medium Daily Digest, Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict, 9 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite." [ref=e1302]:
+                    - checkbox "okunmadı, Medium Daily Digest, Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict, 9 Nis, Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite." [ref=e1303]
+                  - gridcell "Yıldızlı değil" [ref=e1304]:
+                    - button "Yıldızlı değil" [ref=e1305]
+                  - gridcell "Önemsiz" [ref=e1306]:
+                    - switch "Önemsiz" [ref=e1307]
+                  - gridcell "Medium Daily Digest" [ref=e1309]:
+                    - generic [ref=e1311]: Medium Daily Digest
+                  - gridcell "Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite" [ref=e1312]:
+                    - link "Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict - Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite" [ref=e1314]:
+                      - generic [ref=e1315]:
+                        - generic [ref=e1317]: Palantir CEO Says Only Two Types Will Survive AI (And Elite Degrees Aren’t One of Them)! | Tasmia Sharmin in Predict
+                        - generic:
+                          - generic [ref=e1318]: "-"
+                          - text: Bahu Cvc Stories for Bahu Cvc @bahucvc·Become a member Medium daily digest Today's highlights Tasmia Sharmin Tasmia SharmininPredict Palantir CEO Says Only Two Types Will Survive AI (And Elite
+                  - gridcell [ref=e1319]
+                  - gridcell "9 Nis 2026 Per 07:40" [ref=e1320]:
+                    - generic "9 Nis 2026 Per 07:40" [ref=e1321]: 9 Nis
+                  - gridcell
+                - row "okunmadı, Zane Cole, I built a 6-figure business with Claude Code (no coding background), 9 Nis, You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to." [ref=e1322] [cursor=pointer]:
+                  - gridcell [ref=e1323]
+                  - gridcell "okunmadı, Zane Cole, I built a 6-figure business with Claude Code (no coding background), 9 Nis, You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to." [ref=e1324]:
+                    - checkbox "okunmadı, Zane Cole, I built a 6-figure business with Claude Code (no coding background), 9 Nis, You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to." [ref=e1325]
+                  - gridcell "Yıldızlı değil" [ref=e1326]:
+                    - button "Yıldızlı değil" [ref=e1327]
+                  - gridcell "Google'ın sihrine göre önemli." [ref=e1328]:
+                    - switch "Google'ın sihrine göre önemli." [checked] [ref=e1329]
+                  - gridcell "Zane Cole" [ref=e1331]:
+                    - generic [ref=e1333]: Zane Cole
+                  - gridcell "I built a 6-figure business with Claude Code (no coding background) - You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to" [ref=e1334]:
+                    - link "I built a 6-figure business with Claude Code (no coding background) - You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to" [ref=e1335]:
+                      - generic [ref=e1336]:
+                        - generic [ref=e1338]: I built a 6-figure business with Claude Code (no coding background)
+                        - generic:
+                          - generic [ref=e1340]: "-"
+                          - text: You already know you can build software with AI. That's not the hard part anymore. The hard part is finding the right businesses, saying the right things on a sales call, and getting someone to
+                  - gridcell [ref=e1341]
+                  - gridcell "9 Nis 2026 Per 02:37" [ref=e1342]:
+                    - generic "9 Nis 2026 Per 02:37" [ref=e1343]: 9 Nis
+                  - gridcell
+                - 'row "okunmadı, The Economist Today, Questions remain about Iran and America’s truce, 8 Nis, Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing." [ref=e1344] [cursor=pointer]':
+                  - gridcell [ref=e1345]
+                  - 'gridcell "okunmadı, The Economist Today, Questions remain about Iran and America’s truce, 8 Nis, Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing." [ref=e1346]':
+                    - 'checkbox "okunmadı, The Economist Today, Questions remain about Iran and America’s truce, 8 Nis, Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing." [ref=e1347]'
+                  - gridcell "Yıldızlı değil" [ref=e1348]:
+                    - button "Yıldızlı değil" [ref=e1349]
+                  - gridcell "Önemsiz" [ref=e1350]:
+                    - switch "Önemsiz" [ref=e1351]
+                  - gridcell "The Economist Today" [ref=e1353]:
+                    - generic [ref=e1355]: The Economist Today
+                  - 'gridcell "Questions remain about Iran and America’s truce - Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing" [ref=e1356]':
+                    - 'link "Questions remain about Iran and America’s truce - Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing" [ref=e1358]':
+                      - generic [ref=e1359]:
+                        - generic [ref=e1361]: Questions remain about Iran and America’s truce
+                        - generic [ref=e1362]:
+                          - generic [ref=e1363]: "-"
+                          - text: "Also: Bye, bye to the Trump trades The Economist April 8th 2026 The Economist Today Our best journalism, handpicked each day desktop mobile Brooke Unger Senior digital editor Instead of erasing"
+                  - gridcell [ref=e1364]
+                  - gridcell "8 Nis 2026 Çar 19:28" [ref=e1365]:
+                    - generic "8 Nis 2026 Çar 19:28" [ref=e1366]: 8 Nis
+                  - gridcell
+                - row "okunmadı, Pegasus, ✈️Bahunur, Samsonite alışverişlerde BolPuan kazanın! 🧳, 8 Nis, Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL ✈." [ref=e1367] [cursor=pointer]:
+                  - gridcell [ref=e1368]
+                  - gridcell "okunmadı, Pegasus, ✈️Bahunur, Samsonite alışverişlerde BolPuan kazanın! 🧳, 8 Nis, Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL ✈." [ref=e1369]:
+                    - checkbox "okunmadı, Pegasus, ✈️Bahunur, Samsonite alışverişlerde BolPuan kazanın! 🧳, 8 Nis, Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL ✈." [ref=e1370]
+                  - gridcell "Yıldızlı değil" [ref=e1371]:
+                    - button "Yıldızlı değil" [ref=e1372]
+                  - gridcell "Önemsiz" [ref=e1373]:
+                    - switch "Önemsiz" [ref=e1374]
+                  - gridcell "Pegasus" [ref=e1376]:
+                    - generic [ref=e1378]: Pegasus
+                  - gridcell "✈️Bahunur, Samsonite alışverişlerde BolPuan kazanın! 🧳 - Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL ✈" [ref=e1379]:
+                    - link "✈️Bahunur, Samsonite alışverişlerde BolPuan kazanın! 🧳 - Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL ✈" [ref=e1381]:
+                      - generic [ref=e1382]:
+                        - generic [ref=e1385]:
+                          - img "✈️" [ref=e1386]
+                          - text: Bahunur, Samsonite alışverişlerde BolPuan kazanın!
+                          - img "🧳" [ref=e1387]
+                        - generic [ref=e1388]:
+                          - generic [ref=e1389]: "-"
+                          - text: Nisan sonuna kadar Samsonite mağazaları veya samsonite.com.tr adresinden yapacağınız alışverişlerde uçak bileti değerinde BolPuan kazanın! Bu e-postayı görüntüleyemiyorsanız tıklayınız. BİLET AL
+                          - img "✈" [ref=e1390]
+                  - gridcell [ref=e1391]
+                  - gridcell "8 Nis 2026 Çar 18:02" [ref=e1392]:
+                    - generic "8 Nis 2026 Çar 18:02" [ref=e1393]: 8 Nis
+                  - gridcell
+                - row "okunmadı, Going Zeero, Seni beklettiğimiz için üzgünüz!, 8 Nis, Umarım telafi edebiliriz ♥️ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏." [ref=e1394] [cursor=pointer]:
+                  - gridcell [ref=e1395]
+                  - gridcell "okunmadı, Going Zeero, Seni beklettiğimiz için üzgünüz!, 8 Nis, Umarım telafi edebiliriz ♥️ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏." [ref=e1396]:
+                    - checkbox "okunmadı, Going Zeero, Seni beklettiğimiz için üzgünüz!, 8 Nis, Umarım telafi edebiliriz ♥️ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏." [ref=e1397]
+                  - gridcell "Yıldızlı değil" [ref=e1398]:
+                    - button "Yıldızlı değil" [ref=e1399]
+                  - gridcell "Önemsiz" [ref=e1400]:
+                    - switch "Önemsiz" [ref=e1401]
+                  - gridcell "Going Zeero" [ref=e1403]:
+                    - generic [ref=e1405]: Going Zeero
+                  - gridcell "Seni beklettiğimiz için üzgünüz! - Umarım telafi edebiliriz ♥️ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏" [ref=e1406]:
+                    - link "Seni beklettiğimiz için üzgünüz! - Umarım telafi edebiliriz ♥️ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏" [ref=e1408]:
+                      - generic [ref=e1409]:
+                        - generic [ref=e1411]: Seni beklettiğimiz için üzgünüz!
+                        - generic [ref=e1412]:
+                          - generic [ref=e1413]: "-"
+                          - text: Umarım telafi edebiliriz
+                          - img "♥️" [ref=e1414]
+                          - text: ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏ ‌‍‎‏
+                  - gridcell [ref=e1415]
+                  - gridcell "8 Nis 2026 Çar 15:59" [ref=e1416]:
+                    - generic "8 Nis 2026 Çar 15:59" [ref=e1417]: 8 Nis
+                  - gridcell
+                - row "okunmadı, daily.dev, We messed up, we asked for GitHub permissions we don't need, 8 Nis, Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we." [ref=e1418] [cursor=pointer]:
+                  - gridcell [ref=e1419]
+                  - gridcell "okunmadı, daily.dev, We messed up, we asked for GitHub permissions we don't need, 8 Nis, Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we." [ref=e1420]:
+                    - checkbox "okunmadı, daily.dev, We messed up, we asked for GitHub permissions we don't need, 8 Nis, Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we." [ref=e1421]
+                  - gridcell "Yıldızlı değil" [ref=e1422]:
+                    - button "Yıldızlı değil" [ref=e1423]
+                  - gridcell "Önemsiz" [ref=e1424]:
+                    - switch "Önemsiz" [ref=e1425]
+                  - gridcell "daily.dev" [ref=e1427]:
+                    - generic [ref=e1429]: daily.dev
+                  - gridcell "We messed up, we asked for GitHub permissions we don't need - Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we" [ref=e1430]:
+                    - link "We messed up, we asked for GitHub permissions we don't need - Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we" [ref=e1432]:
+                      - generic [ref=e1433]:
+                        - generic [ref=e1435]: We messed up, we asked for GitHub permissions we don't need
+                        - generic [ref=e1436]:
+                          - generic [ref=e1437]: "-"
+                          - text: Hey Bahu, We're writing to apologize. During a recent authentication migration, we accidentally asked for more GitHub permissions than we need. We only need access to your email address, and we
+                  - gridcell [ref=e1438]
+                  - gridcell "8 Nis 2026 Çar 15:59" [ref=e1439]:
+                    - generic "8 Nis 2026 Çar 15:59" [ref=e1440]: 8 Nis
+                  - gridcell
+          - contentinfo [ref=e1442]:
+            - link "5.120 GB kotanın %0 kadarı kullanıldı Depolama alanını yönetmek için bağlantıyı ziyaret edin" [ref=e1447] [cursor=pointer]:
+              - /url: https://drive.google.com/u/0/settings/storage?hl=tr&utm_medium=web&utm_source=gmail&utm_campaign=storage_meter&utm_content=storage_normal
+              - generic [ref=e1449]:
+                - generic [ref=e1450]: 5.120 GB kotanın %0 kadarı kullanıldı
+                - img "Depolama alanını yönetmek için bağlantıyı ziyaret edin" [ref=e1451]
+            - generic [ref=e1455]:
+              - link "Şartlar" [ref=e1456] [cursor=pointer]:
+                - /url: https://www.google.com/intl/tr/policies/terms/
+              - text: ·
+              - link "Gizlilik" [ref=e1457] [cursor=pointer]:
+                - /url: https://www.google.com/intl/tr/policies/privacy/
+              - text: ·
+              - link "Program Politikaları" [ref=e1458] [cursor=pointer]:
+                - /url: https://www.google.com/gmail/about/policy/
+            - generic [ref=e1596]:
+              - generic [ref=e1597]: "Son hesap etkinliği: 0 dakika önce"
+              - text: Şu anda 1 farklı konumda daha kullanılıyor ·
+              - link "Ayrıntılar" [ref=e1598] [cursor=pointer]
+      - generic [ref=e1601]:
+        - complementary "Yan panel" [ref=e1602]:
+          - tablist [ref=e1604]:
+            - tab "Takvim"
+            - tab "Keep"
+            - tab "Görevler"
+            - tab "Kişiler"
+            - separator [disabled] [ref=e1609]
+            - tab "Eklenti Yükleyin"
+        - generic:
+          - button "Yan paneli gizle":
+            - img [ref=e1612] [cursor=pointer]
+  - generic [ref=e1615]: Öneriler güncellendi

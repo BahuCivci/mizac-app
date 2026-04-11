@@ -1,0 +1,69 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - progressbar [ref=e6]
+    - main [ref=e14]:
+      - generic [ref=e15]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - img [ref=e20]
+            - generic [ref=e25]: Google ile oturum açın
+          - img "Lemon Squeezy" [ref=e26]
+        - generic [ref=e27]:
+          - heading "Lemon Squeezy uygulamasında oturum açın" [level=1] [ref=e28]
+          - link "safra943@gmail.com seçildi. Hesap değiştir" [ref=e30] [cursor=pointer]:
+            - generic [ref=e33]: safra943@gmail.com
+            - img [ref=e35]
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - heading "Google, Lemon Squeezy hizmetinin sizinle ilgili aşağıdaki bilgilere erişmesine izin verecek" [level=2] [ref=e48]:
+            - generic [ref=e49]: Google, Lemon Squeezy hizmetinin sizinle ilgili aşağıdaki bilgilere erişmesine izin verecek
+          - list [ref=e53]:
+            - listitem [ref=e54]:
+              - generic [ref=e55]:
+                - img [ref=e57]
+                - generic [ref=e60]:
+                  - generic [ref=e61]: Bahu k
+                  - generic [ref=e62]: Ad ve profil resmi
+            - listitem [ref=e63]:
+              - generic [ref=e64]:
+                - img [ref=e66]
+                - generic [ref=e68]:
+                  - generic [ref=e69]: safra943@gmail.com
+                  - generic [ref=e70]: E-posta adresi
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - text: Lemon Squeezy hizmetinin verilerinizi nasıl işleyeceğini ve koruyacağını anlamak için Lemon Squeezy
+            - link "Gizlilik Politikası" [ref=e75] [cursor=pointer]:
+              - /url: https://www.lemonsqueezy.com/privacy
+            - text: ve
+            - link "Hizmet Şartları" [ref=e76] [cursor=pointer]:
+              - /url: https://www.lemonsqueezy.com/terms
+            - text: "'nı inceleyin."
+          - generic [ref=e77]:
+            - text: İstediğiniz zaman değişiklik yapmak için
+            - link "Google Hesabınıza" [ref=e78] [cursor=pointer]:
+              - /url: https://myaccount.google.com/connections#filter=4
+            - text: gidin.
+          - generic [ref=e79]:
+            - link "Google ile oturum açma" [ref=e80] [cursor=pointer]:
+              - /url: https://support.google.com/accounts/answer/12921417?sjid=1919169284593837430-NC
+            - text: hakkında daha fazla bilgi edinin.
+      - generic [ref=e83]:
+        - button "İptal" [ref=e87]: İptal
+        - button "Devam Et" [ref=e93]: Devam Et
+  - contentinfo [ref=e99]:
+    - combobox "Dili değiştirme Türkçe" [ref=e103] [cursor=pointer]:
+      - generic:
+        - generic: Türkçe
+      - generic:
+        - img
+    - list [ref=e105]:
+      - listitem [ref=e106]:
+        - link "Yardım" [ref=e107] [cursor=pointer]:
+          - /url: https://support.google.com/accounts?hl=tr&p=account_iph
+      - listitem [ref=e108]:
+        - link "Gizlilik" [ref=e109] [cursor=pointer]:
+          - /url: https://accounts.google.com/TOS?loc=TR&hl=tr&privacy=true
+      - listitem [ref=e110]:
+        - link "Şartlar" [ref=e111] [cursor=pointer]:
+          - /url: https://accounts.google.com/TOS?loc=TR&hl=tr

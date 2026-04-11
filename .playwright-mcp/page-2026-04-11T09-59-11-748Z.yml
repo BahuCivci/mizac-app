@@ -1,0 +1,198 @@
+- generic:
+  - generic:
+    - navigation:
+      - complementary:
+        - generic:
+          - button:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - img
+                    - text: s
+                - generic:
+                  - generic: safra943
+            - generic:
+              - img
+        - navigation:
+          - list:
+            - listitem:
+              - link:
+                - /url: /emails
+                - generic:
+                  - img
+                - text: Emails
+            - listitem:
+              - link:
+                - /url: /broadcasts
+                - generic:
+                  - img
+                - text: Broadcasts
+            - listitem:
+              - link:
+                - /url: /templates
+                - generic:
+                  - img
+                - text: Templates
+            - listitem:
+              - link:
+                - /url: /audience
+                - generic:
+                  - img
+                - text: Audience
+            - listitem:
+              - link:
+                - /url: /metrics
+                - generic:
+                  - img
+                - text: Metrics
+            - listitem:
+              - link:
+                - /url: /domains
+                - generic:
+                  - img
+                - text: Domains
+            - listitem:
+              - link:
+                - /url: /logs
+                - generic:
+                  - img
+                - text: Logs
+            - listitem:
+              - link:
+                - /url: /api-keys
+                - generic:
+                  - img
+                - text: API Keys
+            - listitem:
+              - link:
+                - /url: /webhooks
+                - generic:
+                  - img
+                - text: Webhooks
+            - listitem:
+              - link:
+                - /url: /settings
+                - generic:
+                  - img
+                - text: Settings
+        - button:
+          - generic:
+            - generic:
+              - generic:
+                - generic: s
+              - generic: safra943@gmail.com
+          - generic:
+            - img
+    - generic:
+      - generic:
+        - generic:
+          - button:
+            - generic: Feedback
+            - generic:
+              - generic: F
+          - link:
+            - /url: /help
+            - text: Help
+          - link:
+            - /url: https://resend.com/docs/dashboard/api-keys/introduction
+            - text: Docs
+      - generic:
+        - generic:
+          - heading [level=1]: API Keys
+          - generic:
+            - button:
+              - generic:
+                - img
+              - generic: Create API Key
+            - button:
+              - generic:
+                - img
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - generic:
+                    - generic:
+                      - img
+                - textbox:
+                  - /placeholder: Search...
+              - combobox:
+                - generic: All Permissions
+                - img
+            - button:
+              - generic:
+                - generic:
+                  - img
+          - generic:
+            - generic:
+              - generic:
+                - table:
+                  - rowgroup:
+                    - row:
+                      - columnheader:
+                        - generic:
+                          - generic:
+                            - checkbox
+                          - text: Name
+                      - columnheader: Token
+                      - columnheader: Permission
+                      - columnheader: Last Used
+                      - columnheader: Created
+                      - columnheader
+                  - rowgroup:
+                    - row:
+                      - cell:
+                        - generic:
+                          - generic:
+                            - checkbox
+                          - link:
+                            - /url: /api-keys/7361dd22-1e44-4837-9ab8-9c6eeb9809d3
+                            - generic:
+                              - img
+                              - img
+                          - link:
+                            - /url: /api-keys/7361dd22-1e44-4837-9ab8-9c6eeb9809d3
+                            - text: mizac-app
+                      - cell:
+                        - button:
+                          - generic: re_cdug8hy5...
+                      - cell: Full access
+                      - cell:
+                        - button:
+                          - link:
+                            - /url: /logs/a5884dec-d40c-487d-a1d4-f5822455c885
+                            - generic:
+                              - time: about 7 hours ago
+                      - cell:
+                        - time: 12 days ago
+                      - cell:
+                        - button [expanded]:
+                          - img
+            - generic:
+              - generic:
+                - text: Page 1 – 1 of 1 keys –
+                - generic:
+                  - combobox
+                  - img
+  - region "Notifications alt+T":
+    - list:
+      - listitem:
+        - generic:
+          - generic:
+            - generic:
+              - generic:
+                - generic:
+                  - img
+                - generic:
+                  - heading "This API Key has been deleted" [level=1]
+  - alert: API Keys · Resend
+  - menu "More actions" [ref=e476]:
+    - menuitem "Edit API key" [ref=e477] [cursor=pointer]:
+      - img [ref=e479]
+      - text: Edit API key
+    - separator [ref=e485]
+    - menuitem "Delete API key" [active] [ref=e486] [cursor=pointer]:
+      - img [ref=e488]
+      - text: Delete API key

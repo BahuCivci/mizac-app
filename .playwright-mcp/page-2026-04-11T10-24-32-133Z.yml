@@ -1,0 +1,236 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e7]:
+    - generic [ref=e260]:
+      - link [ref=e262] [cursor=pointer]:
+        - /url: https://app.lemonsqueezy.com/dashboard
+        - img [ref=e263]
+      - generic [ref=e265]:
+        - generic [ref=e266]:
+          - link "Home" [ref=e267] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/dashboard
+            - img [ref=e269]
+            - generic [ref=e273]: Home
+          - link "Store" [ref=e274] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e276]
+            - generic [ref=e279]: Store
+            - img [ref=e281]
+          - link "Email" [ref=e283] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e285]
+            - generic [ref=e287]: Email
+            - img [ref=e289]
+          - link "Affiliates" [ref=e291] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e293]
+            - generic [ref=e295]: Affiliates
+            - img [ref=e297]
+          - link "Settings" [ref=e299] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e301]
+            - generic [ref=e304]: Settings
+            - img [ref=e306]
+          - generic [ref=e308]:
+            - link "General" [ref=e309] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/general
+              - generic [ref=e310]: General
+            - link "Domains" [ref=e311] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/domains
+              - generic [ref=e312]: Domains
+            - link "Integrations" [ref=e313] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/integrations
+              - generic [ref=e314]: Integrations
+            - link "Webhooks" [ref=e315] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/webhooks
+              - generic [ref=e316]: Webhooks
+            - link "Email" [ref=e317] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/email
+              - generic [ref=e318]: Email
+            - link "Affiliates" [ref=e319] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/affiliates
+              - generic [ref=e320]: Affiliates
+            - link "Recovery" [ref=e321] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/recovery
+              - generic [ref=e322]: Recovery
+            - link "Plans" [ref=e323] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/plan
+              - generic [ref=e324]: Plans
+            - link "Billing" [ref=e325] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/billing
+              - generic [ref=e326]: Billing
+            - link "Payouts" [ref=e327] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/payouts
+              - generic [ref=e328]: Payouts
+            - link "Team" [ref=e329] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/team
+              - generic [ref=e330]: Team
+            - link "Stores" [ref=e331] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/stores
+              - generic [ref=e332]: Stores
+            - link "API" [ref=e333] [cursor=pointer]:
+              - /url: https://app.lemonsqueezy.com/settings/api
+              - generic [ref=e334]: API
+          - link "Design" [ref=e335] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/design
+            - img [ref=e337]
+            - generic [ref=e339]: Design
+            - img [ref=e341]
+          - link "Setup" [ref=e343] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/setup
+            - img [ref=e345]
+            - generic [ref=e349]: Setup
+            - img [ref=e352]
+        - generic [ref=e355]:
+          - paragraph [ref=e356]: Fill out your business details to activate your store and accept live payments
+          - link "Activate your store" [ref=e357] [cursor=pointer]:
+            - /url: https://app.lemonsqueezy.com/settings/general/identity
+            - generic [ref=e358]: Activate your store
+      - generic [ref=e360]:
+        - button "Mizaç Mizaç" [ref=e362] [cursor=pointer]:
+          - generic "Mizaç" [ref=e365]:
+            - img [ref=e366]:
+              - generic [ref=e368]: M
+          - generic "Mizaç" [ref=e369]
+          - img [ref=e371]
+        - separator [ref=e373]
+        - generic [ref=e374] [cursor=pointer]:
+          - generic [ref=e375]: Test mode
+          - checkbox [checked] [ref=e378]
+    - generic [ref=e128]:
+      - generic [ref=e129]:
+        - heading "Settings" [level=2] [ref=e131]
+        - generic [ref=e132]:
+          - img [ref=e134]
+          - generic [ref=e137]:
+            - text: "Test mode: These webhooks will only work with test mode data."
+            - link "Help↗" [ref=e138] [cursor=pointer]:
+              - /url: https://docs.lemonsqueezy.com/help/getting-started/test-mode
+        - generic [ref=e139]:
+          - generic [ref=e140]:
+            - heading "Webhooks" [level=2] [ref=e141]
+            - paragraph [ref=e142]:
+              - text: Use webhooks to listen for events and trigger reactions ·
+              - link "Help↗" [ref=e143] [cursor=pointer]:
+                - /url: https://docs.lemonsqueezy.com/api/webhooks
+          - button [ref=e145] [cursor=pointer]:
+            - img [ref=e146]
+        - table [ref=e380]:
+          - rowgroup [ref=e381]:
+            - row "URL Listening for" [ref=e382]:
+              - columnheader "URL" [ref=e383]:
+                - heading "URL" [level=4] [ref=e384]
+              - columnheader "Listening for" [ref=e385]:
+                - heading "Listening for" [level=4] [ref=e386]
+              - columnheader [ref=e387]
+          - rowgroup [ref=e388]:
+            - row "https://mizac.xyz/api/lemonsqueezy/webhook 1 events" [ref=e389]:
+              - cell "https://mizac.xyz/api/lemonsqueezy/webhook" [ref=e390] [cursor=pointer]
+              - cell "1 events" [ref=e391] [cursor=pointer]
+              - cell [ref=e392] [cursor=pointer]:
+                - button [ref=e394]:
+                  - img [ref=e395]
+      - generic [ref=e148]:
+        - button "Search" [ref=e150] [cursor=pointer]:
+          - img [ref=e151]
+        - button "Activity" [ref=e154] [cursor=pointer]:
+          - img [ref=e155]
+        - button [ref=e159] [cursor=pointer]:
+          - img [ref=e160]
+    - generic [ref=e166]:
+      - generic [ref=e167]:
+        - generic [ref=e398]: Webhook settings saved!
+        - generic [ref=e168]:
+          - heading "Edit Webhook" [level=1] [ref=e169]
+          - button [ref=e171] [cursor=pointer]:
+            - img [ref=e173]
+        - paragraph [ref=e175]:
+          - text: For information on how to use webhooks see our ·
+          - link "Help↗" [ref=e176] [cursor=pointer]:
+            - /url: https://docs.lemonsqueezy.com/api/webhooks/
+        - generic [ref=e179]:
+          - generic [ref=e180]:
+            - generic [ref=e181] [cursor=pointer]: Callback URL
+            - generic [ref=e182]:
+              - generic [ref=e183]: https://
+              - textbox "example.com/webhook" [ref=e185]: mizac.xyz/api/lemonsqueezy/webhook
+            - paragraph [ref=e186]:
+              - text: A
+              - code [ref=e187]: POST
+              - text: request will be sent to this URL every time an event is triggered in Lemon Squeezy
+          - generic [ref=e188]:
+            - generic [ref=e189] [cursor=pointer]: Signing secret
+            - textbox "Signing secret" [ref=e190]:
+              - /placeholder: "********"
+              - text: c7bc247ba2a5d7c38341f9b42c267d71077ca995
+            - paragraph [ref=e191]:
+              - text: A secret that will be used to sign each request. Used to verify the webhook is sent from Lemon Squeezy via the
+              - code [ref=e192]: X-Signature
+              - text: header
+          - generic [ref=e193]:
+            - generic [ref=e194] [cursor=pointer]: What updates should we send?
+            - generic [ref=e196] [cursor=pointer]:
+              - checkbox "affiliate_activated" [ref=e197]
+              - text: affiliate_activated
+            - generic [ref=e199] [cursor=pointer]:
+              - checkbox "customer_updated" [ref=e200]
+              - text: customer_updated
+            - generic [ref=e202] [cursor=pointer]:
+              - checkbox "dispute_created" [ref=e203]
+              - text: dispute_created
+            - generic [ref=e205] [cursor=pointer]:
+              - checkbox "dispute_resolved" [ref=e206]
+              - text: dispute_resolved
+            - generic [ref=e208] [cursor=pointer]:
+              - checkbox "order_created" [checked] [ref=e209]
+              - text: order_created
+            - generic [ref=e211] [cursor=pointer]:
+              - checkbox "order_refunded" [ref=e212]
+              - text: order_refunded
+            - generic [ref=e214] [cursor=pointer]:
+              - checkbox "subscription_created" [ref=e215]
+              - text: subscription_created
+            - generic [ref=e217] [cursor=pointer]:
+              - checkbox "subscription_updated" [ref=e218]
+              - text: subscription_updated
+            - generic [ref=e220] [cursor=pointer]:
+              - checkbox "subscription_cancelled" [ref=e221]
+              - text: subscription_cancelled
+            - generic [ref=e223] [cursor=pointer]:
+              - checkbox "subscription_resumed" [ref=e224]
+              - text: subscription_resumed
+            - generic [ref=e226] [cursor=pointer]:
+              - checkbox "subscription_expired" [ref=e227]
+              - text: subscription_expired
+            - generic [ref=e229] [cursor=pointer]:
+              - checkbox "subscription_paused" [ref=e230]
+              - text: subscription_paused
+            - generic [ref=e232] [cursor=pointer]:
+              - checkbox "subscription_unpaused" [ref=e233]
+              - text: subscription_unpaused
+            - generic [ref=e235] [cursor=pointer]:
+              - checkbox "subscription_payment_failed" [ref=e236]
+              - text: subscription_payment_failed
+            - generic [ref=e238] [cursor=pointer]:
+              - checkbox "subscription_payment_success" [ref=e239]
+              - text: subscription_payment_success
+            - generic [ref=e241] [cursor=pointer]:
+              - checkbox "subscription_payment_recovered" [ref=e242]
+              - text: subscription_payment_recovered
+            - generic [ref=e244] [cursor=pointer]:
+              - checkbox "subscription_payment_refunded" [ref=e245]
+              - text: subscription_payment_refunded
+            - generic [ref=e247] [cursor=pointer]:
+              - checkbox "subscription_plan_changed" [ref=e248]
+              - text: subscription_plan_changed
+            - generic [ref=e250] [cursor=pointer]:
+              - checkbox "license_key_created" [ref=e251]
+              - text: license_key_created
+            - generic [ref=e253] [cursor=pointer]:
+              - checkbox "license_key_updated" [ref=e254]
+              - text: license_key_updated
+      - generic [ref=e256]:
+        - button "Cancel" [ref=e257] [cursor=pointer]
+        - button "Save Webhook" [ref=e258] [cursor=pointer]:
+          - generic [ref=e259]: Save Webhook
+  - iframe [ref=e162]:
+    

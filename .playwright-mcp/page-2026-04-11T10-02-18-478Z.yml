@@ -1,0 +1,54 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - link [ref=e6] [cursor=pointer]:
+      - /url: https://www.lemonsqueezy.com
+      - img [ref=e7]
+    - heading "Sign up to Lemon Squeezy" [level=1] [ref=e13]
+    - generic [ref=e14]:
+      - link "Sign up with Google" [ref=e16] [cursor=pointer]:
+        - /url: https://auth.lemonsqueezy.com/google/login
+        - img [ref=e17]
+        - generic [ref=e22]: Sign up with Google
+      - link "Sign up with Twitter" [ref=e24] [cursor=pointer]:
+        - /url: https://auth.lemonsqueezy.com/twitter/login
+        - img [ref=e25]
+        - generic [ref=e27]: Sign up with Twitter
+    - generic [ref=e30]: Or
+    - generic [ref=e31]:
+      - textbox "Name" [active] [ref=e33]
+      - textbox "Email address" [ref=e35]
+      - textbox "Password (12+ characters please)" [ref=e37]
+      - iframe [ref=e43]:
+        - generic [ref=f58e2]:
+          - generic [ref=f58e3]:
+            - checkbox "I'm not a robot" [ref=f58e7]
+            - generic [ref=f58e11]: I'm not a robot
+          - generic [ref=f58e15]: reCAPTCHA
+      - button "Create account" [disabled] [ref=e45]:
+        - generic [ref=e46]: Create account
+    - generic [ref=e47]:
+      - paragraph [ref=e48]:
+        - text: Signing up for a Lemon Squeezy account means you agree to the
+        - link "Privacy Policy" [ref=e49] [cursor=pointer]:
+          - /url: https://www.lemonsqueezy.com/privacy
+        - text: ","
+        - link "Terms of Service" [ref=e50] [cursor=pointer]:
+          - /url: https://www.lemonsqueezy.com/terms
+        - text: and
+        - link "Affiliate Terms" [ref=e51] [cursor=pointer]:
+          - /url: https://www.lemonsqueezy.com/affiliate-terms
+        - text: .
+      - paragraph [ref=e52]:
+        - text: Already signed up?
+        - link "Sign in" [ref=e53] [cursor=pointer]:
+          - /url: https://auth.lemonsqueezy.com/login
+  - generic [ref=e54]:
+    - img [ref=e55]
+    - img [ref=e57]
+    - img [ref=e59]
+    - img [ref=e61]
+    - generic [ref=e64]:
+      - paragraph [ref=e65]: “It’s refreshing to see Lemon Squeezy focusing solely on digital products. Giving you all the necessary tools you’ll need to start selling your products and subscriptions quickly and easily.”
+      - generic [ref=e67]:
+        - heading "Ian Barnard" [level=4] [ref=e68]
+        - text: "@ian_barnard"

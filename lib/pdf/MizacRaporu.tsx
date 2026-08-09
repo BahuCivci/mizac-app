@@ -7,24 +7,39 @@ import {
   StyleSheet,
   Font,
 } from '@react-pdf/renderer';
+import path from 'path';
 import { MizacProfil, MizacTip, mizacProfiller } from '../mizac-data';
+import { uyumVerisi } from '../uyum-data';
 
-// Font kayıt — Turkish karakter desteği için Noto Serif
+// Fontlar repoya gömülüdür. Daha önce gstatic URL'lerinden çekiliyordu; Google
+// bu URL'leri sürüm yükseltince döndürdü (v21/v36 -> 404) ve PDF üretimi
+// tamamen durdu. Yerel dosyada sürüm rotasyonu ya da ağ hatası riski yok.
+// Dosyalar Türkçe için gereken latin + latin-ext aralığına indirilmiştir.
+const fontDir = path.join(process.cwd(), 'lib/pdf/fonts');
+
 Font.register({
   family: 'NotoSerif',
   fonts: [
-    { src: 'https://fonts.gstatic.com/s/notoserif/v21/ga6Iaw1J5X9T9RW6j9bNTFA.woff2' },
-    { src: 'https://fonts.gstatic.com/s/notoserif/v21/ga6Law1J5X9T9RW6j9bNfFcWaA.woff2', fontWeight: 700 },
+    { src: path.join(fontDir, 'NotoSerif-Regular.ttf') },
+    { src: path.join(fontDir, 'NotoSerif-Bold.ttf'), fontWeight: 700 },
   ],
 });
 
 Font.register({
   family: 'NotoSans',
   fonts: [
-    { src: 'https://fonts.gstatic.com/s/notosans/v36/o-0bIpQlx3QUlC5A4PNjhjRFSfiM7HBj.woff2' },
-    { src: 'https://fonts.gstatic.com/s/notosans/v36/o-0IIpQlx3QUlC5A4PNjFhFSZwp5Wg.woff2', fontWeight: 700 },
+    { src: path.join(fontDir, 'NotoSans-Regular.ttf') },
+    { src: path.join(fontDir, 'NotoSans-Bold.ttf'), fontWeight: 700 },
   ],
 });
+
+
+/**
+ * Türkçe'ye duyarlı büyük harf. @react-pdf'in textTransform: 'uppercase'
+ * özelliği JS toUpperCase() kullanıyor ve 'i' harfini 'I' yapıyor; Türkçe'de
+ * karşılığı 'İ'. Bu yüzden başlıklar "İÇINDEKILER" diye basılıyordu.
+ */
+const trBuyuk = (s: string) => s.toLocaleUpperCase('tr-TR');
 
 // Renkler
 const GOLD = '#c4973a';
@@ -53,7 +68,6 @@ const styles = StyleSheet.create({
     color: GOLD,
     fontSize: 9,
     letterSpacing: 3,
-    textTransform: 'uppercase',
     marginBottom: 20,
     fontFamily: 'NotoSans',
   },
@@ -111,7 +125,6 @@ const styles = StyleSheet.create({
     color: MUTED,
     fontSize: 9,
     letterSpacing: 2,
-    textTransform: 'uppercase',
     fontFamily: 'NotoSans',
   },
   // İçerik sayfaları
@@ -133,21 +146,18 @@ const styles = StyleSheet.create({
     color: MUTED,
     fontSize: 8,
     letterSpacing: 2,
-    textTransform: 'uppercase',
     fontFamily: 'NotoSans',
   },
   pageHeaderMizac: {
     color: GOLD,
     fontSize: 8,
     letterSpacing: 2,
-    textTransform: 'uppercase',
     fontFamily: 'NotoSans',
   },
   sectionLabel: {
     color: GOLD,
     fontSize: 8,
     letterSpacing: 3,
-    textTransform: 'uppercase',
     marginBottom: 6,
     fontFamily: 'NotoSans',
   },
@@ -224,7 +234,6 @@ const styles = StyleSheet.create({
   infoBoxLabel: {
     fontSize: 8,
     letterSpacing: 2,
-    textTransform: 'uppercase',
     marginBottom: 6,
     fontFamily: 'NotoSans',
   },
@@ -314,7 +323,6 @@ const styles = StyleSheet.create({
     color: GOLD,
     fontFamily: 'NotoSans',
     letterSpacing: 1,
-    textTransform: 'uppercase',
   },
 });
 
@@ -329,13 +337,18 @@ function elementSimgesi(element: string): string {
   return map[element] || element;
 }
 
-// Uyum hesaplama
-const uyumPuanlari: Record<MizacTip, Record<MizacTip, number>> = {
-  safravi:  { safravi: 70, demevi: 68, balgami: 92, sevdavi: 38 },
-  demevi:   { safravi: 68, demevi: 70, balgami: 48, sevdavi: 90 },
-  balgami:  { safravi: 92, demevi: 48, balgami: 70, sevdavi: 76 },
-  sevdavi:  { safravi: 38, demevi: 90, balgami: 76, sevdavi: 70 },
-};
+// Uyum puanları sitedeki tek kaynaktan gelir (lib/uyum-data.ts). Burada ayrı
+// bir kopya vardı ve aynı-mizaç çiftlerinde siteyle çelişiyordu (hepsine 70
+// diyordu; site 55/65/68/62). Müşteri raporda başka, sitede başka sayı
+// görüyordu.
+const uyumPuanlari = Object.fromEntries(
+  (Object.keys(uyumVerisi) as MizacTip[]).map((a) => [
+    a,
+    Object.fromEntries(
+      (Object.keys(uyumVerisi[a]) as MizacTip[]).map((b) => [b, uyumVerisi[a][b].puan])
+    ) as Record<MizacTip, number>,
+  ])
+) as Record<MizacTip, Record<MizacTip, number>>;
 
 // Haftalık protokol (mizaca göre özelleştirilmiş)
 const haftalikProtokol: Record<MizacTip, { sabah: string; ogle: string; aksam: string; uzeri: string }[]> = {
@@ -381,8 +394,8 @@ const haftalikProtokol: Record<MizacTip, { sabah: string; ogle: string; aksam: s
 function PageHeader({ mizacIsim }: { mizacIsim: string }) {
   return (
     <View style={styles.pageHeader}>
-      <Text style={styles.pageHeaderTitle}>Derin Mizaç Raporu</Text>
-      <Text style={styles.pageHeaderMizac}>{mizacIsim} Mizacı</Text>
+      <Text style={styles.pageHeaderTitle}>{trBuyuk(`Derin Mizaç Raporu`)}</Text>
+      <Text style={styles.pageHeaderMizac}>{trBuyuk(`${mizacIsim} Mizacı`)}</Text>
     </View>
   );
 }
@@ -440,7 +453,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       ═══════════════════════════════════════════════════════ */}
       <Page size="A4" style={styles.page}>
         <View style={styles.coverPage}>
-          <Text style={styles.coverLabel}>mizac.xyz · Tıbb-ı Nebevî</Text>
+          <Text style={styles.coverLabel}>{trBuyuk(`mizac.xyz · Tıbb-ı Nebevî`)}</Text>
 
           <View style={[styles.coverSymbolBox, { backgroundColor: renk + '22', borderWidth: 1.5, borderColor: renk + '40' }]}>
             <Text style={[styles.coverSymbolText, { color: renk }]}>
@@ -458,7 +471,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
           </Text>
 
           <View style={styles.coverFooter}>
-            <Text style={styles.coverFooterText}>İbn-i Sina Geleneği · Zeynep Işık Büyükbay · Varlığın Tahlili</Text>
+            <Text style={styles.coverFooterText}>{trBuyuk(`İbn-i Sina Geleneği · Zeynep Işık Büyükbay · Varlığın Tahlili`)}</Text>
           </View>
         </View>
       </Page>
@@ -469,7 +482,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>İçindekiler</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`İçindekiler`)}</Text>
           <Text style={[styles.sectionTitle, { marginBottom: 24 }]}>Raporunuzda Neler Var?</Text>
 
           {[
@@ -506,7 +519,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>01 · Mizacınızın Özü</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`01 · Mizacınızın Özü`)}</Text>
           <Text style={styles.sectionTitle}>Sen Kimsin?</Text>
           <Text style={styles.bodyText}>{profil.uzunAciklama}</Text>
 
@@ -520,14 +533,14 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
               { label: 'Nitelik', value: `${profil.sicaklik} · ${profil.nem}` },
             ].map((info, i) => (
               <View key={i} style={[styles.infoBox, { flex: 1, marginRight: i % 2 === 0 ? 6 : 0, marginLeft: i % 2 === 1 ? 6 : 0 }]}>
-                <Text style={[styles.infoBoxLabel, { color: renk }]}>{info.label}</Text>
+                <Text style={[styles.infoBoxLabel, { color: renk }]}>{trBuyuk(`${info.label}`)}</Text>
                 <Text style={styles.infoBoxValue}>{info.value}</Text>
               </View>
             ))}
           </View>
 
           <View style={{ marginTop: 8 }}>
-            <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>Anahtar Kelimeler</Text>
+            <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>{trBuyuk(`Anahtar Kelimeler`)}</Text>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
               {profil.anahtarKelimeler.map((kw) => (
                 <View key={kw} style={{ backgroundColor: renk + '22', borderWidth: 1, borderColor: renk + '44', borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 }}>
@@ -546,7 +559,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>02 · Fiziksel Yapı ve Sağlık</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`02 · Fiziksel Yapı ve Sağlık`)}</Text>
           <Text style={styles.sectionTitle}>Bedeninizin Dili</Text>
 
           {profil.fiziksel.map((item, i) => (
@@ -556,13 +569,13 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
           <View style={styles.divider} />
           <View style={styles.twoCol}>
             <View style={styles.col}>
-              <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>Ağrı Tipi</Text>
+              <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>{trBuyuk(`Ağrı Tipi`)}</Text>
               <View style={[styles.infoBox, { marginBottom: 0 }]}>
                 <Text style={styles.cardText}>{profil.agriTipi}</Text>
               </View>
             </View>
             <View style={[styles.col, { marginLeft: 12 }]}>
-              <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>Yaş Dönemi</Text>
+              <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>{trBuyuk(`Yaş Dönemi`)}</Text>
               <View style={[styles.infoBox, { marginBottom: 0 }]}>
                 <Text style={styles.cardText}>{profil.yasDonem}</Text>
               </View>
@@ -578,7 +591,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>03 · Güçlü ve Zayıf Yönler</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`03 · Güçlü ve Zayıf Yönler`)}</Text>
           <Text style={styles.sectionTitle}>Güçlü Yönleriniz</Text>
           {profil.gucluYonler.map((item, i) => (
             <ListItem key={i} text={item} color={renk} />
@@ -599,7 +612,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>04 · Duygu ve Ruh</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`04 · Duygu ve Ruh`)}</Text>
           <Text style={styles.sectionTitle}>İçinizin Haritası</Text>
           <Text style={styles.bodyText}>
             Tıbb-ı nebevî geleneğinde duygular bedenden ayrı düşünülmez. {profil.isim} mizacının duygusal dünyası:
@@ -617,17 +630,17 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>05 · Beslenme Rehberi</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`05 · Beslenme Rehberi`)}</Text>
           <Text style={styles.sectionTitle}>Sofranızdaki Şifa</Text>
 
-          <Text style={[styles.sectionLabel, { color: '#16a34a', marginBottom: 8 }]}>Tavsiye Edilen Besinler</Text>
+          <Text style={[styles.sectionLabel, { color: '#16a34a', marginBottom: 8 }]}>{trBuyuk(`Tavsiye Edilen Besinler`)}</Text>
           <View style={{ backgroundColor: '#16a34a11', borderRadius: 8, padding: 12, marginBottom: 14, borderWidth: 1, borderColor: '#16a34a33' }}>
             {profil.beslenme.map((item, i) => (
               <ListItem key={i} text={item} color="#16a34a" />
             ))}
           </View>
 
-          <Text style={[styles.sectionLabel, { color: '#dc2626', marginBottom: 8 }]}>Kaçınılacak Besinler</Text>
+          <Text style={[styles.sectionLabel, { color: '#dc2626', marginBottom: 8 }]}>{trBuyuk(`Kaçınılacak Besinler`)}</Text>
           <View style={{ backgroundColor: '#dc262611', borderRadius: 8, padding: 12, borderWidth: 1, borderColor: '#dc262633' }}>
             {profil.yasak.map((item, i) => (
               <ListItem key={i} text={item} color="#dc2626" />
@@ -636,7 +649,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
 
           <View style={styles.divider} />
           <View style={{ backgroundColor: DARKER, borderRadius: 8, padding: 12 }}>
-            <Text style={[styles.sectionLabel, { marginBottom: 6 }]}>Sağlık Eğilimleri</Text>
+            <Text style={[styles.sectionLabel, { marginBottom: 6 }]}>{trBuyuk(`Sağlık Eğilimleri`)}</Text>
             {profil.saglikEgilimleri.slice(0, 3).map((item, i) => (
               <ListItem key={i} text={item} color={renk} />
             ))}
@@ -651,7 +664,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>06 · Detoks Tarifleri</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`06 · Detoks Tarifleri`)}</Text>
           <Text style={styles.sectionTitle}>Sizin İçin Detoks</Text>
           <Text style={styles.bodyText}>
             İbn-i Sina geleneğinde detoks, hıltların dengelenmesi anlamına gelir.
@@ -665,7 +678,10 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
           ))}
 
           <View style={styles.divider} />
-          <Text style={[styles.bodyText, { fontSize: 9, fontStyle: 'italic' }]}>
+          {/* fontStyle: 'italic' kullanılamaz — NotoSans için italik varyant
+              kayıtlı değil ve @react-pdf tüm PDF üretimini hata ile durduruyor
+              ("Could not resolve font"). Vurgu renk/boyutla veriliyor. */}
+          <Text style={[styles.bodyText, { fontSize: 9 }]}>
             Not: Bu tarifler genel mizaç önerisidir. Kronik hastalığınız varsa doktora danışın.
           </Text>
         </View>
@@ -678,13 +694,13 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>07 · Renk ve Çevre</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`07 · Renk ve Çevre`)}</Text>
           <Text style={styles.sectionTitle}>Ortamınızdaki Şifa</Text>
           <Text style={styles.bodyText}>
             Renkler ve çevre, mizacı doğrudan etkiler. {profil.isim} mizacı için:
           </Text>
 
-          <Text style={[styles.sectionLabel, { color: '#16a34a', marginBottom: 8 }]}>Önerilen Renkler</Text>
+          <Text style={[styles.sectionLabel, { color: '#16a34a', marginBottom: 8 }]}>{trBuyuk(`Önerilen Renkler`)}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
             {profil.renkOnerilir.map((renki) => (
               <View key={renki} style={{ backgroundColor: '#16a34a22', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 4, borderWidth: 1, borderColor: '#16a34a44' }}>
@@ -693,7 +709,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
             ))}
           </View>
 
-          <Text style={[styles.sectionLabel, { color: '#dc2626', marginBottom: 8 }]}>Kaçınılacak Renkler</Text>
+          <Text style={[styles.sectionLabel, { color: '#dc2626', marginBottom: 8 }]}>{trBuyuk(`Kaçınılacak Renkler`)}</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
             {profil.renkOnerilmez.map((renki) => (
               <View key={renki} style={{ backgroundColor: '#dc262622', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 4, borderWidth: 1, borderColor: '#dc262644' }}>
@@ -703,7 +719,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
           </View>
 
           <View style={[styles.infoBox, { borderLeftWidth: 3, borderLeftColor: renk }]}>
-            <Text style={[styles.infoBoxLabel, { color: renk, marginBottom: 8 }]}>Çevre Tavsiyesi</Text>
+            <Text style={[styles.infoBoxLabel, { color: renk, marginBottom: 8 }]}>{trBuyuk(`Çevre Tavsiyesi`)}</Text>
             <Text style={styles.cardText}>
               {profil.id === 'safravi' && 'Serin, iyi havalandırılmış, açık renkli mekanlar sizi dengeler. Kalabalık ve sıcak ortamlardan uzak durun.'}
               {profil.id === 'demevi' && 'Canlı, aydınlık, sosyal mekanlar sizi besler. Tek düze ve kapalı ortamlardan kaçının.'}
@@ -721,11 +737,11 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>08 · İlişki ve Sevgi Dili</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`08 · İlişki ve Sevgi Dili`)}</Text>
           <Text style={styles.sectionTitle}>Sevginin Haritası</Text>
           <Text style={styles.bodyText}>{profil.iliski}</Text>
           <View style={styles.divider} />
-          <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>Sevgi Diliniz</Text>
+          <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>{trBuyuk(`Sevgi Diliniz`)}</Text>
           <View style={[styles.infoBox, { borderLeftWidth: 3, borderLeftColor: renk }]}>
             <Text style={[styles.infoBoxValue, { color: renk, fontSize: 14 }]}>{profil.sevgiDili}</Text>
           </View>
@@ -745,7 +761,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>09 · Uyum Haritası</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`09 · Uyum Haritası`)}</Text>
           <Text style={styles.sectionTitle}>Diğer Mizaçlarla Uyumunuz</Text>
           <Text style={styles.bodyText}>
             İbn-i Sina geleneğinde mizaçlar birbirini etkiler. Zıt nitelikler çekişir, benzer nitelikler uyum sağlar.
@@ -778,7 +794,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>10 · Kariyer ve Yaşam Amacı</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`10 · Kariyer ve Yaşam Amacı`)}</Text>
           <Text style={styles.sectionTitle}>Çağrınız Ne?</Text>
           <Text style={styles.bodyText}>
             İbn-i Sina'ya göre her mizacın doğal meylettiği alanlar vardır.
@@ -797,7 +813,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>11 · Esmaü'l-Hüsna</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`11 · Esmaü'l-Hüsna`)}</Text>
           <Text style={styles.sectionTitle}>Sizin İçin Önerilen İsimler</Text>
           <Text style={styles.bodyText}>
             Allah'ın güzel isimleri, farklı hastalıklar ve mizaçlar için farklı tesir gösterir.
@@ -815,7 +831,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
 
           <View style={styles.divider} />
           <View style={[styles.infoBox, { borderLeftWidth: 3, borderLeftColor: renk }]}>
-            <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>Zikir Tavsiyesi</Text>
+            <Text style={[styles.sectionLabel, { marginBottom: 8 }]}>{trBuyuk(`Zikir Tavsiyesi`)}</Text>
             <Text style={styles.cardText}>
               Sabah namazı sonrasında seçtiğiniz ismi 33, 66 veya 99 kez tekrarlayın.
               Nefes alırken içine çekin, verirken söyleyin. Gönülden ve tefekkürle.
@@ -831,15 +847,15 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>12 · Haftalık Sağlık Protokolü</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`12 · Haftalık Sağlık Protokolü`)}</Text>
           <Text style={styles.sectionTitle}>7 Günlük Rutininiz</Text>
 
           {/* Tablo başlığı */}
           <View style={[styles.tableRow, { borderBottomColor: GOLD, borderBottomWidth: 1 }]}>
-            <Text style={[styles.tableCellHeader, { color: renk }]}>Gün</Text>
-            <Text style={styles.tableCellHeader}>Sabah</Text>
-            <Text style={styles.tableCellHeader}>Öğle</Text>
-            <Text style={styles.tableCellHeader}>Akşam</Text>
+            <Text style={[styles.tableCellHeader, { color: renk }]}>{trBuyuk(`Gün`)}</Text>
+            <Text style={styles.tableCellHeader}>{trBuyuk(`Sabah`)}</Text>
+            <Text style={styles.tableCellHeader}>{trBuyuk(`Öğle`)}</Text>
+            <Text style={styles.tableCellHeader}>{trBuyuk(`Akşam`)}</Text>
           </View>
 
           {haftalikProtokol[profil.id].map((gun) => (
@@ -860,7 +876,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>13 · Çocukluk ve Gelişim</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`13 · Çocukluk ve Gelişim`)}</Text>
           <Text style={styles.sectionTitle}>{profil.isim} Çocuk</Text>
           <Text style={styles.bodyText}>
             Mizaç doğuştan gelir. {profil.isim} mizacındaki bir çocuk nasıl büyür?
@@ -878,12 +894,12 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       <Page size="A4" style={styles.page}>
         <View style={styles.contentPage}>
           <PageHeader mizacIsim={profil.isim} />
-          <Text style={styles.sectionLabel}>14 · Sahabi Örneği</Text>
+          <Text style={styles.sectionLabel}>{trBuyuk(`14 · Sahabi Örneği`)}</Text>
           <Text style={styles.sectionTitle}>Size En Yakın Örnek</Text>
 
           <View style={[styles.infoBox, { borderWidth: 1.5, borderColor: renk + '44', padding: 24, alignItems: 'center', marginBottom: 20 }]}>
-            <Text style={{ color: MUTED, fontSize: 9, letterSpacing: 2, textTransform: 'uppercase', fontFamily: 'NotoSans', marginBottom: 8 }}>
-              {profil.isim} Mizacı · Sahabi Örneği
+            <Text style={{ color: MUTED, fontSize: 9, letterSpacing: 2, fontFamily: 'NotoSans', marginBottom: 8 }}>
+              {trBuyuk(`${profil.isim} Mizacı · Sahabi Örneği`)}
             </Text>
             <Text style={{ color: renk, fontSize: 18, fontWeight: 700, fontFamily: 'NotoSerif', textAlign: 'center' }}>
               {profil.halife}
@@ -897,14 +913,16 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
 
           <View style={styles.divider} />
 
-          <Text style={[styles.sectionLabel, { marginBottom: 12 }]}>Hatırlatıcı</Text>
+          <Text style={[styles.sectionLabel, { marginBottom: 12 }]}>{trBuyuk(`Hatırlatıcı`)}</Text>
           <Text style={styles.bodyText}>
             {profil.gucluYonler[0]} — bu sizin en güçlü yanınız.
             Bunu bir araç olarak, kendiniz ve çevreniz için kullanın.
           </Text>
 
           <View style={[styles.infoBox, { marginTop: 8, borderLeftWidth: 3, borderLeftColor: GOLD }]}>
-            <Text style={[styles.cardText, { fontStyle: 'italic', fontSize: 11, lineHeight: 1.8 }]}>
+            {/* fontStyle: 'italic' kayıtlı olmadığı için PDF üretimini
+                tamamen bozuyordu — bkz. Font.register (NotoSans) */}
+            <Text style={[styles.cardText, { fontSize: 11, lineHeight: 1.8, color: CREAM }]}>
               "Her mizacın bir hikayesi, her hikayenin bir anlamı vardır.
               Sen bu mizaçla yaratılmadın — bu mizaç senin içindir."
             </Text>
@@ -921,7 +939,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
       ═══════════════════════════════════════════════════════ */}
       <Page size="A4" style={styles.page}>
         <View style={[styles.coverPage, { justifyContent: 'flex-start', paddingTop: 80 }]}>
-          <Text style={[styles.coverLabel, { marginBottom: 40 }]}>Raporunuzu Tamamladınız</Text>
+          <Text style={[styles.coverLabel, { marginBottom: 40 }]}>{trBuyuk(`Raporunuzu Tamamladınız`)}</Text>
 
           <Text style={[styles.coverTitle, { fontSize: 22, marginBottom: 16 }]}>
             Bir sonraki adımınız ne?
@@ -934,7 +952,7 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
 
           <View style={styles.coverLine} />
 
-          <Text style={[styles.sectionLabel, { textAlign: 'center', marginBottom: 16 }]}>Kaynaklar</Text>
+          <Text style={[styles.sectionLabel, { textAlign: 'center', marginBottom: 16 }]}>{trBuyuk(`Kaynaklar`)}</Text>
           {[
             'Varlığın Tahlili — Zeynep Işık Büyükbay',
             'El-Kanun fit-Tıbb — İbn-i Sina',
@@ -952,8 +970,8 @@ export function MizacRaporuPDF({ profil }: { profil: MizacProfil }) {
           </Text>
 
           <View style={[styles.coverFooter, { position: 'relative', bottom: 0, marginTop: 40 }]}>
-            <Text style={[styles.coverFooterText, { marginBottom: 4 }]}>mizac.xyz</Text>
-            <Text style={[styles.coverFooterText, { opacity: 0.5, fontSize: 7 }]}>© 2026 · Tüm hakları saklıdır</Text>
+            <Text style={[styles.coverFooterText, { marginBottom: 4 }]}>{trBuyuk(`mizac.xyz`)}</Text>
+            <Text style={[styles.coverFooterText, { opacity: 0.5, fontSize: 7 }]}>{trBuyuk(`© 2026 · Tüm hakları saklıdır`)}</Text>
           </View>
         </View>
       </Page>

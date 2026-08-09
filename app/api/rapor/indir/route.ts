@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { renderToBuffer } from '@react-pdf/renderer';
 import { MizacRaporuPDF } from '@/lib/pdf/MizacRaporu';
 import { MizacTip, mizacProfiller } from '@/lib/mizac-data';
+import { rateLimit, istemciIp } from '@/lib/rate-limit';
 import React from 'react';
 
 export const runtime = 'nodejs';
@@ -15,7 +16,21 @@ interface JwtPayload {
   orderId: string;
 }
 
+/** 429 yanıtı — Retry-After ile birlikte */
+function cokFazlaIstek(saniye: number) {
+  return NextResponse.json(
+    { error: 'Çok fazla indirme isteği. Lütfen biraz sonra tekrar deneyin.' },
+    { status: 429, headers: { 'Retry-After': String(saniye) } }
+  );
+}
+
 export async function GET(req: NextRequest) {
+  // 1. katman: JWT doğrulamadan önce IP limiti — geçersiz token'la gelen
+  // seri istekler doğrulama yolunu boşuna meşgul etmesin
+  if (!rateLimit(`rapor-ip:${istemciIp(req)}`, { limit: 10, windowMs: 60_000 })) {
+    return cokFazlaIstek(60);
+  }
+
   const token = req.nextUrl.searchParams.get('token');
 
   if (!token) {
@@ -42,6 +57,14 @@ export async function GET(req: NextRequest) {
   const profil = mizacProfiller[payload.tip];
   if (!profil) {
     return NextResponse.json({ error: 'Geçersiz mizaç tipi' }, { status: 400 });
+  }
+
+  // 2. katman: token başına limit. PDF render'ı maxDuration 60s'lik pahalı bir
+  // iş; geçerli bir token 7 gün boyunca bunu sınırsız tetikleyebilmemeli.
+  // Saatte 10, normal bir alıcının birkaç indirmesi için fazlasıyla yeterli.
+  const tokenAnahtari = `rapor-token:${payload.orderId ?? payload.email}`;
+  if (!rateLimit(tokenAnahtari, { limit: 10, windowMs: 60 * 60_000 })) {
+    return cokFazlaIstek(600);
   }
 
   try {

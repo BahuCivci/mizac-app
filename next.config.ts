@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // PDF fontları çalışma anında dosya sisteminden okunuyor; Next'in izleyicisi
+  // bunu koddan çıkaramadığı için serverless pakete elle dahil edilmeli.
+  outputFileTracingIncludes: {
+    '/api/rapor/indir': ['./lib/pdf/fonts/**'],
+  },
 };
 
 export default nextConfig;

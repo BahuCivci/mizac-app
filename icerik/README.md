@@ -32,10 +32,17 @@ kaynağına gidilebilir.
 
 ## Çıktı — `icerik/cikti/` (git'e girmez)
 
-- `takvim.csv` — Sheets/Excel'e aktarılabilir yayın takvimi
-- `postlar/<tarih>-<platform>-<biçim>-<konu>.md` — post başına hazır açıklama
-  metni, etiketler ve (video ise) sahne sahne senaryo
-- `gorsel/*.png` — yüklemeye hazır görseller
+**Doğrudan kullanmak için:** `open icerik/cikti/index.html` — 429 postu
+tarayıcıda ay/platform/sütun süzerek gezersiniz, görseller önizlemeli,
+"Metni kopyala" ile açıklama panoya gider. Tek ihtiyacınız olan bu.
+
+| Yol | Ne işe yarar |
+|---|---|
+| `index.html` | Gezilebilir arayüz — kopyala-yapıştır ile post atmak için |
+| `zamanlayici/*.csv` | Meta Business Suite / Later / Buffer'a toplu yükleme |
+| `gorsel/*.png` | Yüklemeye hazır 814 görsel |
+| `postlar/*.md` | Post başına brief + video senaryosu |
+| `takvim.csv` | Sheets/Excel'e aktarılabilir genel takvim |
 
 Ölçüler: karusel/kare 1080×1350, reels/tiktok/shorts 1080×1920, uzun 1280×720.
 

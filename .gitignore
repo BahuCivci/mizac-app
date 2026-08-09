@@ -12,6 +12,7 @@
 
 # sosyal medya üretimi çıktısı (yeniden üretilebilir, 45 MB)
 /icerik/cikti
+/icerik/*.zip
 
 # kaynak materyal — "Varlığın Tahlili" OCR metni (telifli, repoya girmez)
 /kaynak

@@ -48,6 +48,8 @@ type Post = {
   etiketler: string;
   gorseller: string[];
   dosya: string;
+  /** Gün klasöründeki alt yol: 2026-08-10/instagram-karusel */
+  klasor: string;
 };
 
 /**
@@ -134,6 +136,7 @@ function dizinYaz(postlar: Post[]) {
       baslik: p.baslik,
       metin: p.metin + '\n' + p.etiketler,
       g: p.gorseller,
+      klasor: p.klasor,
       video: VIDEO_BICIMLERI.includes(p.bicim),
       md: `postlar/${p.dosya}.md`,
     })),
@@ -219,11 +222,11 @@ function ciz() {
       </div>
       <h2>\${kacir(p.baslik)}</h2>
       <div class="slayt">\${p.g.map((x, k) =>
-        '<figure><img loading="lazy" src="gorsel/' + x + '" alt=""><figcaption>' + (k+1) + '/' + p.g.length + '</figcaption></figure>').join('')}</div>
+        '<figure><img loading="lazy" src="gunluk/' + p.klasor + '/' + x + '" alt=""><figcaption>' + (k+1) + '/' + p.g.length + '</figcaption></figure>').join('')}</div>
       <pre id="m\${i}">\${kacir(p.metin)}</pre>
       <div class="alt">
         <button onclick="kopyala('m\${i}',this)">Metni kopyala</button>
-        \${p.g.map((x, k) => '<a class="dl" href="gorsel/' + x + '" download>Görsel ' + (k+1) + ' indir</a>').join('')}
+        \${p.g.map((x, k) => '<a class="dl" href="gunluk/' + p.klasor + '/' + x + '" download>Görsel ' + (k+1) + ' indir</a>').join('')}
         \${p.video ? '<a class="dl" href="' + p.md + '">Senaryo →</a>' : ''}
       </div>
     </div>\`).join('') || '<div class="bos">Bu gün için post yok.</div>';
@@ -302,7 +305,7 @@ function zamanlayiciYaz(postlar: Post[]) {
         k(p.metin),
         k(p.etiketler),
         k(p.gorseller.join(' | ')),
-        k(p.gorseller.map((g) => path.join(CIKTI, 'gorsel', g)).join(' | ')),
+        k(p.gorseller.map((g) => path.join(CIKTI, 'gunluk', p.klasor, g)).join(' | ')),
         k(p.baslik),
       ].join(',')),
     ];
@@ -338,6 +341,43 @@ function zamanlayiciYaz(postlar: Post[]) {
     '- Saatler varsayılan; kendi analitiğinize göre değiştirin.',
     '',
   ].join('\n'));
+}
+
+
+/**
+ * Her gün klasörünün köküne "bugün ne yapılacak" notu. Klasörü açan kişi
+ * uygulamayı çalıştırmadan, tarayıcı açmadan ne paylaşacağını görsün.
+ */
+function gunNotuYaz(postlar: Post[]) {
+  const gunler = new Map<string, Post[]>();
+  for (const p of postlar) {
+    if (!gunler.has(p.tarih)) gunler.set(p.tarih, []);
+    gunler.get(p.tarih)!.push(p);
+  }
+  const GUN_ADI = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+  for (const [tarih, liste] of gunler) {
+    const d = new Date(tarih + 'T00:00:00Z');
+    const satirlar = [
+      `${tarih} — ${GUN_ADI[d.getUTCDay()]}`,
+      `Bugün ${liste.length} post var.`,
+      '',
+    ];
+    liste.forEach((p, i) => {
+      const video = VIDEO_BICIMLERI.includes(p.bicim);
+      const alt = p.klasor.split('/')[1];
+      satirlar.push(
+        `${i + 1}) ${p.platform.toUpperCase()} · ${p.bicim}`,
+        `   klasör : ${alt}/`,
+        `   konu   : ${p.baslik}`,
+        video
+          ? `   yapılacak: VIDEO ÇEKİLECEK. kapak.png kapak karesi, SENARYO.md sahne planı.`
+          : `   yapılacak: ${p.gorseller.length} görseli (${p.gorseller.join(', ')}) sırayla yükle, METIN.txt'yi yapıştır.`,
+        '',
+      );
+    });
+    satirlar.push('Not: Karusel görsellerinin sırası önemli — son kare mizac.xyz çağrısıdır.');
+    fs.writeFileSync(path.join(CIKTI, 'gunluk', tarih, '_BUGUN.txt'), satirlar.join('\n'));
+  }
 }
 
 async function main() {
@@ -383,8 +423,18 @@ async function main() {
         etiketler: ETIKETLER[slot.platform].join(' '),
         gorseller: [],
         dosya: `${tarih}-${slot.platform}-${slot.bicim}-${atom.id}`,
+        klasor: '',
       });
     }
+  }
+
+  // Aynı günde aynı platformdan birden çok post olabilir; klasör adı çakışmasın
+  const gunSayaci = new Map<string, number>();
+  for (const post of postlar) {
+    const taban = `${post.tarih}/${post.platform}-${post.bicim}`;
+    const n = (gunSayaci.get(taban) ?? 0) + 1;
+    gunSayaci.set(taban, n);
+    post.klasor = n === 1 ? taban : `${taban}-${n}`;
   }
 
   // Görseller ve post dosyaları
@@ -392,6 +442,8 @@ async function main() {
   for (const post of postlar) {
     const renk = post.atom.mizac ? mizacProfiller[post.atom.mizac].renk : '#c4973a';
     const etiket = SUTUNLAR[post.atom.sutun].ad;
+    const gunDizin = path.join(CIKTI, 'gunluk', post.klasor);
+    fs.mkdirSync(gunDizin, { recursive: true });
 
     if (GORSEL_URET) {
       if (post.bicim === 'karusel') {
@@ -404,8 +456,8 @@ async function main() {
           kapanisSvg(post.bicim, renk, { su: toplam, toplam }),
         ];
         for (let i = 0; i < kareler.length; i++) {
-          const ad = `${post.dosya}-${i + 1}.png`;
-          await gorselYaz(kareler[i], path.join(CIKTI, 'gorsel', ad));
+          const ad = `${i + 1}.png`;
+          await gorselYaz(kareler[i], path.join(gunDizin, ad));
           post.gorseller.push(ad);
           uretilenGorsel++;
         }
@@ -416,8 +468,8 @@ async function main() {
           maddeler: VIDEO_BICIMLERI.includes(post.bicim) ? undefined : post.atom.maddeler.slice(0, 4),
           vurguRenk: renk,
         });
-        const ad = `${post.dosya}.png`;
-        await gorselYaz(svg, path.join(CIKTI, 'gorsel', ad));
+        const ad = VIDEO_BICIMLERI.includes(post.bicim) ? 'kapak.png' : '1.png';
+        await gorselYaz(svg, path.join(gunDizin, ad));
         post.gorseller.push(ad);
         uretilenGorsel++;
       }
@@ -451,6 +503,15 @@ async function main() {
       '',
     ].join('\n');
     fs.writeFileSync(path.join(CIKTI, 'postlar', `${post.dosya}.md`), md);
+
+    // Gün klasörü: paylaşmak için gereken her şey, uygulama çalıştırmadan
+    fs.writeFileSync(path.join(gunDizin, 'METIN.txt'), `${post.metin}\n${post.etiketler}\n`);
+    if (video) {
+      fs.writeFileSync(path.join(gunDizin, 'SENARYO.md'),
+        `# ${post.baslik}\n\n${post.tarih} · ${post.platform} · ${post.bicim}\n\n` +
+        `> Bu bir video postu. Kapak görseli ve senaryo hazır, videoyu çekmen gerekiyor.\n\n` +
+        videoSenaryosu(post.atom, post.bicim) + '\n');
+    }
   }
 
   // Takvim CSV
@@ -465,6 +526,7 @@ async function main() {
   ].join('\n');
   fs.writeFileSync(path.join(CIKTI, 'takvim.csv'), csv);
 
+  gunNotuYaz(postlar);
   dizinYaz(postlar);
   zamanlayiciYaz(postlar);
 

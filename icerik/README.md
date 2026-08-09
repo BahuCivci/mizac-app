@@ -35,17 +35,19 @@ kaynağına gidilebilir.
 
 ## Çıktı — `icerik/cikti/` (git'e girmez)
 
-**Doğrudan kullanmak için:** `open icerik/cikti/index.html` — gün gün akış.
-Açtığınızda bugünün (ya da en yakın günün) postunu gösterir. Sağ/sol ok
-tuşları, "Dün / Yarın" düğmeleri veya telefonda parmakla kaydırma ile
-gezinirsiniz. Her postta "Metni kopyala" ve her görsel için "indir" düğmesi
-vardır — klasörlerle uğraşmanız gerekmez.
+**Hiçbir şey çalıştırmadan kullanmak için:** `cikti/gunluk/` klasörünü açın.
+Her gün için bir klasör var; içinde `_BUGUN.txt` (o gün ne paylaşılacak),
+görseller (`1.png, 2.png…` yükleme sırasına göre) ve `METIN.txt` (açıklama +
+etiketler). Video günlerinde ayrıca `kapak.png` ve `SENARYO.md`.
+
+**Tarayıcıda gezinmeyi tercih ederseniz:** `open icerik/cikti/index.html` —
+gün gün akış, ok tuşları/kaydırma ile ilerler, metni kopyalar, görseli indirir.
 
 | Yol | Ne işe yarar |
 |---|---|
-| `index.html` | Gezilebilir arayüz — kopyala-yapıştır ile post atmak için |
+| `index.html` | Tarayıcıda gün gün akış (isteğe bağlı) |
 | `zamanlayici/*.csv` | Meta Business Suite / Later / Buffer'a toplu yükleme |
-| `gorsel/*.png` | Yüklemeye hazır 814 görsel |
+| `gunluk/<tarih>/` | Gün gün klasörler — görseller + METIN.txt + senaryo |
 | `postlar/*.md` | Post başına brief + video senaryosu |
 | `takvim.csv` | Sheets/Excel'e aktarılabilir genel takvim |
 

@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# sosyal medya üretimi çıktısı (yeniden üretilebilir, 45 MB)
+/icerik/cikti
+
 # kaynak materyal — "Varlığın Tahlili" OCR metni (telifli, repoya girmez)
 /kaynak
 

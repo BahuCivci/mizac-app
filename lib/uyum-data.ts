@@ -1,4 +1,4 @@
-import { MizacTip } from '@/lib/mizac-data';
+import type { MizacTip } from './mizac-data';
 
 // Mizaç uyum matrisi ve karşılaştırma sayfalarının kanonik listesi.
 // Tek kaynak: /uyum, /karsilastir, OG image'lar ve sitemap buradan okur.

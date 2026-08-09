@@ -1,0 +1,6 @@
+{
+  "name": "mizac-icerik",
+  "private": true,
+  "type": "module",
+  "description": "Sosyal medya içerik üreticisi — uygulamanın verisinden post takvimi ve görsel üretir. Next uygulamasından bağımsızdır."
+}

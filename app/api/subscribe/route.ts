@@ -1,16 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { rateLimit, istemciIp, gecerliEposta } from '@/lib/rate-limit';
 
 export async function POST(req: NextRequest) {
-  const resend = new Resend(process.env.RESEND_API_KEY);
+  // Limit yoksa bu uç herhangi bir adrese sınırsız "hoş geldin" maili
+  // gönderttirebilir ve Resend audience'ını şişirebilir.
+  if (!rateLimit(istemciIp(req), { limit: 5, windowMs: 60_000 })) {
+    return NextResponse.json(
+      { error: 'Çok fazla istek. Lütfen bir dakika bekleyin.' },
+      { status: 429 }
+    );
+  }
+
   const AUDIENCE_ID = process.env.RESEND_AUDIENCE_ID || '';
   try {
     const { email, tip } = await req.json();
 
-    if (!email || !email.includes('@')) {
+    if (!gecerliEposta(email)) {
       return NextResponse.json({ error: 'Geçersiz email' }, { status: 400 });
     }
+
+    // Resend istemcisi doğrulamadan sonra kurulur: anahtar tanımlı değilse
+    // constructor hata atıyor ve geçersiz girdiler 400 yerine 500 dönüyordu
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
     const profil = tip ? mizacProfiller[tip as MizacTip] : null;
 

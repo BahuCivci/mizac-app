@@ -30,6 +30,12 @@ export async function generateMetadata({ params }: { params: Promise<{ tip: stri
   return {
     title,
     description,
+    // Üst layout (app/sonuc/layout.tsx) kişisel sonuç sayfası için noindex
+    // veriyor; bu statik mizaç sayfaları ise indekslenmek üzere var
+    // (generateStaticParams + kendi OG image'ları + sitemap kaydı).
+    // Miras alınan noindex burada açıkça geri alınır.
+    robots: { index: true, follow: true },
+    alternates: { canonical: `${siteUrl}/sonuc/${tip}` },
     openGraph: {
       title,
       description,

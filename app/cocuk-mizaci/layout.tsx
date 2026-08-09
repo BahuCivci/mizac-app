@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Çocuk Mizacı · Varlığın Tahlili',
   description: 'Çocuğunuzun mizacını tanıyın: Safravî, Demevî, Balgamî ve Sevdavî çocukların bebeklik, çocukluk ve okul dönemleri. Ebeveynlere rehber bilgiler.',
+  alternates: { canonical: 'https://mizac.xyz/cocuk-mizaci' },
   keywords: ['çocuk mizacı', 'bebeğimin mizacı', 'çocuk karakteri', 'mizaç ebeveyn', 'safravi çocuk', 'demevi çocuk', 'balgami çocuk', 'sevdavi çocuk'],
   openGraph: {
     title: 'Çocuğunuzun Mizacı',

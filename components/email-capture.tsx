@@ -66,7 +66,9 @@ export function EmailCapture({ title, subtitle, cta = 'Gönder', tip, dark = tru
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
-            className="flex-1 rounded-full px-4 py-3 text-sm focus:outline-none"
+            // min-w-0 olmadan flex-1 input, input'un içsel genişliğinin altına
+            // inemiyor ve dar ekranda satırı taşırıyor
+            className="flex-1 min-w-0 rounded-full px-4 py-3 text-sm focus:outline-none"
             style={{
               background: dark ? 'rgba(255,255,255,0.08)' : 'white',
               color: dark ? '#fff' : '#3d2c0e',

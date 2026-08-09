@@ -18,12 +18,19 @@ export async function POST(req: NextRequest) {
   }
 
   // HMAC-SHA256 imza doğrulaması
-  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET!;
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(rawBody);
-  const digest = hmac.digest('hex');
+  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+  if (!secret) {
+    // Sır tanımlı değilse imza doğrulanamaz — isteği kabul etme
+    console.error('LEMONSQUEEZY_WEBHOOK_SECRET tanımlı değil');
+    return NextResponse.json({ error: 'Sunucu yapılandırma hatası' }, { status: 500 });
+  }
 
-  if (digest !== signature) {
+  const digest = crypto.createHmac('sha256', secret).update(rawBody).digest();
+  const gelen = Buffer.from(signature, 'hex');
+
+  // Sabit zamanlı karşılaştırma; timingSafeEqual uzunluk farkında hata attığı
+  // için önce uzunluk kontrol edilir
+  if (gelen.length !== digest.length || !crypto.timingSafeEqual(gelen, digest)) {
     console.error('Webhook imza hatası');
     return NextResponse.json({ error: 'Geçersiz imza' }, { status: 400 });
   }

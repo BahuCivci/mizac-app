@@ -24,7 +24,10 @@ export async function GET(req: NextRequest) {
 
   let payload: JwtPayload;
   try {
-    payload = jwt.verify(token, process.env.PDF_JWT_SECRET!) as JwtPayload;
+    // Algoritma sabitlenir; aksi halde token'ın kendi header'ındaki alg kabul edilir
+    payload = jwt.verify(token, process.env.PDF_JWT_SECRET!, {
+      algorithms: ['HS256'],
+    }) as JwtPayload;
   } catch {
     return new NextResponse(
       `<!DOCTYPE html><html><body style="font-family:sans-serif;text-align:center;padding:60px;background:#1a1207;color:#f5f0e8;">

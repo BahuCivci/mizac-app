@@ -238,7 +238,7 @@ export default function HastalıklarPage() {
                 Bu {secili.isim} mizacının sesi.
               </h2>
               <p className="text-lg font-semibold mb-2" style={{ color: '#3d2c0e' }}>
-                "{secili.aci}"
+                &ldquo;{secili.aci}&rdquo;
               </p>
               <p className="text-base leading-relaxed max-w-xl mx-auto" style={{ color: '#5c3d1e' }}>
                 {secili.aciSonuc}

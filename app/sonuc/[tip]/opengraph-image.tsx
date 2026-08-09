@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 
 export const size = { width: 1200, height: 630 };
@@ -65,7 +66,8 @@ export default async function Image({ params }: { params: Promise<{ tip: string 
             border: `2px solid ${profil.renk}40`,
           }}
         >
-          <span style={{ fontSize: 18, color: profil.renk, fontWeight: 700 }}>✦ Mizaç Testi Sonucu</span>
+          <OgStar size={18} color={profil.renk} />
+          <span style={{ fontSize: 18, color: profil.renk, fontWeight: 700, marginLeft: 10 }}>Mizaç Testi Sonucu</span>
         </div>
 
         {/* Emoji */}

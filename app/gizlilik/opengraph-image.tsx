@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 
 export const runtime = 'edge';
 export const alt = 'Gizlilik Politikası | mizac.xyz';
@@ -21,8 +22,9 @@ export default function OGImage() {
           border: '1px solid #3d2c0e',
           background: 'rgba(255,255,255,0.03)',
         }}>
-          <div style={{ fontSize: 52, fontWeight: 900, color: '#c4973a', display: 'flex', letterSpacing: 2 }}>
-            ✦ Mizaç
+          <div style={{ fontSize: 52, fontWeight: 900, color: '#c4973a', display: 'flex', alignItems: 'center', gap: 16, letterSpacing: 2 }}>
+            <OgStar size={44} color="#c4973a" />
+            Mizaç
           </div>
           <div style={{ width: 120, height: 1, background: '#3d2c0e', display: 'flex' }} />
           <div style={{ fontSize: 40, fontWeight: 700, color: '#f5f0e8', display: 'flex' }}>

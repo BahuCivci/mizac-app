@@ -7,7 +7,9 @@ export default defineConfig({
   timeout: 30000,
   reporter: [['html', { open: 'never' }], ['list']],
   use: {
-    baseURL: 'https://mizac.xyz',
+    // Varsayılan canlı site; yerel build'i test etmek için:
+    //   PLAYWRIGHT_BASE_URL=http://localhost:3000 npx playwright test
+    baseURL: process.env.PLAYWRIGHT_BASE_URL || 'https://mizac.xyz',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { sorular, MizacTip, mizacProfiller } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
@@ -31,10 +31,19 @@ export default function TestPage() {
   const [kayitliIlerleme, setKayitliIlerleme] = useState<{ secimler: (number | undefined)[]; soru: number } | null>(null);
 
   // Önceki sonuç + kayıtlı ilerleme yükle
+  // localStorage SSR'da yok; lazy initializer hydration uyumsuzluğu yaratır.
+  // Bu yüzden mount sonrası tek sefer okunur — cascading render riski yok.
   useEffect(() => {
     try {
       const kayit = localStorage.getItem('mizac_sonuc');
-      if (kayit) setOncekiSonuc(JSON.parse(kayit));
+      if (kayit) {
+        const parsed = JSON.parse(kayit);
+        // Bozuk veya eski kayıt: bilinmeyen tip render'da patlar
+        if (parsed?.tip && mizacProfiller[parsed.tip as MizacTip]) {
+          // eslint-disable-next-line react-hooks/set-state-in-effect
+          setOncekiSonuc(parsed);
+        }
+      }
 
       const ilerleme = localStorage.getItem('mizac_test_ilerleme');
       if (ilerleme) {
@@ -73,7 +82,7 @@ export default function TestPage() {
   const ilerleme = (aktifSoru / sorular.length) * 100;
   const tr = lang === 'tr';
 
-  function secenekSec(index: number) {
+  const secenekSec = useCallback((index: number) => {
     const yeniSecimler = [...seciliSecenekler];
     yeniSecimler[aktifSoru] = index;
     setSeciliSecenekler(yeniSecimler);
@@ -93,13 +102,13 @@ export default function TestPage() {
         router.push(`/sonuc?tip=${kazanan}&puanlar=${puanStr}`);
       }
     }, 400);
-  }
+  }, [seciliSecenekler, aktifSoru, router]);
 
-  function geriGit() {
+  const geriGit = useCallback(() => {
     if (aktifSoru > 0) {
       setAktifSoru(aktifSoru - 1);
     }
-  }
+  }, [aktifSoru]);
 
   // Klavye navigasyonu: 1/2/3/4 tuşları ile cevap seç
   useEffect(() => {
@@ -115,7 +124,7 @@ export default function TestPage() {
     }
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
-  }, [basladi, animasyon, aktifSoru, soru]);
+  }, [basladi, animasyon, aktifSoru, soru, secenekSec, geriGit]);
 
   const oncekiProfil = oncekiSonuc ? mizacProfiller[oncekiSonuc.tip] : null;
 

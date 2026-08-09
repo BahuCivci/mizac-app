@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 import { getBlogYazisi } from '@/lib/blog-data';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 
@@ -56,7 +57,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
               borderRadius: 100,
             }}
           >
-            <span style={{ fontSize: 18, color: '#c4973a' }}>✦</span>
+            <OgStar size={18} color="#c4973a" />
             <span style={{ fontSize: 16, color: '#c4973a', letterSpacing: '0.2em', fontWeight: 700 }}>
               MİZAÇ BLOG
             </span>

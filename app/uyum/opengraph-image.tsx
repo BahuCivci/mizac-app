@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 
 export const runtime = 'edge';
 export const size = { width: 1200, height: 630 };
@@ -34,7 +35,7 @@ export default function OGImage() {
                 <div style={{ fontSize: 18, color: m.c, fontWeight: 700, display: 'flex' }}>{m.n}</div>
               </div>
               {i < arr.length - 1 && (
-                <div style={{ fontSize: 28, color: '#c4973a', display: 'flex', opacity: 0.5 }}>✦</div>
+                <div style={{ display: 'flex', opacity: 0.5 }}><OgStar size={28} color="#c4973a" /></div>
               )}
             </div>
           ))}

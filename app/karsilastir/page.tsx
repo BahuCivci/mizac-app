@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { mizacProfiller } from '@/lib/mizac-data';
+import { uyumVerisi, kombinasyonlar } from '@/lib/uyum-data';
 
 export const metadata: Metadata = {
   title: 'Mizaç Uyum Karşılaştırması · Hangi Mizaçlar Uyumlu?',
@@ -8,14 +9,6 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://mizac.xyz/karsilastir' },
 };
 
-const kombinasyonlar = [
-  { slug: 'safravi-vs-balgami', a: 'safravi' as MizacTip, b: 'balgami' as MizacTip, puan: 92, baslik: 'Mükemmel Denge' },
-  { slug: 'demevi-vs-sevdavi', a: 'demevi' as MizacTip, b: 'sevdavi' as MizacTip, puan: 90, baslik: 'Zıt Kutupların Çekimi' },
-  { slug: 'balgami-vs-sevdavi', a: 'balgami' as MizacTip, b: 'sevdavi' as MizacTip, puan: 76, baslik: 'Soğuk Mizaçların Uyumu' },
-  { slug: 'safravi-vs-demevi', a: 'safravi' as MizacTip, b: 'demevi' as MizacTip, puan: 68, baslik: 'Sıcak Dinamizm' },
-  { slug: 'demevi-vs-balgami', a: 'demevi' as MizacTip, b: 'balgami' as MizacTip, puan: 48, baslik: 'Hız Farkı' },
-  { slug: 'safravi-vs-sevdavi', a: 'safravi' as MizacTip, b: 'sevdavi' as MizacTip, puan: 38, baslik: 'Zor Ama Derin' },
-];
 
 function uyumRenk(puan: number) {
   if (puan >= 85) return { bar: '#16a34a', label: '#dcfce7', text: '#15803d' };
@@ -51,7 +44,8 @@ export default function KarsilastirIndexPage() {
           {kombinasyonlar.map((k) => {
             const profilA = mizacProfiller[k.a];
             const profilB = mizacProfiller[k.b];
-            const renk = uyumRenk(k.puan);
+            const uyum = uyumVerisi[k.a][k.b];
+            const renk = uyumRenk(uyum.puan);
 
             return (
               <Link
@@ -77,7 +71,7 @@ export default function KarsilastirIndexPage() {
                       className="text-xs px-2 py-0.5 rounded-full font-semibold"
                       style={{ background: renk.label, color: renk.text }}
                     >
-                      {k.baslik}
+                      {uyum.baslik}
                     </span>
                   </div>
                   {/* Puan çubuğu */}
@@ -85,11 +79,11 @@ export default function KarsilastirIndexPage() {
                     <div className="flex-1 h-2 rounded-full" style={{ background: '#e5d5b0' }}>
                       <div
                         className="h-2 rounded-full transition-all"
-                        style={{ width: `${k.puan}%`, background: renk.bar }}
+                        style={{ width: `${uyum.puan}%`, background: renk.bar }}
                       />
                     </div>
                     <span className="text-sm font-bold flex-shrink-0" style={{ color: renk.text }}>
-                      %{k.puan}
+                      %{uyum.puan}
                     </span>
                   </div>
                 </div>

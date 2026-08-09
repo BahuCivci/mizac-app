@@ -13,17 +13,27 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ['education', 'lifestyle', 'health'],
     lang: 'tr',
     icons: [
+      // Boyutlar gerçek çıktıyla eşleşmeli: app/icon.tsx 512x512,
+      // app/apple-icon.tsx 180x180 üretir.
       {
-        src: '/icon',
-        sizes: '192x192',
+        src: '/apple-icon',
+        sizes: '180x180',
         type: 'image/png',
-        purpose: 'maskable',
+        purpose: 'any',
       },
       {
         src: '/icon',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any',
+      },
+      // Aynı görsel maskable olarak da uygun: tam taşan gradient zemin,
+      // sembol ortada ve güvenli alanın içinde.
+      {
+        src: '/icon',
+        sizes: '512x512',
+        type: 'image/png',
+        purpose: 'maskable',
       },
     ],
     shortcuts: [

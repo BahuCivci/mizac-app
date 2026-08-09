@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -32,8 +33,9 @@ export default function Image() {
           background: '#c4973a18', border: '1.5px solid #c4973a40',
           padding: '8px 24px', borderRadius: 100, marginBottom: 32,
         }}>
-          <span style={{ fontSize: 16, color: '#c4973a', letterSpacing: '0.25em', fontWeight: 700 }}>
-            ✦ MİZAÇ TESTİ
+          <OgStar size={16} color="#c4973a" />
+          <span style={{ fontSize: 16, color: '#c4973a', letterSpacing: '0.25em', fontWeight: 700, marginLeft: 10 }}>
+            MİZAÇ TESTİ
           </span>
         </div>
 

@@ -1,17 +1,10 @@
 import { ImageResponse } from 'next/og';
-import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { mizacProfiller } from '@/lib/mizac-data';
+import { uyumVerisi, kombinasyonlar } from '@/lib/uyum-data';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
-const kombinasyonlar = [
-  { slug: 'safravi-vs-demevi', a: 'safravi' as MizacTip, b: 'demevi' as MizacTip, puan: 68 },
-  { slug: 'safravi-vs-balgami', a: 'safravi' as MizacTip, b: 'balgami' as MizacTip, puan: 92 },
-  { slug: 'safravi-vs-sevdavi', a: 'safravi' as MizacTip, b: 'sevdavi' as MizacTip, puan: 38 },
-  { slug: 'demevi-vs-balgami', a: 'demevi' as MizacTip, b: 'balgami' as MizacTip, puan: 48 },
-  { slug: 'demevi-vs-sevdavi', a: 'demevi' as MizacTip, b: 'sevdavi' as MizacTip, puan: 90 },
-  { slug: 'balgami-vs-sevdavi', a: 'balgami' as MizacTip, b: 'sevdavi' as MizacTip, puan: 76 },
-];
 
 export async function generateImageMetadata() {
   return kombinasyonlar.map((k) => ({
@@ -26,7 +19,7 @@ export default function OGImage({ id }: { id: string }) {
   const kombo = kombinasyonlar.find((k) => k.slug === id) ?? kombinasyonlar[0];
   const a = mizacProfiller[kombo.a];
   const b = mizacProfiller[kombo.b];
-  const puan = kombo.puan;
+  const puan = uyumVerisi[kombo.a][kombo.b].puan;
 
   const barColor = puan >= 85 ? '#16a34a' : puan >= 65 ? '#2563eb' : puan >= 50 ? '#d97706' : '#dc2626';
 

@@ -434,7 +434,6 @@ function SonucIcerik() {
 
   const { lang } = useLang();
   const profil = mizacProfiller[tip];
-  if (!profil) return null;
   const tr = lang === 'tr';
 
   let puanlar: Record<MizacTip, number> = { safravi: 0, demevi: 0, balgami: 0, sevdavi: 0 };
@@ -459,17 +458,24 @@ function SonucIcerik() {
   const [showSticky, setShowSticky] = useState(false);
 
   // Sonucu localStorage'a kaydet
+  // puanlar bağımlılığa eklenmez: her render'da yeniden kurulan bir nesne olduğu
+  // için döngü yaratır; kaynağı olan puanlarStr zaten bağımlılıkta.
   useEffect(() => {
-    if (tip && puanlarStr) {
+    if (profil && tip && puanlarStr) {
       localStorage.setItem('mizac_sonuc', JSON.stringify({ tip, puanlar, tarih: Date.now() }));
     }
-  }, [tip, puanlarStr]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profil, tip, puanlarStr]);
 
   useEffect(() => {
     const onScroll = () => setShowSticky(window.scrollY > 500);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  // Geçersiz/eksik tip — tüm hook'lar çağrıldıktan SONRA çık, yoksa
+  // render'lar arasında hook sayısı değişir ve React hata verir.
+  if (!profil) return null;
 
   return (
     <main className="min-h-screen px-4 py-16" style={{ background: 'var(--background)' }}>

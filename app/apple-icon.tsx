@@ -1,10 +1,10 @@
 import { ImageResponse } from 'next/og';
 import { OgStar } from '@/lib/og-star';
 
-export const size = { width: 512, height: 512 };
+export const size = { width: 180, height: 180 };
 export const contentType = 'image/png';
 
-export default function Icon() {
+export default function AppleIcon() {
   return new ImageResponse(
     (
       <div
@@ -15,10 +15,10 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           background: 'linear-gradient(135deg, #c4973a 0%, #8b5e1e 100%)',
-          borderRadius: 112,
+          borderRadius: 40,
         }}
       >
-        <OgStar size={300} color="white" />
+        <OgStar size={110} color="white" />
       </div>
     ),
     { ...size }

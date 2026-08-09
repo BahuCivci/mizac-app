@@ -17,7 +17,8 @@ URL: **mizac.xyz** — Vercel üzerinde deploy edilmiş.
 | Dosya | İçerik |
 |-------|--------|
 | `lib/mizac-data.ts` | Tüm mizaç profil verileri — `MizacTip`, `mizacProfiller` |
-| `lib/blog-data.ts` | Tüm blog yazıları (33 adet) |
+| `lib/blog-data.ts` | Tüm blog yazıları (31 adet) |
+| `lib/uyum-data.ts` | Mizaç uyum matrisi + karşılaştırma kombinasyonları (tek kaynak) |
 | `app/sitemap.ts` | Sitemap — yeni sayfa eklerken buraya da ekle |
 | `components/footer.tsx` | Footer linkleri — yeni sayfa eklerken buraya da ekle |
 | `app/page.tsx` | Ana sayfa — Keşfet kartları grid'i |

@@ -6,9 +6,8 @@ import { LangProvider } from "@/lib/lang-context";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { PWARegister } from "@/components/pwa-register";
 
-// AdSense client ID — ca-pub-XXXXXXXXXXXXXXXX ile değiştirin
-const ADSENSE_CLIENT = 'ca-pub-XXXXXXXXXXXXXXXX';
 const GA_ID = 'G-N8NNVEMSEQ';
 
 const geistSans = Geist({
@@ -113,6 +112,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        {/* iPhone PWA meta tag'leri */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Mizaç" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#c4973a" />
         <link rel="alternate" type="application/rss+xml" title="Mizaç Blog RSS" href={`${siteUrl}/rss`} />
         <link rel="alternate" hrefLang="tr" href={siteUrl} />
         <link rel="alternate" hrefLang="en" href={siteUrl} />
@@ -143,6 +148,7 @@ export default function RootLayout({
             <Footer />
           </LangProvider>
           <Analytics />
+          <PWARegister />
         </body>
     </html>
   );

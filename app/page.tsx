@@ -12,10 +12,18 @@ export default function Home() {
   const tr = lang === 'tr';
   const [oncekiSonuc, setOncekiSonuc] = useState<{ tip: MizacTip } | null>(null);
 
+  // localStorage SSR'da yok; lazy initializer hydration uyumsuzluğu yaratır.
+  // Bu yüzden mount sonrası tek sefer okunur — cascading render riski yok.
   useEffect(() => {
     try {
       const kayit = localStorage.getItem('mizac_sonuc');
-      if (kayit) setOncekiSonuc(JSON.parse(kayit));
+      if (!kayit) return;
+      const parsed = JSON.parse(kayit);
+      // Bozuk veya eski kayıt: bilinmeyen tip render'da patlar
+      if (parsed?.tip && mizacProfiller[parsed.tip as MizacTip]) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setOncekiSonuc(parsed);
+      }
     } catch {}
   }, []);
 

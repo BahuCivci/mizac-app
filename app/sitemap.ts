@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { mizacProfiller } from '@/lib/mizac-data';
 import { blogYazilari } from '@/lib/blog-data';
+import { kombinasyonlar } from '@/lib/uyum-data';
 
 const siteUrl = 'https://mizac.xyz';
 
@@ -15,6 +16,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const blogPages = blogYazilari.map((y) => ({
     url: `${siteUrl}/blog/${y.slug}`,
     lastModified: new Date(y.tarih),
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  // 6 uyum karşılaştırma sayfası — statik üretiliyor ve indekslenebilir
+  const karsilastirPages = kombinasyonlar.map((k) => ({
+    url: `${siteUrl}/karsilastir/${k.slug}`,
+    lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
@@ -65,6 +74,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/gizlilik`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
     ...mizacPages,
     ...blogPages,
+    ...karsilastirPages,
     ...sonucPages,
   ];
 }

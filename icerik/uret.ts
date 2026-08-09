@@ -28,7 +28,14 @@ const arg = (ad: string, varsayilan?: string) => {
   const i = process.argv.indexOf(`--${ad}`);
   return i >= 0 ? process.argv[i + 1] : varsayilan;
 };
-const YIL = Number(arg('yil', String(new Date().getFullYear() + 1)));
+/** Varsayılan başlangıç: yarın. Takvimin ocakta başlaması için sebep yok. */
+function yarin(): string {
+  const d = new Date();
+  d.setUTCDate(d.getUTCDate() + 1);
+  return d.toISOString().slice(0, 10);
+}
+const BASLANGIC = arg('baslangic', yarin())!;
+const GUN_SAYISI = Number(arg('gun', '365'));
 const GORSEL_URET = !process.argv.includes('--gorselsiz');
 
 type Post = {
@@ -111,109 +118,151 @@ async function gorselYaz(svg: string, hedef: string) {
  * Görseller göreli yolla gömülür — dosyayı çift tıklayıp açmak yeterli.
  */
 function dizinYaz(postlar: Post[]) {
-  const veri = postlar.map((p) => ({
-    t: p.tarih,
-    pl: p.platform,
-    b: p.bicim,
-    s: SUTUNLAR[p.atom.sutun].ad,
-    m: p.atom.mizac ? mizacProfiller[p.atom.mizac].isim : '',
-    baslik: p.baslik,
-    metin: p.metin,
-    etiket: p.etiketler,
-    g: p.gorseller,
-    md: `postlar/${p.dosya}.md`,
+  // Gün gün gruplanmış akış: bir ekranda bir gün, sırayla ilerler.
+  const gunler = new Map<string, Post[]>();
+  for (const p of postlar) {
+    if (!gunler.has(p.tarih)) gunler.set(p.tarih, []);
+    gunler.get(p.tarih)!.push(p);
+  }
+  const veri = [...gunler.entries()].map(([tarih, liste]) => ({
+    t: tarih,
+    postlar: liste.map((p) => ({
+      pl: p.platform,
+      b: p.bicim,
+      s: SUTUNLAR[p.atom.sutun].ad,
+      m: p.atom.mizac ? mizacProfiller[p.atom.mizac].isim : '',
+      baslik: p.baslik,
+      metin: p.metin + '\n' + p.etiketler,
+      g: p.gorseller,
+      video: VIDEO_BICIMLERI.includes(p.bicim),
+      md: `postlar/${p.dosya}.md`,
+    })),
   }));
 
   const html = `<!doctype html><html lang="tr"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mizaç · ${YIL} İçerik Takvimi</title>
+<title>Mizaç · Günlük Post Akışı</title>
 <style>
 :root{--bg:#14100a;--kart:#1f1810;--gold:#c4973a;--cream:#f5f0e8;--muted:#9a8060;--kenar:#3d2c0e}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--cream);font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
-header{position:sticky;top:0;background:#0f0a04;border-bottom:1px solid var(--kenar);padding:14px 20px;z-index:5}
-h1{margin:0 0 10px;font-size:19px;color:var(--gold)}
-.suz{display:flex;gap:8px;flex-wrap:wrap}
-select,input{background:var(--kart);color:var(--cream);border:1px solid var(--kenar);border-radius:8px;padding:7px 10px;font-size:14px}
-.sayac{color:var(--muted);font-size:13px;margin-left:auto;align-self:center}
-main{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;padding:18px;max-width:1600px;margin:0 auto}
-.kart{background:var(--kart);border:1px solid var(--kenar);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-.ust{padding:11px 13px;border-bottom:1px solid var(--kenar);display:flex;gap:7px;align-items:center;flex-wrap:wrap}
-.rozet{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--kenar);color:var(--muted)}
-.tarih{font-weight:700;color:var(--gold);font-size:13px}
-.gorseller{display:flex;gap:6px;overflow-x:auto;padding:11px 13px;scrollbar-width:thin}
-.gorseller img{height:190px;border-radius:8px;border:1px solid var(--kenar);cursor:zoom-in;flex:0 0 auto}
-.baslik{padding:0 13px;font-weight:600}
-pre{margin:10px 13px;padding:11px;background:#0f0a04;border-radius:8px;white-space:pre-wrap;font:12px/1.55 ui-monospace,Menlo,monospace;color:#e8d5b0;max-height:190px;overflow:auto}
-.alt{margin-top:auto;padding:11px 13px;display:flex;gap:8px;flex-wrap:wrap}
-button{background:var(--gold);color:#1a1207;border:0;border-radius:8px;padding:7px 12px;font-weight:700;cursor:pointer;font-size:13px}
+body{margin:0;background:var(--bg);color:var(--cream);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial}
+header{position:sticky;top:0;background:#0f0a04;border-bottom:1px solid var(--kenar);padding:12px 16px;display:flex;gap:12px;align-items:center;z-index:9}
+.gun{font-size:19px;font-weight:700;color:var(--gold)}
+.ilerleme{color:var(--muted);font-size:13px}
+nav{margin-left:auto;display:flex;gap:8px}
+button{background:var(--gold);color:#1a1207;border:0;border-radius:9px;padding:9px 15px;font-weight:700;cursor:pointer;font-size:14px}
 button.ikincil{background:transparent;color:var(--gold);border:1px solid var(--gold)}
-a{color:var(--gold)}
-dialog{border:0;background:transparent;padding:0;max-width:96vw;max-height:96vh}
+button:disabled{opacity:.35;cursor:default}
+main{max-width:760px;margin:0 auto;padding:18px 16px 90px}
+.post{background:var(--kart);border:1px solid var(--kenar);border-radius:16px;margin-bottom:20px;overflow:hidden}
+.ust{padding:13px 16px;border-bottom:1px solid var(--kenar);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.rozet{font-size:12px;padding:3px 9px;border-radius:99px;border:1px solid var(--kenar);color:var(--muted)}
+.pl{background:var(--gold);color:#1a1207;font-weight:700;border:0}
+.uyari{background:#4a2f0a;color:#f0c987;border:0}
+h2{margin:14px 16px 6px;font-size:19px}
+.slayt{display:flex;gap:10px;overflow-x:auto;padding:12px 16px;scroll-snap-type:x mandatory}
+.slayt figure{margin:0;flex:0 0 auto;scroll-snap-align:center;text-align:center}
+.slayt img{height:340px;border-radius:10px;border:1px solid var(--kenar);display:block}
+.slayt figcaption{font-size:11px;color:var(--muted);margin-top:5px}
+pre{margin:0 16px;padding:13px;background:#0f0a04;border-radius:10px;white-space:pre-wrap;font:13px/1.6 ui-monospace,Menlo,monospace;color:#e8d5b0}
+.alt{padding:13px 16px;display:flex;gap:9px;flex-wrap:wrap}
+a.dl{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:9px;padding:9px 15px;font-weight:700;font-size:14px;text-decoration:none;display:inline-block}
+.bos{text-align:center;color:var(--muted);padding:60px 20px}
+dialog{border:0;background:transparent;padding:0}
 dialog img{max-width:96vw;max-height:96vh;border-radius:10px}
-dialog::backdrop{background:#000c}
+dialog::backdrop{background:#000d}
+.atla{padding:0 16px 14px;display:flex;gap:8px;align-items:center}
+input[type=date]{background:var(--kart);color:var(--cream);border:1px solid var(--kenar);border-radius:8px;padding:7px 10px}
 </style></head><body>
 <header>
-  <h1>Mizaç · ${YIL} içerik takvimi — <span id="toplam"></span> post</h1>
-  <div class="suz">
-    <select id="fPlatform"><option value="">Tüm platformlar</option></select>
-    <select id="fAy"><option value="">Tüm aylar</option></select>
-    <select id="fSutun"><option value="">Tüm sütunlar</option></select>
-    <input id="fArama" placeholder="Başlıkta ara…" size="22">
-    <span class="sayac" id="sayac"></span>
+  <div>
+    <div class="gun" id="gunBaslik"></div>
+    <div class="ilerleme" id="ilerleme"></div>
   </div>
+  <nav>
+    <button class="ikincil" id="geri">‹ Dün</button>
+    <button id="ileri">Yarın ›</button>
+  </nav>
 </header>
-<main id="liste"></main>
+<div class="atla"><span class="ilerleme">Tarihe git:</span><input type="date" id="tarihSec"></div>
+<main id="icerik"></main>
 <dialog id="buyut"><img id="buyutImg" alt=""></dialog>
 <script>
-const P = ${JSON.stringify(veri)};
+const G = ${JSON.stringify(veri)};
+const GUNLER = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
 const AYLAR = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-const el = (id) => document.getElementById(id);
-el('toplam').textContent = P.length;
-const doldur = (sel, degerler) => degerler.forEach(d => { const o=document.createElement('option'); o.value=d; o.textContent=d; sel.appendChild(o); });
-doldur(el('fPlatform'), [...new Set(P.map(p=>p.pl))]);
-doldur(el('fSutun'), [...new Set(P.map(p=>p.s))].sort());
-AYLAR.forEach((a,i) => { const o=document.createElement('option'); o.value=String(i+1).padStart(2,'0'); o.textContent=a; el('fAy').appendChild(o); });
+const el = (i) => document.getElementById(i);
+const kacir = (t) => t.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let n = 0;
+
+function tarihYaz(iso) {
+  const d = new Date(iso + 'T00:00:00');
+  return d.getDate() + ' ' + AYLAR[d.getMonth()] + ' ' + d.getFullYear() + ', ' + GUNLER[d.getDay()];
+}
 
 function ciz() {
-  const pl=el('fPlatform').value, ay=el('fAy').value, su=el('fSutun').value, q=el('fArama').value.toLocaleLowerCase('tr');
-  const secili = P.filter(p =>
-    (!pl||p.pl===pl) && (!ay||p.t.slice(5,7)===ay) && (!su||p.s===su) &&
-    (!q||p.baslik.toLocaleLowerCase('tr').includes(q)));
-  el('sayac').textContent = secili.length + ' post gösteriliyor';
-  el('liste').innerHTML = secili.map((p,i) => \`
-    <div class="kart">
+  const g = G[n];
+  el('gunBaslik').textContent = tarihYaz(g.t);
+  el('ilerleme').textContent = (n + 1) + ' / ' + G.length + ' · bugün ' + g.postlar.length + ' post';
+  el('tarihSec').value = g.t;
+  el('geri').disabled = n === 0;
+  el('ileri').disabled = n === G.length - 1;
+
+  el('icerik').innerHTML = g.postlar.map((p, i) => \`
+    <div class="post">
       <div class="ust">
-        <span class="tarih">\${p.t}</span>
-        <span class="rozet">\${p.pl}</span>
+        <span class="rozet pl">\${p.pl}</span>
         <span class="rozet">\${p.b}</span>
         <span class="rozet">\${p.s}</span>
-        \${p.m?'<span class="rozet">'+p.m+'</span>':''}
+        \${p.m ? '<span class="rozet">' + p.m + '</span>' : ''}
+        \${p.video ? '<span class="rozet uyari">video çekilmeli — kapak + senaryo hazır</span>' : ''}
       </div>
-      <div class="gorseller">\${p.g.map(g=>'<img loading="lazy" src="gorsel/'+g+'" alt="">').join('')}</div>
-      <div class="baslik">\${p.baslik}</div>
-      <pre id="m\${i}">\${p.metin.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-
-\${p.etiket}</pre>
+      <h2>\${kacir(p.baslik)}</h2>
+      <div class="slayt">\${p.g.map((x, k) =>
+        '<figure><img loading="lazy" src="gorsel/' + x + '" alt=""><figcaption>' + (k+1) + '/' + p.g.length + '</figcaption></figure>').join('')}</div>
+      <pre id="m\${i}">\${kacir(p.metin)}</pre>
       <div class="alt">
         <button onclick="kopyala('m\${i}',this)">Metni kopyala</button>
-        <a class="rozet" href="\${p.md}">brief →</a>
+        \${p.g.map((x, k) => '<a class="dl" href="gorsel/' + x + '" download>Görsel ' + (k+1) + ' indir</a>').join('')}
+        \${p.video ? '<a class="dl" href="' + p.md + '">Senaryo →</a>' : ''}
       </div>
-    </div>\`).join('');
+    </div>\`).join('') || '<div class="bos">Bu gün için post yok.</div>';
+  window.scrollTo({ top: 0 });
+  location.hash = g.t;
 }
+
 function kopyala(id, btn) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>{
-    const e=btn.textContent; btn.textContent='Kopyalandı ✓'; setTimeout(()=>btn.textContent=e,1200);
+  navigator.clipboard.writeText(el(id).textContent).then(() => {
+    const e = btn.textContent; btn.textContent = 'Kopyalandı ✓';
+    setTimeout(() => btn.textContent = e, 1200);
   });
 }
-document.addEventListener('click', e => {
-  if (e.target.tagName==='IMG' && e.target.closest('.gorseller')) {
-    el('buyutImg').src = e.target.src; el('buyut').showModal();
-  }
+el('geri').onclick = () => { if (n > 0) { n--; ciz(); } };
+el('ileri').onclick = () => { if (n < G.length - 1) { n++; ciz(); } };
+el('tarihSec').onchange = (e) => { const i = G.findIndex(x => x.t === e.target.value); if (i >= 0) { n = i; ciz(); } };
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowLeft') el('geri').click();
+  if (e.key === 'ArrowRight') el('ileri').click();
 });
-el('buyut').addEventListener('click', ()=>el('buyut').close());
-['fPlatform','fAy','fSutun'].forEach(id=>el(id).addEventListener('change',ciz));
-el('fArama').addEventListener('input',ciz);
+document.addEventListener('click', (e) => {
+  if (e.target.tagName === 'IMG' && e.target.closest('.slayt')) { el('buyutImg').src = e.target.src; el('buyut').showModal(); }
+});
+el('buyut').onclick = () => el('buyut').close();
+// dokunmatik kaydırma
+let x0 = null;
+document.addEventListener('touchstart', (e) => x0 = e.changedTouches[0].clientX, { passive: true });
+document.addEventListener('touchend', (e) => {
+  if (x0 === null) return;
+  const fark = e.changedTouches[0].clientX - x0;
+  if (Math.abs(fark) > 90) (fark < 0 ? el('ileri') : el('geri')).click();
+  x0 = null;
+}, { passive: true });
+
+// adres çubuğundaki tarihe ya da bugüne en yakın güne aç
+const istenen = location.hash.slice(1);
+const bugun = new Date().toISOString().slice(0, 10);
+const bul = G.findIndex(x => x.t >= (istenen || bugun));
+n = bul >= 0 ? bul : 0;
 ciz();
 </script></body></html>`;
   fs.writeFileSync(path.join(CIKTI, 'index.html'), html);
@@ -306,8 +355,9 @@ async function main() {
   const sonrakiUyum = () => uyumAtomlari[ui++ % uyumAtomlari.length];
 
   const postlar: Post[] = [];
-  const baslangic = new Date(Date.UTC(YIL, 0, 1));
-  const bitis = new Date(Date.UTC(YIL, 11, 31));
+  const baslangic = new Date(BASLANGIC + 'T00:00:00Z');
+  const bitis = new Date(baslangic);
+  bitis.setUTCDate(bitis.getUTCDate() + GUN_SAYISI - 1);
 
   for (let d = new Date(baslangic); d <= bitis; d.setUTCDate(d.getUTCDate() + 1)) {
     const gun = d.getUTCDay();
@@ -422,7 +472,7 @@ async function main() {
   const sayac = (f: (p: Post) => string) =>
     postlar.reduce<Record<string, number>>((a, p) => { const k = f(p); a[k] = (a[k] || 0) + 1; return a; }, {});
 
-  console.log(`${YIL} yılı içerik planı üretildi`);
+  console.log(`İçerik planı üretildi: ${BASLANGIC} → ${bitis.toISOString().slice(0, 10)} (${GUN_SAYISI} gün)`);
   console.log(`  toplam post   : ${postlar.length}`);
   console.log(`  platform      : ${JSON.stringify(sayac((p) => p.platform))}`);
   console.log(`  biçim         : ${JSON.stringify(sayac((p) => p.bicim))}`);

@@ -5,10 +5,13 @@ görselleri üretir. Next uygulamasından **bağımsızdır** — siteyi build e
 çalıştırmaz, etkilemez. Uygulamanın verisini yalnızca *okur*.
 
 ```bash
-npm run icerik                  # gelecek yıl için üret
-npm run icerik -- --yil 2027    # belirli bir yıl
-npm run icerik -- --gorselsiz   # sadece takvim ve metinler (hızlı)
+npm run icerik                              # yarından itibaren 365 gün
+npm run icerik -- --baslangic 2026-09-01    # başka bir tarihten başlat
+npm run icerik -- --gun 90                  # sadece 90 günlük plan
+npm run icerik -- --gorselsiz               # sadece metinler (hızlı)
 ```
+
+Sonra: `open icerik/cikti/index.html`
 
 ## Neden böyle kurgulandı
 
@@ -32,9 +35,11 @@ kaynağına gidilebilir.
 
 ## Çıktı — `icerik/cikti/` (git'e girmez)
 
-**Doğrudan kullanmak için:** `open icerik/cikti/index.html` — 429 postu
-tarayıcıda ay/platform/sütun süzerek gezersiniz, görseller önizlemeli,
-"Metni kopyala" ile açıklama panoya gider. Tek ihtiyacınız olan bu.
+**Doğrudan kullanmak için:** `open icerik/cikti/index.html` — gün gün akış.
+Açtığınızda bugünün (ya da en yakın günün) postunu gösterir. Sağ/sol ok
+tuşları, "Dün / Yarın" düğmeleri veya telefonda parmakla kaydırma ile
+gezinirsiniz. Her postta "Metni kopyala" ve her görsel için "indir" düğmesi
+vardır — klasörlerle uğraşmanız gerekmez.
 
 | Yol | Ne işe yarar |
 |---|---|

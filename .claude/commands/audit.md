@@ -44,3 +44,13 @@ grep "href:" /Users/bahu/Documents/mizac-app/components/footer.tsx | grep -o "'/
 ```
 
 Tespit edilen tüm sorunları düzelt.
+
+## Dokunulmayacaklar
+
+- **Test sorularının puan ağırlıkları** (`lib/mizac-data.ts` → `sorular`): kitaptan
+  türetilmiştir. Mizaçlar arasında beklenen puan farkı kasıtlıdır, dengelemeye çalışma.
+- **Uyum matrisindeki açıklama/güçler/zorluklar metinleri** (`lib/uyum-data.ts`): her
+  mizacın kendi bakışından yazılmıştır, yön yön farklı olması normaldir. Puanlar ise
+  simetriktir ve öyle kalmalı.
+- **OG image'larda `runtime = 'edge'`**: bilerek kaldırıldı, geri ekleme — build
+  zamanında statik üretimi engelliyor.

@@ -304,6 +304,16 @@ export const mizacProfiller: Record<MizacTip, MizacProfil> = {
   },
 };
 
+/**
+ * Test soruları ve puanları *Varlığın Tahlili* kitabından türetilmiştir.
+ *
+ * Puan ağırlıklarını "dengelemek" için değiştirmeyin. Her mizacın ulaşılabilir
+ * maksimum puanı zaten eşittir (150). Buna karşılık karışık cevaplamada
+ * beklenen puan eşit değildir — safravi 41.0, demevi 48.5, balgami 43.8,
+ * sevdavi 46.5 — çünkü ikincil puanlar seçeneklere kitaptaki tanımlara göre
+ * dağıtılmıştır. Bu kasıtlıdır; otomatik denetimlerde "dengesizlik" olarak
+ * görünse de düzeltilecek bir hata değildir.
+ */
 export const sorular = [
   // --- FİZİKSEL ÖZELLİKLER ---
   {

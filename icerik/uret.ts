@@ -97,17 +97,20 @@ function videoSenaryosu(a: Atom, bicim: Bicim): string {
 function postMetni(a: Atom, platform: Platform): string {
   const p = a.mizac ? mizacProfiller[a.mizac] : null;
   const basSatir = p ? `${p.elementSembol} ${a.baslik}` : `✦ ${a.baslik}`;
-  const govde = a.maddeler.slice(0, 5).map((m) => `• ${m}`).join('\n');
+  // Açıklama kısa tutulur: içeriğin kendisi zaten görselin üstünde yazıyor.
+  // Uzun hali postlar/*.md içindeki brief'te duruyor.
+  const kanca = a.maddeler[0] ?? '';
   return [
     basSatir,
     '',
-    govde,
+    kanca.length > 160 ? kanca.slice(0, kanca.lastIndexOf(' ', 160)) + '…' : kanca,
+    '',
+    'Kaydır 👉' ,
     '',
     CTA[platform],
-    '',
-    `Kaynak: Varlığın Tahlili — Zeynep Işık Büyükbay · ${SITE}`,
   ].join('\n');
 }
+
 
 async function gorselYaz(svg: string, hedef: string) {
   await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(hedef);
@@ -419,7 +422,8 @@ async function main() {
         bicim: slot.bicim,
         atom,
         baslik: atom.baslik,
-        metin: postMetni(atom, slot.platform),
+        metin: postMetni(atom, slot.platform).replace(
+          'Kaydır 👉\n\n', slot.bicim === 'karusel' ? 'Kaydır 👉\n\n' : ''),
         etiketler: ETIKETLER[slot.platform].join(' '),
         gorseller: [],
         dosya: `${tarih}-${slot.platform}-${slot.bicim}-${atom.id}`,

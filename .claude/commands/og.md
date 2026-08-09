@@ -17,7 +17,7 @@ cat /Users/bahu/Documents/mizac-app/app/$ARGUMENTS/layout.tsx 2>/dev/null || ech
 **Şablon:**
 ```tsx
 import { ImageResponse } from 'next/og';
-export const runtime = 'edge';
+// runtime = 'edge' EKLEME — build zamanında statik üretimi engeller
 export const alt = 'Sayfa Başlığı | mizac.xyz';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';

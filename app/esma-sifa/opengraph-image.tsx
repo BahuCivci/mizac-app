@@ -1,6 +1,6 @@
 import { ImageResponse } from 'next/og';
+import { OgStar } from '@/lib/og-star';
 
-export const runtime = 'edge';
 export const alt = 'Esma & Şifa | mizac.xyz';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -15,11 +15,12 @@ export default function OGImage() {
         background: 'linear-gradient(135deg, #1a0a2e 0%, #2d1457 50%, #1a1207 100%)',
         fontFamily: 'serif',
       }}>
-        <div style={{
-          fontSize: 64, color: '#c4973a', display: 'flex', marginBottom: 16,
-          letterSpacing: 4, opacity: 0.9,
-        }}>
-          الأسماء الحسنى
+        {/* Burada Arapça "الأسماء الحسنى" vardı; satori bu script için font
+            çözemeyip (lookupType 5 / substFormat 3) görseli tamamen boş
+            döndürüyordu. Arapça geri istenirse satori'nin desteklediği bir
+            font dosyası ImageResponse'un fonts seçeneğiyle verilmeli. */}
+        <div style={{ display: 'flex', marginBottom: 20, opacity: 0.9 }}>
+          <OgStar size={64} color="#c4973a" />
         </div>
         <div style={{ fontSize: 72, fontWeight: 900, color: '#f5f0e8', display: 'flex', marginBottom: 12 }}>
           Esma-i Hüsna & Şifa

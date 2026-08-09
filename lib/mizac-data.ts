@@ -377,15 +377,14 @@ export const sorular = [
     ],
   },
   {
-    id: 6,
-    kategori: 'fiziksel',
+    id: 6, kategori: 'fiziksel',
     soru: 'Terleme düzeyiniz nasıldır?',
     soruEn: 'How much do you sweat?',
     secenekler: [
-      { metin: 'Çabuk ve çok terliyorum; ter bazen keskin kokuyor', metinEn: 'I sweat quickly and heavily; sweat can sometimes smell sharp', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
-      { metin: 'Normal düzeyde terliyorum; tatlımsı bir koku var', metinEn: 'I sweat normally; with a slightly sweet scent', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
-      { metin: 'Kolay terlerim ve ter kokusu belirgindir', metinEn: 'I sweat easily and the odor is noticeable', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
-      { metin: 'Az terlerim; cildim çoğu zaman kuru kalır', metinEn: 'I sweat little; my skin stays mostly dry', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Az terlerim; terim kurudur, ama başım ve saç derim yağlanır', metinEn: 'I sweat little and my sweat is dry, but my scalp gets oily', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
+      { metin: 'Kolay ve bol terlerim; sıcakta hemen ısınırım', metinEn: 'I sweat easily and heavily; heat gets to me fast', puan: { safravi: 1, demevi: 3, balgami: 1, sevdavi: 0 } },
+      { metin: 'Terlerim ve terim soğuktur; kokusu belirgin olabilir', metinEn: 'I do sweat and my sweat is cold; the odor can be noticeable', puan: { safravi: 0, demevi: 1, balgami: 3, sevdavi: 0 } },
+      { metin: 'Neredeyse hiç terlemem; cildim çoğu zaman kuru kalır', metinEn: 'I barely sweat at all; my skin stays dry', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
   {
@@ -572,15 +571,14 @@ export const sorular = [
     ],
   },
   {
-    id: 22,
-    kategori: 'calisma',
+    id: 22, kategori: 'calisma',
     soru: 'Detaylara verdiğiniz önem nasıl?',
     soruEn: 'How much attention do you pay to details?',
     secenekler: [
-      { metin: 'Büyük resme odaklanırım; detaylar başkalarının işi', metinEn: 'I focus on the big picture; details are for others', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
-      { metin: 'Genel hatları görürüm; ayrıntıları çabuk unuturum', metinEn: 'I see the broad strokes; I quickly forget the details', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
-      { metin: 'Ayrıntılara dikkat ederim, özellikle usule uygun işler için', metinEn: 'I pay attention to details, especially procedural tasks', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
-      { metin: 'Her ayrıntıyı kontrol etmeden geçemem', metinEn: 'I can\'t move on without checking every single detail', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Detaylar gözüme batar; eğri duran tablo, yamuk pencere dikkatimi dağıtır', metinEn: 'Details jump out at me; a crooked picture or window distracts me', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 2 } },
+      { metin: 'Genel hatları görürüm; ayrıntılara fazla inmem, çabuk unuturum', metinEn: 'I see the broad strokes; I don\'t go deep into details and forget them fast', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Usule ve listeye uyarım; prosedür neyse ona göre ilerlerim', metinEn: 'I follow procedure and lists; I go by the established process', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Konuyu her yönden ayrıntılı incelemeden karar vermem', metinEn: 'I won\'t decide without examining the matter in detail from every angle', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
   {
@@ -671,15 +669,14 @@ export const sorular = [
   },
   // --- İLİŞKİ TARZI ---
   {
-    id: 30,
-    kategori: 'iliski',
+    id: 30, kategori: 'iliski',
     soru: 'Sevginizi en çok nasıl ifade edersiniz?',
     soruEn: 'How do you most express your love?',
     secenekler: [
-      { metin: 'Koruyarak, sahiplenerek ve hediyeyle', metinEn: 'By protecting, claiming and giving gifts', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
-      { metin: 'Sürekli temas, dokunma ve sözel ifadeyle', metinEn: 'Through constant contact, touch, and words of affirmation', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
-      { metin: 'Hizmet ederek, ihtiyaçları karşılayarak', metinEn: 'By serving and meeting their needs', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
-      { metin: 'Kaliteli vakit geçirerek ve derin sohbetle', metinEn: 'Through quality time and deep conversations', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Hediye alarak, koruyarak ve ihtiyaçlarını karşılayarak', metinEn: 'By giving gifts, protecting and providing', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Överek, güzel sözler söyleyerek ve muhabbet ederek', metinEn: 'By praising, saying beautiful things and conversing', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Dokunarak; elini tutarak, sarılarak, sırtını sıvazlayarak', metinEn: 'Through touch; holding hands, hugging, a pat on the back', puan: { safravi: 0, demevi: 1, balgami: 3, sevdavi: 0 } },
+      { metin: 'Söylemem ama yaparım; onun için orada olmam sevdiğimin göstergesidir', metinEn: 'I don\'t say it, I do it; being there for them is how I show love', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
     ],
   },
   {
@@ -751,21 +748,20 @@ export const sorular = [
     secenekler: [
       { metin: 'Simetrik ve estetik olmasına önem veririm', metinEn: 'I care about it being symmetrical and aesthetic', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
       { metin: 'Renkli ve hareketli; biraz dağınık olabilir', metinEn: 'Colorful and lively; it can get a bit messy', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
-      { metin: 'Rahat ve sıcak; köşelere yığılmış şeyler olabilir', metinEn: 'Cozy and warm; things might pile up in corners', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
-      { metin: 'Düzenli ve sade; her şeyin yeri bellidir', metinEn: 'Organized and minimal; everything has its place', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Konforlu, sade ve tertemiz; az ama kaliteli eşya olsun isterim', metinEn: 'Comfortable, simple and spotless; few but quality things', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Düzenli ve sade; eşyalarımın kalitesi görünüşünden önemlidir', metinEn: 'Organized and minimal; the quality of my things matters more than their look', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
     ],
   },
   // --- SAĞLIK EĞİLİMLERİ ---
   {
-    id: 37,
-    kategori: 'saglik',
+    id: 37, kategori: 'saglik',
     soru: 'Hastalandığınızda genellikle nasıl bir tablo ortaya çıkar?',
     soruEn: 'What symptoms typically appear when you get sick?',
     secenekler: [
-      { metin: 'Ateş ve iltihaplanmalar; hızlı başlar, hızlı geçer', metinEn: 'Fever and inflammation; starts fast and passes fast', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
-      { metin: 'Solunum yolu hastalıkları ve enerji düşüşleri', metinEn: 'Respiratory illnesses and energy crashes', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
-      { metin: 'Soğuk algınlığı, balgamlı öksürük, şişme ve eklem ağrıları', metinEn: 'Colds, phlegmy cough, swelling and joint aches', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
-      { metin: 'Kronik yorgunluk, cilt sorunları ve sindirim bozuklukları', metinEn: 'Chronic fatigue, skin problems and digestive issues', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Mide yanması, reflü, safra kesesi şikâyeti; ciltte sivilce ve ani kızarıklık', metinEn: 'Heartburn, reflux, gallbladder complaints; acne and sudden skin redness', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 0 } },
+      { metin: 'Çarpıntı, tansiyon, migren; kanla ilgili şikâyetler', metinEn: 'Palpitations, blood pressure, migraine; blood-related complaints', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Balgamlı öksürük, sinüzit, nefes darlığı, eklem ağrıları ve şişme', metinEn: 'Phlegmy cough, sinusitis, shortness of breath, joint aches and swelling', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
+      { metin: 'Kemik ve bacak ağrıları, kronik yorgunluk; tırnak, saç ve diş problemleri', metinEn: 'Bone and leg pain, chronic fatigue; nail, hair and tooth problems', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
   {
@@ -794,15 +790,14 @@ export const sorular = [
     ],
   },
   {
-    id: 40,
-    kategori: 'kisilik',
+    id: 40, kategori: 'kisilik',
     soru: 'Mükemmeliyetçilik konusunda nasılsınız?',
     soruEn: 'How are you when it comes to perfectionism?',
     secenekler: [
-      { metin: 'Hızlıyım; "yeterince iyi" mantığıyla ilerlerim', metinEn: 'I\'m fast; I operate on "good enough" logic', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
-      { metin: 'Değil; daha önemli şeyler var hayatta', metinEn: 'Not at all; there are more important things in life', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
-      { metin: 'Değilim; mükemmel olmasa da sorun değil, önemli olan huzur', metinEn: 'I\'m not; imperfection is fine, peace of mind matters more', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
-      { metin: 'Yüksek; standartlarımın altında iş yapmaktan rahatsızlık duyarım', metinEn: 'High; I\'m uncomfortable doing work below my standards', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+      { metin: 'Yüksek; işi dört dörtlük yapmalıyım, başkası yaparsa içim rahat etmez', metinEn: 'High; it must be done flawlessly — I can\'t relax if someone else does it', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
+      { metin: 'Değil; hayatta daha önemli şeyler var, keyfim yerinde olsun yeter', metinEn: 'Not at all; there are more important things — as long as I\'m enjoying life', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
+      { metin: 'Mükemmel olmasa da olur; benim için asıl önemli olan huzur', metinEn: 'It doesn\'t have to be perfect; peace of mind matters more to me', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
+      { metin: 'Standartlarım çok yüksek; hazır hissetmeden başlamam bile', metinEn: 'My standards are very high; I won\'t even start until I feel ready', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
   {
@@ -926,4 +921,95 @@ export const sorular = [
       { metin: 'Kaliteyi ve doğruyu ararım; kolaya kaçmam', metinEn: 'I seek quality and truth; I never take shortcuts', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
+
+  {
+    id: 51,
+    kategori: 'kisilik',
+    soru: 'Maneviyat ve soyut konularla ilişkiniz nasıl?',
+    soruEn: 'What is your relationship with spirituality and abstract subjects?',
+    secenekler: [
+      { metin: 'Dönemsel; bazen çok yoğun ilgilenirim, sonra bir süre uzaklaşırım', metinEn: 'It comes in waves; sometimes I dive deep, then I drift away for a while', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Kalpten yaşarım; "bağlantı, arınma, korunma" gibi kavramlar bana çok şey ifade eder', metinEn: 'I live it from the heart; words like "connection, purification, protection" mean a lot to me', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
+      { metin: 'Sessiz ve düzenli bir bağım var; gösterişten uzak, kendi içimde yaşarım', metinEn: 'My bond is quiet and steady; unshowy, lived inwardly', puan: { safravi: 0, demevi: 1, balgami: 3, sevdavi: 0 } },
+      { metin: 'Soyut konulara mesafeliyim; emin olana kadar araştırır, kolay inanmam', metinEn: 'I keep my distance from abstract topics; I research until certain and don\'t believe easily', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 52,
+    kategori: 'fiziksel',
+    soru: 'Yüksek ses, gürültü ve parlak ışığa tahammülünüz nasıl?',
+    soruEn: 'How well do you tolerate loud noise and bright light?',
+    secenekler: [
+      { metin: 'Hiç tahammülüm yok ve bunu hemen belli ederim; "kapatın şunu" derim', metinEn: 'None at all, and I say so immediately — "turn that off"', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
+      { metin: 'Rahatsız olmam; kalabalık ses ve hareket bana canlılık verir', metinEn: 'It doesn\'t bother me; noise and movement make me feel alive', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Rahatsız olurum ama sesimi çıkarmam; ortamdan uzaklaşmayı beklerim', metinEn: 'It bothers me but I say nothing; I wait to get away from it', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Çok rahatsız olurum ama tepki vermem; içimden sıkılarak susarım', metinEn: 'It disturbs me a lot but I don\'t react; I clench up and stay silent', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 53,
+    kategori: 'iliski',
+    soru: 'Bir simidi biriyle paylaşacaksınız. Nasıl davranırsınız?',
+    soruEn: 'You are about to share a bagel with someone. What do you do?',
+    secenekler: [
+      { metin: 'Hızlıca ikiye ayırırım; adaletsizlik olmasın diye dikkat ederim ama üstünde durmam', metinEn: 'I split it fast; I make sure it\'s fair but don\'t dwell on it', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
+      { metin: 'Rastgele koparır, büyük olanı karşımdakine veririm', metinEn: 'I tear it anywhere and give the bigger piece to the other person', puan: { safravi: 0, demevi: 3, balgami: 1, sevdavi: 0 } },
+      { metin: 'Karşımdakinin seçmesini beklerim; kalanı alırım', metinEn: 'I let them choose first and take what\'s left', puan: { safravi: 0, demevi: 1, balgami: 3, sevdavi: 0 } },
+      { metin: 'Tam ortadan koparmaya çalışırım; iki parçanın eşit olmasına çok dikkat ederim', metinEn: 'I try to break it exactly in half; I\'m careful the two pieces are equal', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 54,
+    kategori: 'saglik',
+    soru: 'Hastalandığınızda nasıl davranırsınız?',
+    soruEn: 'How do you behave when you fall ill?',
+    secenekler: [
+      { metin: 'Yatakta duramam; hasta olduğumu kabul etmeden işlerimi yapmaya devam ederim', metinEn: 'I can\'t stay in bed; I keep going without admitting I\'m sick', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Herkese anlatırım; ilgi ve moral görmek beni iyileştirir', metinEn: 'I tell everyone; attention and encouragement is what heals me', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Üstümü kat kat giyer, sarınıp yatarım; hasta olmaktan çok korkarım', metinEn: 'I bundle up in layers and take to bed; I\'m very afraid of getting ill', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
+      { metin: 'Kimseye söylemem, uyarıları da pek dikkate almam; kendi kendime geçmesini beklerim', metinEn: 'I tell no one and ignore the warnings; I wait it out on my own', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 55,
+    kategori: 'kisilik',
+    soru: 'Zihniniz daha çok neyle meşgul olur?',
+    soruEn: 'What does your mind dwell on most?',
+    secenekler: [
+      { metin: 'Gelecek planlarım; bir sonraki hedefime nasıl ulaşacağım', metinEn: 'My future plans; how I\'ll reach the next goal', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Bugün; şu an yaşadığım ve yakında yaşayacağım güzel şeyler', metinEn: 'Today; the good things happening now and coming soon', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Geçmiş; yaşadıklarımı ve söylenenleri tekrar tekrar düşünürüm', metinEn: 'The past; I replay what happened and what was said', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 2 } },
+      { metin: 'Geçmişi hiç unutmam; yıllar önce olanı ayrıntısıyla hatırlarım', metinEn: 'I never forget the past; I recall things from years ago in detail', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 56,
+    kategori: 'rutin',
+    soru: 'Kendi dış görünüşünüzle ilişkiniz nasıl?',
+    soruEn: 'What is your relationship with your own appearance?',
+    secenekler: [
+      { metin: 'Başkalarının görünüşü daha çok dikkatimi çeker; simetri ve uyum ararım', metinEn: 'Other people\'s appearance catches my eye more; I look for symmetry and harmony', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Vitrin camlarında bile kendime bakarım; bakımlı görünmek benim için önemli', metinEn: 'I check myself even in shop windows; looking well-groomed matters to me', puan: { safravi: 1, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Temiz ve uyumlu bir kıyafet bana yeter; süslenmekle pek uğraşmam', metinEn: 'Clean and tidy clothes are enough for me; I don\'t fuss over adornment', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Görünüşten çok kalitesine bakarım; az ama sağlam şeyler tercih ederim', metinEn: 'I care about quality over looks; few but solid things', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 57,
+    kategori: 'karar',
+    soru: 'Size yeni bir teklif ya da fikir sunulduğunda ne olur?',
+    soruEn: 'What happens when someone brings you a new offer or idea?',
+    secenekler: [
+      { metin: 'Fikri beğenirsem hemen atlarım; sonradan pişman olabilirim', metinEn: 'If I like it I jump in right away; I may regret it later', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Genelde iyi niyetle yaklaşırım; bu yüzden bazen kandırılabiliyorum', metinEn: 'I usually assume good intent, which sometimes gets me fooled', puan: { safravi: 1, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Hemen "olur" demem; garantisi yoksa uzak dururum', metinEn: 'I don\'t say yes right away; without a guarantee I stay away', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Somut olarak gösterilmeden ikna olmam; aylar sonra tekrar sorabilirim', metinEn: 'I\'m not convinced without concrete proof; I may come back months later to ask again', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
 ];
+
+/** Testteki soru sayısı. Arayüz metinleri buradan okumalı — sabit yazılmasın. */
+export const SORU_SAYISI = sorular.length;
+
+/** Testin tahmini süresi (dakika). ~7 soru/dakika varsayımıyla. */
+export const TAHMINI_DAKIKA = Math.round(SORU_SAYISI / 7);

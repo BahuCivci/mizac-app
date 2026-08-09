@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { mizacProfiller, MizacTip, SORU_SAYISI } from '@/lib/mizac-data';
 import { kazananBelirle } from '@/lib/puanlama';
 
 const sorular = [
@@ -144,7 +144,7 @@ function HizliTestEmail({ tip, renk }: { tip: MizacTip; renk: string }) {
         Tam profili emaile al
       </p>
       <p className="text-xs mb-4" style={{ color: '#9a8a6a' }}>
-        50 soruluk detaylı analiz + beslenme rehberi gönderelim.
+        {SORU_SAYISI} soruluk detaylı analiz + beslenme rehberi gönderelim.
       </p>
       <form onSubmit={submit} className="flex gap-2">
         <input
@@ -269,7 +269,7 @@ export default function HizliTestPage() {
               className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl font-semibold border-2 text-stone-700 transition-all hover:bg-stone-50"
               style={{ borderColor: 'var(--gold)' }}
             >
-              ✦ 50 Soruluk Detaylı Testi Yap
+              ✦ {SORU_SAYISI} Soruluk Detaylı Testi Yap
             </Link>
           </div>
 
@@ -292,7 +292,7 @@ export default function HizliTestPage() {
 
           <p className="text-center text-xs text-stone-400 mt-4">
             Bu hızlı test 10 sorudan oluşur.{' '}
-            <Link href="/test" className="underline">50 soruluk tam test</Link>{' '}
+            <Link href="/test" className="underline">{SORU_SAYISI} soruluk tam test</Link>{' '}
             daha hassas sonuç verir.
           </p>
         </div>

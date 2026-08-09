@@ -48,7 +48,7 @@ export const blogYazilari: BlogYazisi[] = [
         ]
       },
       { tip: 'h2', metin: 'Mizaç Testi Nasıl Çalışır?' },
-      { tip: 'p', metin: 'Modern mizaç testleri, İbn-i Sina\'nın teorisini temel alarak insanların fiziksel özelliklerini, duygusal tepkilerini, uyku düzenlerini, beslenme alışkanlıklarını ve sosyal davranışlarını ölçer. 50 soruluk kapsamlı testimiz bu dört alanı dengeli biçimde ele alır.' },
+      { tip: 'p', metin: 'Modern mizaç testleri, İbn-i Sina\'nın teorisini temel alarak insanların fiziksel özelliklerini, duygusal tepkilerini, uyku düzenlerini, beslenme alışkanlıklarını ve sosyal davranışlarını ölçer. 57 soruluk kapsamlı testimiz bu dört alanı dengeli biçimde ele alır.' },
       { tip: 'h2', metin: 'Mizaç Bilmek Neden Önemlidir?' },
       {
         tip: 'ul', maddeler: [
@@ -58,7 +58,7 @@ export const blogYazilari: BlogYazisi[] = [
           'Kişisel gelişim: Hangi alanlarda güçlü, hangi alanlarda gelişime açıksınız?',
         ]
       },
-      { tip: 'cta', metin: '50 soruluk ücretsiz mizaç testini şimdi yap', buton: 'Testi Başlat', href: '/test' },
+      { tip: 'cta', metin: '57 soruluk ücretsiz mizaç testini şimdi yap', buton: 'Testi Başlat', href: '/test' },
     ],
   },
   {
@@ -638,7 +638,7 @@ export const blogYazilari: BlogYazisi[] = [
     slug: 'mizac-testi-nasil-yapilir',
     baslik: 'Mizaç Testi Nasıl Yapılır? Ne Anlama Gelir?',
     baslikEn: 'How Does a Temperament Test Work? What Does It Mean?',
-    ozet: '50 soruluk mizaç testi ne ölçüyor, sorular nasıl hazırlandı, sonuç ne kadar güvenilir? Test mantığını anlayarak daha doğru sonuç al.',
+    ozet: '57 soruluk mizaç testi ne ölçüyor, sorular nasıl hazırlandı, sonuç ne kadar güvenilir? Test mantığını anlayarak daha doğru sonuç al.',
     ozetEn: 'What does the 50-question temperament test measure, how were the questions prepared, and how reliable is the result? Get a more accurate result by understanding the test logic.',
     tarih: '2026-03-17',
     okumaSuresi: 5,
@@ -647,7 +647,7 @@ export const blogYazilari: BlogYazisi[] = [
     icerik: [
       { tip: 'p', metin: 'İnternet\'te onlarca "kişilik testi" var. Mizaç testi onlardan farklı — ve bu fark önemli. Kişilik testleri değişir; MBTI\'ınız yıldan yıla değişebilir. Mizaç testi ise doğuştan belirlenen ve hayat boyunca temelde sabit kalan bir yapıyı ölçer.' },
       { tip: 'h2', metin: 'Test Neyi Ölçüyor?' },
-      { tip: 'p', metin: 'Test, İbn-i Sina\'nın Kanun fi\'t-Tıbb adlı eserinden ve Zeynep Işık Büyükbay\'ın "Varlığın Tahlili" kitabından derlenen dört mizaç tipinin özelliklerini 50 soru üzerinden değerlendiriyor. Fiziksel özellikler (uyku, yeme, sıcaklık tercihi), duygusal örüntüler (öfke, sevinç, üzüntü) ve sosyal davranışlar üç ana alan.' },
+      { tip: 'p', metin: 'Test, İbn-i Sina\'nın Kanun fi\'t-Tıbb adlı eserinden ve Zeynep Işık Büyükbay\'ın "Varlığın Tahlili" kitabından derlenen dört mizaç tipinin özelliklerini 57 soru üzerinden değerlendiriyor. Fiziksel özellikler (uyku, yeme, sıcaklık tercihi), duygusal örüntüler (öfke, sevinç, üzüntü) ve sosyal davranışlar üç ana alan.' },
       { tip: 'h2', metin: 'Sorular Nasıl Hazırlandı?' },
       {
         tip: 'ul', maddeler: [
@@ -668,7 +668,7 @@ export const blogYazilari: BlogYazisi[] = [
       },
       { tip: 'h2', metin: 'Sonuç Ne Kadar Güvenilir?' },
       { tip: 'p', metin: 'Mizaç testleri MBTI veya OCEAN gibi akademik testlerin psikometrik standartlarını takip etmez. Ancak İbn-i Sina\'nın 1000 yıllık klinik gözlemlerine dayandığı için pratik doğruluk yüksektir. Test tamamlayanların %91\'i sonucu "çok doğru" veya "doğru" olarak değerlendiriyor.' },
-      { tip: 'cta', metin: 'Testi şimdi dene — 50 soru, ~8 dakika', buton: 'Testi Başlat', href: '/test' },
+      { tip: 'cta', metin: 'Testi şimdi dene — 57 soru, ~8 dakika', buton: 'Testi Başlat', href: '/test' },
     ],
   },
   {
@@ -698,7 +698,7 @@ export const blogYazilari: BlogYazisi[] = [
       { tip: 'p', metin: 'İbn-i Sina\'nın 14 ciltlik Tıp Kanunu 600 yıl boyunca Avrupa\'da ders kitabı olarak okutuldu. İçinde sadece ilaç ve cerrahi değil; beslenme, psikoloji, müzik terapisi ve mizaca göre yaşam rehberi de var. İbn-i Sina\'ya göre hastalığın en derin sebebi mizaç dengesizliğidir — dışarıdan ilaç vermek değil, kişinin kendi mizacına göre yaşamasını sağlamak asıl tedavidir.' },
       { tip: 'h2', metin: 'Günümüzde Neden Hâlâ Geçerli?' },
       { tip: 'p', metin: 'Modern psikoloji OCEAN (Big Five) modeliyle kişiliği ölçüyor. Nörobilim beyin kimyasını inciliyor. Ama İbn-i Sina\'nın mizaç teorisi farklı bir şey yapıyor: bedenin fiziğini, duygusal örüntüleri ve spiritüel eğilimleri tek bir çerçevede birleştiriyor. 1000 yıl sonra hâlâ rezonans kuruyor çünkü insan doğasını doğrudan konuşuyor.' },
-      { tip: 'cta', metin: 'Kendi mizacını İbn-i Sina sistemiyle keşfet', buton: '50 Soruluk Testi Başlat', href: '/test' },
+      { tip: 'cta', metin: 'Kendi mizacını İbn-i Sina sistemiyle keşfet', buton: '57 Soruluk Testi Başlat', href: '/test' },
     ],
   },
   {

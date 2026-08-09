@@ -7,6 +7,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
 import { PWARegister } from "@/components/pwa-register";
+import { SORU_SAYISI } from '@/lib/mizac-data';
 
 const GA_ID = 'G-N8NNVEMSEQ';
 
@@ -29,7 +30,7 @@ export const metadata: Metadata = {
     template: '%s · Mizaç',
   },
   description:
-    'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi. Safravî, Demevî, Balgamî ve Sevdavî mizaç tiplerinden hangisi sensin? Ücretsiz, bilimsel tabanlı.',
+    `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk mizaç testi. Safravî, Demevî, Balgamî ve Sevdavî mizaç tiplerinden hangisi sensin? Ücretsiz, bilimsel tabanlı.`,
   keywords: [
     'mizaç testi', 'mizaç nedir', 'safravi', 'demevi', 'balgami', 'sevdavi',
     'ibn-i sina', 'dört mizaç', 'humour test', 'temperament test',
@@ -43,13 +44,13 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: 'Mizaç',
     title: 'Mizaç · Mizacını Keşfet',
-    description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi. Hangi elementi taşıyorsun?',
+    description: `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk mizaç testi. Hangi elementi taşıyorsun?`,
     images: [{ url: '/opengraph-image', width: 1200, height: 630, alt: 'Mizaç Testi' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mizaç · Mizacını Keşfet',
-    description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
+    description: `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk mizaç testi.`,
     images: ['/opengraph-image'],
   },
   robots: {
@@ -70,7 +71,7 @@ const siteSchema = {
       '@id': `${siteUrl}/#website`,
       name: 'Mizaç',
       url: siteUrl,
-      description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi.',
+      description: `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk mizaç testi.`,
       inLanguage: ['tr', 'en'],
       potentialAction: {
         '@type': 'SearchAction',
@@ -95,7 +96,7 @@ const siteSchema = {
       applicationSubCategory: 'PersonalityTest',
       operatingSystem: 'All',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'TRY' },
-      description: 'İbn-i Sina geleneğine dayalı 50 soruluk ücretsiz mizaç testi.',
+      description: `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk ücretsiz mizaç testi.`,
       inLanguage: ['tr', 'en'],
     },
   ],

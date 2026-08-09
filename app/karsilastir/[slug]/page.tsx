@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { mizacProfiller } from '@/lib/mizac-data';
+import { mizacProfiller, SORU_SAYISI } from '@/lib/mizac-data';
 import { uyumVerisi, kombinasyonlar } from '@/lib/uyum-data';
 import { notFound } from 'next/navigation';
 import { KarsilastirEmailCapture } from './email-capture-client';
@@ -183,7 +183,7 @@ export default async function KarsilastirPage({ params }: { params: Promise<{ sl
         <div className="rounded-3xl p-8 text-center bg-stone-800 text-white">
           <h2 className="font-bold text-xl mb-2">Sen hangi mizaçsın?</h2>
           <p className="text-stone-300 text-sm mb-6">
-            50 soruluk ücretsiz test ile mizacını öğren, ardından uyum haritanı gör.
+            {SORU_SAYISI} soruluk ücretsiz test ile mizacını öğren, ardından uyum haritanı gör.
           </p>
           <Link
             href="/test"

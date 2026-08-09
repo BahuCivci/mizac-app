@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: 'Mizaç · Mizacını Keşfet',
     short_name: 'Mizaç',
-    description: 'İbn-i Sina geleneğine dayalı 50 soruluk mizaç testi. Safravî, Demevî, Balgamî veya Sevdavî misin?',
+    description: `İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk mizaç testi. Safravî, Demevî, Balgamî veya Sevdavî misin?`,
     start_url: '/',
     display: 'standalone',
     background_color: '#faf7f2',
@@ -40,7 +41,7 @@ export default function manifest(): MetadataRoute.Manifest {
       {
         name: 'Testi Başlat',
         short_name: 'Test',
-        description: '50 soruluk mizaç testini başlat',
+        description: `${SORU_SAYISI} soruluk mizaç testini başlat`,
         url: '/test',
       },
       {

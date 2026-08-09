@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { SORU_SAYISI, TAHMINI_DAKIKA } from '@/lib/mizac-data';
 import { OgStar } from '@/lib/og-star';
 
 export const size = { width: 1200, height: 630 };
@@ -54,12 +55,12 @@ export default function Image() {
 
         {/* Subtitle */}
         <div style={{ fontSize: 26, color: '#9a8a6a', textAlign: 'center', marginBottom: 44 }}>
-          İbn-i Sina geleneğine dayalı 50 soruluk ücretsiz test
+          {`İbn-i Sina geleneğine dayalı ${SORU_SAYISI} soruluk ücretsiz test`}
         </div>
 
         {/* Stats */}
         <div style={{ display: 'flex', gap: 32 }}>
-          {[['50', 'Soru'], ['~8', 'Dakika'], ['4', 'Mizaç Tipi'], ['Ücretsiz', '']].map(([sayi, etiket]) => (
+          {[[String(SORU_SAYISI), 'Soru'], [`~${TAHMINI_DAKIKA}`, 'Dakika'], ['4', 'Mizaç Tipi'], ['Ücretsiz', '']].map(([sayi, etiket]) => (
             <div key={sayi} style={{
               display: 'flex', flexDirection: 'column', alignItems: 'center',
               background: '#2a1f0a', padding: '14px 24px', borderRadius: 14,

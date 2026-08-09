@@ -1,6 +1,7 @@
 'use client';
 
 import { useLang } from '@/lib/lang-context';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 import Link from 'next/link';
 import { useState } from 'react';
 import { ShareBar } from '@/components/share-bar';
@@ -201,7 +202,7 @@ export default function VarliginMizaciPage() {
           <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
             {tr ? 'Kendi mizacını keşfet' : 'Discover your own temperament'}
           </h2>
-          <p className="opacity-60 text-sm mb-5">{tr ? '50 soruluk ücretsiz test' : '50-question free test'}</p>
+          <p className="opacity-60 text-sm mb-5">{tr ? `${SORU_SAYISI} soruluk ücretsiz test` : `${SORU_SAYISI}-question free test`}</p>
           <Link href="/test" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all hover:scale-105"
             style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}>
             ✦ {tr ? 'Testi Başlat' : 'Start Test'}

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
 import { ShareBar } from '@/components/share-bar';
 import { EmailCapture } from '@/components/email-capture';
@@ -282,7 +283,7 @@ export default function DortHalifePage() {
             {tr ? 'Sen hangi halifenin mizacındasın?' : 'Which caliph shares your temperament?'}
           </h2>
           <p className="opacity-60 text-sm mb-5">
-            {tr ? '50 soruluk ücretsiz mizaç testi' : '50-question free temperament test'}
+            {tr ? `${SORU_SAYISI} soruluk ücretsiz mizaç testi` : `${SORU_SAYISI}-question free temperament test`}
           </p>
           <Link href="/test" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all hover:scale-105"
             style={{ background: 'linear-gradient(135deg, var(--earth), var(--gold))' }}>

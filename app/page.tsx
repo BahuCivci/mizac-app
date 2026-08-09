@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { mizacProfiller, MizacTip } from "@/lib/mizac-data";
+import { mizacProfiller, MizacTip, SORU_SAYISI, TAHMINI_DAKIKA } from "@/lib/mizac-data";
 import { useLang } from "@/lib/lang-context";
 import { EmailCapture } from "@/components/email-capture";
 
@@ -198,8 +198,8 @@ export default function Home() {
           {[
             {
               icon: '📝',
-              tr: { baslik: '50 Soru', aciklama: 'Fiziksel, duygusal ve sosyal özelliklerini kapsayan kapsamlı sorular' },
-              en: { baslik: '50 Questions', aciklama: 'Comprehensive questions covering physical, emotional and social traits' },
+              tr: { baslik: `${SORU_SAYISI} Soru`, aciklama: 'Fiziksel, duygusal ve sosyal özelliklerini kapsayan kapsamlı sorular' },
+              en: { baslik: `${SORU_SAYISI} Questions`, aciklama: 'Comprehensive questions covering physical, emotional and social traits' },
             },
             {
               icon: '🔬',
@@ -556,7 +556,7 @@ export default function Home() {
             ✦ {tr ? 'Ücretsiz Testi Başlat' : 'Start Free Test'}
           </Link>
           <p className="text-xs mt-4" style={{ color: '#6b5230' }}>
-            {tr ? '50 soru · ~8 dakika · Kayıt gerekmez' : '50 questions · ~8 minutes · No signup'}
+            {tr ? `${SORU_SAYISI} soru · ~${TAHMINI_DAKIKA} dakika · Kayıt gerekmez` : `${SORU_SAYISI} questions · ~${TAHMINI_DAKIKA} minutes · No signup`}
           </p>
         </div>
       </section>

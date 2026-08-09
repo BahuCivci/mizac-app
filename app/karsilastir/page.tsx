@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { mizacProfiller } from '@/lib/mizac-data';
+import { mizacProfiller, SORU_SAYISI } from '@/lib/mizac-data';
 import { uyumVerisi, kombinasyonlar } from '@/lib/uyum-data';
 
 export const metadata: Metadata = {
@@ -105,7 +105,7 @@ export default function KarsilastirIndexPage() {
             Önce kendi mizacını öğren
           </h2>
           <p className="text-sm mb-5" style={{ color: '#9a8a6a' }}>
-            Hangi kombinasyona girdiğini bilmek için 50 soruluk ücretsiz test
+            Hangi kombinasyona girdiğini bilmek için {SORU_SAYISI} soruluk ücretsiz test
           </p>
           <Link
             href="/test"

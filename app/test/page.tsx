@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { sorular, MizacTip, mizacProfiller } from '@/lib/mizac-data';
+import { sorular, MizacTip, mizacProfiller, SORU_SAYISI, TAHMINI_DAKIKA } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
 import { kazananBelirle } from '@/lib/puanlama';
 import Link from 'next/link';
@@ -145,13 +145,13 @@ export default function TestPage() {
             </h1>
             <p className="text-base leading-relaxed mb-8" style={{ color: '#9a8a6a' }}>
               {tr
-                ? '50 soru, 8 dakika. İbn-i Sina\'nın kadim mizaç bilimine dayalı — sağlık, ilişki ve yaşam rehberin.'
-                : '50 questions, 8 minutes. Based on Ibn Sina\'s ancient temperament science — your health, relationship and life guide.'}
+                ? `${SORU_SAYISI} soru, ${TAHMINI_DAKIKA} dakika. İbn-i Sina'nın kadim mizaç bilimine dayalı — sağlık, ilişki ve yaşam rehberin.`
+                : `${SORU_SAYISI} questions, ${TAHMINI_DAKIKA} minutes. Based on Ibn Sina's ancient temperament science — your health, relationship and life guide.`}
             </p>
             <div className="grid grid-cols-3 gap-4 mb-8">
               {[
-                { sayi: '50', etiket: tr ? 'Soru' : 'Questions' },
-                { sayi: '~8', etiket: tr ? 'Dakika' : 'Minutes' },
+                { sayi: String(SORU_SAYISI), etiket: tr ? 'Soru' : 'Questions' },
+                { sayi: `~${TAHMINI_DAKIKA}`, etiket: tr ? 'Dakika' : 'Minutes' },
                 { sayi: '4', etiket: tr ? 'Mizaç' : 'Types' },
               ].map((item) => (
                 <div key={item.etiket} className="rounded-2xl py-4" style={{ background: '#2a1f0a' }}>

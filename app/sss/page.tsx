@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 import Link from 'next/link';
 
 const sorular = [
@@ -161,7 +162,7 @@ const sorular = [
     liste: [
       {
         soru: 'Mizaç testi kaç sorudur ve ne kadar sürer?',
-        cevap: 'Mizaç testimiz 50 sorudan oluşur ve yaklaşık 8-12 dakika sürer. Fiziksel özellikler, uyku düzeni, duygusal tepkiler, beslenme alışkanlıkları ve sosyal davranışı ölçen dengeli bir soru seti içerir. Sonuçta baskın ve ikincil mizacınızı, puan dağılımınızı ve detaylı profilinizi görürsünüz.',
+        cevap: `Mizaç testimiz ${SORU_SAYISI} sorudan oluşur ve yaklaşık 8-12 dakika sürer. Fiziksel özellikler, uyku düzeni, duygusal tepkiler, beslenme alışkanlıkları ve sosyal davranışı ölçen dengeli bir soru seti içerir. Sonuçta baskın ve ikincil mizacınızı, puan dağılımınızı ve detaylı profilinizi görürsünüz.`,
       },
       {
         soru: 'Test sonucu her seferinde aynı çıkar mı?',

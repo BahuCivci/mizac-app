@@ -3,36 +3,22 @@
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { uyumVerisi } from '@/lib/uyum-data';
 import { Suspense, useState, useEffect } from 'react';
 import { useLang } from '@/lib/lang-context';
 import { blogYazilari } from '@/lib/blog-data';
 
-const uyumHaritasi: Record<MizacTip, { tip: MizacTip; puan: number }[]> = {
-  safravi: [
-    { tip: 'balgami', puan: 92 },
-    { tip: 'demevi', puan: 68 },
-    { tip: 'safravi', puan: 55 },
-    { tip: 'sevdavi', puan: 38 },
-  ],
-  demevi: [
-    { tip: 'sevdavi', puan: 90 },
-    { tip: 'safravi', puan: 72 },
-    { tip: 'demevi', puan: 65 },
-    { tip: 'balgami', puan: 48 },
-  ],
-  balgami: [
-    { tip: 'safravi', puan: 92 },
-    { tip: 'sevdavi', puan: 76 },
-    { tip: 'balgami', puan: 68 },
-    { tip: 'demevi', puan: 50 },
-  ],
-  sevdavi: [
-    { tip: 'demevi', puan: 90 },
-    { tip: 'balgami', puan: 74 },
-    { tip: 'sevdavi', puan: 62 },
-    { tip: 'safravi', puan: 42 },
-  ],
-};
+// Uyum haritası tek kaynaktan türetilir (lib/uyum-data.ts). Burada elle
+// yazılmış bir kopya vardı ve puanlar simetrikleştirilirken güncellenmediği
+// için eski değerleri (demevi->safravi 72 gibi) göstermeye devam ediyordu.
+const uyumHaritasi = Object.fromEntries(
+  (Object.keys(uyumVerisi) as MizacTip[]).map((a) => [
+    a,
+    (Object.keys(uyumVerisi[a]) as MizacTip[])
+      .map((b) => ({ tip: b, puan: uyumVerisi[a][b].puan }))
+      .sort((x, y) => y.puan - x.puan),
+  ])
+) as Record<MizacTip, { tip: MizacTip; puan: number }[]>;
 
 const unluler: Record<MizacTip, { isim: string; aciklama: string; aciklamaEn: string }[]> = {
   safravi: [

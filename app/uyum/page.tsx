@@ -191,12 +191,12 @@ export default function UyumPage() {
           </h2>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[
-              { slug: 'safravi-vs-balgami', label: '🔥 × 🌊', isim: tr ? 'Safravî × Balgamî' : 'Choleric × Phlegmatic', puan: 92 },
-              { slug: 'demevi-vs-sevdavi', label: '💧 × 🌍', isim: tr ? 'Demevî × Sevdavî' : 'Sanguine × Melancholic', puan: 90 },
-              { slug: 'balgami-vs-sevdavi', label: '🌊 × 🌍', isim: tr ? 'Balgamî × Sevdavî' : 'Phlegmatic × Melancholic', puan: 76 },
-              { slug: 'safravi-vs-demevi', label: '🔥 × 💧', isim: tr ? 'Safravî × Demevî' : 'Choleric × Sanguine', puan: 68 },
-              { slug: 'demevi-vs-balgami', label: '💧 × 🌊', isim: tr ? 'Demevî × Balgamî' : 'Sanguine × Phlegmatic', puan: 48 },
-              { slug: 'safravi-vs-sevdavi', label: '🔥 × 🌍', isim: tr ? 'Safravî × Sevdavî' : 'Choleric × Melancholic', puan: 38 },
+              { slug: 'safravi-vs-balgami', label: '🔥 × 🌊', isim: tr ? 'Safravî × Balgamî' : 'Choleric × Phlegmatic', puan: uyumVerisi.safravi.balgami.puan },
+              { slug: 'demevi-vs-sevdavi', label: '💧 × 🌍', isim: tr ? 'Demevî × Sevdavî' : 'Sanguine × Melancholic', puan: uyumVerisi.demevi.sevdavi.puan },
+              { slug: 'balgami-vs-sevdavi', label: '🌊 × 🌍', isim: tr ? 'Balgamî × Sevdavî' : 'Phlegmatic × Melancholic', puan: uyumVerisi.balgami.sevdavi.puan },
+              { slug: 'safravi-vs-demevi', label: '🔥 × 💧', isim: tr ? 'Safravî × Demevî' : 'Choleric × Sanguine', puan: uyumVerisi.safravi.demevi.puan },
+              { slug: 'demevi-vs-balgami', label: '💧 × 🌊', isim: tr ? 'Demevî × Balgamî' : 'Sanguine × Phlegmatic', puan: uyumVerisi.demevi.balgami.puan },
+              { slug: 'safravi-vs-sevdavi', label: '🔥 × 🌍', isim: tr ? 'Safravî × Sevdavî' : 'Choleric × Melancholic', puan: uyumVerisi.safravi.sevdavi.puan },
             ].map((item) => (
               <Link
                 key={item.slug}

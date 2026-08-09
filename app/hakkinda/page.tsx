@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
 
 export default function HakkindaPage() {
@@ -40,8 +41,8 @@ export default function HakkindaPage() {
             </h2>
             <p className="leading-relaxed opacity-80 text-sm mb-3">
               {tr
-                ? 'Testimiz, kitap içeriğinden çıkarılmış 50 sorudan oluşmaktadır. Fiziksel özellikler, duygusal tepkiler, sosyal davranışlar, çalışma stili ve günlük rutinler gibi farklı kategorilerdeki sorular, dört mizaç tipinden hangisine daha yakın olduğunuzu belirler.'
-                : 'Our test consists of 50 questions extracted from book content. Questions in categories such as physical traits, emotional responses, social behaviors, work style and daily routines determine which of the four temperament types you are closest to.'}
+                ? `Testimiz, kitap içeriğinden çıkarılmış ${SORU_SAYISI} sorudan oluşmaktadır. Fiziksel özellikler, duygusal tepkiler, sosyal davranışlar, çalışma stili ve günlük rutinler gibi farklı kategorilerdeki sorular, dört mizaç tipinden hangisine daha yakın olduğunuzu belirler.`
+                : `Our test consists of ${SORU_SAYISI} questions extracted from book content. Questions in categories such as physical traits, emotional responses, social behaviors, work style and daily routines determine which of the four temperament types you are closest to.`}
             </p>
             <p className="leading-relaxed opacity-80 text-sm">
               {tr

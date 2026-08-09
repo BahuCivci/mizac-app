@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { SORU_SAYISI } from '@/lib/mizac-data';
 import type { Metadata } from 'next';
 import { blogYazilari } from '@/lib/blog-data';
 import { BlogFilter } from './blog-filter-client';
@@ -41,7 +42,7 @@ export default function BlogPage() {
           <h2 className="text-xl font-bold mb-2" style={{ color: '#e8d5b0' }}>
             Kendi mizacını öğren
           </h2>
-          <p className="text-sm mb-5" style={{ color: '#6b5230' }}>50 soruluk ücretsiz mizaç testi</p>
+          <p className="text-sm mb-5" style={{ color: '#6b5230' }}>{SORU_SAYISI} soruluk ücretsiz mizaç testi</p>
           <Link
             href="/test"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold transition-all hover:scale-105"

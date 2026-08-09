@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { sorular, MizacTip, mizacProfiller } from '@/lib/mizac-data';
 import { useLang } from '@/lib/lang-context';
+import { kazananBelirle } from '@/lib/puanlama';
 import Link from 'next/link';
 
 function puanlariHesapla(secimler: (number | undefined)[]): Record<MizacTip, number> {
@@ -94,9 +95,10 @@ export default function TestPage() {
         setAktifSoru(aktifSoru + 1);
       } else {
         const puanlar = puanlariHesapla(yeniSecimler);
-        const kazanan = (Object.keys(puanlar) as MizacTip[]).reduce((a, b) =>
-          puanlar[a] > puanlar[b] ? a : b
+        const secilenPuanlar = yeniSecimler.map((sec, i) =>
+          sec === undefined ? {} : sorular[i].secenekler[sec].puan
         );
+        const kazanan = kazananBelirle(puanlar, secilenPuanlar);
         const puanStr = encodeURIComponent(JSON.stringify(puanlar));
         try { localStorage.removeItem('mizac_test_ilerleme'); } catch {}
         router.push(`/sonuc?tip=${kazanan}&puanlar=${puanStr}`);

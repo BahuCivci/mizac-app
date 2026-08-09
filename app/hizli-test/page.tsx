@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
+import { kazananBelirle } from '@/lib/puanlama';
 
 const sorular = [
   {
@@ -195,7 +196,10 @@ export default function HizliTestPage() {
         setAktif(aktif + 1);
       } else {
         const p = hesapla(yeni);
-        const kazanan = (Object.keys(p) as MizacTip[]).reduce((a, b) => p[a] > p[b] ? a : b);
+        const secilenPuanlar = yeni.map((sec, i) =>
+          sec === undefined ? {} : sorular[i].secenekler[sec].puan
+        );
+        const kazanan = kazananBelirle(p, secilenPuanlar);
         setSonuc({ tip: kazanan, puanlar: p });
       }
     }, 350);

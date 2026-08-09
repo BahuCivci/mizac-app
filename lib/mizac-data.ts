@@ -748,8 +748,8 @@ export const sorular = [
     secenekler: [
       { metin: 'Simetrik ve estetik olmasına önem veririm', metinEn: 'I care about it being symmetrical and aesthetic', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 1 } },
       { metin: 'Renkli ve hareketli; biraz dağınık olabilir', metinEn: 'Colorful and lively; it can get a bit messy', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
-      { metin: 'Konforlu, sade ve tertemiz; az ama kaliteli eşya olsun isterim', metinEn: 'Comfortable, simple and spotless; few but quality things', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
-      { metin: 'Düzenli ve sade; eşyalarımın kalitesi görünüşünden önemlidir', metinEn: 'Organized and minimal; the quality of my things matters more than their look', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+      { metin: 'Rahat ve tertemiz olsun; huzur veren, ferah bir düzen isterim', metinEn: 'Comfortable and spotless; I want a calm, airy order', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Az ama kaliteli; eşyanın markası ve sağlamlığı görünüşünden önemli', metinEn: 'Few but high quality; brand and durability matter more than looks', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
     ],
   },
   // --- SAĞLIK EĞİLİMLERİ ---
@@ -1004,6 +1004,42 @@ export const sorular = [
       { metin: 'Genelde iyi niyetle yaklaşırım; bu yüzden bazen kandırılabiliyorum', metinEn: 'I usually assume good intent, which sometimes gets me fooled', puan: { safravi: 1, demevi: 3, balgami: 0, sevdavi: 0 } },
       { metin: 'Hemen "olur" demem; garantisi yoksa uzak dururum', metinEn: 'I don\'t say yes right away; without a guarantee I stay away', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
       { metin: 'Somut olarak gösterilmeden ikna olmam; aylar sonra tekrar sorabilirim', metinEn: 'I\'m not convinced without concrete proof; I may come back months later to ask again', puan: { safravi: 0, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 58,
+    kategori: 'sosyal',
+    soru: 'Merak ettiğiniz bir konuda genellikle ne yaparsınız?',
+    soruEn: 'What do you usually do about something you are curious about?',
+    secenekler: [
+      { metin: 'Peş peşe soru sorarım; öğrenmeden bırakmam, bir sonrakini de merak ederim', metinEn: 'I ask question after question; I do not let go until I know, and then I want the next thing', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Sorarım ve sonra kendim anlatmaya başlarım; hikâyeye dönüştürürüm', metinEn: 'I ask, then start telling it myself; I turn it into a story', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Sormaya çekinirim; kendi kendime izler, sessizce öğrenirim', metinEn: 'I hesitate to ask; I watch quietly and learn on my own', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 1 } },
+      { metin: 'Kolay ikna olmam; somut kanıt görene kadar araştırır, kimseye sormam', metinEn: 'I am not easily convinced; I research until I see solid proof and ask no one', puan: { safravi: 1, demevi: 0, balgami: 0, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 59,
+    kategori: 'fiziksel',
+    soru: 'Evde eşya taşımak, perde asmak gibi ağır bir iş çıkınca ne olur?',
+    soruEn: 'What happens when heavy work comes up at home — moving furniture, hanging curtains?',
+    secenekler: [
+      { metin: 'Hemen kendim yaparım; beklemeye tahammülüm yok', metinEn: 'I just do it myself right away; I cannot stand waiting', puan: { safravi: 3, demevi: 1, balgami: 0, sevdavi: 0 } },
+      { metin: 'Birilerini çağırırım; kalabalık olsun, eğlenceye dönsün', metinEn: 'I call people over; the more the merrier, let it turn into fun', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Çabuk yorulurum; başkası yapsın ya da birini tutalım isterim', metinEn: 'I tire quickly; I would rather someone else did it, or we hired someone', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
+      { metin: 'Hemen başlamam; uzun uzun düşünür, doğru aletle düzgün yaparım', metinEn: 'I do not start right away; I think it through and do it properly with the right tools', puan: { safravi: 1, demevi: 0, balgami: 1, sevdavi: 3 } },
+    ],
+  },
+  {
+    id: 60,
+    kategori: 'saglik',
+    soru: 'Hangi mevsimde kendinizi daha yorgun ve hastalığa açık hissedersiniz?',
+    soruEn: 'In which season do you feel most tired and prone to illness?',
+    secenekler: [
+      { metin: 'Yazın; sıcak bastırınca halsizleşir, tahammülüm azalır', metinEn: 'Summer; when the heat sets in I get weak and my patience shortens', puan: { safravi: 3, demevi: 0, balgami: 0, sevdavi: 0 } },
+      { metin: 'İlkbaharda; havalar açarken tam tersine kendimi kötü hissederim', metinEn: 'Spring; as the weather opens up I oddly feel worse', puan: { safravi: 0, demevi: 3, balgami: 0, sevdavi: 0 } },
+      { metin: 'Kışın; soğuk ve nem beni çökertir, sık hastalanırım', metinEn: 'Winter; cold and damp wear me down and I get ill often', puan: { safravi: 0, demevi: 0, balgami: 3, sevdavi: 0 } },
+      { metin: 'Sonbaharda; yapraklar dökülürken bedenim de ağırlaşır', metinEn: 'Autumn; as the leaves fall my body grows heavy too', puan: { safravi: 0, demevi: 0, balgami: 0, sevdavi: 3 } },
     ],
   },
 ];

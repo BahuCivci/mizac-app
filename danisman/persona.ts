@@ -118,12 +118,54 @@ export function danismanPromptu(): string {
   ].join('\n');
 }
 
-/** Kanıt çıkarıcının kullandığı, kısa ve göstergeye odaklı sürüm. */
+/**
+ * Testin 60 sorusundaki puanlanmış göstergeleri tablo hâline getirir.
+ *
+ * Çıkarıcı bunsuz modelin kendi mizaç bilgisine kalıyordu ve sohbet testinde
+ * sistematik olarak yanılıyordu: "elim ayağım buz gibi" → sevdavî, "terim
+ * soğuk olur" → demevî. Oysa ikisi de kitapta açıkça balgamî. Tablo, çıkarıcıyı
+ * modelin hafızasından alıp verinin üzerine oturtur — bu göstergeler zaten
+ * sitedeki testin kaynağı, yani danışman ve test aynı şeye bakar.
+ */
+function gostergeTablosu(): string {
+  const satirlar: string[] = [];
+  for (const soru of sorular) {
+    const esler = soru.secenekler
+      .map((s) => {
+        const uc = TIPLER.filter((t) => s.puan[t] >= 3);
+        return uc.length === 1 ? `${uc[0]}: ${s.metin}` : null;
+      })
+      .filter(Boolean);
+    if (esler.length) satirlar.push(`[${soru.kategori}] ` + esler.join(' | '));
+  }
+  return satirlar.join('\n');
+}
+
+/** Kanıt çıkarıcının kullandığı, göstergeye odaklı sürüm. */
 export function kanitPromptu(): string {
   return [
     'Bir kişinin sözünden mizaç göstergesi çıkarıyorsun.',
     '',
     TIPLER.map(mizacTarifi).join('\n'),
     NEM_KURALI,
+    '',
+    'GÖSTERGE TABLOSU — kişinin sözünü ÖNCE buradaki maddelerle eşleştir.',
+    'Bir madde uyuyorsa mizacını oradan al; kendi yorumunu tablonun önüne geçirme.',
+    gostergeTablosu(),
   ].join('\n');
+}
+
+/**
+ * Üslup kuralları her tura yeniden hatırlatılır.
+ *
+ * Sohbet testinde görüldü: kurallar yalnız açılış sistem mesajında durunca
+ * bağlam uzadıkça sulanıyor ve danışman numaralı listeler yapıp ders anlatmaya
+ * dönüyor, hatta mizaç adını izinsiz söylüyor.
+ */
+export function uslupHatirlatmasi(): string {
+  return (
+    '[hatırlatma — kullanıcıya gösterme] Kısa konuş (en fazla 4 cümle), madde ' +
+    'işaretli liste yapma, ders anlatma, kendi gözlemini anlatma ("fark ettim" ' +
+    'gibi), en fazla bir soru sor. Mizaç adını izin verilmedikçe söyleme.'
+  );
 }

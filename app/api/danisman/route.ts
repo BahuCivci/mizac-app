@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, istemciIp } from '@/lib/rate-limit';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
-import { danismanPromptu } from '@/danisman/persona';
+import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, type Kanit } from '@/danisman/kanit';
 
 /**
@@ -99,6 +99,7 @@ export async function POST(req: NextRequest) {
     const istem: Mesaj[] = [
       { rol: 'sistem', metin: danismanPromptu() },
       ...mesajlar,
+      { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
     ];
 

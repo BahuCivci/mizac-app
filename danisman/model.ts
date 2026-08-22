@@ -30,8 +30,12 @@ export interface Saglayici {
   sor(mesajlar: Mesaj[], secenekler?: SorSecenekleri): Promise<string>;
 }
 
-/** Ölçümde 72B'nin en iyi çalıştığı bağlam. Gereksiz büyütmek yükleme süresidir. */
-const VARSAYILAN_BAGLAM = 8192;
+/**
+ * Gösterge tablosu (~3K token) çıkarıcı promptuna eklendiğinden 8192 dar
+ * kalıyordu. 16384, 72B'nin 128K penceresi içinde rahat; yükleme süresini
+ * ölçülebilir biçimde artırmıyor.
+ */
+const VARSAYILAN_BAGLAM = 16384;
 
 /* ------------------------------------------------------------------ Ollama */
 
@@ -49,10 +53,29 @@ export function ollama(ayar: OllamaAyar = {}): Saglayici {
   const baglam = ayar.baglam ?? VARSAYILAN_BAGLAM;
   const sicakKalma = ayar.sicakKalma ?? '30m';
 
+  /**
+   * Soğuk açılış Node'un undici katmanındaki 300 sn'lik başlık zaman aşımını
+   * aşabiliyor: 72B'yi yüklemek dakikalar sürüyor ve `num_ctx` değişince Ollama
+   * modeli baştan yüklüyor. İstek düşse de sunucu yüklemeye devam ettiği için
+   * tekrar denemek işe yarıyor — ikinci deneme sıcak modeli bulur.
+   */
+  async function denemeliIstek(gonder: () => Promise<Response>): Promise<Response> {
+    let sonHata: unknown;
+    for (let deneme = 0; deneme < 3; deneme++) {
+      try {
+        return await gonder();
+      } catch (e) {
+        sonHata = e;
+        await new Promise((r) => setTimeout(r, 20_000 * (deneme + 1)));
+      }
+    }
+    throw sonHata;
+  }
+
   return {
     ad: `ollama:${model}`,
     async sor(mesajlar, secenekler = {}) {
-      const cevap = await fetch(`${adres}/api/chat`, {
+      const cevap = await denemeliIstek(() => fetch(`${adres}/api/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -70,7 +93,7 @@ export function ollama(ayar: OllamaAyar = {}): Saglayici {
             content: m.metin,
           })),
         }),
-      });
+      }));
 
       if (!cevap.ok) throw new Error(`Ollama ${cevap.status}: ${await cevap.text()}`);
       const d = await cevap.json();

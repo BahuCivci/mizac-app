@@ -12,7 +12,7 @@
  */
 import * as readline from 'node:readline/promises';
 import { saglayiciSec, type Mesaj } from './model';
-import { danismanPromptu } from './persona';
+import { danismanPromptu, uslupHatirlatmasi } from './persona';
 import { kanitCikar, puanla, eksikAlanlar, yonerge, type Kanit } from './kanit';
 import { mizacProfiller } from '@/lib/mizac-data';
 
@@ -76,9 +76,11 @@ async function main() {
     );
 
     const not = yonerge(kanitlar);
-    const istem: Mesaj[] = not
-      ? [...gecmis, { rol: 'sistem' as const, metin: not }]
-      : [...gecmis];
+    const istem: Mesaj[] = [
+      ...gecmis,
+      { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
+      ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
+    ];
 
     let cevap: string;
     try {

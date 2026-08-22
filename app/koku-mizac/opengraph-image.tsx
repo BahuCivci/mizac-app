@@ -14,7 +14,10 @@ export default function OGImage() {
         background: 'linear-gradient(180deg, #0f0a04 0%, #1a1207 50%, #1a0a18 100%)',
         fontFamily: 'serif',
       }}>
-        <div style={{ fontSize: 64, display: 'flex', marginBottom: 16 }}>✿</div>
+        {/* ✿ (U+273F) satori tarafından çözülemiyor: font isteği 400 dönüp
+            görselde tofu kutusu çıkıyor (bkz. lib/og-star.tsx). Emoji ayrı bir
+            yoldan çözülüyor ve sorunsuz render ediliyor. */}
+        <div style={{ fontSize: 64, display: 'flex', marginBottom: 16 }}>🌸</div>
         <div style={{ fontSize: 68, fontWeight: 900, color: '#c4973a', display: 'flex', marginBottom: 12 }}>
           Koku &amp; Mizaç
         </div>

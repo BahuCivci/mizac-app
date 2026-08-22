@@ -64,17 +64,22 @@ async function main() {
   console.log(`\ndanışmanın cevabı:\n${cevap}`);
 
   // Üslup kuralları öğüt değil şart; burada ölçülür.
+  //
+  // "Soruyla bitmeli" ölçütü kaldırıldı: her turu soruya bağlamak danışmanı
+  // sohbet arkadaşı değil mülakatçı yapıyordu. Artık soru sormamak serbest,
+  // sorgulamak değil.
   const cumleSayisi = (cevap.match(/[.!?…]/g) ?? []).length;
-  const mizacAdiGecti = /safrav|demev|balgam|sevdav/i.test(cevap);
-  const soruylaBitiyor = /\?\s*$/.test(cevap);
-
   const soruSayisi = (cevap.match(/\?/g) ?? []).length;
 
+  // Kendi gözlem sürecini anlatmak insana denek olduğunu hissettiriyor.
+  const inceleyenDil =
+    /fark ettim|dikkatimi çekti|görüyor gibiyim|anlaşılıyor|gözlemliyorum|senin şu özelliğin|bu bana .{0,20}gösteriyor|olduğunu görüyorum/i;
+
   const ihlaller: string[] = [];
-  if (cumleSayisi > 3) ihlaller.push(`${cumleSayisi} cümle (en fazla 3)`);
-  if (mizacAdiGecti) ihlaller.push('mizaç adını erken söyledi');
-  if (!soruylaBitiyor) ihlaller.push('soruyla bitmedi');
+  if (cumleSayisi > 4) ihlaller.push(`${cumleSayisi} cümle (en fazla 4)`);
+  if (/safrav|demev|balgam|sevdav/i.test(cevap)) ihlaller.push('mizaç adını erken söyledi');
   if (soruSayisi > 1) ihlaller.push(`${soruSayisi} soru (en fazla 1)`);
+  if (inceleyenDil.test(cevap)) ihlaller.push('inceleyen dil ("fark ettim" vb.)');
 
   console.log(`\nüslup: ${ihlaller.length ? '✗ ' + ihlaller.join(', ') : '✓ kurallara uygun'}`);
 

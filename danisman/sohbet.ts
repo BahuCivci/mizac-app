@@ -13,7 +13,7 @@
 import * as readline from 'node:readline/promises';
 import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu } from './persona';
-import { kanitCikar, puanla, eksikAlanlar, nemYoklamasiGerek, type Kanit } from './kanit';
+import { kanitCikar, puanla, eksikAlanlar, yonerge, type Kanit } from './kanit';
 import { mizacProfiller } from '@/lib/mizac-data';
 
 const saglayici = saglayiciSec();
@@ -40,36 +40,6 @@ function durumYaz() {
   const eksik = eksikAlanlar(kanitlar);
   if (eksik.length) console.log(`  hiç değinilmeyen alanlar: ${eksik.join(', ')}`);
   console.log('  ─────────────────\n');
-}
-
-/** Modele o turda nereye yöneleceğini söyleyen, kullanıcının görmediği not. */
-function yonlendirme(): string | null {
-  if (!kanitlar.length) return null;
-  const d = puanla(kanitlar);
-  const notlar: string[] = [];
-
-  const nem = nemYoklamasiGerek(d);
-  if (nem) {
-    notlar.push(
-      `İlk iki aday (${d.kazanan}, ${d.ikinci}) aynı sıcaklık grubunda; aralarındaki ` +
-        `fark nem ekseninde ve tam orada yanılma riskin yüksek. Sohbetin akışına ` +
-        `sığdırarak şunlardan BİRİNİ öğren: ${nem.join(' / ')}.`
-    );
-  }
-
-  const eksik = eksikAlanlar(kanitlar);
-  if (eksik.length > 4) {
-    notlar.push(`Şu alanlarda hiç gözlem yok: ${eksik.slice(0, 4).join(', ')}.`);
-  }
-
-  if (d.guven > 0.35 && kanitlar.length >= 6) {
-    notlar.push(
-      `Kanaatin oluştu (${d.kazanan}). Uygun bir anda söyle ve gerekçesini ` +
-        `kişinin kendi sözlerinden göster.`
-    );
-  }
-
-  return notlar.length ? `[yönerge — kullanıcıya gösterme]\n${notlar.join('\n')}` : null;
 }
 
 async function main() {
@@ -105,7 +75,7 @@ async function main() {
       gecmis.slice(-6).filter((m) => m.rol !== 'sistem').map((m) => `${m.rol}: ${m.metin}`)
     );
 
-    const not = yonlendirme();
+    const not = yonerge(kanitlar);
     const istem: Mesaj[] = not
       ? [...gecmis, { rol: 'sistem' as const, metin: not }]
       : [...gecmis];

@@ -55,6 +55,7 @@ const linkler = {
     liste: [
       { href: '/test', tr: 'Mizaç Testi', en: 'Temperament Test' },
       { href: '/hizli-test', tr: 'Hızlı Test (10 Soru)', en: 'Quick Test (10 Q)' },
+      { href: '/danisman', tr: 'Mizaç Danışmanı (Sohbet)', en: 'Temperament Consultant (Chat)' },
       { href: '/sss', tr: 'SSS', en: 'FAQ' },
       { href: '/karsilastir', tr: 'Mizaç Uyumu', en: 'Compatibility' },
       { href: '/blog', tr: 'Blog', en: 'Blog' },

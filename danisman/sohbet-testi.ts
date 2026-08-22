@@ -16,6 +16,7 @@ import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
 import { kanitCikar, puanla, yonerge, type Kanit } from './kanit';
 import { cevabiBicimlendir } from './bicim';
+import { stratejiSec, stratejiNotu } from './strateji';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
 
 const SENARYOLAR: Record<MizacTip, string[]> = {
@@ -90,16 +91,29 @@ async function senaryoKos(hedef: MizacTip) {
     const oncekiDurum = kanitlar.length ? puanla(kanitlar) : null;
     const kanaatVar = !!oncekiDurum && oncekiDurum.guven > 0.35 && kanitlar.length >= 6;
 
+    const strateji = stratejiSec({
+      kanitlar,
+      durum: oncekiDurum,
+      tur: i + 1,
+      sonSoz: soz,
+      kanaatVar,
+    });
+
     const cevap = cevabiBicimlendir(
       await saglayici.sor(
         [
           ...gecmis,
           { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
           ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
+          { rol: 'sistem' as const, metin: stratejiNotu(strateji) },
         ],
         { sicaklik: 0.7, enFazlaJeton: 300 }
       ),
-      { mizacSoylenebilir: kanaatVar, kazanan: oncekiDurum?.kazanan }
+      {
+        mizacSoylenebilir: kanaatVar,
+        kazanan: oncekiDurum?.kazanan,
+        soruVar: strateji.soruVar,
+      }
     );
 
     gecmis.push({ rol: 'danisman', metin: cevap });
@@ -108,7 +122,7 @@ async function senaryoKos(hedef: MizacTip) {
     const d = puanla(kanitlar);
     if (d.kazanan === hedef && ilkDogruTur === null && kanitlar.length >= 3) ilkDogruTur = i + 1;
 
-    console.log(`danışman: ${cevap}`);
+    console.log(`danışman [${strateji.ad}]: ${cevap}`);
     console.log(
       `   [${kanitlar.length} gösterge · saf ${d.puanlar.safravi} dem ${d.puanlar.demevi} ` +
         `bal ${d.puanlar.balgami} sev ${d.puanlar.sevdavi} → ${d.kazanan} %${Math.round(d.guven * 100)}]`

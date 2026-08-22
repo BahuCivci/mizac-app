@@ -15,6 +15,7 @@ import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
 import { kanitCikar, puanla, eksikAlanlar, yonerge, type Kanit } from './kanit';
 import { cevabiBicimlendir } from './bicim';
+import { stratejiSec, stratejiNotu } from './strateji';
 import { mizacProfiller } from '@/lib/mizac-data';
 
 const saglayici = saglayiciSec();
@@ -77,10 +78,18 @@ async function main() {
     );
 
     const not = yonerge(kanitlar);
+    const strateji = stratejiSec({
+      kanitlar,
+      durum: kanitlar.length ? puanla(kanitlar) : null,
+      tur: gecmis.filter((m) => m.rol === 'kullanici').length,
+      sonSoz: soz,
+      kanaatVar: kanitlar.length >= 6 && puanla(kanitlar).guven > 0.35,
+    });
     const istem: Mesaj[] = [
       ...gecmis,
       { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
+      { rol: 'sistem' as const, metin: stratejiNotu(strateji) },
     ];
 
     const oncekiDurum = kanitlar.length ? puanla(kanitlar) : null;
@@ -90,7 +99,11 @@ async function main() {
     try {
       cevap = cevabiBicimlendir(
         await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 400 }),
-        { mizacSoylenebilir: kanaatVar, kazanan: oncekiDurum?.kazanan }
+        {
+          mizacSoylenebilir: kanaatVar,
+          kazanan: oncekiDurum?.kazanan,
+          soruVar: strateji.soruVar,
+        }
       );
     } catch (e) {
       console.error(`\n[model hatası: ${(e as Error).message}]\n`);

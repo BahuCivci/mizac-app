@@ -49,12 +49,18 @@ export interface BicimSecenekleri {
    * mizacın adı geçebilir.
    */
   kazanan?: string;
+  /**
+   * Bu turda soru sorulabilir mi. Strateji "yansıtma"/"onaylama" gibi bir
+   * hamle seçtiyse false gelir ve soru cümleleri ayıklanır — soru sormamak
+   * temenni değil, uygulanan bir kural olsun diye.
+   */
+  soruVar?: boolean;
   enFazlaCumle?: number;
 }
 
 export function cevabiBicimlendir(
   ham: string,
-  { mizacSoylenebilir, kazanan, enFazlaCumle = 4 }: BicimSecenekleri
+  { mizacSoylenebilir, kazanan, soruVar = true, enFazlaCumle = 4 }: BicimSecenekleri
 ): string {
   // Satır bazlı temizlik: liste maddelerini ve başlıkları düz metne indir.
   const satirlar = ham
@@ -86,17 +92,22 @@ export function cevabiBicimlendir(
 
   cumleler = cumleler.slice(0, enFazlaCumle);
 
-  // Birden fazla soru varsa ilkinden sonrakiler düşer — sorgu değil sohbet.
-  let soruGoruldu = false;
-  cumleler = cumleler.filter((c) => {
-    if (!c.includes('?')) return true;
-    if (soruGoruldu) return false;
-    soruGoruldu = true;
-    return true;
-  });
+  if (soruVar) {
+    // Birden fazla soru varsa ilkinden sonrakiler düşer — sorgu değil sohbet.
+    let soruGoruldu = false;
+    cumleler = cumleler.filter((c) => {
+      if (!c.includes('?')) return true;
+      if (soruGoruldu) return false;
+      soruGoruldu = true;
+      return true;
+    });
+  } else {
+    cumleler = cumleler.filter((c) => !c.includes('?'));
+  }
 
   const sonuc = cumleler.join(' ').trim();
 
-  // Her şey elendiyse sohbeti boş bırakma.
-  return sonuc || 'Anlıyorum. Biraz daha anlatır mısın?';
+  // Her şey elendiyse sohbeti boş bırakma. Soru yasakken soruyla dolduramayız.
+  if (sonuc) return sonuc;
+  return soruVar ? 'Anlıyorum. Biraz daha anlatır mısın?' : 'Anlıyorum seni.';
 }

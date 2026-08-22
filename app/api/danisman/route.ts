@@ -4,6 +4,7 @@ import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, type Kanit } from '@/danisman/kanit';
 import { cevabiBicimlendir } from '@/danisman/bicim';
+import { stratejiSec, stratejiNotu } from '@/danisman/strateji';
 
 /**
  * Danışman uç noktası.
@@ -96,12 +97,26 @@ export async function POST(req: NextRequest) {
       mesajlar.slice(-6).map((m) => `${m.rol}: ${m.metin}`)
     );
 
+    const oncekiDurum = oncekiKanitlar.length ? puanla(oncekiKanitlar) : null;
+    const oncekiKanaat =
+      !!oncekiDurum && oncekiDurum.guven > 0.35 && oncekiKanitlar.length >= 6;
+
+    // Danışmanın o turdaki hamlesi: yansıtma, onaylama, soru, özet...
+    const strateji = stratejiSec({
+      kanitlar: oncekiKanitlar,
+      durum: oncekiDurum,
+      tur: mesajlar.filter((m) => m.rol === 'kullanici').length,
+      sonSoz: son.metin,
+      kanaatVar: oncekiKanaat,
+    });
+
     const not = yonerge(oncekiKanitlar);
     const istem: Mesaj[] = [
       { rol: 'sistem', metin: danismanPromptu() },
       ...mesajlar,
       { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
+      { rol: 'sistem' as const, metin: stratejiNotu(strateji) },
     ];
 
     const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
@@ -118,6 +133,7 @@ export async function POST(req: NextRequest) {
       cevap: cevabiBicimlendir(ham, {
         mizacSoylenebilir: kanaatVar,
         kazanan: durum.kazanan,
+        soruVar: strateji.soruVar,
       }),
       kanitlar: tumKanitlar,
       // Kanaat oluşmadan mizaç dışarı verilmez; arayüz erken sonuç göstermesin.

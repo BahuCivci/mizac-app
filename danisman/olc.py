@@ -18,30 +18,43 @@ import urllib.request
 
 TIPLER = ["safravi", "demevi", "balgami", "sevdavi"]
 
-SISTEM = (
-    "Sen tıbb-ı nebevî geleneğindeki dört mizaç sınıflandırmasında uzmansın.\n"
-    "safravi: sıcak-kuru (safra/ateş) — hızlı, sabırsız, çabuk parlayıp çabuk sönen, "
-    "az uyuyan, az terleyen, sıcaktan bunalan, atılgan, mükemmeliyetçi\n"
-    "demevi: sıcak-ıslak (kan/hava) — sosyal, coşkulu, bol terleyen, iştahlı, "
-    "çok uyku isteyen, dağınık, çabuk kaynaşan, paylaşan\n"
-    "balgami: soğuk-ıslak (balgam/su) — sakin, ağır, geç kalkan, kilo alan, "
-    "üşüyen, çatışmadan kaçan, rutine bağlı, yavaş ama kalıcı öğrenen\n"
-    "sevdavi: soğuk-kuru (sevda/toprak) — düşünceli, kaygılı, aşırı analiz eden, "
-    "kuru ciltli, unutmayan, yalnız çalışan, kanıt isteyen, geç affeden\n\n"
-    "Sana bir kişinin kendi ifadesi verilecek. Bu ifade hangi mizacın göstergesidir?\n"
-    "SADECE şu dört kelimeden birini yaz, başka hiçbir şey yazma: "
-    "safravi, demevi, balgami, sevdavi"
-)
+TANIM = {
+    "safravi": "sıcak-kuru (safra/ateş) — hızlı, sabırsız, çabuk parlayıp çabuk "
+               "sönen, az uyuyan, az terleyen, sıcaktan bunalan, atılgan, "
+               "mükemmeliyetçi",
+    "demevi": "sıcak-ıslak (kan/hava) — sosyal, coşkulu, bol terleyen, iştahlı, "
+              "çok uyku isteyen, dağınık, çabuk kaynaşan, paylaşan",
+    "balgami": "soğuk-ıslak (balgam/su) — sakin, ağır, geç kalkan, kilo alan, "
+               "üşüyen, çatışmadan kaçan, rutine bağlı, yavaş ama kalıcı öğrenen",
+    "sevdavi": "soğuk-kuru (sevda/toprak) — düşünceli, kaygılı, aşırı analiz eden, "
+               "kuru ciltli, unutmayan, yalnız çalışan, kanıt isteyen, geç affeden",
+}
 
 
-def sor(url, model, ifade, ctx, zaman_asimi):
+def sistem_promptu(sira):
+    """Mizaçların sunuş sırası ölçümün kendisini etkiliyor mu — `--sira` bunu sınar.
+
+    Küçük modeller listenin sonundaki seçeneğe kayabiliyor. Sırayı değiştirip
+    aynı sınavı koşmak, yanlılığın modelde mi promptta mı olduğunu ayırır.
+    """
+    return (
+        "Sen tıbb-ı nebevî geleneğindeki dört mizaç sınıflandırmasında uzmansın.\n"
+        + "".join("%s: %s\n" % (t, TANIM[t]) for t in sira)
+        + "\nSana bir kişinin kendi ifadesi verilecek. Bu ifade hangi mizacın "
+          "göstergesidir?\n"
+          "SADECE şu dört kelimeden birini yaz, başka hiçbir şey yazma: "
+        + ", ".join(sira)
+    )
+
+
+def sor(url, model, ifade, ctx, zaman_asimi, sistem):
     govde = {
         "model": model,
         "stream": False,
         "keep_alive": "30m",
         "options": {"temperature": 0, "num_predict": 8, "num_ctx": ctx},
         "messages": [
-            {"role": "system", "content": SISTEM},
+            {"role": "system", "content": sistem},
             {"role": "user", "content": ifade},
         ],
     }
@@ -81,7 +94,14 @@ def main():
     p.add_argument("--sinir", type=int, default=0, help="ilk N madde (0=hepsi)")
     p.add_argument("--cikti", default="")
     p.add_argument("--devam", action="store_true")
+    p.add_argument("--sira", default=",".join(TIPLER),
+                   help="mizaclarin promptta sunulus sirasi (yanlilik sinamasi)")
     a = p.parse_args()
+
+    sira = [t.strip() for t in a.sira.split(",")]
+    if sorted(sira) != sorted(TIPLER):
+        sys.exit("--sira dort mizaci da icermeli: " + ",".join(TIPLER))
+    sistem = sistem_promptu(sira)
 
     maddeler = [json.loads(s) for s in open(a.sinav, encoding="utf-8") if s.strip()]
     if a.sinir:
@@ -110,7 +130,7 @@ def main():
         hata = None
         for deneme in range(3):
             try:
-                ham, meta = sor(a.url, a.model, ifade, a.ctx, a.zaman_asimi)
+                ham, meta = sor(a.url, a.model, ifade, a.ctx, a.zaman_asimi, sistem)
                 break
             except (urllib.error.URLError, RuntimeError, OSError) as e:
                 hata = str(e)
@@ -143,7 +163,7 @@ def main():
 
     dogru = sum(1 for s in sonuclar if s["tahmin"] == s["dogru"])
     ozet = {
-        "model": a.model, "sinav": a.sinav, "ctx": a.ctx,
+        "model": a.model, "sinav": a.sinav, "ctx": a.ctx, "sira": sira,
         "madde": len(sonuclar), "dogru": dogru,
         "dogruluk": round(100.0 * dogru / max(len(sonuclar), 1), 1),
         "cevapsiz": sum(1 for s in sonuclar if s["tahmin"] is None),

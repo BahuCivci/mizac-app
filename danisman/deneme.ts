@@ -68,10 +68,13 @@ async function main() {
   const mizacAdiGecti = /safrav|demev|balgam|sevdav/i.test(cevap);
   const soruylaBitiyor = /\?\s*$/.test(cevap);
 
+  const soruSayisi = (cevap.match(/\?/g) ?? []).length;
+
   const ihlaller: string[] = [];
   if (cumleSayisi > 3) ihlaller.push(`${cumleSayisi} cümle (en fazla 3)`);
   if (mizacAdiGecti) ihlaller.push('mizaç adını erken söyledi');
   if (!soruylaBitiyor) ihlaller.push('soruyla bitmedi');
+  if (soruSayisi > 1) ihlaller.push(`${soruSayisi} soru (en fazla 1)`);
 
   console.log(`\nüslup: ${ihlaller.length ? '✗ ' + ihlaller.join(', ') : '✓ kurallara uygun'}`);
 

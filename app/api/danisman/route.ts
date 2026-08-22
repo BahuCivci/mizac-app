@@ -3,6 +3,7 @@ import { rateLimit, istemciIp } from '@/lib/rate-limit';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, type Kanit } from '@/danisman/kanit';
+import { cevabiBicimlendir } from '@/danisman/bicim';
 
 /**
  * Danışman uç noktası.
@@ -103,19 +104,26 @@ export async function POST(req: NextRequest) {
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
     ];
 
-    const cevap = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
+    const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
     const yeni = await yeniKanitSozu;
     const tumKanitlar = [...oncekiKanitlar, ...yeni];
     const durum = puanla(tumKanitlar);
 
+    // Kanaat ölçütü tek yerde: hem mizaç adının söylenebilmesi hem de
+    // `durum`un dışarı verilmesi aynı eşiğe bağlı olmalı, yoksa danışman
+    // arayüzün göstermediği bir mizacı ağzına alabilir.
+    const kanaatVar = durum.guven > 0.35 && tumKanitlar.length >= 6;
+
     return NextResponse.json({
-      cevap: cevap.trim(),
+      cevap: cevabiBicimlendir(ham, {
+        mizacSoylenebilir: kanaatVar,
+        kazanan: durum.kazanan,
+      }),
       kanitlar: tumKanitlar,
       // Kanaat oluşmadan mizaç dışarı verilmez; arayüz erken sonuç göstermesin.
-      durum:
-        durum.guven > 0.35 && tumKanitlar.length >= 6
-          ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
-          : null,
+      durum: kanaatVar
+        ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
+        : null,
     });
   } catch (e) {
     // Model adresi/anahtarı hata metniyle sızmasın.

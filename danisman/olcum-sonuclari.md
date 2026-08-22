@@ -94,6 +94,48 @@ sevdavî okumaya eğilimli olacak. Bunun tasarım cevabı gerekiyor:
 - Gözlemler modelin güven derecesiyle ağırlıklandırılmalı; zayıf kanıt puanı
   az taşımalı.
 
+## Aşama 2-3 — uçtan uca sohbet testi
+
+`danisman/sohbet-testi.ts`, dört mizaç için sekizer turluk senaryo koşar.
+Ölçüt planın doğrulama maddesi: aynı kişi profili danışmanda ve testte aynı
+mizacı vermeli.
+
+| Senaryo | Sonuç | Güven | İlk doğru tur |
+|---|---|---|---|
+| balgamî | ✓ balgamî | %100 | 3 |
+| safravî | ✓ safravî | %100 | 2 |
+| demevî | ✓ demevî | %56 | 3 |
+| sevdavî | ✓ sevdavî | %100 | 3 |
+
+**4/4.** Ama ilk koşu 0/4'tü ve aradaki fark üç düzeltmeden geliyor:
+
+1. **Gösterge tablosu.** Çıkarıcı modelin kendi mizaç bilgisiyle çalışıyordu ve
+   balgamî'de sistematik yanılıyordu ("elim ayağım buz gibi" → sevdavî, "terim
+   soğuk olur" → demevî; ikisi de kitapta balgamî). Testin 240 puanlanmış
+   göstergesi prompta tablo olarak konunca balgamî senaryosu demevî %7'den
+   balgamî %100'e çıktı.
+2. **Üslup hatırlatması her turda.** Kurallar yalnız açılış mesajındayken
+   bağlam uzadıkça sulanıyor, danışman ders anlatmaya dönüyordu.
+3. **`danisman/bicim.ts` — kodda dayatma.** Hatırlatma da yetmedi. Prompt bir
+   ricadır, garanti değildir; cümle sınırı, liste temizliği, tedavi önerisi
+   ayıklama ve mizaç adı kapısı artık deterministik olarak uygulanıyor.
+
+### Modelin promptla düzelmeyen kusurları
+
+Bunlar `bicim.ts` ile yakalanıyor ama kaynağı model:
+
+- **Tıbbi tavsiye veriyor** — "antiperspirant kullanın", "düzenli egzersiz
+  dolaşımı hızlandırır", "bir terapiste danışın". Sağlık sınırı promptta yazılı
+  olmasına rağmen.
+- **Motorunkinden farklı mizaç adı söylüyor** — motor balgamî derken danışman
+  "demevî eğilimi" dedi. Kullanıcı çelişki görürdü.
+- **Çince karakter sızdırıyor** — "derin katmanlarda扎根 olduğunu".
+- Resmî/samimi kayıt arasında gidip geliyor.
+
+Üçü de `qwen2.5vl:72b`'nin talimat takibindeki zayıflığı; görsel-dil modeli,
+sıcak Türkçe sohbet için ayarlanmamış. Asıl kaldıraç prompt değil sağlayıcı
+(`MIZAC_SAGLAYICI=claude`).
+
 ## İşletme notları
 
 - 72B soğuk yükleme ~90 sn, sonrası ~1.0 sn/madde → sohbet turu için yeterli

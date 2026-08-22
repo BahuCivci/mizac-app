@@ -15,6 +15,7 @@
 import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
 import { kanitCikar, puanla, yonerge, type Kanit } from './kanit';
+import { cevabiBicimlendir } from './bicim';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
 
 const SENARYOLAR: Record<MizacTip, string[]> = {
@@ -86,7 +87,10 @@ async function senaryoKos(hedef: MizacTip) {
     const not = yonerge(kanitlar);
     if (not?.includes('nem ekseninde')) nemYoklandi = true;
 
-    const cevap = (
+    const oncekiDurum = kanitlar.length ? puanla(kanitlar) : null;
+    const kanaatVar = !!oncekiDurum && oncekiDurum.guven > 0.35 && kanitlar.length >= 6;
+
+    const cevap = cevabiBicimlendir(
       await saglayici.sor(
         [
           ...gecmis,
@@ -94,8 +98,9 @@ async function senaryoKos(hedef: MizacTip) {
           ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
         ],
         { sicaklik: 0.7, enFazlaJeton: 300 }
-      )
-    ).trim();
+      ),
+      { mizacSoylenebilir: kanaatVar, kazanan: oncekiDurum?.kazanan }
+    );
 
     gecmis.push({ rol: 'danisman', metin: cevap });
     kanitlar.push(...(await yeniSozu));

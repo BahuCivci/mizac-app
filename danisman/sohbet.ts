@@ -14,6 +14,7 @@ import * as readline from 'node:readline/promises';
 import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
 import { kanitCikar, puanla, eksikAlanlar, yonerge, type Kanit } from './kanit';
+import { cevabiBicimlendir } from './bicim';
 import { mizacProfiller } from '@/lib/mizac-data';
 
 const saglayici = saglayiciSec();
@@ -82,9 +83,15 @@ async function main() {
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
     ];
 
+    const oncekiDurum = kanitlar.length ? puanla(kanitlar) : null;
+    const kanaatVar = !!oncekiDurum && oncekiDurum.guven > 0.35 && kanitlar.length >= 6;
+
     let cevap: string;
     try {
-      cevap = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 400 });
+      cevap = cevabiBicimlendir(
+        await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 400 }),
+        { mizacSoylenebilir: kanaatVar, kazanan: oncekiDurum?.kazanan }
+      );
     } catch (e) {
       console.error(`\n[model hatası: ${(e as Error).message}]\n`);
       continue;

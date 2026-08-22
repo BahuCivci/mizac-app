@@ -1,4 +1,6 @@
-import { MizacTip } from './mizac-data';
+// Yalnız tip olarak kullanılıyor; `import type` olmazsa Node tipleri soyarken
+// bunu değer sanıp çalışma anında hata veriyor (danisman/ script'leri).
+import type { MizacTip } from './mizac-data';
 
 const TIPLER: MizacTip[] = ['safravi', 'demevi', 'balgami', 'sevdavi'];
 

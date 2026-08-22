@@ -39,15 +39,29 @@ göremiyor: 59'un 15'i, 33'ünü sevdavi sanıyor.
 
 Gerçekçi sınavda aynı örüntü: 40 maddenin 20'sine sevdavi, safravi'yi 10'da 1.
 
-Bu yanlılık modelin mi yoksa **ölçüm aletinin** mi — yani sistem promptunda
-mizaçları sıralarken sonuncuyu öne çıkarıp çıkarmadığımın — ürünü olduğu henüz
-ayrışmadı. `olc.py --sira` bunun için eklendi: sıra ters çevrilip aynı sınav
-koşulur. Yanlılık son sıradakine kayıyorsa suç promptta, sevdavi'de kalıyorsa
-modelde. **Bu koşu 32B'den önce yapılmalı**, yoksa 32B'nin sonucu da aynı
-şüpheyi taşır.
+### Yanlılık sınaması: suç promptta değil
+
+Aynı sınav, mizaçlar promptta **ters sırada** sunularak tekrar koşuldu
+(`--sira sevdavi,balgami,demevi,safravi`) — sevdavi artık listenin başında,
+safravi sonunda:
+
+| gerçek \ tahmin | safravi | demevi | balgami | sevdavi |
+|---|---|---|---|---|
+| **safravi** | 29 | 2 | 0 | **29** |
+| **demevi** | 12 | 21 | 3 | **24** |
+| **balgami** | 0 | 2 | 16 | **41** |
+| **sevdavi** | 3 | 0 | 8 | 48 |
+
+Doğruluk %47.9 (114/238) — değişmedi. Sevdavi tahmini ise 126'dan **142'ye
+çıktı**, oysa sevdavi artık listenin *başında*.
+
+Yanlılık konumu takip etmiyor. Küçük modellerde beklenen "listenin sonundaki
+seçeneğe kayma" burada yok; model, nereye koyulursa koyulsun sevdavi diyor.
+**Yanlılık modelin, ölçüm aletinin değil.** Sınav 32B'yi yargılamak için
+kullanılabilir.
 
 ## Sıradaki
 
-1. `--sira sevdavi,balgami,demevi,safravi` ile 7B taban koşusu (yanlılık sınaması)
+1. ~~7B yanlılık sınaması~~ — yapıldı, yukarıda
 2. 32B onarımı bitince taban + gerçekçi
 3. Gerekirse 72B

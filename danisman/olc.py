@@ -47,12 +47,58 @@ def sistem_promptu(sira):
     )
 
 
+# Ölçümde görüldü: model sıcak/soğuk eksenini büyük ölçüde doğru okuyor,
+# ıslak/kuru eksenini kaçırıyor (72B'nin 11 gerçekçi hatasının 7'si kendi
+# sıcaklık grubu içinde, yanlış nem). Dört mizaç zaten iki nitelikten türediği
+# için tek dörtlü seçim yerine iki ikili seçim sormak, doğru bilinen ekseni
+# korur. EKSEN_SISTEM bunu sınar.
+EKSEN = {
+    ("sicak", "kuru"): "safravi",
+    ("sicak", "islak"): "demevi",
+    ("soguk", "islak"): "balgami",
+    ("soguk", "kuru"): "sevdavi",
+}
+
+EKSEN_SISTEM = (
+    "Sen tıbb-ı nebevî geleneğindeki mizaç niteliklerinde uzmansın. Her insanın "
+    "mizacı iki nitelikten oluşur: ısı (sıcak/soğuk) ve nem (ıslak/kuru).\n\n"
+    "ISI ekseni:\n"
+    "  sıcak — çabuk ısınır, sıcaktan bunalır, hızlı tepki verir, enerjik, "
+    "atılgan, yüzü kızarır, az uyur ya da uykusu hafiftir\n"
+    "  soğuk — sürekli üşür, eli ayağı soğuktur, yavaş ve ağır hareket eder, "
+    "geç tepki verir, kışın zorlanır\n\n"
+    "NEM ekseni:\n"
+    "  ıslak — bol terler, cildi nemli ve yumuşaktır, bedeni dolgundur, çok uyur, "
+    "duyguları akıcıdır (kolay ağlar, kolay kaynaşır), balgam/kan fazlalığı\n"
+    "  kuru — az terler ya da hiç terlemez, cildi kurudur ve çatlar, bedeni "
+    "ince/kemiklidir, uykusu azdır ya da bölünür, katıdır, unutmaz\n\n"
+    "Sana bir kişinin kendi ifadesi verilecek. Bu ifade hangi ısı ve hangi nem "
+    "niteliğini gösteriyor?\n"
+    "SADECE iki kelime yaz, aralarında bir boşluk, başka hiçbir şey yazma.\n"
+    "Birinci kelime: sicak ya da soguk\n"
+    "İkinci kelime: islak ya da kuru\n"
+    "Örnek cevap: sicak kuru"
+)
+
+
+def eksen_cozumle(metin):
+    """İki nitelikli cevabı mizaca çevirir."""
+    k = (metin or "").lower()
+    k = (k.replace("ı", "i").replace("İ", "i").replace("î", "i")
+          .replace("ğ", "g").replace("ş", "s").replace("ç", "c"))
+    isi = "sicak" if "sicak" in k else ("soguk" if "soguk" in k else None)
+    nem = "islak" if "islak" in k else ("kuru" if "kuru" in k else None)
+    if isi is None or nem is None:
+        return None
+    return EKSEN[(isi, nem)]
+
+
 def sor(url, model, ifade, ctx, zaman_asimi, sistem):
     govde = {
         "model": model,
         "stream": False,
         "keep_alive": "30m",
-        "options": {"temperature": 0, "num_predict": 8, "num_ctx": ctx},
+        "options": {"temperature": 0, "num_predict": 12, "num_ctx": ctx},
         "messages": [
             {"role": "system", "content": sistem},
             {"role": "user", "content": ifade},
@@ -96,12 +142,15 @@ def main():
     p.add_argument("--devam", action="store_true")
     p.add_argument("--sira", default=",".join(TIPLER),
                    help="mizaclarin promptta sunulus sirasi (yanlilik sinamasi)")
+    p.add_argument("--eksen", action="store_true",
+                   help="mizaci dogrudan sormak yerine isi+nem sorup esle")
     a = p.parse_args()
 
     sira = [t.strip() for t in a.sira.split(",")]
     if sorted(sira) != sorted(TIPLER):
         sys.exit("--sira dort mizaci da icermeli: " + ",".join(TIPLER))
-    sistem = sistem_promptu(sira)
+    sistem = EKSEN_SISTEM if a.eksen else sistem_promptu(sira)
+    ayristir = eksen_cozumle if a.eksen else cozumle
 
     maddeler = [json.loads(s) for s in open(a.sinav, encoding="utf-8") if s.strip()]
     if a.sinir:
@@ -136,7 +185,7 @@ def main():
                 hata = str(e)
                 time.sleep(5 * (deneme + 1))
 
-        tahmin = cozumle(ham) if ham is not None else None
+        tahmin = ayristir(ham) if ham is not None else None
         sonuclar.append({
             "id": m.get("id", m.get("soru_id")),
             "dogru": m["dogru"],
@@ -163,7 +212,7 @@ def main():
 
     dogru = sum(1 for s in sonuclar if s["tahmin"] == s["dogru"])
     ozet = {
-        "model": a.model, "sinav": a.sinav, "ctx": a.ctx, "sira": sira,
+        "model": a.model, "sinav": a.sinav, "ctx": a.ctx, "sira": sira, "eksen": a.eksen,
         "madde": len(sonuclar), "dogru": dogru,
         "dogruluk": round(100.0 * dogru / max(len(sonuclar), 1), 1),
         "cevapsiz": sum(1 for s in sonuclar if s["tahmin"] is None),

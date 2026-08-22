@@ -1,0 +1,329 @@
+{
+ "model": "qwen2.5vl:72b",
+ "sinav": "sinav-gercekci.jsonl",
+ "ctx": 8192,
+ "sira": [
+  "safravi",
+  "demevi",
+  "balgami",
+  "sevdavi"
+ ],
+ "eksen": true,
+ "madde": 40,
+ "dogru": 27,
+ "dogruluk": 67.5,
+ "cevapsiz": 0,
+ "sure_sn": 45.0,
+ "matris": {
+  "safravi": {
+   "safravi": 6,
+   "demevi": 1,
+   "balgami": 2,
+   "sevdavi": 1,
+   "?": 0
+  },
+  "demevi": {
+   "safravi": 0,
+   "demevi": 6,
+   "balgami": 3,
+   "sevdavi": 1,
+   "?": 0
+  },
+  "balgami": {
+   "safravi": 0,
+   "demevi": 0,
+   "balgami": 7,
+   "sevdavi": 3,
+   "?": 0
+  },
+  "sevdavi": {
+   "safravi": 0,
+   "demevi": 0,
+   "balgami": 2,
+   "sevdavi": 8,
+   "?": 0
+  }
+ },
+ "sonuclar": [
+  {
+   "id": "g01",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g02",
+   "dogru": "safravi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g03",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g04",
+   "dogru": "safravi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g05",
+   "dogru": "safravi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g06",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g07",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g08",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g09",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "sicak kuru",
+   "hata": null
+  },
+  {
+   "id": "g10",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g11",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g12",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g13",
+   "dogru": "demevi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g14",
+   "dogru": "demevi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g15",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sıcak ıslak",
+   "hata": null
+  },
+  {
+   "id": "g16",
+   "dogru": "demevi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g17",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g18",
+   "dogru": "demevi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g19",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g20",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "sicak islak",
+   "hata": null
+  },
+  {
+   "id": "g21",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g22",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g23",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g24",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g25",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g26",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g27",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g28",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g29",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g30",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g31",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g32",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g33",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g34",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g35",
+   "dogru": "sevdavi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g36",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g37",
+   "dogru": "sevdavi",
+   "tahmin": "balgami",
+   "ham": "soguk islak",
+   "hata": null
+  },
+  {
+   "id": "g38",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g39",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  },
+  {
+   "id": "g40",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "soguk kuru",
+   "hata": null
+  }
+ ]
+}

@@ -1,67 +1,101 @@
 # Aşama 1 — Ölçüm sonuçları
 
 Kapadokya Üniversitesi sunucusu (192.168.1.40), Ollama, `num_ctx=8192`,
-`temperature=0`. Her satır gerçek bir koşu; tahmin yok.
+`temperature=0`. Her satır gerçek bir koşu; tahmin yok. Ham çıktılar
+`sonuclar/` altında, madde madde.
 
 ## Modellerin çalışabilirlik durumu
 
 | Model | Boyut | Durum |
 |---|---|---|
-| `qwen2.5vl:7b` | 6.0 GB | **Çalışıyor** — 15 sn'de yükleniyor, 0.6 sn/madde |
-| `qwen2.5vl:32b` | 21.2 GB | **Bozuk** — `Failed to load CLIP model`; blob tam boyutta (21.159.298.208 bayt) ama görsel katmanı yüklenmiyor. `/api/pull` ile onarım denendi |
-| `qwen2.5vl:32b-q8_0` | 36.2 GB | Denenmedi |
-| `qwen2.5vl:72b` | 48.7 GB | Denenmedi |
-| `qwen3.5:122b` | 81.4 GB | **Yüklenmiyor** — 9 dk %100 CPU, 974 MB RSS, GPU'ya hiç konmuyor. Bağlam ayarıyla ilgisi yok; kapsam dışı |
+| `qwen2.5vl:7b` | 6.0 GB | Çalışıyor — 15 sn'de yükleniyor, 0.6 sn/madde |
+| `qwen2.5vl:32b` | 21.2 GB | **Bozuk** — `Failed to load CLIP model` |
+| `qwen2.5vl:32b-q8_0` | 36.2 GB | **Bozuk** — aynı hata, **farklı blob** |
+| `qwen2.5vl:72b` | 48.7 GB | **Çalışıyor** — ~90 sn soğuk yükleme, ~1.0 sn/madde |
+| `qwen3.5:122b` | 81.4 GB | **Yüklenmiyor** — 9 dk %100 CPU, 974 MB RSS, GPU'ya hiç konmuyor |
 
-## Doğruluk
+32B'nin iki varyantı da aynı hatayı **ayrı blob'larla** veriyor, yani tek bir
+bozuk dosya değil; Ollama'nın bu yapıyla sorunu var. `/api/pull` onarımı aynı
+saniyede `{"status":"success"}` döndü — Ollama dosyaları eksiksiz sayıyor,
+hiçbir şey indirmedi. Bu yoldan onarım mümkün değil.
 
-| Model | Sınav | Doğruluk | Cevapsız | Süre |
+## Doğruluk — hepsi
+
+| Model | Sınav | Yöntem | Doğruluk | Süre |
 |---|---|---|---|---|
-| `qwen2.5vl:7b` | taban (238) | **%51.3** (122/238) | 0 | 138 sn |
-| `qwen2.5vl:7b` | gerçekçi (40) | **%42.5** (17/40) | 0 | 23 sn |
+| 7b | taban (238) | doğrudan | %51.3 | 138 sn |
+| 7b | taban (238) | doğrudan, ters sıra | %47.9 | 146 sn |
+| 7b | gerçekçi (40) | doğrudan | %42.5 | 23 sn |
+| **72b** | **taban (238)** | **doğrudan** | **%71.0** | 224 sn |
+| **72b** | **taban (238)** | **doğrudan, ters sıra** | **%73.5** | 226 sn |
+| **72b** | **gerçekçi (40)** | **doğrudan** | **%72.5** | 38 sn |
+| 72b | gerçekçi (40) | eksen (ısı+nem) | %67.5 | 45 sn |
+| 72b | taban (238) | eksen (ısı+nem) | %63.4 | 260 sn |
 
-Karar kuralı taban ≥%85 / gerçekçi ≥%70 idi. 7B ikisinde de çok uzak.
+7B elendi. **En iyi kurulum: 72B + doğrudan dörtlü soru, ~%71-73.**
 
-## Asıl bulgu: sevdavi yanlılığı
+## Sınavın kendisi hakkında öğrenilenler
 
-Taban sınavı, karışıklık matrisi (satır = gerçek, sütun = tahmin):
+**Yanlılık promptta değil.** 7B, 238 maddenin 126'sına sevdavi demişti (gerçek:
+59). Mizaçları promptta ters sırayla sunup tekrar koştum: sevdavi tahmini
+142'ye *çıktı*, oysa sevdavi artık listenin başındaydı. Küçük modellerde
+beklenen "listenin sonuna kayma" burada yok — yanlılık modelin.
 
-| gerçek \ tahmin | safravi | demevi | balgami | sevdavi |
-|---|---|---|---|---|
-| **safravi** | 29 | 5 | 1 | **25** |
-| **demevi** | 7 | 29 | 5 | **19** |
-| **balgami** | 4 | 7 | 15 | **33** |
-| **sevdavi** | 4 | 1 | 5 | 49 |
+**Taban sınavı "kolay" değil, gürültülü.** 72B gerçekçi sınavda (%72.5) taban
+sınavından (%71.0) *daha iyi*. Sebep: taban maddeleri testin şıkları ve şıklar
+ancak birbirlerine göre anlam taşıyor. Tek başına sunulduğunda bazıları gerçekten
+belirsiz — "Az terlerim" (safravî) ile "Neredeyse hiç terlemem" (sevdavî) gibi.
+Yani **%85'lik taban eşiğini ben yanlış kalibre etmişim**; o eşik maddelerin
+kendinden menkul ayırt edici olduğunu varsayıyordu, değiller.
 
-Model 238 maddenin **126'sına** sevdavi demiş; gerçekte 59 tane var. Sevdavi'yi
-bulma oranı yüksek (49/59) ama isabeti düşük (49/126). Balgami'yi neredeyse hiç
-göremiyor: 59'un 15'i, 33'ünü sevdavi sanıyor.
+## Asıl hata: ıslak/kuru ekseni
 
-Gerçekçi sınavda aynı örüntü: 40 maddenin 20'sine sevdavi, safravi'yi 10'da 1.
+72B'nin gerçekçi sınavdaki 11 hatasının **7'si kendi sıcaklık grubunun içinde**:
 
-### Yanlılık sınaması: suç promptta değil
+- safravî (sıcak-kuru) ↔ demevî (sıcak-**ıslak**) — 3 hata
+- balgamî (soğuk-ıslak) ↔ sevdavî (soğuk-**kuru**) — 4 hata
 
-Aynı sınav, mizaçlar promptta **ters sırada** sunularak tekrar koşuldu
-(`--sira sevdavi,balgami,demevi,safravi`) — sevdavi artık listenin başında,
-safravi sonunda:
+Örnekler: *"sırtım sırılsıklam oluyor"* (bol terleme = demevî) → safravî dedi.
+*"elim ayağım buz gibi"* (balgamî) → sevdavî dedi.
 
-| gerçek \ tahmin | safravi | demevi | balgami | sevdavi |
-|---|---|---|---|---|
-| **safravi** | 29 | 2 | 0 | **29** |
-| **demevi** | 12 | 21 | 3 | **24** |
-| **balgami** | 0 | 2 | 16 | **41** |
-| **sevdavi** | 3 | 0 | 8 | 48 |
+Model **sıcak/soğuk eksenini okuyor, ıslak/kuru eksenini kaçırıyor.**
 
-Doğruluk %47.9 (114/238) — değişmedi. Sevdavi tahmini ise 126'dan **142'ye
-çıktı**, oysa sevdavi artık listenin *başında*.
+### Denenen düzeltme — işe yaramadı
 
-Yanlılık konumu takip etmiyor. Küçük modellerde beklenen "listenin sonundaki
-seçeneğe kayma" burada yok; model, nereye koyulursa koyulsun sevdavi diyor.
-**Yanlılık modelin, ölçüm aletinin değil.** Sınav 32B'yi yargılamak için
-kullanılabilir.
+Dört mizaç zaten iki nitelikten türediği için, tek dörtlü seçim yerine iki ikili
+seçim (ısı + nem) sorup eşleştirmeyi denedim (`olc.py --eksen`). Hipotez: model
+doğru bildiği ekseni kaybetmez.
 
-## Sıradaki
+Sonuç: taban %71.0 → **%63.4**, gerçekçi %72.5 → **%67.5**. İkisi de düştü.
 
-1. ~~7B yanlılık sınaması~~ — yapıldı, yukarıda
-2. 32B onarımı bitince taban + gerçekçi
-3. Gerekirse 72B
+Matris nedenini gösteriyor: safravî 44/60'tan 27/60'a çöktü, 16'sı demevî oldu.
+Modeli nem ekseninde açıkça karar vermeye zorlayınca zayıf bilgisi doğrudan
+sonuca yansıyor; dörtlü soruda ise bütünsel ipuçlarıyla telafi edebiliyor.
+Hedeflenen balgamî karışıklığı biraz düzeldi (27→29) ama bedeli ağır.
+
+**Hipotez ölçümle çürütüldü. Doğrudan dörtlü soru kalıyor.**
+
+## Aşama 2 için sonuç
+
+**İnce ayara (Aşama 4) gerek yok** — ama karar kuralı sağladığı için değil:
+
+1. Hedef Claude API; Qwen üzerine LoRA taşınmaz (planda zaten kararlıydı)
+2. Gerçekçi eşiği (%70) geçildi; taban eşiği ise yanlış kalibre edilmişti
+3. Danışman tek ifadeye bakıp karar vermiyor — sohbet boyunca 8-10 gözlem
+   biriktirip kararı `lib/puanlama.ts` veriyor
+
+**Ama dikkat:** balgamî→sevdavî hatası **sistematik, rastgele değil**. Sistematik
+hata gözlem sayısı arttıkça sönmez, birikir. Yani danışman balgamî kişileri
+sevdavî okumaya eğilimli olacak. Bunun tasarım cevabı gerekiyor:
+
+- İlk iki aday balgamî/sevdavî olduğunda danışman **ayırt edici sinyali doğrudan
+  yoklamalı**: terleme, cilt nemi, kilo eğilimi, uyku süresi. Planda zaten olan
+  "eksik sinyal takibi" bu çifte özel kural kazanmalı.
+- Gözlemler modelin güven derecesiyle ağırlıklandırılmalı; zayıf kanıt puanı
+  az taşımalı.
+
+## İşletme notları
+
+- 72B soğuk yükleme ~90 sn, sonrası ~1.0 sn/madde → sohbet turu için yeterli
+- Ollama boştaki modeli düşürüyor; `keep_alive` verilmezse her tur soğuk açılış
+- Her istekte `num_ctx` **açıkça** verilmeli (122B'nin varsayılanı 262.144)

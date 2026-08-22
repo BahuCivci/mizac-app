@@ -1,0 +1,322 @@
+{
+ "model": "qwen2.5vl:7b",
+ "sinav": "sinav-gercekci.jsonl",
+ "ctx": 8192,
+ "madde": 40,
+ "dogru": 17,
+ "dogruluk": 42.5,
+ "cevapsiz": 0,
+ "sure_sn": 23.2,
+ "matris": {
+  "safravi": {
+   "safravi": 1,
+   "demevi": 2,
+   "balgami": 2,
+   "sevdavi": 5,
+   "?": 0
+  },
+  "demevi": {
+   "safravi": 3,
+   "demevi": 5,
+   "balgami": 0,
+   "sevdavi": 2,
+   "?": 0
+  },
+  "balgami": {
+   "safravi": 0,
+   "demevi": 0,
+   "balgami": 4,
+   "sevdavi": 6,
+   "?": 0
+  },
+  "sevdavi": {
+   "safravi": 2,
+   "demevi": 0,
+   "balgami": 1,
+   "sevdavi": 7,
+   "?": 0
+  }
+ },
+ "sonuclar": [
+  {
+   "id": "g01",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g02",
+   "dogru": "safravi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g03",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g04",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g05",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g06",
+   "dogru": "safravi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g07",
+   "dogru": "safravi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g08",
+   "dogru": "safravi",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g09",
+   "dogru": "safravi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g10",
+   "dogru": "safravi",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g11",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g12",
+   "dogru": "demevi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g13",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g14",
+   "dogru": "demevi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g15",
+   "dogru": "demevi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g16",
+   "dogru": "demevi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g17",
+   "dogru": "demevi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g18",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g19",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g20",
+   "dogru": "demevi",
+   "tahmin": "demevi",
+   "ham": "demevi",
+   "hata": null
+  },
+  {
+   "id": "g21",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g22",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g23",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g24",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g25",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g26",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g27",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g28",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g29",
+   "dogru": "balgami",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g30",
+   "dogru": "balgami",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g31",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g32",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g33",
+   "dogru": "sevdavi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g34",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g35",
+   "dogru": "sevdavi",
+   "tahmin": "balgami",
+   "ham": "balgami",
+   "hata": null
+  },
+  {
+   "id": "g36",
+   "dogru": "sevdavi",
+   "tahmin": "safravi",
+   "ham": "safravi",
+   "hata": null
+  },
+  {
+   "id": "g37",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g38",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g39",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  },
+  {
+   "id": "g40",
+   "dogru": "sevdavi",
+   "tahmin": "sevdavi",
+   "ham": "sevdavi",
+   "hata": null
+  }
+ ]
+}

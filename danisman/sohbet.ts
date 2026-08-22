@@ -103,6 +103,7 @@ async function main() {
           mizacSoylenebilir: kanaatVar,
           kazanan: oncekiDurum?.kazanan,
           soruVar: strateji.soruVar,
+          enFazlaCumle: strateji.enFazlaCumle,
         }
       );
     } catch (e) {

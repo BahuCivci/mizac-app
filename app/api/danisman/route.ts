@@ -134,6 +134,7 @@ export async function POST(req: NextRequest) {
         mizacSoylenebilir: kanaatVar,
         kazanan: durum.kazanan,
         soruVar: strateji.soruVar,
+        enFazlaCumle: strateji.enFazlaCumle,
       }),
       kanitlar: tumKanitlar,
       // Kanaat oluşmadan mizaç dışarı verilmez; arayüz erken sonuç göstermesin.

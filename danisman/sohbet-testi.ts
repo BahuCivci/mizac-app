@@ -113,6 +113,7 @@ async function senaryoKos(hedef: MizacTip) {
         mizacSoylenebilir: kanaatVar,
         kazanan: oncekiDurum?.kazanan,
         soruVar: strateji.soruVar,
+        enFazlaCumle: strateji.enFazlaCumle,
       }
     );
 

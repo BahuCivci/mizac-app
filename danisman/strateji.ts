@@ -30,6 +30,14 @@ export interface Strateji {
   yonerge: string;
   /** Bu hamlede soru sorulur mu — sorulmuyorsa çıktıdan da ayıklanır. */
   soruVar: boolean;
+  /**
+   * Bu hamlede en fazla kaç cümle.
+   *
+   * Soru sormayan hamlelerde model, cevabı bağlayacak bir çıpa kalmayınca
+   * boşluğu genel geçer lafla dolduruyor ("tamamen normal", "herkes
+   * farklıdır"). Yansıtma zaten kısa olmalı; sınır dar tutuluyor.
+   */
+  enFazlaCumle: number;
 }
 
 const STRATEJILER: Record<StratejiAdi, Omit<Strateji, 'ad'>> = {
@@ -38,6 +46,7 @@ const STRATEJILER: Record<StratejiAdi, Omit<Strateji, 'ad'>> = {
       'BU TUR: basit yansıtma yap. Kişinin söylediğini kendi cümlenle geri ver ' +
       'ki duyulduğunu bilsin. Soru SORMA, yorum ekleme, öğüt verme.',
     soruVar: false,
+    enFazlaCumle: 2,
   },
   duygulanim: {
     yonerge:
@@ -45,12 +54,14 @@ const STRATEJILER: Record<StratejiAdi, Omit<Strateji, 'ad'>> = {
       '("yorucu olmalı", "canını sıkmış") ama teşhis koyar gibi değil, ' +
       'tahmin eder gibi söyle. Soru SORMA.',
     soruVar: false,
+    enFazlaCumle: 2,
   },
   onaylama: {
     yonerge:
       'BU TUR: onayla. Kişinin anlattığı içinde gerçekten değerli ya da zor ' +
       'olan bir şeyi göster. Boş iltifat değil, somut olana değin. Soru SORMA.',
     soruVar: false,
+    enFazlaCumle: 2,
   },
   cerceveleme: {
     yonerge:
@@ -58,24 +69,28 @@ const STRATEJILER: Record<StratejiAdi, Omit<Strateji, 'ad'>> = {
       'kusur gibi gördüğü şeyin işlevini, ya da alışkanlığının ona ne ' +
       'kazandırdığını göster. Tek bir soruyla bitirebilirsin.',
     soruVar: true,
+    enFazlaCumle: 3,
   },
   acik_soru: {
     yonerge:
       'BU TUR: kısaca karşılık ver, sonra açık uçlu TEK bir soru sor. ' +
       'Evet/hayırla cevaplanan soru sorma.',
     soruVar: true,
+    enFazlaCumle: 3,
   },
   hedefli_soru: {
     yonerge:
       'BU TUR: kısaca karşılık ver, sonra öğrenmen gereken şeyi TEK bir soruyla ' +
       'sor. Sorgu gibi olmasın; sohbetin akışına yedir.',
     soruVar: true,
+    enFazlaCumle: 3,
   },
   ozet: {
     yonerge:
       'BU TUR: konuşulanları toparla. Kişinin kendi sözlerinden yola çıkarak ' +
       'ne gördüğünü söyle ve kanaatini paylaş. Sonunda ona söz hakkı bırak.',
     soruVar: true,
+    enFazlaCumle: 4,
   },
 };
 
@@ -106,8 +121,12 @@ export function stratejiSec(s: SecimDurumu): Strateji {
 }
 
 function adSec(s: SecimDurumu): StratejiAdi {
-  // Kanaat oluştuysa toparla.
-  if (s.kanaatVar && s.kanitlar.length >= 8) return 'ozet';
+  // Kanaat oluştuysa toparla — ama her turda değil.
+  //
+  // İlk sürümde koşul yalnız `kanaatVar && kanıt >= 8` idi; bir kez sağlanınca
+  // kalıcı olarak sağlandığı için danışman 5., 6. ve 7. turda üst üste özet
+  // geçti. Özet ara verilerek gelmeli, yoksa sohbet kapanış konuşmasına döner.
+  if (s.kanaatVar && s.kanitlar.length >= 8 && s.tur % 4 === 0) return 'ozet';
 
   // Duygu yüklü bir şey anlatıldıysa önce ona değin, soruyla üstünden geçme.
   if (DUYGU_IZI.test(s.sonSoz)) {

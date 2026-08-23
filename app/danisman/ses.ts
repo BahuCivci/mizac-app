@@ -13,7 +13,7 @@
  * düğmeyi göstermesin.
  */
 
-export type SesDurumu = 'bos' | 'dinliyor' | 'konusuyor';
+export type SesDurumu = 'bos' | 'dinliyor' | 'dusunuyor' | 'konusuyor';
 
 /* --------------------------------------------------------------- tanımlar */
 
@@ -123,6 +123,16 @@ export function sus(): void {
   if (!sesVar()) return;
   window.speechSynthesis.cancel();
   sonSoylem = null;
+}
+
+/**
+ * Kuyrukta okunacak cümle kaldı mı.
+ *
+ * Seans kipinde mikrofonun ne zaman yeniden açılacağını bu belirliyor: danışman
+ * daha konuşurken mikrofonu açmak, kendi sesini duyup cevap yazmasına yol açıyor.
+ */
+export function konusuyorMu(): boolean {
+  return sesVar() && (window.speechSynthesis.speaking || window.speechSynthesis.pending);
 }
 
 /** Sekme arkaya alınıp dönüldüğünde Chrome sentezi askıda bırakıyor. */

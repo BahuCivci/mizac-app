@@ -102,6 +102,7 @@ export default function Yuz({
         const z = saat.getElapsedTime();
         const konusuyor = durumRef.current === 'konusuyor';
         const dinliyor = durumRef.current === 'dinliyor';
+        const dusunuyor = durumRef.current === 'dusunuyor';
 
         // Ağız: tetikle açılır, sönümlenerek kapanır. Safari kelime olayı
         // vermediği için konuşurken tabanda bir ritim tutuluyor.
@@ -112,7 +113,8 @@ export default function Yuz({
         parcalar.agiz.scale.z = 0.45 + acik * 0.12;
 
         // Göz kırpma düzensiz aralıklarla: düzenli olan tekinsiz duruyor.
-        sonrakiKirpma -= dt;
+        // Düşünürken daha sık kırpılıyor — insanlar da öyle yapıyor.
+        sonrakiKirpma -= dt * (dusunuyor ? 2.2 : 1);
         if (sonrakiKirpma <= 0) {
           kirpma = 1;
           sonrakiKirpma = 2 + Math.random() * 3.5;
@@ -120,11 +122,19 @@ export default function Yuz({
         kirpma = Math.max(0, kirpma - dt * 8);
         for (const k of parcalar.kapaklar) k.position.y = 0.115 - kirpma * 0.2;
 
-        // Baş: boştayken yavaş salınım, dinlerken kişiye doğru hafif eğilme.
-        egim += ((dinliyor ? 0.13 : 0) - egim) * Math.min(1, dt * 4);
-        parcalar.kafa.rotation.y = Math.sin(z * 0.45) * 0.09;
+        /*
+         * Baş hareketi. Bunun donmaması meselenin kendisi:
+         * kullanıcı sustuktan sonra ekranda hiçbir şey olmaması, karşıda
+         * kimsenin olmadığı hissini veren asıl şeydi.
+         *
+         *   dinliyor  → kişiye doğru hafifçe eğilir
+         *   düşünüyor → bakışını yana ve yukarı kaydırır, yavaşça gezinir
+         *   konuşuyor → küçük vurgu hareketleri
+         */
+        egim += ((dinliyor ? 0.13 : dusunuyor ? -0.06 : 0) - egim) * Math.min(1, dt * 4);
+        const bakis = dusunuyor ? 0.26 + Math.sin(z * 0.9) * 0.08 : 0;
+        parcalar.kafa.rotation.y = Math.sin(z * 0.45) * 0.09 + bakis;
         parcalar.kafa.rotation.x = egim + Math.sin(z * 0.63) * 0.03;
-        // Konuşurken çok hafif bir vurgu hareketi.
         parcalar.kok.position.y = 0.22 + (konusuyor ? Math.sin(z * 7) * 0.012 : 0);
 
         cizer.render(sahne, kamera);

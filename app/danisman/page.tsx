@@ -17,6 +17,7 @@ import {
   sesVar,
   dinlemeVar,
   sesiCanlandir,
+  konusuyorMu,
   type SesDurumu,
   type Dinleyici,
 } from './ses';
@@ -64,8 +65,21 @@ export default function DanismanSayfasi() {
   const [izGoster, setIzGoster] = useState(false);
   const [oncekiTest, setOncekiTest] = useState<MizacTip | null>(null);
 
-  // Ses varsayılan olarak KAPALI. Sayfa açılır açılmaz konuşmaya başlamak
-  // saygısız: kullanıcı otobüste, derste ya da yanında biriyle olabilir.
+  /*
+   * Seans kipi — istenen şey buydu.
+   *
+   * Düğmeye basıp konuşup tekrar düğmeye basmak sohbet değil, form doldurmak.
+   * Seans açıkken tek bir akış var: sen konuşursun, danışman cevap verir,
+   * mikrofon kendiliğinden yeniden açılır. Aradaki düğmeler kalkıyor.
+   *
+   * Ses hâlâ kendiliğinden başlamıyor: seansı kullanıcı açıkça başlatıyor.
+   * Sayfa açılır açılmaz konuşmaya başlamak saygısız olurdu — otobüste,
+   * derste ya da yanında biriyle olabilir.
+   */
+  const [seans, setSeans] = useState(false);
+  const seansRef = useRef(false);
+  seansRef.current = seans;
+
   const [sesAcik, setSesAcik] = useState(false);
   const [sesDurumu, setSesDurumu] = useState<SesDurumu>('bos');
   const [sesDestegi, setSesDestegi] = useState({ konusma: false, dinleme: false });
@@ -74,6 +88,9 @@ export default function DanismanSayfasi() {
 
   const sonRef = useRef<HTMLDivElement>(null);
   const dinleyiciRef = useRef<Dinleyici | null>(null);
+  // Geri çağrıların içinden okunuyor; state kapanışta eski değeriyle kalıyor.
+  const bekliyorRef = useRef(false);
+  bekliyorRef.current = bekliyor;
 
   // Yetenek kontrolü sunucuda çalışamaz (window yok) ve ilk render'da da
   // yapılmamalı — sunucu/istemci çıktısı ayrışır ve hydration uyarısı verir.
@@ -88,6 +105,7 @@ export default function DanismanSayfasi() {
     document.addEventListener('visibilitychange', gorunurluk);
     return () => {
       document.removeEventListener('visibilitychange', gorunurluk);
+      seansRef.current = false;
       sus();
       dinleyiciRef.current?.durdur();
     };
@@ -128,6 +146,48 @@ export default function DanismanSayfasi() {
     });
   }
 
+  /**
+   * Danışmanın sözü bitince mikrofonu yeniden açar.
+   *
+   * `speechSynthesis` kuyruğu boşalmadan mikrofonu açmak, danışmanın kendi
+   * sesini duyup ona cevap vermesine yol açıyor. Kuyruk yoklanarak bekleniyor;
+   * olay tabanlı beklemek mümkün değil çünkü cümleler akış sırasında tek tek
+   * kuyruğa giriyor ve "sonuncusu" hangisi olduğu o an bilinmiyor.
+   */
+  function seansDevam() {
+    if (!seansRef.current) return;
+    const yokla = () => {
+      if (!seansRef.current) return;
+      if (konusuyorMu()) {
+        window.setTimeout(yokla, 220);
+        return;
+      }
+      dinlemeyeBasla();
+    };
+    // Kısa bir nefes payı: cümle biter bitmez mikrofonu açmak, insanın sözünü
+    // kesip hemen "e?" demesi gibi duruyor.
+    window.setTimeout(yokla, 420);
+  }
+
+  function seansBaslat() {
+    // Ref'i elle kur: `setSeans` bir sonraki render'a kadar işlemiyor ve
+    // hemen aşağıda başlayan dinleme zinciri seansRef'e bakıyor.
+    seansRef.current = true;
+    setSeans(true);
+    setSesAcik(true);
+    setHata(null);
+    dinlemeyeBasla();
+  }
+
+  function seansBitir() {
+    seansRef.current = false;
+    setSeans(false);
+    sus();
+    dinleyiciRef.current?.durdur();
+    dinleyiciRef.current = null;
+    setSesDurumu('bos');
+  }
+
   function mikrofon() {
     if (dinleyiciRef.current) {
       dinleyiciRef.current.durdur();
@@ -135,6 +195,11 @@ export default function DanismanSayfasi() {
       setSesDurumu('bos');
       return;
     }
+    dinlemeyeBasla();
+  }
+
+  function dinlemeyeBasla() {
+    if (dinleyiciRef.current) return;
     sus();
     setSesDurumu('dinliyor');
     dinleyiciRef.current = dinle(lang, {
@@ -155,7 +220,19 @@ export default function DanismanSayfasi() {
         ),
       bitti: () => {
         dinleyiciRef.current = null;
-        setSesDurumu((d) => (d === 'dinliyor' ? 'bos' : d));
+        // Seansta kullanıcı hiç konuşmadan tanıma kapandıysa (sessizlik)
+        // mikrofonu yeniden aç; yoksa seans tek bir sessizlikte ölüyor.
+        setSesDurumu((d) => {
+          if (d !== 'dinliyor') return d;
+          if (seansRef.current && !bekliyorRef.current) {
+            window.setTimeout(() => {
+              if (seansRef.current && !dinleyiciRef.current && !bekliyorRef.current) {
+                dinlemeyeBasla();
+              }
+            }, 300);
+          }
+          return 'bos';
+        });
       },
     });
     if (!dinleyiciRef.current) {
@@ -176,7 +253,11 @@ export default function DanismanSayfasi() {
     // Kullanıcı yazmaya/konuşmaya başladıysa danışman sözünü kesmeli —
     // üstüne konuşmaya devam etmek karşılıklı sohbet hissini bozuyor.
     sus();
-    setSesDurumu('bos');
+    dinleyiciRef.current?.durdur();
+    dinleyiciRef.current = null;
+    // 'dusunuyor': yüz donmasın. Sen sustuktan sonra ekranda hiçbir şey
+    // olmaması, karşıda kimse yokmuş hissi veren asıl şeydi.
+    setSesDurumu('dusunuyor');
 
     const yeniMesajlar: Mesaj[] = [...mesajlar, { rol: 'kullanici', metin }];
     setMesajlar(yeniMesajlar);
@@ -258,6 +339,11 @@ export default function DanismanSayfasi() {
       setHata(tr ? 'Bağlantı kurulamadı. Tekrar dene.' : 'Could not connect. Try again.');
     } finally {
       setBekliyor(false);
+      // Ses kapalıyken 'dusunuyor'da asılı kalmasın.
+      setSesDurumu((d) => (d === 'dusunuyor' ? 'bos' : d));
+      // Seansta sıra yeniden kullanıcıda: danışmanın sözü biter bitmez
+      // mikrofon kendiliğinden açılıyor, düğmeye basmak gerekmiyor.
+      seansDevam();
     }
   }
 
@@ -382,6 +468,50 @@ export default function DanismanSayfasi() {
           )}
           <div ref={sonRef} />
         </div>
+
+        {/* Seans kipi: konuşmaktan başka bir şey yapmayacağın hâl. */}
+        {sesDestegi.dinleme && sesDestegi.konusma && (
+          <div className="mb-3 text-center">
+            {seans ? (
+              <>
+                <p className="text-xs mb-2" style={{ color: '#9a8060' }}>
+                  {sesDurumu === 'dinliyor'
+                    ? tr
+                      ? 'Seni dinliyorum…'
+                      : 'Listening…'
+                    : sesDurumu === 'dusunuyor'
+                      ? tr
+                        ? 'Düşünüyorum…'
+                        : 'Thinking…'
+                      : sesDurumu === 'konusuyor'
+                        ? tr
+                          ? 'Konuşuyor'
+                          : 'Speaking'
+                        : tr
+                          ? 'Sıra sende, anlat'
+                          : 'Your turn'}
+                </p>
+                <button
+                  type="button"
+                  onClick={seansBitir}
+                  className="px-5 py-2.5 rounded-full text-xs font-semibold"
+                  style={{ background: '#1a1207', color: '#c4973a', border: '1px solid #3d2c0e' }}
+                >
+                  {tr ? 'Seansı bitir' : 'End session'}
+                </button>
+              </>
+            ) : (
+              <button
+                type="button"
+                onClick={seansBaslat}
+                className="px-6 py-3 rounded-full text-sm font-semibold"
+                style={{ background: '#c4973a', color: '#1a1207' }}
+              >
+                {tr ? '🎙 Konuşarak başla' : '🎙 Start talking'}
+              </button>
+            )}
+          </div>
+        )}
 
         <form onSubmit={gonder} className="flex gap-2 mb-2">
           {sesDestegi.dinleme && (

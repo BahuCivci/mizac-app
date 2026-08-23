@@ -22,6 +22,52 @@ URL: **mizac.xyz** — Vercel üzerinde deploy edilmiş.
 | `app/sitemap.ts` | Sitemap — yeni sayfa eklerken buraya da ekle |
 | `components/footer.tsx` | Footer linkleri — yeni sayfa eklerken buraya da ekle |
 | `app/page.tsx` | Ana sayfa — Keşfet kartları grid'i |
+| `icerik/sirada.py` | Publer'a sırada hangi CSV yüklenecek — her oturumda çalıştır |
+| `icerik/cikti/yuklendi.json` | Hangi parçalar yüklendi (git'te değil, yerel) |
+
+## Sosyal Medya Paylaşımı — düzenli iş
+
+Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılıyor.
+429 gönderi (24 Ağu 2026 → 23 Ağu 2027) hazır, her günde en az bir gönderi var.
+
+**Her oturumda kontrol et, kullanıcı sormasa bile:**
+
+```bash
+python3 icerik/sirada.py
+```
+
+`ŞİMDİ YÜKLE` çıkıyorsa kullanıcıya söyle ve yüklemeyi yap. `yayında` ise
+yapacak bir şey yok; çıktı sıradaki yüklemenin gününü de yazar.
+
+**Neden elle besleniyor:** Publer'ın ücretsiz planı hesap başına yalnız
+**5 bekleyen gönderi** tutuyor (belge 10 diyor, ölçülen 5). Bu yüzden takvim
+8-10 günde bir besleniyor. Kullanıcı ücretli plana geçmek istemiyor — sorma.
+
+**Yükleme nasıl yapılır** (Publer oturumu Playwright profilinde kalıcı):
+1. `app.publer.com` → **Create**
+2. Hesap satırından **yalnız hedef hesabı** seç — sağdaki *Post Preview*
+   başlığı hangi platformda olduğunu yazar, oradan doğrula
+3. **Bulk Options** → **Import CSV** → `cikti/zamanlayici/publer/parcali/`
+   içinden sıradaki dosya
+4. *"You will receive a notification once the CSV import is finished"*
+   yeterli — işlem arka planda, composer boş kalır, bu normal
+5. `python3 icerik/sirada.py --yuklendi instagram-02` ile deftere işle
+6. Takvimden doğrula: **Posts** → sonraki hafta
+
+**Instagram'a tarayıcıdan girmeyi deneme.** Doğru şifreyle bile "login
+information is incorrect" diyor; otomasyonu kasıtlı engelliyor. Publer'da
+böyle bir engel yok.
+
+**İçerik tazeleme** (yeni gönderi üretildiyse):
+```bash
+python3 icerik/video.py     # eksik videolar
+vercel env pull             # BLOB_READ_WRITE_TOKEN
+node icerik/yukle.mjs       # medyayı Vercel Blob'a
+python3 icerik/csv-url.py   # CSV'ler + parçalar
+```
+
+Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
+bekliyor): `icerik/PAYLASIM-KURULUM.md`.
 
 ## Tailwind v4 Uyarıları
 - `bg-gradient-to-b` → **`bg-linear-to-b`** kullan (Tailwind v4'te değişti)

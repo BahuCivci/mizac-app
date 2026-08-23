@@ -29,6 +29,7 @@ GUNLUK = KOK / "cikti" / "gunluk"
 ZAMANLAYICI = KOK / "cikti" / "zamanlayici"
 DEFTER = KOK / "cikti" / "blob-adresler.json"
 HEDEF = ZAMANLAYICI / "url"
+PUBLER = ZAMANLAYICI / "publer"
 
 # Birden fazla medyayı çoğu araç virgülle ayrılmış bekliyor. Kaynak CSV " | "
 # kullanıyordu; o ayraç Publer'ın içe aktarıcısında tek bir dev URL gibi
@@ -40,6 +41,53 @@ AYRAC = ","
 # video yerine tek bir durağan görsel gidecekti. Klasörde video.mp4 varsa
 # medya onunla değiştirilir.
 VIDEO_BICIMLERI = {"tiktok", "reels", "shorts", "uzun"}
+
+
+# Publer sütun eşlemesi sunmuyor; kendi şablonunu bekliyor ve sütunlar bu
+# sırada olmalı. Kaynak: publer.com/help → "What CSV template should I use?"
+PUBLER_SUTUNLAR = [
+    "Date",
+    "Text",
+    "Link",
+    "Media URL",
+    "Title",
+    "Label",
+    "Alt text(s)",
+    "Comment(s)",
+    "Pin board, FB album, or Google category",
+    "Post subtype",
+    "CTA",
+    "Reminder",
+]
+
+# Publer gönderi türünü "Post subtype" ile anlıyor. Boş bırakılanlar normal
+# gönderi olarak gidiyor: karusel çoklu görselden, tiktok/uzun tek videodan
+# kendiliğinden anlaşılıyor.
+ALT_TUR = {"reels": "Reel", "shorts": "Short", "kare": "Photo"}
+
+
+def publer_yaz(hedef: Path, satirlar: list[dict]) -> None:
+    hedef.parent.mkdir(parents=True, exist_ok=True)
+    with hedef.open("w", encoding="utf-8", newline="") as f:
+        y = csv.DictWriter(f, fieldnames=PUBLER_SUTUNLAR)
+        y.writeheader()
+        for s in satirlar:
+            y.writerow({
+                # Publer'ın tercih ettiği biçim YYYY/MM/DD HH:MM.
+                "Date": f"{s['Date'].replace('-', '/')} {s['Time']}",
+                "Text": s["Caption"],
+                # Link DOLU olursa Media URL yok sayılıyor — boş kalmalı.
+                "Link": "",
+                "Media URL": s["MediaURLs"],
+                "Title": s["Title"],
+                "Label": s["Format"],
+                "Alt text(s)": "",
+                "Comment(s)": "",
+                "Pin board, FB album, or Google category": "",
+                "Post subtype": ALT_TUR.get(s["Format"], ""),
+                "CTA": "",
+                "Reminder": "",
+            })
 
 
 def main() -> int:
@@ -110,6 +158,8 @@ def main() -> int:
             y.writeheader()
             y.writerows(cikti)
 
+        publer_yaz(PUBLER / kaynak.name, cikti)
+
         toplam_eksik += eksik + videosuz
         notlar = []
         if eksik:
@@ -119,7 +169,8 @@ def main() -> int:
         not_ = f", {', '.join(notlar)}" if notlar else ""
         print(f"{kaynak.name}: {len(cikti)} gönderi hazır{not_}")
 
-    print(f"\nçıktı: {HEDEF}")
+    print(f"\nPubler'a yüklenecek: {PUBLER}")
+    print(f"genel biçim (başka araçlar için): {HEDEF}")
     if toplam_eksik:
         print(f"UYARI: {toplam_eksik} gönderi eksik medya yüzünden dışarıda kaldı.")
         print("Eksikleri tamamla: python3 icerik/video.py && node icerik/yukle.mjs")

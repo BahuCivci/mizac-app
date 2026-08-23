@@ -9,29 +9,17 @@ istemiyor, çünkü onlar zaten onaylı iş ortakları.
 ## Yükleyeceğin dosyalar
 
 ```
-cikti/zamanlayici/url/instagram.csv   209 gönderi   (157 görsel, 52 Reels)
-cikti/zamanlayici/url/tiktok.csv      156 gönderi   (hepsi video)
-cikti/zamanlayici/url/youtube.csv      64 gönderi   (52 Shorts, 12 uzun)
+cikti/zamanlayici/publer/instagram.csv   209 gönderi   (157 görsel, 52 Reels)
+cikti/zamanlayici/publer/tiktok.csv      156 gönderi   (hepsi video)
+cikti/zamanlayici/publer/youtube.csv      64 gönderi   (52 Shorts, 12 uzun)
 ```
 
-`zamanlayici/` kökündeki CSV'leri **kullanma** — onlar medyayı senin diskinde
-gösteriyor, hiçbir araç oradan okuyamaz. `url/` altındakiler Vercel Blob
-adreslerini taşıyor.
+Üçü de Publer'ın 500 gönderi sınırının altında, tek seferde yüklenir.
 
-## Sütunlar
-
-| Sütun | Ne |
-|---|---|
-| `Date` | 2026-08-24 |
-| `Time` | 19:30 |
-| `Platform` | instagram / tiktok / youtube |
-| `Format` | karusel, kare, reels, tiktok, shorts, uzun |
-| `Title` | başlık (YouTube için gerekli) |
-| `Caption` | gönderi metni — etiketler zaten içinde |
-| `MediaURLs` | virgülle ayrılmış açık adresler |
-
-İçe aktarırken araç sütun eşlemesi soracak. Önemli olan üçü: **tarih+saat**,
-**Caption**, **MediaURLs**.
+Diğer iki klasörü **kullanma**:
+- `zamanlayici/*.csv` — medyayı senin diskinde gösteriyor, hiçbir araç okuyamaz
+- `zamanlayici/url/*.csv` — adresler doğru ama sütunlar genel; Publer bu biçimi
+  tanımaz. Başka bir araca geçersen işine yarar.
 
 ## Publer ile (önerilen)
 
@@ -40,12 +28,29 @@ araç bu; Buffer'da karusel, Later'da TikTok tarafı zayıf kalıyor.
 
 1. publer.com → hesap aç
 2. Instagram, TikTok ve YouTube hesaplarını bağla
-3. Bulk → Import from CSV
-4. Üç dosyayı ayrı ayrı yükle
-5. Sütunları eşle, önizlemede ilk birkaç gönderiyi gözle kontrol et
-6. Onayla
+3. **Create** sekmesi → **Bulk Options** → **Import CSV**
+4. `publer/instagram.csv`'yi seç (ya da sürükle bırak)
+5. Önizlemede ilk birkaç gönderiyi gözle kontrol et
+6. En alta in, **Submit**
 
-Sonrası kendiliğinden akar.
+Sonra `tiktok.csv` ve `youtube.csv` için tekrarla.
+
+**Dosya seçme penceresinde CSV'ler soluk görünüyorsa** yanlış ekrandasın —
+o medya yükleme ekranı. Doğrusu `Create → Bulk Options → Import CSV`.
+
+## Publer'ın sütun düzeni
+
+Publer sütun eşlemesi sunmuyor, kendi şablonunu bekliyor. `csv-url.py` o
+şablonu üretiyor; elle düzenlemen gerekirse bilinmesi gerekenler:
+
+| Sütun | Ne koyduk |
+|---|---|
+| `Date` | `2026/08/24 19:30` — Publer'ın tercih ettiği biçim |
+| `Text` | gönderi metni, etiketler dahil |
+| `Link` | **boş** — dolu olsa Publer medyayı yok sayıyor |
+| `Media URL` | virgülle ayrılmış Blob adresleri |
+| `Post subtype` | Reel / Short / Photo; karusel ve video için boş |
+| `Label` | biçim adı, Publer içinde süzmek için |
 
 ## Bilinmesi gerekenler
 

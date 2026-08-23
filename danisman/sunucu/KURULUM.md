@@ -1,7 +1,34 @@
 # Danışmanı canlıya almak — üniversite sunucusu
 
-Danışman bugün yalnız VPN'in arkasından çalışıyor. Bu belge onu mizac.xyz
-ziyaretçilerine açmanın yolunu anlatıyor.
+**Durum: kurulu ve çalışıyor** (23 Ağu 2026). mizac.xyz/danisman canlı.
+Ölçülen gecikme: soğuk açılış 16 sn, sıcak istek 5,5 sn / 120 jeton.
+
+Aşağısı hem nasıl kurulduğunu hem de bozulduğunda nasıl onarılacağını anlatıyor.
+
+## En kırılgan yer — önce bunu bil
+
+Tünel `trycloudflare.com` üzerinde **geçici** bir adres kullanıyor. Tünel
+süreci ölürse ya da sunucu yeniden başlarsa **adres değişir** ve mizac.xyz
+sessizce çalışmaz hâle gelir — hata sayfası çıkmaz, danışman cevap vermez.
+
+Süreçler `nohup` ile başlatıldı; `sudo` olmadığı için systemd servisi
+yazılamıyor. Yani sunucu yeniden başlarsa ikisi de gider.
+
+Kalıcı çözüm: Cloudflare hesabıyla **adlandırılmış tünel**. O zaman adres
+sabitlenir (`danisman.mizac.xyz` gibi) ve yeniden başlatma adresi bozmaz.
+
+## Sağlık kontrolü
+
+```bash
+curl -s -o /dev/null -w '%{http_code}\n' https://mizac.xyz/danisman   # 200 olmalı
+
+curl -s -m 60 -X POST https://mizac.xyz/api/danisman \
+  -H 'Content-Type: application/json' \
+  -d '{"mesajlar":[{"rol":"kullanici","metin":"Yazlari zor gecirivorum."}],"dil":"tr"}'
+```
+
+İkincisi boş dönüyorsa tünel kopmuştur: sunucuya girip 3. adımı tekrarla ve
+yeni adresi `vercel env` ile güncelle.
 
 ## Neden tünel
 

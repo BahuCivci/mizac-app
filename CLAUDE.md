@@ -25,6 +25,30 @@ URL: **mizac.xyz** — Vercel üzerinde deploy edilmiş.
 | `icerik/sirada.py` | Publer'a sırada hangi CSV yüklenecek — her oturumda çalıştır |
 | `icerik/cikti/yuklendi.json` | Hangi parçalar yüklendi (git'te değil, yerel) |
 
+## Mizaç Danışmanı — canlı, kırılgan
+
+`mizac.xyz/danisman` çalışıyor. Model üniversite sunucusundaki `gemma3:27b`;
+oraya Cloudflare tüneli ve kimlik doğrulayan bir vekil üzerinden gidiliyor.
+
+**Kırılgan nokta:** tünel adresi `trycloudflare.com` üzerinde geçici. Tünel
+süreci ölür ya da sunucu yeniden başlarsa adres değişir ve danışman **sessizce**
+cevap vermez olur — hata sayfası çıkmaz. Süreçler `nohup` ile başlatıldı,
+`sudo` olmadığı için systemd yok.
+
+Şüphe duyulduğunda:
+
+```bash
+curl -s -m 60 -X POST https://mizac.xyz/api/danisman \
+  -H 'Content-Type: application/json' \
+  -d '{"mesajlar":[{"rol":"kullanici","metin":"Yazlari zor gecirivorum."}],"dil":"tr"}'
+```
+
+Boş dönüyorsa onarım adımları: `danisman/sunucu/KURULUM.md`.
+
+Sunucu erişimi: `mta_kullanici@192.168.1.40`, FortiClient SSL-VPN gerekiyor.
+Ollama yalnız `127.0.0.1:11434`'ü dinliyor — dışarıdan doğrudan erişilmez,
+bu kasıtlı.
+
 ## Sosyal Medya Paylaşımı — düzenli iş
 
 Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılıyor.

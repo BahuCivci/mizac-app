@@ -11,16 +11,40 @@ takvim 8-10 günde bir elle besleniyor. O an akılda tutulması gereken tek şey
 tarihe bakıp cevabı veriyor.
 
 MANTIK
-Bir parçanın son gönderisi geçmişte kaldıysa o parça yayınlanmış sayılır ve
-sıra sonrakine gelmiştir. Publer'a bağlanmıyor — neyin gerçekten yüklendiğini
-bilmiyor, sadece takvime bakıyor. Yanlış giderse takvimdeki son gönderiye bak.
+Yüklenenler `cikti/yuklendi.json` içinde tutuluyor; sıradaki, yüklenmemiş ilk
+parçadır. İlk sürüm bunu tarihten tahmin ediyordu ve yükledikten hemen sonra
+bile "ŞİMDİ YÜKLE" demeye devam ediyordu — parçanın gönderileri henüz
+gelecekte olduğu için. Tahmin yerine kayıt.
+
+Publer'a bağlanmıyor; defter yalnız buradan yapılan yüklemeleri biliyor.
+Publer'da elle bir şey yaptıysan `--yuklendi` ile bildir.
+
+    python3 icerik/sirada.py --yuklendi tiktok-01
 """
 import csv
+import json
 import sys
 from datetime import date, datetime
 from pathlib import Path
 
-PARCALI = Path(__file__).resolve().parent / "cikti" / "zamanlayici" / "publer" / "parcali"
+KOK = Path(__file__).resolve().parent
+PARCALI = KOK / "cikti" / "zamanlayici" / "publer" / "parcali"
+DEFTER = KOK / "cikti" / "yuklendi.json"
+
+
+def defteri_oku() -> set[str]:
+    if not DEFTER.exists():
+        return set()
+    try:
+        return set(json.loads(DEFTER.read_text(encoding="utf-8")))
+    except (json.JSONDecodeError, TypeError):
+        print("yuklendi.json okunamadı, boş kabul ediliyor.", file=sys.stderr)
+        return set()
+
+
+def defteri_yaz(yuklenen: set[str]) -> None:
+    DEFTER.parent.mkdir(parents=True, exist_ok=True)
+    DEFTER.write_text(json.dumps(sorted(yuklenen), indent=2), encoding="utf-8")
 
 
 def tarihler(yol: Path) -> list[date]:
@@ -36,6 +60,20 @@ def main() -> int:
         print("Parçalar üretilmemiş. Önce: python3 icerik/csv-url.py", file=sys.stderr)
         return 1
 
+    yuklenen = defteri_oku()
+
+    argv = sys.argv[1:]
+    if "--yuklendi" in argv:
+        for ad in argv[argv.index("--yuklendi") + 1 :]:
+            ad = ad.removesuffix(".csv")
+            if not (PARCALI / f"{ad}.csv").exists():
+                print(f"böyle bir parça yok: {ad}", file=sys.stderr)
+                return 1
+            yuklenen.add(ad)
+            print(f"işaretlendi: {ad}")
+        defteri_yaz(yuklenen)
+        print()
+
     bugun = date.today()
     platformlar: dict[str, list[Path]] = {}
     for yol in sorted(PARCALI.glob("*.csv")):
@@ -43,28 +81,24 @@ def main() -> int:
 
     print(f"bugün: {bugun}\n")
     for ad, parcalar in platformlar.items():
-        sirada = None
-        for yol in parcalar:
-            t = tarihler(yol)
-            if t[-1] >= bugun:
-                sirada = (yol, t)
-                break
-
+        sirada = next((y for y in parcalar if y.stem not in yuklenen), None)
         if sirada is None:
-            print(f"{ad}: bitti — {len(parcalar)} parçanın hepsi geçmişte")
+            print(f"{ad}: bitti — {len(parcalar)} parçanın hepsi yüklendi")
             continue
 
-        yol, t = sirada
-        if t[0] <= bugun:
-            # İçinde bulunduğumuz parça; yüklenmiş olması gerekiyor.
-            kalan = len([g for g in t if g >= bugun])
-            print(f"{ad}: {yol.name} yayında ({kalan} gönderi kaldı, son {t[-1]})")
-            i = parcalar.index(yol)
-            if i + 1 < len(parcalar):
-                s = parcalar[i + 1]
-                print(f"        sıradaki: {s.name} — {t[-1]} günü yükle")
-        else:
-            print(f"{ad}: ŞİMDİ YÜKLE → {yol.name}  ({t[0]} → {t[-1]})")
+        t = tarihler(sirada)
+        son_yuklenen = [y for y in parcalar if y.stem in yuklenen]
+
+        if son_yuklenen:
+            onceki = tarihler(son_yuklenen[-1])
+            kalan = len([g for g in onceki if g >= bugun])
+            if kalan:
+                # Publer'da hâlâ bekleyen gönderi var; sınır dolu, beklenecek.
+                print(f"{ad}: {son_yuklenen[-1].name} yayında — {kalan} gönderi kaldı")
+                print(f"          {onceki[-1]} günü {sirada.name} yükle")
+                continue
+
+        print(f"{ad}: ŞİMDİ YÜKLE → {sirada.name}  ({t[0]} → {t[-1]})")
 
     print(f"\nklasör: {PARCALI}")
     print("Publer: Create → Bulk Options → Import CSV")

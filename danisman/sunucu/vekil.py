@@ -98,7 +98,11 @@ class Kapi(http.server.BaseHTTPRequestHandler):
                 # geçirilmeli yoksa ilk jeton bütün cevap bitene kadar beklenir.
                 self.send_header("Transfer-Encoding", "chunked")
                 self.end_headers()
-                while parca := cevap.read(8192):
+                # read() değil read1(): read(8192) tampon dolana kadar BLOKLUYOR.
+                # Ollama jetonları ~100 baytlık satırlar hâlinde gönderdiği için
+                # bu, ilk jetonu ~80 jeton birikene kadar geciktiriyordu —
+                # ölçüldü: ilk jeton 4,56 sn. read1 eldeki veriyi hemen verir.
+                while parca := cevap.read1(65536):
                     self.wfile.write(f"{len(parca):X}\r\n".encode())
                     self.wfile.write(parca)
                     self.wfile.write(b"\r\n")

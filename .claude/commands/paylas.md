@@ -1,56 +1,56 @@
 ---
 name: paylas
-description: Günün sosyal medya içeriğini göster ve paylaşıma hazır mı doğrula (hiçbir şey göndermez)
-allowed-tools: Read Bash(python3 icerik/paylas.py*) Bash(ls *) Bash(date*)
+description: Publer'a sırada hangi CSV'nin yükleneceğini söyler (hiçbir şey göndermez)
+allowed-tools: Read Bash(python3 icerik/sirada.py*) Bash(python3 icerik/paylas.py*) Bash(open icerik/*) Bash(ls *) Bash(date*)
 ---
 
-# Günün paylaşımı
+# Sıradaki paylaşım
 
-Bu komut **hiçbir şey göndermez**. Günün içeriğini gösterir ve paylaşıma
-hazır olup olmadığını doğrular. Gerçek paylaşım ayrı bir adımdır — aşağıda.
+Bu komut **hiçbir şey göndermez**. Publer'a elle yüklenecek sıradaki dosyayı
+söyler.
 
-## 1. Bugün ne var
+Ücretsiz planda aynı anda 5 bekleyen gönderi tutulabiliyor, yani takvim 8-10
+günde bir besleniyor. Hangi parçanın sırada olduğunu hatırlamak gerekmesin
+diye bu komut var.
 
-```!
-cd /Users/bahu/Documents/mizac-app
-GUN=${1:-$(date +%Y-%m-%d)}
-echo "gün: $GUN"
-if [ -d "icerik/cikti/gunluk/$GUN" ]; then
-  cat "icerik/cikti/gunluk/$GUN/_BUGUN.txt" 2>/dev/null | head -20
-  echo
-  for k in icerik/cikti/gunluk/$GUN/*/; do
-    [ -d "$k" ] && echo "  $(basename $k): $(ls "$k" | tr '\n' ' ')"
-  done
-else
-  echo "Bu gün için içerik yok."
-  echo "İlk gün: $(ls icerik/cikti/gunluk 2>/dev/null | head -1)"
-  echo "Son gün : $(ls icerik/cikti/gunluk 2>/dev/null | tail -1)"
-fi
-```
-
-## 2. Paylaşıma hazır mı (kuru çalışma)
+## Sırada ne var
 
 ```!
-cd /Users/bahu/Documents/mizac-app
-python3 icerik/paylas.py --gun ${1:-$(date +%Y-%m-%d)} 2>&1 | tail -15
+cd /Users/bahu/Documents/mizac-app && python3 icerik/sirada.py
 ```
 
-## 3. Ne yapmalı
+## Ne yapmalı
 
-Yukarıdaki çıktıya bak:
+Yukarıda **ŞİMDİ YÜKLE** yazan varsa:
 
-- **`✓` satırları** → o post gönderilmeye hazır.
-- **`MEDYA_TABAN_URL tanımlı değil`** → Instagram medyayı herkese açık bir
-  adresten çekmek zorunda. Kurulum: `icerik/PAYLASIM-KURULUM.md`.
-- **`IG_TOKEN` / `TIKTOK_TOKEN` tanımlı değil** → platform onayları henüz
-  tamamlanmamış (Instagram 2-4 hafta, TikTok 2-6 hafta).
-- **`video.mp4 yok`** → `python3 icerik/video.py` ile üret.
+1. Publer → **Create** → **Bulk Options** → **Import CSV**
+2. `cikti/zamanlayici/publer/parcali/` içinden o dosyayı seç
+3. Önizlemede ilk gönderiye bak, en alta inip **Submit**
 
-**Gerçekten paylaşmak için** — kullanıcı açıkça istediğinde, kendisi çalıştırır:
+**yayında** yazıyorsa yapacak bir şey yok; belirtilen günde tekrar bak.
+
+Klasörü açmak için: `open icerik/cikti/zamanlayici/publer/parcali`
+
+## İçerik tazeleme
+
+Yeni gönderi üretildiyse sırayla:
 
 ```
-python3 icerik/paylas.py --gercek
+python3 icerik/video.py     # eksik videoları üret
+vercel env pull             # BLOB_READ_WRITE_TOKEN
+node icerik/yukle.mjs       # medyayı Blob'a yükle
+python3 icerik/csv-url.py   # CSV'leri ve parçaları tazele
+```
+
+## API ile otomatik paylaşım
+
+Meta ve TikTok onayları geldiğinde `paylas.py` devreye girer ve Publer'a
+gerek kalmaz. Onaylar yoksa aşağıdaki komut zaten hata verir:
+
+```
+python3 icerik/paylas.py            # kuru çalışma
+python3 icerik/paylas.py --gercek   # gerçek paylaşım — kullanıcı çalıştırır
 ```
 
 Bu komut o adımı **çalıştırmaz**. Herkese açık ve geri alınamaz bir iş olduğu
-için kararı ve komutu kullanıcıya bırakır.
+için kararı ve komutu kullanıcıya bırakır. Ayrıntı: `icerik/PAYLASIM-KURULUM.md`

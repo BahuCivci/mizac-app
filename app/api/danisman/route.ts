@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, istemciIp } from '@/lib/rate-limit';
 import { DANISMAN_ACIK } from '@/lib/ozellikler';
+import { krizTespit, krizCevabi } from '@/danisman/kriz';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from '@/danisman/kanit';
@@ -96,6 +97,19 @@ export async function POST(req: NextRequest) {
           ['safravi', 'demevi', 'balgami', 'sevdavi'].includes(k.mizac)
       )
     : [];
+
+  // Kriz, modele sorulmadan karşılanır. Bir insanın intihardan söz ettiği
+  // turda ne söyleneceği tahmine bırakılamaz; kanıt da çıkarılmaz, puan da
+  // işlenmez — o an mizaç okuması yapılacak an değildir.
+  const kriz = krizTespit(son.metin);
+  if (kriz) {
+    return NextResponse.json({
+      cevap: krizCevabi(kriz),
+      kanitlar: oncekiKanitlar,
+      durum: null,
+      kriz,
+    });
+  }
 
   const saglayici = saglayiciSec();
 

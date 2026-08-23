@@ -10,9 +10,12 @@ Karşılığında bir bedel var: her iki platform da uygulama onayı istiyor.
 
 ## Bugün başlamak istiyorsan
 
-Onayı beklemeden başlamanın yolu var: `cikti/zamanlayici/` altındaki CSV'leri
-Buffer, Later ya da Publer gibi bir zamanlayıcıya yükle. Video dosyaları artık
-her gün klasöründe hazır. Bu araç o yolun yerine geçmez, kalıcı alternatifidir.
+Onayı beklemeden başlamanın yolu var ve **hazır**: `cikti/zamanlayici/url/`
+altındaki CSV'leri Publer, Buffer ya da Later gibi bir zamanlayıcıya yükle.
+Medya Vercel Blob'a yüklendi, o dosyalardaki adresler herkese açık. Kurulum
+adımları: `ZAMANLAYICI.md`.
+
+Bu araç o yolun yerine geçmez, kalıcı alternatifidir.
 
 ---
 
@@ -32,25 +35,31 @@ her gün klasöründe hazır. Bu araç o yolun yerine geçmez, kalıcı alternat
 İnceleme onaylandıktan sonra uzun ömürlü bir anahtar üret. Anahtarlar süreli;
 süresi dolunca paylaşım sessizce durmaz, hata verir — `paylas.py` bunu yazdırır.
 
-### Medya barındırma — atlanamaz
+### Medya barındırma — hallolmuş durumda
 Instagram medyayı **kendi sunucusundan çeker**; ikili dosya yüklemesi kabul
 etmez. Dokümantasyonun sözü: *"we cURL media used in publishing attempts, so
 the media must be hosted on a publicly accessible server"*.
 
-Yani `cikti/gunluk/` klasörünün herkese açık bir adreste yayında olması gerekir.
-Seçenekler:
-
-| Yol | Not |
-|---|---|
-| Vercel Blob | Site zaten Vercel'de; en az sürtünme |
-| Cloudflare R2 | Cömert ücretsiz katman |
-| Herhangi bir statik barındırma | Klasör yapısı korunmalı |
-
-Adres `MEDYA_TABAN_URL` olarak verilir ve araç şu düzeni bekler:
+Bu yüzden `cikti/gunluk/` içeriği **Vercel Blob**'a yüklendi — `mizac-medya`
+deposu, projeye bağlı, 1086 dosya / 211 MB. Blob içindeki yol yereldekiyle
+birebir aynı tutuldu:
 
 ```
 MEDYA_TABAN_URL/<gün>/<biçim>/<dosya>
-örn. https://cdn.example.com/icerik/2026-08-24/instagram-karusel/1.png
+örn. https://6khfg6gwjc8v5js8.public.blob.vercel-storage.com/2026-08-24/instagram-karusel/1.png
+```
+
+```bash
+export MEDYA_TABAN_URL=https://6khfg6gwjc8v5js8.public.blob.vercel-storage.com
+```
+
+Yeni içerik ürettikten sonra tazelemek tek komutluk iş; yüklenmiş dosyalar
+atlanır:
+
+```bash
+vercel env pull            # BLOB_READ_WRITE_TOKEN
+node icerik/yukle.mjs      # eksik medyayı yükle
+python3 icerik/csv-url.py  # zamanlayıcı CSV'lerini tazele
 ```
 
 Kuru çalışma her adresi tek tek yoklar; biri açık değilse paylaşımı hiç

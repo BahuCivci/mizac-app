@@ -5,6 +5,17 @@ import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
 import { DANISMAN_ACIK } from '@/lib/ozellikler';
 import { useLang } from '@/lib/lang-context';
+import Varlik from './varlik';
+import {
+  konus,
+  sus,
+  dinle,
+  sesVar,
+  dinlemeVar,
+  sesiCanlandir,
+  type SesDurumu,
+  type Dinleyici,
+} from './ses';
 
 type Rol = 'kullanici' | 'danisman';
 interface Mesaj {
@@ -49,7 +60,32 @@ export default function DanismanSayfasi() {
   const [izGoster, setIzGoster] = useState(false);
   const [oncekiTest, setOncekiTest] = useState<MizacTip | null>(null);
 
+  // Ses varsayılan olarak KAPALI. Sayfa açılır açılmaz konuşmaya başlamak
+  // saygısız: kullanıcı otobüste, derste ya da yanında biriyle olabilir.
+  const [sesAcik, setSesAcik] = useState(false);
+  const [sesDurumu, setSesDurumu] = useState<SesDurumu>('bos');
+  const [sesDestegi, setSesDestegi] = useState({ konusma: false, dinleme: false });
+
   const sonRef = useRef<HTMLDivElement>(null);
+  const dinleyiciRef = useRef<Dinleyici | null>(null);
+
+  // Yetenek kontrolü sunucuda çalışamaz (window yok) ve ilk render'da da
+  // yapılmamalı — sunucu/istemci çıktısı ayrışır ve hydration uyarısı verir.
+  useEffect(() => {
+    setSesDestegi({ konusma: sesVar(), dinleme: dinlemeVar() });
+  }, []);
+
+  // Sekmeden çıkıp dönünce Chrome sentezi askıya alıyor; sayfadan ayrılırken
+  // de konuşma sürüyorsa arka planda devam ediyor — ikisini de kapat.
+  useEffect(() => {
+    const gorunurluk = () => sesiCanlandir();
+    document.addEventListener('visibilitychange', gorunurluk);
+    return () => {
+      document.removeEventListener('visibilitychange', gorunurluk);
+      sus();
+      dinleyiciRef.current?.durdur();
+    };
+  }, []);
 
   // Testi daha önce çözdüyse danışman onu tanıyarak başlasın.
   useEffect(() => {
@@ -68,10 +104,72 @@ export default function DanismanSayfasi() {
     sonRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }, [mesajlar, bekliyor]);
 
-  async function gonder(e: React.FormEvent) {
+  /**
+   * Bir cümleyi sesli okur.
+   *
+   * Akışta her cümle geldiğinde ayrı ayrı çağrılıyor; `speechSynthesis` bunları
+   * kendi kuyruğuna alıyor, yani cevabın tamamının bitmesini beklemeden
+   * konuşmaya başlıyor. Cevabın tümünü bekleyip tek seferde okutmak, akışın
+   * kazandırdığı saniyeleri geri verirdi.
+   */
+  function seslendir(cumle: string) {
+    konus(cumle, lang, {
+      basladi: () => setSesDurumu('konusuyor'),
+      // Kuyrukta başka cümle varsa hemen 'bos'a düşmek varlığı titretiyor;
+      // sıradaki cümlenin `basladi`'sı zaten durumu geri alıyor.
+      bitti: () => setSesDurumu((d) => (d === 'konusuyor' ? 'bos' : d)),
+    });
+  }
+
+  function mikrofon() {
+    if (dinleyiciRef.current) {
+      dinleyiciRef.current.durdur();
+      dinleyiciRef.current = null;
+      setSesDurumu('bos');
+      return;
+    }
+    sus();
+    setSesDurumu('dinliyor');
+    dinleyiciRef.current = dinle(lang, {
+      araSonuc: (m) => setGirdi(m),
+      sonuc: (m) => {
+        setGirdi('');
+        void gonderMetin(m);
+      },
+      hata: (kod) =>
+        setHata(
+          kod === 'not-allowed'
+            ? tr
+              ? 'Mikrofon izni verilmedi.'
+              : 'Microphone permission denied.'
+            : tr
+              ? 'Sesin alınamadı, yazarak deneyebilirsin.'
+              : 'Could not hear you — you can type instead.'
+        ),
+      bitti: () => {
+        dinleyiciRef.current = null;
+        setSesDurumu((d) => (d === 'dinliyor' ? 'bos' : d));
+      },
+    });
+    if (!dinleyiciRef.current) {
+      setSesDurumu('bos');
+      setHata(tr ? 'Bu tarayıcı dinlemeyi desteklemiyor.' : 'This browser cannot listen.');
+    }
+  }
+
+  function gonder(e: React.FormEvent) {
     e.preventDefault();
-    const metin = girdi.trim();
+    void gonderMetin(girdi);
+  }
+
+  async function gonderMetin(ham: string) {
+    const metin = ham.trim();
     if (!metin || bekliyor) return;
+
+    // Kullanıcı yazmaya/konuşmaya başladıysa danışman sözünü kesmeli —
+    // üstüne konuşmaya devam etmek karşılıklı sohbet hissini bozuyor.
+    sus();
+    setSesDurumu('bos');
 
     const yeniMesajlar: Mesaj[] = [...mesajlar, { rol: 'kullanici', metin }];
     setMesajlar(yeniMesajlar);
@@ -94,6 +192,7 @@ export default function DanismanSayfasi() {
           return;
         }
         setMesajlar((m) => [...m, { rol: 'danisman', metin: d.cevap }]);
+        if (sesAcik) seslendir(d.cevap);
         if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
         if (d.durum) setDurum(d.durum);
         return;
@@ -122,6 +221,7 @@ export default function DanismanSayfasi() {
           // öncekine eklenirdi.
           const ilkCumle = !balonAcildi;
           balonAcildi = true;
+          if (sesAcik) seslendir(parca);
           setMesajlar((m) =>
             ilkCumle
               ? [...m, { rol: 'danisman' as const, metin: parca }]
@@ -213,6 +313,7 @@ export default function DanismanSayfasi() {
     <main className="min-h-screen px-4 py-10" style={{ background: 'var(--background)' }}>
       <div className="max-w-lg mx-auto">
         <header className="text-center mb-6">
+          <Varlik durum={sesDurumu} />
           <p
             className="text-xs font-semibold uppercase tracking-[0.3em] mb-2"
             style={{ color: '#c4973a' }}
@@ -275,11 +376,36 @@ export default function DanismanSayfasi() {
           <div ref={sonRef} />
         </div>
 
-        <form onSubmit={gonder} className="flex gap-2 mb-4">
+        <form onSubmit={gonder} className="flex gap-2 mb-2">
+          {sesDestegi.dinleme && (
+            <button
+              type="button"
+              onClick={mikrofon}
+              disabled={bekliyor}
+              aria-label={tr ? 'Konuşarak anlat' : 'Speak instead'}
+              aria-pressed={sesDurumu === 'dinliyor'}
+              className="px-4 py-3 rounded-full text-base shrink-0 disabled:opacity-50"
+              style={{
+                background: sesDurumu === 'dinliyor' ? '#c4973a' : '#1a1207',
+                color: sesDurumu === 'dinliyor' ? '#1a1207' : '#c4973a',
+                border: '1px solid #3d2c0e',
+              }}
+            >
+              {sesDurumu === 'dinliyor' ? '■' : '🎤'}
+            </button>
+          )}
           <input
             value={girdi}
             onChange={(e) => setGirdi(e.target.value)}
-            placeholder={tr ? 'Anlatmak istediğini yaz…' : 'Write what’s on your mind…'}
+            placeholder={
+              sesDurumu === 'dinliyor'
+                ? tr
+                  ? 'Dinliyorum…'
+                  : 'Listening…'
+                : tr
+                  ? 'Anlatmak istediğini yaz…'
+                  : 'Write what’s on your mind…'
+            }
             maxLength={2000}
             disabled={bekliyor}
             className="flex-1 min-w-0 px-4 py-3 rounded-full text-sm outline-none"
@@ -294,6 +420,31 @@ export default function DanismanSayfasi() {
             {tr ? 'Gönder' : 'Send'}
           </button>
         </form>
+
+        {sesDestegi.konusma && (
+          <button
+            type="button"
+            onClick={() => {
+              const yeni = !sesAcik;
+              setSesAcik(yeni);
+              if (!yeni) {
+                sus();
+                setSesDurumu('bos');
+              }
+            }}
+            aria-pressed={sesAcik}
+            className="mb-4 text-xs underline"
+            style={{ color: '#c4973a' }}
+          >
+            {sesAcik
+              ? tr
+                ? 'Sesi kapat'
+                : 'Turn voice off'
+              : tr
+                ? 'Sesli konuşsun'
+                : 'Let it speak'}
+          </button>
+        )}
 
         {profil && durum && (
           <div

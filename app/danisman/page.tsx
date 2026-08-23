@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
 import dynamic from 'next/dynamic';
-import { DANISMAN_ACIK, DANISMAN_YUZ } from '@/lib/ozellikler';
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 import { useLang } from '@/lib/lang-context';
-import Varlik from './varlik';
 
-// three.js ~600 KB. Statik import edilirse yüzü hiç görmeyecek kullanıcılar da
-// (yüz kapalıyken, Firefox'ta, yavaş bağlantıda) o yükü indiriyor. Ayrıca
-// WebGL sunucuda yok, ssr kapalı olmak zorunda.
+// three.js ~600 KB ve WebGL sunucuda yok — ayrı parçaya alınıp yalnız
+// tarayıcıda yükleniyor, ilk sayfa yükünü şişirmesin.
 const Yuz = dynamic(() => import('./yuz'), { ssr: false });
 import {
   konus,
@@ -322,11 +320,7 @@ export default function DanismanSayfasi() {
     <main className="min-h-screen px-4 py-10" style={{ background: 'var(--background)' }}>
       <div className="max-w-lg mx-auto">
         <header className="text-center mb-6">
-          {DANISMAN_YUZ ? (
-            <Yuz src={DANISMAN_YUZ} durum={sesDurumu} agizTetik={agizTetik} />
-          ) : (
-            <Varlik durum={sesDurumu} />
-          )}
+          <Yuz durum={sesDurumu} agizTetik={agizTetik} />
           <p
             className="text-xs font-semibold uppercase tracking-[0.3em] mb-2"
             style={{ color: '#c4973a' }}

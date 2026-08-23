@@ -1,48 +1,44 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SesDurumu } from './ses';
+import { yuzKur, type YuzParcalari } from './yuz-geometri';
+import Varlik from './varlik';
 
 /**
- * Danışmanın yüzü — tarayıcıda çizilen 3B karakter.
+ * Danışmanın yüzü — tarayıcıda çizilen bir baş.
  *
  * NEDEN BÖYLE
- * İstenen şey "karşımda bir insan olsun"du. Fotogerçekçi konuşan baş üreten
- * servisler (HeyGen, D-ID) dakika başına ücretli; her sohbet para yakardı.
- * Bu yol tarayıcının ekran kartıyla çiziyor, dışarıya hiçbir istek gitmiyor,
- * maliyeti sıfır.
+ * İstenen "karşımda bir insan olsun"du. Fotogerçekçi konuşan baş üreten
+ * servisler dakika başına ücretli; her sohbet para yakardı. Bu yol ekran
+ * kartıyla çiziyor, dışarıya hiçbir istek gitmiyor, maliyeti sıfır.
+ * Yüzün kendisi kodla üretiliyor (`yuz-geometri.ts`) — indirilen model yok,
+ * telif sorunu yok, kimsenin gerçek yüzü değil.
  *
  * AĞIZ HAREKETİ UYDURMA DEĞİL
  * `speechSynthesis` ürettiği sesi Web Audio'ya vermiyor, yani genlik okunamıyor.
- * Ama kelime sınırlarında olay veriyor (`onboundary`). Ağız o olaylara bağlı:
- * kelime geldiğinde açılıyor, uzunluğuna göre açık kalıyor, sonra kapanıyor.
- * Rastgele titreşimden farkı, dudakların gerçekten konuşmayla tutması.
- * Safari `onboundary` vermiyor; orada `konusuyor` durumu boyunca daha kaba bir
- * ritim çalışıyor — sessiz durmasından iyi.
- *
- * MODEL DIŞARIDAN GELİYOR
- * GLB dosyası `src` ile veriliyor ve kendi Blob depomuzdan sunuluyor. Üçüncü
- * parti bir CDN'e bağlamak, o servis kapandığında danışmanın yüzsüz kalması
- * demek olurdu.
+ * Ama kelime sınırlarında olay veriyor. Ağız o olaylara bağlı: kelime gelince
+ * açılıyor, sönümlenerek kapanıyor. Rastgele titreşimden farkı, dudakların
+ * gerçekten konuşmayla tutması. Safari bu olayı vermiyor; orada `konusuyor`
+ * durumu boyunca daha kaba bir ritim çalışıyor — sessiz durmasından iyi.
  */
 export default function Yuz({
-  src,
   durum,
   agizTetik,
 }: {
-  src: string;
   durum: SesDurumu;
   /** Her artışında ağız bir kez açılır. Kelime sınırı sayacı. */
   agizTetik: number;
 }) {
   const kutuRef = useRef<HTMLDivElement>(null);
-  const agizRef = useRef(0);          // 0..1 hedef açıklık
+  const agizRef = useRef(0);
   const durumRef = useRef(durum);
   durumRef.current = durum;
+  // WebGL yoksa boş bir daire göstermektense soyut varlığa düş.
+  const [webglYok, setWebglYok] = useState(false);
 
-  // Tetik değişince ağzı aç; sönümlemeyi çizim döngüsü yapıyor.
   useEffect(() => {
-    if (agizTetik > 0) agizRef.current = 0.75;
+    if (agizTetik > 0) agizRef.current = 1;
   }, [agizTetik]);
 
   useEffect(() => {
@@ -54,112 +50,90 @@ export default function Yuz({
     let temizle: (() => void) | null = null;
 
     (async () => {
-      const THREE = await import('three');
-      const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
-      if (iptal) return;
+      const t = await import('three');
+      if (iptal || !kutu.isConnected) return;
 
-      const en = kutu.clientWidth || 240;
-      const boy = kutu.clientHeight || 240;
+      const en = kutu.clientWidth || 168;
+      const boy = kutu.clientHeight || 168;
 
-      const sahne = new THREE.Scene();
-      const kamera = new THREE.PerspectiveCamera(22, en / boy, 0.1, 100);
-      kamera.position.set(0, 1.62, 0.72);
+      const sahne = new t.Scene();
+      // Baş dairenin içine sığmalı: 30° / 4.4 birimde tepesi kırpılıyordu.
+      const kamera = new t.PerspectiveCamera(26, en / boy, 0.1, 100);
+      kamera.position.set(0, -0.05, 5.6);
 
-      const cizer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      cizer.setSize(en, boy);
-      // Retina'da 3'ün üstüne çıkmak görüntüyü iyileştirmiyor, pili yiyor.
-      cizer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      cizer.outputColorSpace = THREE.SRGBColorSpace;
-      kutu.appendChild(cizer.domElement);
-
-      // Sıcak, tek yönlü ışık: sitenin altın paletiyle uyumlu dursun.
-      sahne.add(new THREE.HemisphereLight(0xfff2dd, 0x2a1c08, 2.2));
-      const on = new THREE.DirectionalLight(0xffe9c7, 1.6);
-      on.position.set(0.6, 1.8, 1.4);
-      sahne.add(on);
-
-      let kafa: import('three').Object3D | null = null;
-      const agizHedefleri: { mesh: import('three').Mesh; indeks: number }[] = [];
-      const gozHedefleri: { mesh: import('three').Mesh; indeks: number }[] = [];
-
+      let cizer: import('three').WebGLRenderer;
       try {
-        const glb = await new GLTFLoader().loadAsync(src);
-        if (iptal) return;
-        sahne.add(glb.scene);
-
-        glb.scene.traverse((n) => {
-          if (/head/i.test(n.name) && !kafa) kafa = n;
-          const mesh = n as import('three').Mesh;
-          const sozluk = mesh.morphTargetDictionary;
-          if (!sozluk) return;
-          // Ready Player Me / ARKit adları. Hangisi varsa o kullanılıyor;
-          // model setine göre biri ya da öteki bulunuyor.
-          for (const ad of ['jawOpen', 'mouthOpen', 'viseme_aa']) {
-            if (ad in sozluk) {
-              agizHedefleri.push({ mesh, indeks: sozluk[ad] });
-              break;
-            }
-          }
-          for (const ad of ['eyeBlinkLeft', 'eyesClosed', 'eyeBlink_L']) {
-            if (ad in sozluk) gozHedefleri.push({ mesh, indeks: sozluk[ad] });
-          }
-          for (const ad of ['eyeBlinkRight', 'eyeBlink_R']) {
-            if (ad in sozluk) gozHedefleri.push({ mesh, indeks: sozluk[ad] });
-          }
-        });
+        cizer = new t.WebGLRenderer({ antialias: true, alpha: true });
       } catch {
-        // Model gelmezse sayfa çökmesin: kutu boş kalır, çağıran taraf
-        // soyut varlığa düşer.
-        kutu.replaceChildren();
+        // WebGL yoksa (eski cihaz, kapatılmış donanım hızlandırma) sayfa
+        // çökmesin; halkalara düş.
+        setWebglYok(true);
         return;
       }
+      cizer.setSize(en, boy);
+      // Retina'da 2'nin üstüne çıkmak görüntüyü iyileştirmiyor, pili yiyor.
+      cizer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      cizer.outputColorSpace = t.SRGBColorSpace;
+      kutu.appendChild(cizer.domElement);
 
-      const saat = new THREE.Clock();
-      let sonrakiKirpma = 2 + Math.random() * 3;
+      sahne.add(new t.HemisphereLight(0xfff2dd, 0x2a1c08, 1.8));
+      const on = new t.DirectionalLight(0xffe9c7, 2.1);
+      on.position.set(0.8, 1.4, 2.2);
+      sahne.add(on);
+      // Arkadan hafif altın kenar ışığı: baş zeminden ayrılsın.
+      const arka = new t.DirectionalLight(0xc4973a, 1.1);
+      arka.position.set(-1.4, 0.6, -1.6);
+      sahne.add(arka);
+
+      const parcalar: YuzParcalari = yuzKur(t);
+      parcalar.kok.position.y = 0.22;
+      sahne.add(parcalar.kok);
+
+      const saat = new t.Clock();
+      let sonrakiKirpma = 1.5 + Math.random() * 3;
       let kirpma = 0;
+      // Baş dönüşü hedefe doğru yumuşatılıyor; durum değişince zıplamasın.
+      let egim = 0;
 
       const ciz = () => {
         if (iptal) return;
         kare = requestAnimationFrame(ciz);
-        const dt = saat.getDelta();
-        const t = saat.getElapsedTime();
+        const dt = Math.min(saat.getDelta(), 0.1);
+        const z = saat.getElapsedTime();
+        const konusuyor = durumRef.current === 'konusuyor';
+        const dinliyor = durumRef.current === 'dinliyor';
 
-        // Ağız: tetikle açılır, üstel sönümle kapanır.
-        agizRef.current = Math.max(0, agizRef.current - dt * 3.2);
-        // Safari kelime olayı vermiyor; konuşurken tabanda bir ritim tut.
-        const taban =
-          durumRef.current === 'konusuyor' ? 0.12 + 0.12 * Math.abs(Math.sin(t * 9)) : 0;
+        // Ağız: tetikle açılır, sönümlenerek kapanır. Safari kelime olayı
+        // vermediği için konuşurken tabanda bir ritim tutuluyor.
+        agizRef.current = Math.max(0, agizRef.current - dt * 4.5);
+        const taban = konusuyor ? 0.25 + 0.25 * Math.abs(Math.sin(z * 8.5)) : 0;
         const acik = Math.max(agizRef.current, taban);
-        for (const h of agizHedefleri) {
-          if (h.mesh.morphTargetInfluences) h.mesh.morphTargetInfluences[h.indeks] = acik;
-        }
+        parcalar.agiz.scale.y = 0.12 + acik * 0.5;
+        parcalar.agiz.scale.z = 0.45 + acik * 0.12;
 
-        // Göz kırpma: düzenli değil, aralıklı — düzenli olan tekinsiz duruyor.
+        // Göz kırpma düzensiz aralıklarla: düzenli olan tekinsiz duruyor.
         sonrakiKirpma -= dt;
         if (sonrakiKirpma <= 0) {
           kirpma = 1;
-          sonrakiKirpma = 2.5 + Math.random() * 3.5;
+          sonrakiKirpma = 2 + Math.random() * 3.5;
         }
-        kirpma = Math.max(0, kirpma - dt * 7);
-        for (const h of gozHedefleri) {
-          if (h.mesh.morphTargetInfluences) h.mesh.morphTargetInfluences[h.indeks] = kirpma;
-        }
+        kirpma = Math.max(0, kirpma - dt * 8);
+        for (const k of parcalar.kapaklar) k.position.y = 0.115 - kirpma * 0.2;
 
-        // Hafif baş hareketi: dinlerken kişiye doğru eğilir, boştayken salınır.
-        if (kafa) {
-          const k = kafa as import('three').Object3D;
-          const dinliyor = durumRef.current === 'dinliyor';
-          k.rotation.y = Math.sin(t * 0.5) * 0.05;
-          k.rotation.x = (dinliyor ? 0.06 : 0) + Math.sin(t * 0.7) * 0.02;
-        }
+        // Baş: boştayken yavaş salınım, dinlerken kişiye doğru hafif eğilme.
+        egim += ((dinliyor ? 0.13 : 0) - egim) * Math.min(1, dt * 4);
+        parcalar.kafa.rotation.y = Math.sin(z * 0.45) * 0.09;
+        parcalar.kafa.rotation.x = egim + Math.sin(z * 0.63) * 0.03;
+        // Konuşurken çok hafif bir vurgu hareketi.
+        parcalar.kok.position.y = 0.22 + (konusuyor ? Math.sin(z * 7) * 0.012 : 0);
 
         cizer.render(sahne, kamera);
       };
       ciz();
 
       const olcuAyarla = () => {
-        const e = kutu.clientWidth || 240;
-        const b = kutu.clientHeight || 240;
+        const e = kutu.clientWidth || 168;
+        const b = kutu.clientHeight || 168;
         kamera.aspect = e / b;
         kamera.updateProjectionMatrix();
         cizer.setSize(e, b);
@@ -168,6 +142,15 @@ export default function Yuz({
 
       temizle = () => {
         window.removeEventListener('resize', olcuAyarla);
+        // Geometri ve malzemeler elle bırakılmazsa sayfa gezildikçe GPU
+        // belleği birikiyor; React bunları toplamıyor.
+        sahne.traverse((n) => {
+          const m = n as import('three').Mesh;
+          m.geometry?.dispose();
+          const mal = m.material;
+          if (Array.isArray(mal)) mal.forEach((x) => x.dispose());
+          else mal?.dispose();
+        });
         cizer.dispose();
         kutu.replaceChildren();
       };
@@ -178,7 +161,9 @@ export default function Yuz({
       cancelAnimationFrame(kare);
       temizle?.();
     };
-  }, [src]);
+  }, []);
+
+  if (webglYok) return <Varlik durum={durum} />;
 
   return (
     <div
@@ -187,7 +172,7 @@ export default function Yuz({
       style={{
         width: 168,
         height: 168,
-        background: 'radial-gradient(circle at 50% 35%, #2a1c08 0%, #1a1207 70%)',
+        background: 'radial-gradient(circle at 50% 32%, #2f2109 0%, #1a1207 72%)',
         border: '1px solid #3d2c0e',
       }}
       aria-hidden="true"

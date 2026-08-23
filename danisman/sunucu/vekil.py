@@ -27,10 +27,18 @@ import json
 import os
 import secrets
 import sys
+import threading
 import urllib.error
 import urllib.request
 
-OLLAMA = os.environ.get("MIZAC_OLLAMA_ARKA", "http://127.0.0.1:11434")
+# Arka uçlar virgülle ayrılır. Her biri kendi GPU'sunda ayrı bir Ollama örneği:
+#   MIZAC_OLLAMA_ARKA=http://127.0.0.1:11434,http://127.0.0.1:11435
+# Tek adres verilirse dağıtım devre dışı kalır, davranış eskisiyle aynıdır.
+ARKA_UCLAR = [
+    a.strip()
+    for a in os.environ.get("MIZAC_OLLAMA_ARKA", "http://127.0.0.1:11434").split(",")
+    if a.strip()
+]
 
 # Yalnız bunlar geçer. Liste bilerek kısa: danışmanın ihtiyacı bu kadar.
 # /api/pull, /api/delete, /api/create, /api/push kasıtlı olarak yok.
@@ -46,9 +54,40 @@ IZINLI = {
 EN_FAZLA_GOVDE = 512 * 1024
 
 
+class Dagitici:
+    """
+    İsteği en az meşgul arka uca yollar.
+
+    Sıralı dağıtım (round-robin) burada yanlış olurdu: LLM istekleri çok farklı
+    sürüyor (kısa yansıtma ~2 sn, uzun özet ~10 sn), sırayla dağıtınca uzun bir
+    isteğin arkasına kısa istekler diziliyor ve boştaki GPU'lar beklerken
+    kullanıcı bekliyor. Anlık yük sayısına bakmak bunu çözüyor.
+    """
+
+    def __init__(self, adresler: list[str]):
+        self.adresler = adresler
+        self.yuk = {a: 0 for a in adresler}
+        self.kilit = threading.Lock()
+
+    def sec(self) -> str:
+        with self.kilit:
+            adres = min(self.adresler, key=lambda a: self.yuk[a])
+            self.yuk[adres] += 1
+            return adres
+
+    def birak(self, adres: str) -> None:
+        with self.kilit:
+            self.yuk[adres] -= 1
+
+    def durum(self) -> dict[str, int]:
+        with self.kilit:
+            return dict(self.yuk)
+
+
 class Kapi(http.server.BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"
     anahtar = ""
+    dagitici: "Dagitici"
 
     def log_message(self, bicim, *arg):
         # Varsayılan kayıt her isteği stderr'e döküyor; anahtar başlığı da
@@ -84,8 +123,9 @@ class Kapi(http.server.BaseHTTPRequestHandler):
             return
         govde = self.rfile.read(uzunluk) if uzunluk else None
 
+        arka = self.dagitici.sec()
         istek = urllib.request.Request(
-            OLLAMA + self.path,
+            arka + self.path,
             data=govde,
             method=yontem,
             headers={"Content-Type": "application/json"},
@@ -112,6 +152,10 @@ class Kapi(http.server.BaseHTTPRequestHandler):
             self.yaz(e.code, e.read()[:2000])
         except Exception as e:  # noqa: BLE001 - tek istek hatası vekili düşürmemeli
             self.yaz(502, json.dumps({"error": str(e)[:200]}).encode())
+        finally:
+            # Sayacı her hâlükârda düşür: hata yolunda unutulursa o arka uç
+            # kalıcı olarak "meşgul" görünür ve bir daha hiç seçilmez.
+            self.dagitici.birak(arka)
 
     def do_POST(self):
         self.gecir("POST")
@@ -135,8 +179,11 @@ def main() -> int:
         return 1
 
     Kapi.anahtar = anahtar
+    Kapi.dagitici = Dagitici(ARKA_UCLAR)
     sunucu = http.server.ThreadingHTTPServer(("127.0.0.1", ayar.port), Kapi)
-    print(f"vekil 127.0.0.1:{ayar.port} → {OLLAMA}", flush=True)
+    print(f"vekil 127.0.0.1:{ayar.port} → {len(ARKA_UCLAR)} arka uç", flush=True)
+    for a in ARKA_UCLAR:
+        print(f"  {a}", flush=True)
     print(f"izinli yollar: {sorted(y for _, y in IZINLI)}", flush=True)
     try:
         sunucu.serve_forever()

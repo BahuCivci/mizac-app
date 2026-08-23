@@ -141,6 +141,110 @@ export function sesiCanlandir(): void {
   if (window.speechSynthesis.paused) window.speechSynthesis.resume();
 }
 
+/* ------------------------------------------------------------ söz kesme */
+
+export interface Kulak {
+  /** Sözün kesilmesini bekle (danışman konuşurken açılır). */
+  gozet(): void;
+  /** Gözetimi durdur ama mikrofonu kapatma. */
+  birak(): void;
+  kapat(): void;
+}
+
+/**
+ * Kullanıcının araya girdiği anı yakalar.
+ *
+ * NEDEN AYRI BİR MİKROFON AKIŞI
+ * Gerçek sohbette karşındakinin sözünü kesebilirsin. Bunu yapabilmek için
+ * danışman konuşurken de mikrofonun açık olması gerekiyor — ama o zaman
+ * mikrofon danışmanın kendi sesini duyuyor ve konuşma tanıma kendi cümlesini
+ * metne çevirip cevap yazıyor.
+ *
+ * Çözüm: tanıma yerine burada ham ses seviyesine bakılıyor ve akış
+ * `echoCancellation` ile açılıyor. Tarayıcı hoparlörden çıkan sesi mikrofon
+ * girdisinden düşüyor, geriye büyük ölçüde odadaki gerçek ses kalıyor. Seviye
+ * eşiği aşınca "kullanıcı konuşmaya başladı" deniyor, danışman susturuluyor ve
+ * asıl tanıma başlatılıyor.
+ *
+ * SINIRI
+ * Yankı engelleme hoparlörde mükemmel değil. Kulaklıkla kusursuz çalışıyor;
+ * hoparlörde yüksek sesle dinlerken ara sıra kendi sesiyle tetiklenebilir.
+ * Eşik ortamın gürültüsüne göre ayarlanıyor ki sessiz odada aşırı hassas,
+ * gürültülü ortamda sağır olmasın.
+ */
+export async function kulakAc(algila: () => void): Promise<Kulak | null> {
+  if (typeof navigator === 'undefined' || !navigator.mediaDevices?.getUserMedia) return null;
+
+  let akis: MediaStream;
+  try {
+    akis = await navigator.mediaDevices.getUserMedia({
+      audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+    });
+  } catch {
+    return null;
+  }
+
+  const AC = window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+  const baglam = new AC();
+  const kaynak = baglam.createMediaStreamSource(akis);
+  const cozumleyici = baglam.createAnalyser();
+  cozumleyici.fftSize = 1024;
+  kaynak.connect(cozumleyici);
+
+  const veri = new Float32Array(cozumleyici.fftSize);
+  let gozetiyor = false;
+  let ustUsteYuksek = 0;
+  // Ortam gürültüsü sürekli ölçülüyor: sessiz odada hassas, kafede sağır
+  // olmasın diye eşik buna göre kayıyor.
+  let taban = 0.004;
+  let kare = 0;
+
+  const olc = () => {
+    kare = requestAnimationFrame(olc);
+    cozumleyici.getFloatTimeDomainData(veri);
+    let toplam = 0;
+    for (let i = 0; i < veri.length; i++) toplam += veri[i] * veri[i];
+    const rms = Math.sqrt(toplam / veri.length);
+
+    if (!gozetiyor) {
+      // Gözetim kapalıyken taban güncelleniyor — konuşulmadığı an burası.
+      taban = taban * 0.95 + rms * 0.05;
+      ustUsteYuksek = 0;
+      return;
+    }
+
+    const esik = Math.max(taban * 4, 0.02);
+    if (rms > esik) {
+      ustUsteYuksek++;
+      // ~6 kare (100 ms) sürekli yüksek: kapı çarpması, öksürük ya da
+      // yankı artığı tek karede geçip gitmiyor, konuşma geçiyor.
+      if (ustUsteYuksek >= 6) {
+        gozetiyor = false;
+        ustUsteYuksek = 0;
+        algila();
+      }
+    } else {
+      ustUsteYuksek = 0;
+    }
+  };
+  olc();
+
+  return {
+    gozet: () => {
+      ustUsteYuksek = 0;
+      gozetiyor = true;
+    },
+    birak: () => {
+      gozetiyor = false;
+    },
+    kapat: () => {
+      cancelAnimationFrame(kare);
+      akis.getTracks().forEach((t) => t.stop());
+      void baglam.close();
+    },
+  };
+}
+
 /* ---------------------------------------------------------------- dinleme */
 
 export interface Dinleyici {

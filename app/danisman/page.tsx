@@ -18,8 +18,10 @@ import {
   dinlemeVar,
   sesiCanlandir,
   konusuyorMu,
+  kulakAc,
   type SesDurumu,
   type Dinleyici,
+  type Kulak,
 } from './ses';
 
 type Rol = 'kullanici' | 'danisman';
@@ -88,6 +90,7 @@ export default function DanismanSayfasi() {
 
   const sonRef = useRef<HTMLDivElement>(null);
   const dinleyiciRef = useRef<Dinleyici | null>(null);
+  const kulakRef = useRef<Kulak | null>(null);
   // Geri çağrıların içinden okunuyor; state kapanışta eski değeriyle kalıyor.
   const bekliyorRef = useRef(false);
   bekliyorRef.current = bekliyor;
@@ -108,6 +111,7 @@ export default function DanismanSayfasi() {
       seansRef.current = false;
       sus();
       dinleyiciRef.current?.durdur();
+      kulakRef.current?.kapat();
     };
   }, []);
 
@@ -138,12 +142,30 @@ export default function DanismanSayfasi() {
    */
   function seslendir(cumle: string) {
     konus(cumle, lang, {
-      basladi: () => setSesDurumu('konusuyor'),
+      basladi: () => {
+        setSesDurumu('konusuyor');
+        // Konuşurken kulak açık: kullanıcı araya girerse yakalanacak.
+        kulakRef.current?.gozet();
+      },
       // Kuyrukta başka cümle varsa hemen 'bos'a düşmek varlığı titretiyor;
       // sıradaki cümlenin `basladi`'sı zaten durumu geri alıyor.
       bitti: () => setSesDurumu((d) => (d === 'konusuyor' ? 'bos' : d)),
       kelime: () => setAgizTetik((n) => n + 1),
     });
+  }
+
+  /**
+   * Kullanıcı danışmanın sözünü kesti.
+   *
+   * Gerçek sohbetin ölçütü bu: karşındaki sen konuşmaya başlayınca susar.
+   * Kuyruktaki bütün cümleler iptal ediliyor — yalnız o anki cümleyi kesip
+   * sıradakine geçmek, sözü kesilmiş gibi değil, nefes almış gibi duruyor.
+   */
+  function sozKesildi() {
+    if (!seansRef.current) return;
+    sus();
+    kulakRef.current?.birak();
+    dinlemeyeBasla();
   }
 
   /**
@@ -169,13 +191,17 @@ export default function DanismanSayfasi() {
     window.setTimeout(yokla, 420);
   }
 
-  function seansBaslat() {
+  async function seansBaslat() {
     // Ref'i elle kur: `setSeans` bir sonraki render'a kadar işlemiyor ve
     // hemen aşağıda başlayan dinleme zinciri seansRef'e bakıyor.
     seansRef.current = true;
     setSeans(true);
     setSesAcik(true);
     setHata(null);
+    // Söz kesme kulağı seans boyunca açık kalıyor: her turda mikrofon izni
+    // istemek sohbeti kesintiye uğratırdı.
+    if (!kulakRef.current) kulakRef.current = await kulakAc(sozKesildi);
+    if (!seansRef.current) return; // izin beklerken seans bitirilmiş olabilir
     dinlemeyeBasla();
   }
 
@@ -185,6 +211,8 @@ export default function DanismanSayfasi() {
     sus();
     dinleyiciRef.current?.durdur();
     dinleyiciRef.current = null;
+    kulakRef.current?.kapat();
+    kulakRef.current = null;
     setSesDurumu('bos');
   }
 
@@ -201,6 +229,10 @@ export default function DanismanSayfasi() {
   function dinlemeyeBasla() {
     if (dinleyiciRef.current) return;
     sus();
+    // Tanıma açıkken söz kesme gözetimi kapalı: ikisi aynı anda çalışırsa
+    // kullanıcının kendi sesi "araya girdi" diye yorumlanıp tanımayı
+    // baştan başlatıyor ve cümlenin başı kayboluyor.
+    kulakRef.current?.birak();
     setSesDurumu('dinliyor');
     dinleyiciRef.current = dinle(lang, {
       araSonuc: (m) => setGirdi(m),
@@ -491,6 +523,11 @@ export default function DanismanSayfasi() {
                           ? 'Sıra sende, anlat'
                           : 'Your turn'}
                 </p>
+                {sesDurumu === 'konusuyor' && (
+                  <p className="text-xs mb-2 opacity-60" style={{ color: '#9a8060' }}>
+                    {tr ? 'Konuşmaya başlarsan susar' : 'Start speaking and it stops'}
+                  </p>
+                )}
                 <button
                   type="button"
                   onClick={seansBitir}
@@ -503,7 +540,7 @@ export default function DanismanSayfasi() {
             ) : (
               <button
                 type="button"
-                onClick={seansBaslat}
+                onClick={() => void seansBaslat()}
                 className="px-6 py-3 rounded-full text-sm font-semibold"
                 style={{ background: '#c4973a', color: '#1a1207' }}
               >

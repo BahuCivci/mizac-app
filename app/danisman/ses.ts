@@ -74,7 +74,20 @@ let sonSoylem: SpeechSynthesisUtterance | null = null;
 export function konus(
   metin: string,
   dil: 'tr' | 'en',
-  olaylar: { basladi?: () => void; bitti?: () => void } = {}
+  olaylar: {
+    basladi?: () => void;
+    bitti?: () => void;
+    /**
+     * Her kelime sınırında çağrılır — ağız hareketi buna bağlanıyor.
+     *
+     * Sentezlenen ses Web Audio'ya verilmediği için genlik okunamıyor; kelime
+     * sınırı, elde olan tek GERÇEK zamanlama sinyali. Rastgele bir titreşimle
+     * ağız oynatmak yerine bunu kullanmak, konuşmayla dudakların tutmasını
+     * sağlıyor. Safari bu olayı vermiyor — orada `basladi`/`bitti` arasında
+     * daha kaba bir ritim kullanılıyor (bkz. yuz.tsx).
+     */
+    kelime?: (uzunluk: number) => void;
+  } = {}
 ): void {
   if (!sesVar() || !metin.trim()) return;
 
@@ -88,6 +101,17 @@ export function konus(
 
   soylem.onstart = () => olaylar.basladi?.();
   soylem.onend = () => olaylar.bitti?.();
+  if (olaylar.kelime) {
+    soylem.onboundary = (e) => {
+      if (e.name === 'word' || e.name === undefined) {
+        // charLength bazı tarayıcılarda 0; kelimeyi metinden ölçüyoruz ki
+        // uzun kelimelerde ağız daha uzun açık kalsın.
+        const uzunluk =
+          e.charLength || (metin.slice(e.charIndex).match(/^\S+/)?.[0].length ?? 3);
+        olaylar.kelime?.(uzunluk);
+      }
+    };
+  }
   // Hata da bitiş sayılmalı, yoksa arayüz "konuşuyor" hâlinde donup kalıyor.
   soylem.onerror = () => olaylar.bitti?.();
 

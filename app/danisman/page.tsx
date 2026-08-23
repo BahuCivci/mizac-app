@@ -3,9 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
-import { DANISMAN_ACIK } from '@/lib/ozellikler';
+import dynamic from 'next/dynamic';
+import { DANISMAN_ACIK, DANISMAN_YUZ } from '@/lib/ozellikler';
 import { useLang } from '@/lib/lang-context';
 import Varlik from './varlik';
+
+// three.js ~600 KB. Statik import edilirse yüzü hiç görmeyecek kullanıcılar da
+// (yüz kapalıyken, Firefox'ta, yavaş bağlantıda) o yükü indiriyor. Ayrıca
+// WebGL sunucuda yok, ssr kapalı olmak zorunda.
+const Yuz = dynamic(() => import('./yuz'), { ssr: false });
 import {
   konus,
   sus,
@@ -65,6 +71,8 @@ export default function DanismanSayfasi() {
   const [sesAcik, setSesAcik] = useState(false);
   const [sesDurumu, setSesDurumu] = useState<SesDurumu>('bos');
   const [sesDestegi, setSesDestegi] = useState({ konusma: false, dinleme: false });
+  // Her kelime sınırında artıyor; yüz bunu görüp ağzı açıyor.
+  const [agizTetik, setAgizTetik] = useState(0);
 
   const sonRef = useRef<HTMLDivElement>(null);
   const dinleyiciRef = useRef<Dinleyici | null>(null);
@@ -118,6 +126,7 @@ export default function DanismanSayfasi() {
       // Kuyrukta başka cümle varsa hemen 'bos'a düşmek varlığı titretiyor;
       // sıradaki cümlenin `basladi`'sı zaten durumu geri alıyor.
       bitti: () => setSesDurumu((d) => (d === 'konusuyor' ? 'bos' : d)),
+      kelime: () => setAgizTetik((n) => n + 1),
     });
   }
 
@@ -313,7 +322,11 @@ export default function DanismanSayfasi() {
     <main className="min-h-screen px-4 py-10" style={{ background: 'var(--background)' }}>
       <div className="max-w-lg mx-auto">
         <header className="text-center mb-6">
-          <Varlik durum={sesDurumu} />
+          {DANISMAN_YUZ ? (
+            <Yuz src={DANISMAN_YUZ} durum={sesDurumu} agizTetik={agizTetik} />
+          ) : (
+            <Varlik durum={sesDurumu} />
+          )}
           <p
             className="text-xs font-semibold uppercase tracking-[0.3em] mb-2"
             style={{ color: '#c4973a' }}

@@ -65,8 +65,10 @@ PUBLER_SUTUNLAR = [
 # kendiliğinden anlaşılıyor.
 ALT_TUR = {"reels": "Reel", "shorts": "Short", "kare": "Photo"}
 
-# Publer'ın ücretsiz planı hesap başına 10 bekleyen gönderiyle sınırlı.
-PARCA_BOYU = 10
+# Publer'ın belgesi ücretsiz planda hesap başına 10 bekleyen gönderi diyor ama
+# 209 satırlık dosyadan yalnız 5'i içeri girdi (24–31 Ağustos). Ölçülen sayıya
+# uyuyoruz; ücretli plana geçilirse --parca ile büyütülür.
+VARSAYILAN_PARCA = 5
 
 
 def publer_yaz(hedef: Path, satirlar: list[dict]) -> None:
@@ -94,6 +96,11 @@ def publer_yaz(hedef: Path, satirlar: list[dict]) -> None:
 
 
 def main() -> int:
+    argv = sys.argv[1:]
+    parca = VARSAYILAN_PARCA
+    if "--parca" in argv:
+        parca = int(argv[argv.index("--parca") + 1])
+
     if not DEFTER.exists():
         print("blob-adresler.json yok. Önce: node icerik/yukle.mjs", file=sys.stderr)
         return 1
@@ -168,9 +175,9 @@ def main() -> int:
         # yüklenecek 10'arlık parçalar bunun için.
         cikti.sort(key=lambda s: (s["Date"], s["Time"]))
         ad = kaynak.stem
-        for i in range(0, len(cikti), PARCA_BOYU):
-            n = i // PARCA_BOYU + 1
-            publer_yaz(PUBLER / "parcali" / f"{ad}-{n:02d}.csv", cikti[i : i + PARCA_BOYU])
+        for i in range(0, len(cikti), parca):
+            n = i // parca + 1
+            publer_yaz(PUBLER / "parcali" / f"{ad}-{n:02d}.csv", cikti[i : i + parca])
 
         toplam_eksik += eksik + videosuz
         notlar = []
@@ -182,7 +189,7 @@ def main() -> int:
         print(f"{kaynak.name}: {len(cikti)} gönderi hazır{not_}")
 
     print(f"\nPubler (ücretli plan, tek dosya): {PUBLER}")
-    print(f"Publer (ücretsiz plan, 10'arlık): {PUBLER / 'parcali'}")
+    print(f"Publer (ücretsiz plan, {parca}'erlik): {PUBLER / 'parcali'}")
     print(f"genel biçim (başka araçlar için): {HEDEF}")
     if toplam_eksik:
         print(f"UYARI: {toplam_eksik} gönderi eksik medya yüzünden dışarıda kaldı.")

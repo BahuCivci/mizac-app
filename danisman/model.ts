@@ -61,10 +61,19 @@ export interface OllamaAyar {
   baglam?: number;
   /** Model bellekte ne kadar tutulsun. Verilmezse her tur soğuk açılış olur. */
   sicakKalma?: string;
+  /** Tünelin önündeki vekilin beklediği anahtar. Yerel Ollama'da gerekmez. */
+  anahtar?: string;
 }
 
 export function ollama(ayar: OllamaAyar = {}): Saglayici {
   const adres = ayar.adres ?? process.env.MIZAC_OLLAMA ?? 'http://localhost:11434';
+  const anahtar = ayar.anahtar ?? process.env.MIZAC_OLLAMA_ANAHTAR;
+
+  // Üretimde Ollama'ya doğrudan değil, kimlik doğrulayan bir vekil üzerinden
+  // gidiliyor (danisman/sunucu/vekil.py). Anahtar yoksa başlık hiç
+  // gönderilmiyor; yereldeki Ollama'yı bozmasın.
+  const basliklar: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (anahtar) basliklar.Authorization = `Bearer ${anahtar}`;
   // gemma3:27b, qwen2.5vl:72b'nin yerini ölçümle aldı: Türkçesi düzgün
   // (qwen "uzlaşmaca zamanı", "biravukatlık" gibi var olmayan sözcükler
   // üretiyordu), strateji yönergesine uyuyor, cevapları 186 karakter
@@ -98,7 +107,7 @@ export function ollama(ayar: OllamaAyar = {}): Saglayici {
     async sor(mesajlar, secenekler = {}) {
       const cevap = await denemeliIstek(() => fetch(`${adres}/api/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: basliklar,
         body: JSON.stringify({
           model,
           stream: false,
@@ -125,7 +134,7 @@ export function ollama(ayar: OllamaAyar = {}): Saglayici {
     async akisli(mesajlar, parca, secenekler = {}) {
       const cevap = await denemeliIstek(() => fetch(`${adres}/api/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: basliklar,
         body: JSON.stringify({
           model,
           stream: true,

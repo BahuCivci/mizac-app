@@ -2,7 +2,7 @@
  * Ortama göre açılıp kapanan özellikler.
  *
  * Danışman, modele erişebildiği ortamda çalışır. Model şu an üniversite
- * sunucusunda ve özel bir adreste (192.168.1.40) — Vercel oraya ulaşamaz.
+ * sunucusunda, iç ağda özel bir adreste — Vercel oraya ulaşamaz.
  * Bayrak olmadan footer'daki, ana sayfadaki ve sitemap'teki linkler üretimde
  * çalışmayan bir sayfaya götürür; kullanıcı tıklar ve hata alır.
  *

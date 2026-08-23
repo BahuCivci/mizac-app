@@ -13,8 +13,10 @@
  * Yanlış numara vermek hiç vermemekten kötüdür; değiştirmeden önce doğrula.
  */
 
+import type { Dil } from './model';
+
 export type KrizTuru = 'ruhsal' | 'tibbi' | 'ilac';
-export type Dil = 'tr' | 'en';
+export type { Dil };
 
 /**
  * İngilizce kalıplar ayrı tutuluyor.

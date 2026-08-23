@@ -13,6 +13,12 @@
 
 export type Rol = 'sistem' | 'kullanici' | 'danisman';
 
+/**
+ * Çıktı dili. Burada duruyor çünkü `model.ts`'in başka bağımlılığı yok;
+ * persona ve kriz ayrı ayrı tanımlayınca ikisi birbirinden ayrışabilirdi.
+ */
+export type Dil = 'tr' | 'en';
+
 export interface Mesaj {
   rol: Rol;
   metin: string;

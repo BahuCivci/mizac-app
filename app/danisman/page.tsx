@@ -116,14 +116,20 @@ export default function DanismanSayfasi() {
         }
         if (d.tip === 'cumle' && d.metin) {
           const parca = d.metin;
-          setMesajlar((m) => {
-            if (!balonAcildi) {
-              balonAcildi = true;
-              return [...m, { rol: 'danisman', metin: parca }];
-            }
-            const son = m[m.length - 1];
-            return [...m.slice(0, -1), { ...son, metin: `${son.metin} ${parca}` }];
-          });
+          // Bayrak güncelleyicinin DIŞINDA çevriliyor: React güncelleyicilerin
+          // saf olmasını şart koşuyor ve StrictMode'da iki kez çalıştırıyor.
+          // İçeride çevrilseydi ikinci çağrıda ilk cümle yeni balon yerine
+          // öncekine eklenirdi.
+          const ilkCumle = !balonAcildi;
+          balonAcildi = true;
+          setMesajlar((m) =>
+            ilkCumle
+              ? [...m, { rol: 'danisman' as const, metin: parca }]
+              : [
+                  ...m.slice(0, -1),
+                  { ...m[m.length - 1], metin: `${m[m.length - 1].metin} ${parca}` },
+                ]
+          );
         } else if (d.tip === 'son') {
           if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
           if (d.durum) setDurum(d.durum);

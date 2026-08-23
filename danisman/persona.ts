@@ -5,8 +5,9 @@
  * bir profil düzeltilirse danışmanın ağzı da düzelir. Tek kaynak.
  */
 import { mizacProfiller, sorular, type MizacTip } from '@/lib/mizac-data';
+import type { Dil } from './model';
 
-export type Dil = 'tr' | 'en';
+export type { Dil } from './model';
 
 const TIPLER: MizacTip[] = ['safravi', 'demevi', 'balgami', 'sevdavi'];
 

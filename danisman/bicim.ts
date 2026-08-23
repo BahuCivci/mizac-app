@@ -55,7 +55,7 @@ const BOS_TESELLI =
 /** Hekime yönlendirme — bu kalmalı, tavsiye değil sınır çizmedir. */
 const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112|doctor|physician|emergency)\b/i;
 
-function cumlelereBol(metin: string): string[] {
+export function cumlelereBol(metin: string): string[] {
   // Nokta/ünlem/soru sonrası boşlukta böl; kısaltmalar için mükemmel değil ama
   // danışman cevapları kısa olduğundan yeterli.
   return metin
@@ -108,11 +108,6 @@ export function cumleGecerliMi(
     }
   }
   return true;
-}
-
-/** Ham metni cümlelere böler — akış tarafı da bunu kullanır. */
-export function cumlelereBolPublic(metin: string): string[] {
-  return cumlelereBol(metin);
 }
 
 export function cevabiBicimlendir(

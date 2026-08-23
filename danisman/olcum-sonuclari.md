@@ -1,6 +1,6 @@
 # Aşama 1 — Ölçüm sonuçları
 
-Kapadokya Üniversitesi sunucusu (192.168.1.40), Ollama, `num_ctx=8192`,
+Kapadokya Üniversitesi sunucusu (iç ağ), Ollama, `num_ctx=8192`,
 `temperature=0`. Her satır gerçek bir koşu; tahmin yok. Ham çıktılar
 `sonuclar/` altında, madde madde.
 

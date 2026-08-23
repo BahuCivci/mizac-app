@@ -5,7 +5,7 @@ import { krizTespit, krizCevabi } from '@/danisman/kriz';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from '@/danisman/kanit';
-import { cevabiBicimlendir, cumleGecerliMi, cumlelereBolPublic } from '@/danisman/bicim';
+import { cevabiBicimlendir, cumleGecerliMi, cumlelereBol } from '@/danisman/bicim';
 import { stratejiSec, stratejiNotu } from '@/danisman/strateji';
 
 /**
@@ -191,7 +191,7 @@ export async function POST(req: NextRequest) {
         let soruGoruldu = false;
 
         const bosalt = (sondaMi: boolean) => {
-          const parcalar = cumlelereBolPublic(tampon);
+          const parcalar = cumlelereBol(tampon);
           const tamamlanan = sondaMi ? parcalar : parcalar.slice(0, -1);
           tampon = sondaMi ? '' : parcalar[parcalar.length - 1] ?? '';
 

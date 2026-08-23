@@ -13,7 +13,7 @@
 import * as readline from 'node:readline/promises';
 import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
-import { kanitCikar, puanla, eksikAlanlar, yonerge, type Kanit } from './kanit';
+import { kanitCikar, puanla, eksikAlanlar, yonerge, benzersizKanitlar, type Kanit } from './kanit';
 import { cevabiBicimlendir } from './bicim';
 import { stratejiSec, stratejiNotu } from './strateji';
 import { mizacProfiller } from '@/lib/mizac-data';
@@ -111,7 +111,7 @@ async function main() {
       continue;
     }
 
-    const yeni = await yeniKanitSozu;
+    const yeni = benzersizKanitlar(kanitlar, await yeniKanitSozu);
     kanitlar.push(...yeni);
 
     console.log(`\ndanışman: ${cevap.trim()}\n`);

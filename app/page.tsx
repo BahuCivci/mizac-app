@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { mizacProfiller, MizacTip, SORU_SAYISI, TAHMINI_DAKIKA } from "@/lib/mizac-data";
 import { useLang } from "@/lib/lang-context";
 import { EmailCapture } from "@/components/email-capture";
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 
 export default function Home() {
   const profiller = Object.values(mizacProfiller);
@@ -234,6 +235,7 @@ export default function Home() {
           {tr ? 'Varlığın Tahlili kitabından alınan özgün içerikler' : 'Original content from the book Varlığın Tahlili'}
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+{DANISMAN_ACIK && (
           <Link href="/danisman"
             className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
             style={{ background: 'linear-gradient(135deg, #f5f0e8, #ede0c8)', borderColor: '#c4973a60' }}>
@@ -247,6 +249,7 @@ export default function Home() {
                 : 'No question list. Just talk — it reads your temperament from the conversation and shows its reasoning.'}
             </p>
           </Link>
+          )}
           <Link href="/hizli-test"
             className="group rounded-2xl p-6 border transition-all hover:scale-105 hover:shadow-lg"
             style={{ background: 'linear-gradient(135deg, #fef9f0, #fef3c7)', borderColor: '#c4973a40' }}>

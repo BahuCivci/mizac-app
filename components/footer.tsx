@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useLang } from '@/lib/lang-context';
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 
 const linkler = {
   mizac: {
@@ -55,7 +56,11 @@ const linkler = {
     liste: [
       { href: '/test', tr: 'Mizaç Testi', en: 'Temperament Test' },
       { href: '/hizli-test', tr: 'Hızlı Test (10 Soru)', en: 'Quick Test (10 Q)' },
-      { href: '/danisman', tr: 'Mizaç Danışmanı (Sohbet)', en: 'Temperament Consultant (Chat)' },
+      // Danışman yalnız modele ulaşılabilen ortamda listelenir; kapalıyken
+      // link vermek kullanıcıyı çalışmayan bir sayfaya götürür.
+      ...(DANISMAN_ACIK
+        ? [{ href: '/danisman', tr: 'Mizaç Danışmanı (Sohbet)', en: 'Temperament Consultant (Chat)' }]
+        : []),
       { href: '/sss', tr: 'SSS', en: 'FAQ' },
       { href: '/karsilastir', tr: 'Mizaç Uyumu', en: 'Compatibility' },
       { href: '/blog', tr: 'Blog', en: 'Blog' },

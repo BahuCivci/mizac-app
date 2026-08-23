@@ -14,7 +14,7 @@
  */
 import { saglayiciSec, type Mesaj } from './model';
 import { danismanPromptu, uslupHatirlatmasi } from './persona';
-import { kanitCikar, puanla, yonerge, type Kanit } from './kanit';
+import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from './kanit';
 import { cevabiBicimlendir } from './bicim';
 import { stratejiSec, stratejiNotu } from './strateji';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
@@ -118,7 +118,7 @@ async function senaryoKos(hedef: MizacTip) {
     );
 
     gecmis.push({ rol: 'danisman', metin: cevap });
-    kanitlar.push(...(await yeniSozu));
+    kanitlar.push(...benzersizKanitlar(kanitlar, await yeniSozu));
 
     const d = puanla(kanitlar);
     if (d.kazanan === hedef && ilkDogruTur === null && kanitlar.length >= 3) ilkDogruTur = i + 1;

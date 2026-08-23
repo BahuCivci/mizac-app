@@ -1,3 +1,4 @@
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 import { MetadataRoute } from 'next';
 import { mizacProfiller } from '@/lib/mizac-data';
 import { blogYazilari } from '@/lib/blog-data';
@@ -39,7 +40,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: siteUrl, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
     { url: `${siteUrl}/test`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
     { url: `${siteUrl}/hizli-test`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${siteUrl}/danisman`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    // Çalışmayan sayfayı dizine verdirmeyelim: bayrak kapalıyken sitemap'e girmez.
+    ...(DANISMAN_ACIK
+      ? [{ url: `${siteUrl}/danisman`, lastModified: new Date(), changeFrequency: 'monthly' as const, priority: 0.9 }]
+      : []),
     { url: `${siteUrl}/mizaclar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/cocuk-mizaci`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${siteUrl}/yas-mizaclari`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },

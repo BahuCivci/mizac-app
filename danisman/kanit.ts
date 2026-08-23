@@ -97,6 +97,71 @@ export async function kanitCikar(
   }
 }
 
+/**
+ * Karşılaştırma için sözcükleri kabaca köklerine indirger.
+ *
+ * Türkçe sondan eklemeli; "üşüyorum", "üşürüm" ve "üşüyor" aynı şeyi anlatır
+ * ama gövdeleri farklı uzunlukta biter. Düzgün bir kök bulucu burada aşırı
+ * yatırım olurdu, ilk üç harf pratikte yeterli ayrımı veriyor — tek başına
+ * gevşek olduğu için her zaman örtüşme oranıyla birlikte kullanılır.
+ */
+function kokler(metin: string): Set<string> {
+  return new Set(
+    metin
+      .toLocaleLowerCase('tr-TR')
+      .replace(/[^a-zçğıöşü\s]/g, ' ')
+      .split(/\s+/)
+      .filter((k) => k.length > 3)
+      .map((k) => k.slice(0, 3))
+  );
+}
+
+/** İki ifadenin sözcük örtüşmesi (Jaccard). */
+function ortusme(a: Set<string>, b: Set<string>): number {
+  if (!a.size || !b.size) return 0;
+  let kesisim = 0;
+  for (const k of a) if (b.has(k)) kesisim++;
+  return kesisim / (a.size + b.size - kesisim);
+}
+
+const AYNI_SAYILIR = 0.7;
+
+/**
+ * Aynı gözlemin tekrar tekrar puanlanmasını engeller.
+ *
+ * Sohbet testte hep ilerliyor ama gerçek kullanıcı aynı derde birkaç kez
+ * döner. Dedup olmadan "üşüyorum" diye üç kez yakınan biri üç kat puan alıp
+ * yapay bir kesinliğe çıkıyordu. Sitedeki testte de her soru bir kez
+ * puanlanıyor; danışman bundan daha cömert olmamalı.
+ *
+ * Ölçüt aynı mizaç + aynı gösterge (ya da birebir aynı alıntı). Farklı
+ * mizaçlara işaret eden benzer ifadeler elenmez — onlar gerçek bilgidir.
+ */
+export function benzersizKanitlar(mevcut: Kanit[], yeni: Kanit[]): Kanit[] {
+  const gorulen = mevcut.map((k) => ({
+    mizac: k.mizac,
+    gosterge: kokler(k.gosterge),
+    alinti: kokler(k.alinti),
+  }));
+  const eklenecek: Kanit[] = [];
+
+  for (const k of yeni) {
+    const gosterge = kokler(k.gosterge);
+    const alinti = kokler(k.alinti);
+
+    const tekrar = gorulen.some(
+      (g) =>
+        (g.mizac === k.mizac && ortusme(g.gosterge, gosterge) >= AYNI_SAYILIR) ||
+        ortusme(g.alinti, alinti) >= AYNI_SAYILIR
+    );
+    if (tekrar) continue;
+
+    gorulen.push({ mizac: k.mizac, gosterge, alinti });
+    eklenecek.push(k);
+  }
+  return eklenecek;
+}
+
 export function puanla(kanitlar: Kanit[]): Durum {
   const puanlar: Record<MizacTip, number> = {
     safravi: 0, demevi: 0, balgami: 0, sevdavi: 0,

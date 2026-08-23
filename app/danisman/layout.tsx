@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 
 export const metadata: Metadata = {
+  // Bayrak kapalıyken sayfa "henüz yayında değil" diyor; o hâlin dizine
+  // girmesi hem faydasız hem de arama sonucunda yanlış vaat.
+  robots: DANISMAN_ACIK ? undefined : { index: false, follow: true },
   title: 'Mizaç Danışmanı · Konuşarak Mizacını Bul',
   description:
     'Soru listesi doldurmadan, sohbet ederek mizacını bul. Safravî, demevî, balgamî ve sevdavî mizaçları konuşmandan okuyan yapay zekâ danışman.',

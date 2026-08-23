@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 
 type Rol = 'kullanici' | 'danisman';
 interface Mesaj {
@@ -91,6 +92,37 @@ export default function DanismanSayfasi() {
   }
 
   const profil = durum ? mizacProfiller[durum.kazanan] : null;
+
+  // Model bu ortamdan erişilemiyorken sohbet arayüzü göstermek, kullanıcıyı
+  // yazdırıp sonra hata vermek demek. Doğrudan gelen ziyaretçiye durumu söyle.
+  if (!DANISMAN_ACIK) {
+    return (
+      <main className="min-h-screen px-4 py-20" style={{ background: 'var(--background)' }}>
+        <div className="max-w-md mx-auto text-center">
+          <p
+            className="text-xs font-semibold uppercase tracking-[0.3em] mb-3"
+            style={{ color: '#c4973a' }}
+          >
+            Mizaç Danışmanı
+          </p>
+          <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--foreground)' }}>
+            Henüz yayında değil
+          </h1>
+          <p className="text-sm leading-relaxed opacity-70 mb-6" style={{ color: 'var(--foreground)' }}>
+            Konuşarak mizacını okuyan danışman üzerinde çalışıyoruz. O gelene
+            kadar 60 soruluk test aynı motoru kullanıyor ve hazır.
+          </p>
+          <Link
+            href="/test"
+            className="inline-block px-6 py-3 rounded-full text-sm font-semibold"
+            style={{ background: '#c4973a', color: '#1a1207' }}
+          >
+            Mizaç Testine Git
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen px-4 py-10" style={{ background: 'var(--background)' }}>

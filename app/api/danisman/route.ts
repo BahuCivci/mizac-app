@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit, istemciIp } from '@/lib/rate-limit';
+import { DANISMAN_ACIK } from '@/lib/ozellikler';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
-import { kanitCikar, puanla, yonerge, type Kanit } from '@/danisman/kanit';
+import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from '@/danisman/kanit';
 import { cevabiBicimlendir } from '@/danisman/bicim';
 import { stratejiSec, stratejiNotu } from '@/danisman/strateji';
 
@@ -36,6 +37,15 @@ function gecerliMesaj(x: unknown): x is Mesaj {
 }
 
 export async function POST(req: NextRequest) {
+  // Model bu ortamdan erişilemiyorsa isteği hiç başlatma: zaman aşımı bekletip
+  // 503 dönmektense durumu açıkça söyle.
+  if (!DANISMAN_ACIK) {
+    return NextResponse.json(
+      { hata: 'Mizaç danışmanı henüz yayında değil.' },
+      { status: 503 }
+    );
+  }
+
   // Her istek bir model çağrısı — sınırsız bırakmak GPU'yu bedavaya açmak olur.
   if (!rateLimit(istemciIp(req), { limit: 20, windowMs: 60_000 })) {
     return NextResponse.json(
@@ -121,7 +131,7 @@ export async function POST(req: NextRequest) {
 
     const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
     const yeni = await yeniKanitSozu;
-    const tumKanitlar = [...oncekiKanitlar, ...yeni];
+    const tumKanitlar = [...oncekiKanitlar, ...benzersizKanitlar(oncekiKanitlar, yeni)];
     const durum = puanla(tumKanitlar);
 
     // Kanaat ölçütü tek yerde: hem mizaç adının söylenebilmesi hem de

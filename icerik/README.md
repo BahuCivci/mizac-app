@@ -32,6 +32,8 @@ kaynağına gidilebilir.
 | `sablon.ts` | SVG post şablonları (sharp ile PNG'ye çevrilir) |
 | `uret.ts` | Takvimi kurar, metinleri ve görselleri yazar |
 | `kayit.mjs` | Node çözümleyici kancası — `@/` alias'ı ve uzantısız import'lar için |
+| `video.py` | Senaryolardan video üretir (macOS `say` + ffmpeg, maliyet sıfır) |
+| `paylas.py` | Günün içeriğini Instagram/TikTok'a resmî API'lerle gönderir |
 
 ## Çıktı — `icerik/cikti/` (git'e girmez)
 
@@ -78,9 +80,30 @@ Sitenin görünmesi isteğe bağlı değil, şablona gömülü:
 3. **Her açıklama metninde** platforma özel CTA satırı (`temalar.ts` → `CTA`)
 4. **Her video senaryosunun kapanış sahnesi** siteyi söyler ve ekranda gösterir
 
+## Video üretimi
+
+```bash
+python3 icerik/video.py              # eksik olan tüm videoları üret (~40 dk)
+python3 icerik/video.py --gun 2026-08-24
+```
+
+Senaryodaki sahneleri Türkçe sistem sesiyle seslendirip kapak görseli ve marka
+renkli kartlarla birleştirir, sonda mizac.xyz kartı ekler. Dışarıya hiçbir şey
+gitmez, hiçbir servise ödeme yapılmaz.
+
+## Paylaşım
+
+```bash
+python3 icerik/paylas.py             # doğrular, HİÇBİR ŞEY göndermez
+python3 icerik/paylas.py --gercek    # gerçekten paylaşır
+```
+
+Kurulum ve platform onayları: `PAYLASIM-KURULUM.md`.
+
 ## Sınırlar
 
-- Video **senaryoları** üretilir, videonun kendisi değil. Çekim/kurgu sizde.
+- Üretilen videolar **slayt videosudur** — yüz, gerçek ses ve çekim yok.
+  Kendi çekimini isterseniz senaryolar `postlar/` klasöründe.
 - Görsellerde sistem fontu kullanılır (Helvetica). Marka fontu isterseniz
   `sablon.ts` içindeki `font-family` değerlerini değiştirin.
 - Metin sarma karakter sayısı tahminiyle yapılır; çok uzun başlıklarda

@@ -65,6 +65,9 @@ PUBLER_SUTUNLAR = [
 # kendiliğinden anlaşılıyor.
 ALT_TUR = {"reels": "Reel", "shorts": "Short", "kare": "Photo"}
 
+# Publer'ın ücretsiz planı hesap başına 10 bekleyen gönderiyle sınırlı.
+PARCA_BOYU = 10
+
 
 def publer_yaz(hedef: Path, satirlar: list[dict]) -> None:
     hedef.parent.mkdir(parents=True, exist_ok=True)
@@ -160,6 +163,15 @@ def main() -> int:
 
         publer_yaz(PUBLER / kaynak.name, cikti)
 
+        # Ücretsiz planda hesap başına aynı anda en fazla 10 bekleyen gönderi
+        # tutulabiliyor; 209 satırlık dosya olduğu gibi içeri girmiyor. Sırayla
+        # yüklenecek 10'arlık parçalar bunun için.
+        cikti.sort(key=lambda s: (s["Date"], s["Time"]))
+        ad = kaynak.stem
+        for i in range(0, len(cikti), PARCA_BOYU):
+            n = i // PARCA_BOYU + 1
+            publer_yaz(PUBLER / "parcali" / f"{ad}-{n:02d}.csv", cikti[i : i + PARCA_BOYU])
+
         toplam_eksik += eksik + videosuz
         notlar = []
         if eksik:
@@ -169,7 +181,8 @@ def main() -> int:
         not_ = f", {', '.join(notlar)}" if notlar else ""
         print(f"{kaynak.name}: {len(cikti)} gönderi hazır{not_}")
 
-    print(f"\nPubler'a yüklenecek: {PUBLER}")
+    print(f"\nPubler (ücretli plan, tek dosya): {PUBLER}")
+    print(f"Publer (ücretsiz plan, 10'arlık): {PUBLER / 'parcali'}")
     print(f"genel biçim (başka araçlar için): {HEDEF}")
     if toplam_eksik:
         print(f"UYARI: {toplam_eksik} gönderi eksik medya yüzünden dışarıda kaldı.")

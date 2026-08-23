@@ -69,3 +69,22 @@ test('simüle sohbette kaçan göğüs ağırlığını yakalar', () => {
   expect(krizTespit('Göğsümde bir baskı hissediyorum.')).toBe('tibbi');
   expect(krizTespit('Nefesim kesiliyor merdiven çıkarken.')).toBe('tibbi');
 });
+
+test('İngilizce kriz ifadesini de yakalar', () => {
+  // Site iki dilli; güvenlik ağını tek dilde kurmak sessiz bir açık olurdu.
+  expect(krizTespit('I don\'t want to live anymore.')).toBe('ruhsal');
+  expect(krizTespit('I have chest pain and my arm is numb.')).toBe('tibbi');
+  expect(krizTespit('Should I stop taking my medication?')).toBe('ilac');
+});
+
+test('İngilizce karşılık doğru hatları verir', () => {
+  const c = krizCevabi('ruhsal', 'en');
+  expect(c).toContain('112');
+  expect(c).toContain('183');
+  expect(c).toMatch(/local emergency number/i);
+  expect(c).not.toContain('182');
+});
+
+test('İngilizce günlük abartmayı kriz saymaz', () => {
+  expect(krizTespit('This job is killing me, I am exhausted.')).toBeNull();
+});

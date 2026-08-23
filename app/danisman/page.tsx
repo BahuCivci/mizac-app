@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
 import { DANISMAN_ACIK } from '@/lib/ozellikler';
+import { useLang } from '@/lib/lang-context';
 
 type Rol = 'kullanici' | 'danisman';
 interface Mesaj {
@@ -23,13 +24,23 @@ interface Durum {
   puanlar: Record<MizacTip, number>;
 }
 
-const ACILIS =
-  'Merhaba. Ben mizacını anlamana yardım eden bir danışmanım — sana soru listesi ' +
-  'okumayacağım, konuşurken anlamaya çalışacağım. Nasıl gidiyor, seni bugünlerde ' +
-  'en çok ne yoruyor?';
+const ACILIS = {
+  tr:
+    'Merhaba. Ben mizacını anlamana yardım eden bir danışmanım — sana soru listesi ' +
+    'okumayacağım, konuşurken anlamaya çalışacağım. Nasıl gidiyor, seni bugünlerde ' +
+    'en çok ne yoruyor?',
+  en:
+    'Hello. I help people work out their temperament — I won’t read you a list of ' +
+    'questions, I’ll try to understand you as we talk. How are things? What’s been ' +
+    'wearing you out lately?',
+};
 
 export default function DanismanSayfasi() {
-  const [mesajlar, setMesajlar] = useState<Mesaj[]>([{ rol: 'danisman', metin: ACILIS }]);
+  const { lang } = useLang();
+  const tr = lang === 'tr';
+  const [mesajlar, setMesajlar] = useState<Mesaj[]>([
+    { rol: 'danisman', metin: ACILIS[lang] },
+  ]);
   const [kanitlar, setKanitlar] = useState<Kanit[]>([]);
   const [durum, setDurum] = useState<Durum | null>(null);
   const [girdi, setGirdi] = useState('');
@@ -72,12 +83,12 @@ export default function DanismanSayfasi() {
       const cevap = await fetch('/api/danisman', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mesajlar: yeniMesajlar, kanitlar }),
+        body: JSON.stringify({ mesajlar: yeniMesajlar, kanitlar, dil: lang }),
       });
       const d = await cevap.json();
 
       if (!cevap.ok) {
-        setHata(d.hata ?? 'Bir şeyler ters gitti.');
+        setHata(d.hata ?? (tr ? 'Bir şeyler ters gitti.' : 'Something went wrong.'));
         return;
       }
 
@@ -85,7 +96,7 @@ export default function DanismanSayfasi() {
       if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
       if (d.durum) setDurum(d.durum);
     } catch {
-      setHata('Bağlantı kurulamadı. Tekrar dene.');
+      setHata(tr ? 'Bağlantı kurulamadı. Tekrar dene.' : 'Could not connect. Try again.');
     } finally {
       setBekliyor(false);
     }
@@ -103,21 +114,22 @@ export default function DanismanSayfasi() {
             className="text-xs font-semibold uppercase tracking-[0.3em] mb-3"
             style={{ color: '#c4973a' }}
           >
-            Mizaç Danışmanı
+            {tr ? 'Mizaç Danışmanı' : 'Temperament Consultant'}
           </p>
           <h1 className="text-2xl font-bold mb-3" style={{ color: 'var(--foreground)' }}>
-            Henüz yayında değil
+            {tr ? 'Henüz yayında değil' : 'Not live yet'}
           </h1>
           <p className="text-sm leading-relaxed opacity-70 mb-6" style={{ color: 'var(--foreground)' }}>
-            Konuşarak mizacını okuyan danışman üzerinde çalışıyoruz. O gelene
-            kadar 60 soruluk test aynı motoru kullanıyor ve hazır.
+            {tr
+              ? 'Konuşarak mizacını okuyan danışman üzerinde çalışıyoruz. O gelene kadar 60 soruluk test aynı motoru kullanıyor ve hazır.'
+              : 'We’re still building the consultant that reads your temperament from conversation. Until then the 60-question test uses the same engine and is ready.'}
           </p>
           <Link
             href="/test"
             className="inline-block px-6 py-3 rounded-full text-sm font-semibold"
             style={{ background: '#c4973a', color: '#1a1207' }}
           >
-            Mizaç Testine Git
+            {tr ? 'Mizaç Testine Git' : 'Take the Test'}
           </Link>
         </div>
       </main>
@@ -132,23 +144,25 @@ export default function DanismanSayfasi() {
             className="text-xs font-semibold uppercase tracking-[0.3em] mb-2"
             style={{ color: '#c4973a' }}
           >
-            Mizaç Danışmanı
+            {tr ? 'Mizaç Danışmanı' : 'Temperament Consultant'}
           </p>
           {/* Sayfa arka planı açık (--background: #faf7f2); krem başlık görünmez
               oluyordu. Koyu paleti yalnızca kartların içinde kullan. */}
           <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>
-            Konuşarak mizacını bul
+            {tr ? 'Konuşarak mizacını bul' : 'Find your temperament by talking'}
           </h1>
           <p className="text-sm leading-relaxed opacity-70" style={{ color: 'var(--foreground)' }}>
-            Soru listesi yok. Anlat, dinleyeyim.{' '}
+            {tr ? 'Soru listesi yok. Anlat, dinleyeyim.' : 'No question list. Talk, and I’ll listen.'}{' '}
             <Link href="/test" className="underline" style={{ color: '#c4973a' }}>
-              Klasik testi
+              {tr ? 'Klasik testi' : 'The classic test'}
             </Link>{' '}
-            tercih edersen o da duruyor.
+            {tr ? 'tercih edersen o da duruyor.' : 'is still there if you prefer it.'}
           </p>
           {oncekiTest && (
             <p className="text-xs mt-2 opacity-60" style={{ color: 'var(--foreground)' }}>
-              Testte {mizacProfiller[oncekiTest].isim} çıkmıştın — bakalım sohbet ne diyecek.
+              {tr
+                ? `Testte ${mizacProfiller[oncekiTest].isim} çıkmıştın — bakalım sohbet ne diyecek.`
+                : `The test said ${mizacProfiller[oncekiTest].isimEn} — let’s see what the conversation says.`}
             </p>
           )}
         </header>
@@ -177,7 +191,7 @@ export default function DanismanSayfasi() {
 
           {bekliyor && (
             <p className="text-xs px-2" style={{ color: '#9a8060' }}>
-              düşünüyor…
+              {tr ? 'düşünüyor…' : 'thinking…'}
             </p>
           )}
           {hata && (
@@ -192,7 +206,7 @@ export default function DanismanSayfasi() {
           <input
             value={girdi}
             onChange={(e) => setGirdi(e.target.value)}
-            placeholder="Anlatmak istediğini yaz…"
+            placeholder={tr ? 'Anlatmak istediğini yaz…' : 'Write what’s on your mind…'}
             maxLength={2000}
             disabled={bekliyor}
             className="flex-1 min-w-0 px-4 py-3 rounded-full text-sm outline-none"
@@ -204,7 +218,7 @@ export default function DanismanSayfasi() {
             className="px-5 py-3 rounded-full text-xs font-semibold shrink-0 disabled:opacity-50"
             style={{ background: '#c4973a', color: '#1a1207' }}
           >
-            Gönder
+            {tr ? 'Gönder' : 'Send'}
           </button>
         </form>
 
@@ -214,20 +228,22 @@ export default function DanismanSayfasi() {
             style={{ background: '#1a1207', border: `1px solid ${profil.renk}` }}
           >
             <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: '#9a8060' }}>
-              Şu ana kadar okuduğum
+              {tr ? 'Şu ana kadar okuduğum' : 'What I’m reading so far'}
             </p>
             <p className="text-2xl font-bold mb-1" style={{ color: profil.renk }}>
-              {profil.elementSembol} {profil.isim}
+              {profil.elementSembol} {tr ? profil.isim : profil.isimEn}
             </p>
             <p className="text-xs mb-3" style={{ color: '#9a8060' }}>
-              güven %{Math.round(durum.guven * 100)} — sohbet sürdükçe netleşir
+              {tr
+                ? `güven %${Math.round(durum.guven * 100)} — sohbet sürdükçe netleşir`
+                : `${Math.round(durum.guven * 100)}% confidence — it sharpens as we talk`}
             </p>
             <Link
               href="/mizaclar"
               className="text-xs underline"
               style={{ color: '#c4973a' }}
             >
-              Bu mizaç ne demek?
+              {tr ? 'Bu mizaç ne demek?' : 'What does this temperament mean?'}
             </Link>
           </div>
         )}
@@ -239,14 +255,17 @@ export default function DanismanSayfasi() {
               className="text-xs font-bold uppercase tracking-widest w-full text-left"
               style={{ color: '#c4973a' }}
             >
-              {izGoster ? '▾' : '▸'} Neye dayanarak — {kanitlar.length} gösterge
+              {izGoster ? '▾' : '▸'}{' '}
+              {tr
+                ? `Neye dayanarak — ${kanitlar.length} gösterge`
+                : `What this is based on — ${kanitlar.length} signals`}
             </button>
             {izGoster && (
               <ul className="mt-3 space-y-2">
                 {kanitlar.map((k, i) => (
                   <li key={i} className="text-xs leading-relaxed wrap-break-word" style={{ color: '#9a8060' }}>
                     <span style={{ color: mizacProfiller[k.mizac].renk }}>
-                      {mizacProfiller[k.mizac].isim}
+                      {tr ? mizacProfiller[k.mizac].isim : mizacProfiller[k.mizac].isimEn}
                     </span>{' '}
                     · {k.gosterge}
                     <span className="block italic opacity-70">“{k.alinti}”</span>
@@ -258,8 +277,9 @@ export default function DanismanSayfasi() {
         )}
 
         <p className="text-xs text-center mt-6 leading-relaxed opacity-60" style={{ color: 'var(--foreground)' }}>
-          Mizaç okuması bir kişilik ve beden eğilimi yorumudur, tıbbi teşhis değildir.
-          Sağlık şikâyetlerin için hekimine başvur.
+          {tr
+            ? 'Mizaç okuması bir kişilik ve beden eğilimi yorumudur, tıbbi teşhis değildir. Sağlık şikâyetlerin için hekimine başvur.'
+            : 'A temperament reading is an interpretation of personality and bodily tendencies, not a medical diagnosis. See a doctor about health complaints.'}
         </p>
       </div>
     </main>

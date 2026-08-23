@@ -14,6 +14,20 @@
  */
 
 export type KrizTuru = 'ruhsal' | 'tibbi' | 'ilac';
+export type Dil = 'tr' | 'en';
+
+/**
+ * İngilizce kalıplar ayrı tutuluyor.
+ *
+ * Site iki dilli. Güvenlik ağını yalnız Türkçe kurmak, İngilizce yazan birinin
+ * krizini hiç görmemek demek — sessiz ve en kötü türden bir açık.
+ */
+const RUHSAL_EN =
+  /suicid|kill myself|end my life|don'?t want to live|want to die|hurt myself|self[- ]harm|cutting myself|no reason to live/i;
+const TIBBI_EN =
+  /chest (pain|pressure|tightness|heav)|can'?t breathe|cannot breathe|hard to breathe|short(ness)? of breath|passed out|fainted|numb(ness)? in my arm|slurred speech|vision loss|bleeding (that )?won'?t stop|coughing (up )?blood/i;
+const ILAC_EN =
+  /(stop|quit|skip|cut|reduce|halve)\w*\s+(taking\s+)?(my\s+)?(medication|meds|pills|antidepressant|prescription)|off my (meds|medication)|lower the dose|reduce the dose/i;
 
 /**
  * İntihar düşüncesi ve kendine zarar. Kalıplar dar tutuldu: "bittim",
@@ -57,9 +71,11 @@ const ILAC = new RegExp(
 );
 
 export function krizTespit(metin: string): KrizTuru | null {
-  if (RUHSAL.test(metin)) return 'ruhsal';
-  if (TIBBI.test(metin) || TIBBI_2.test(metin)) return 'tibbi';
-  if (ILAC.test(metin)) return 'ilac';
+  // Dil bilgisine güvenilmiyor: kullanıcı arayüzü İngilizce olsa da Türkçe
+  // yazabilir, tersi de olur. Her iki kalıp kümesi de her metne uygulanır.
+  if (RUHSAL.test(metin) || RUHSAL_EN.test(metin)) return 'ruhsal';
+  if (TIBBI.test(metin) || TIBBI_2.test(metin) || TIBBI_EN.test(metin)) return 'tibbi';
+  if (ILAC.test(metin) || ILAC_EN.test(metin)) return 'ilac';
   return null;
 }
 
@@ -67,7 +83,8 @@ export function krizTespit(metin: string): KrizTuru | null {
  * Sabit karşılık. Mizaç okuması burada durur — kriz anında birine huy
  * analizi yapmak hem faydasız hem de zararlı olabilir.
  */
-export function krizCevabi(tur: KrizTuru): string {
+export function krizCevabi(tur: KrizTuru, dil: Dil = 'tr'): string {
+  if (dil === 'en') return krizCevabiEn(tur);
   if (tur === 'ruhsal') {
     return (
       'Söylediğin şey ciddi ve bunu yazabilmen önemli. Burada mizaç konuşmayı ' +
@@ -93,5 +110,46 @@ export function krizCevabi(tur: KrizTuru): string {
     'bırakıyorum.\n\n' +
     'Lütfen vakit kaybetmeden 112’yi ara ya da en yakın acil servise git. ' +
     'Bunu mizaçla açıklamaya çalışmak doğru olmaz.'
+  );
+}
+
+/**
+ * İngilizce karşılıklar.
+ *
+ * Hat numaraları Türkiye'ye ait: site Türkiye merkezli ve kullanıcı burada
+ * olabilir. Uluslararası bir ziyaretçi için de yerel acil servise yönlendirme
+ * ekleniyor — yanlış ülkenin numarasını vermektense ikisini birden söylemek
+ * doğru olan.
+ */
+function krizCevabiEn(tur: KrizTuru): string {
+  if (tur === 'ruhsal') {
+    return (
+      'What you just said matters, and it took something to write it. I am ' +
+      'stopping the temperament conversation here, because that is not what ' +
+      'you need right now.\n\n' +
+      'Please reach a person. In Turkey: 112 if you are in immediate danger, ' +
+      'or 183 (free, 24/7) if you need someone to talk to. Elsewhere, call ' +
+      'your local emergency number. If someone you trust is nearby, tell them ' +
+      'too.\n\n' +
+      'I am an AI; the people who can actually help you are at the end of ' +
+      'those lines.'
+    );
+  }
+  if (tur === 'ilac') {
+    return (
+      'I cannot give you an opinion on stopping or reducing a prescribed ' +
+      'medication — that decision belongs with the doctor who prescribed it, ' +
+      'because only they can weigh the consequences.\n\n' +
+      'If you think it is not suiting you, tell them that; changing the dose ' +
+      'or the drug is their call. Let us pick the conversation up somewhere ' +
+      'else.'
+    );
+  }
+  return (
+    'What you are describing is not something to wait on. I am stopping the ' +
+    'temperament conversation here.\n\n' +
+    'Please call 112 (or your local emergency number) or go to the nearest ' +
+    'emergency department. Trying to explain this through temperament would ' +
+    'be wrong.'
   );
 }

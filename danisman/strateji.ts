@@ -152,6 +152,10 @@ function adSec(s: SecimDurumu): StratejiAdi {
  * Stratejiye göre modele verilecek yönerge; `yonerge()` notuyla birleşir.
  * Kullanıcıya gösterilmez.
  */
-export function stratejiNotu(strateji: Strateji): string {
-  return `[yönerge — kullanıcıya gösterme]\n${strateji.yonerge}`;
+export function stratejiNotu(strateji: Strateji, dil: 'tr' | 'en' = 'tr'): string {
+  // Yönerge Türkçe kalıyor (persona.ts'teki gerekçeyle: tek kaynak), yalnız
+  // çıktı dili hatırlatılıyor.
+  const ek =
+    dil === 'en' ? '\n(Reply to the person in English.)' : '';
+  return `[yönerge — kullanıcıya gösterme]\n${strateji.yonerge}${ek}`;
 }

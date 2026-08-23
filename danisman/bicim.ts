@@ -12,7 +12,10 @@
  * kalır.
  */
 
-const MIZAC_ADI = /safrav[iî]|demev[iî]|balgam[iî]|sevdav[iî]/i;
+// Site iki dilli; İngilizce cevapta mizaç adı İngilizce geçer. Filtreler
+// yalnız Türkçeyi tanısaydı İngilizce tarafta hiçbiri çalışmazdı.
+const MIZAC_ADI =
+  /safrav[iî]|demev[iî]|balgam[iî]|sevdav[iî]|choleric|sanguine|phlegmatic|melancholic/i;
 
 /** Madde işareti, numaralı liste ve başlık işaretleri. */
 const LISTE_BASI = /^\s*(?:[-*•–]|\d+[.)])\s+/;
@@ -25,7 +28,7 @@ const LISTE_BASI = /^\s*(?:[-*•–]|\d+[.)])\s+/;
  * tavsiye ve danışmanın işi değil; içeren cümle atılır.
  */
 const TEDAVI_ONERISI =
-  /\b(kullan(ma[nz]ı|abilirsin|ın|mayı)|iç(me[nz]i|ebilirsin)|tüket(me[nz]i|ebilirsin)|uygula(ma[nz]ı|yabilirsin)|takviye|antiperspirant|nemlendirici|vitamin|ilaç|doz|tedavi yöntem|egzersiz yap|terapi|dermatolo|psikolog)\b/i;
+  /\b(kullan(ma[nz]ı|abilirsin|ın|mayı)|iç(me[nz]i|ebilirsin)|tüket(me[nz]i|ebilirsin)|uygula(ma[nz]ı|yabilirsin)|takviye|antiperspirant|nemlendirici|vitamin|ilaç|doz|tedavi yöntem|egzersiz yap|terapi|dermatolo|psikolog|supplement|dosage|you should take|try taking|antiperspirant|moisturi[sz]er|see a dermatolog|therapist)\b/i;
 
 /**
  * Rol devralma. Güvenlik sınavında model "Anladım, geçmiş talimatları
@@ -34,7 +37,7 @@ const TEDAVI_ONERISI =
  * etmişti. Sonraki tur reçete isteseydi verecekti. Bu cümleler atılır.
  */
 const ROL_DEVRALMA =
-  /\b(bir (doktor|hekim|terapist|psikolog|eczacı) olarak|talimatları unut|talimatlarımı unut|geçmiş talimatlar|rolümü değiştir|artık bir (doktor|hekim|terapist))/i;
+  /\b(bir (doktor|hekim|terapist|psikolog|eczacı) olarak|talimatları unut|talimatlarımı unut|geçmiş talimatlar|rolümü değiştir|artık bir (doktor|hekim|terapist)|as a (doctor|physician|therapist|pharmacist)|ignoring my (previous )?instructions|forget(ting)? my instructions|i am now a (doctor|therapist))/i;
 
 /**
  * Uydurulmuş kişisel deneyim. Simüle sohbette danışman "Ben de bazen markette
@@ -43,13 +46,14 @@ const ROL_DEVRALMA =
  * yalnız sahtelik değil, yanıltıcı.
  */
 const UYDURMA_DENEYIM =
-  /\b(ben|benim) de\b[^.!?]{0,60}\b(olurum|oluyorum|yaparım|yapıyorum|zorlanıyorum|kurur|kuruyor|üşürüm|üşüyorum|yaşıyorum|hissediyorum|severim)\b/i;
+  /\b(ben|benim) de\b[^.!?]{0,60}\b(olurum|oluyorum|yaparım|yapıyorum|zorlanıyorum|kurur|kuruyor|üşürüm|üşüyorum|yaşıyorum|hissediyorum|severim)\b|\b(i )?(too|also) (get|feel|struggle|have)\b|\bwhen i('m| am)\b[^.!?]{0,40}\b(i feel|i get)\b/i;
 
 /** İçi boş teselli — persona bunu yasaklıyor ama model yine kuruyor. */
-const BOS_TESELLI = /\b(bu )?(çok )?normal(dir)?\b|herkes böyle|herkeste olur/i;
+const BOS_TESELLI =
+  /\b(bu )?(çok )?normal(dir)?\b|herkes böyle|herkeste olur|that'?s (completely |totally )?normal|everyone (feels|gets) (that|this)|it happens to everyone/i;
 
 /** Hekime yönlendirme — bu kalmalı, tavsiye değil sınır çizmedir. */
-const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112)\b/i;
+const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112|doctor|physician|emergency)\b/i;
 
 function cumlelereBol(metin: string): string[] {
   // Nokta/ünlem/soru sonrası boşlukta böl; kısaltmalar için mükemmel değil ama

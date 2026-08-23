@@ -71,13 +71,14 @@ function gecerliKanit(x: unknown): x is Kanit {
 export async function kanitCikar(
   saglayici: Saglayici,
   soz: string,
-  baglam: string[] = []
+  baglam: string[] = [],
+  dil: 'tr' | 'en' = 'tr'
 ): Promise<Kanit[]> {
   const oncesi = baglam.length ? `Sohbetin önceki bölümü:\n${baglam.join('\n')}\n\n` : '';
 
   const ham = await saglayici.sor(
     [
-      { rol: 'sistem', metin: kanitPromptu() + '\n' + CIKAR_TALIMATI },
+      { rol: 'sistem', metin: kanitPromptu(dil) + '\n' + CIKAR_TALIMATI },
       { rol: 'kullanici', metin: `${oncesi}Kişinin son sözü:\n${soz}` },
     ],
     { sicaklik: 0, enFazlaJeton: 600, jsonMu: true }

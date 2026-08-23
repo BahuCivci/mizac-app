@@ -6,12 +6,40 @@
  */
 import { mizacProfiller, sorular, type MizacTip } from '@/lib/mizac-data';
 
+export type Dil = 'tr' | 'en';
+
 const TIPLER: MizacTip[] = ['safravi', 'demevi', 'balgami', 'sevdavi'];
+
+/**
+ * Kurallar tek dilde (Türkçe) tutuluyor, çıktı dili ayrıca söyleniyor.
+ *
+ * İki ayrı kural metni tutmak, ikisinin zamanla birbirinden ayrılması demek —
+ * bir kuralı düzeltip diğerini unutmak kaçınılmaz. Modeller talimatı bir
+ * dilde alıp başka dilde üretmekte iyi; kural tek kaynakta kalsın diye bu
+ * yol seçildi. Mizaç tarifleri ise veriden geldiği için gerçekten çevrili.
+ */
+function ciktiDili(dil: Dil): string {
+  return dil === 'en'
+    ? '\nOUTPUT LANGUAGE: Reply in ENGLISH. The rules above are written in ' +
+      'Turkish but your reply to the person must be in natural, warm English. ' +
+      'Use the English temperament names (choleric, sanguine, phlegmatic, ' +
+      'melancholic) only when you are allowed to name one.'
+    : '';
+}
 
 /** Modelin mizaçları tanıması için damıtılmış tarif. Uzun açıklamalar alınmaz —
  *  bağlamı şişirir ve ölçümde faydası görülmedi; ayırt edici sinyaller yeter. */
-function mizacTarifi(tip: MizacTip): string {
+function mizacTarifi(tip: MizacTip, dil: Dil): string {
   const p = mizacProfiller[tip];
+  if (dil === 'en') {
+    return [
+      `${tip} (${p.isimEn}) — ${p.elementEn}`,
+      `  body: ${p.fizikselEn.slice(0, 4).join('; ')}`,
+      `  traits: ${p.anahtarKelimelerEn.join(', ')}`,
+      `  strengths: ${p.gucluYonlerEn.slice(0, 3).join('; ')}`,
+      `  struggles: ${p.zayifYonlerEn.slice(0, 3).join('; ')}`,
+    ].join('\n');
+  }
   return [
     `${tip} (${p.isim}) — ${p.element}, ${p.sicaklik}-${p.nem}`,
     `  beden: ${p.fiziksel.slice(0, 4).join('; ')}`,
@@ -115,7 +143,7 @@ kolay geçti?"
 "Klimasız duramamak yazı baştan sona bir mücadeleye çeviriyor olmalı.
 Temmuz'da insanın enerjisi zaten yerlerde."`;
 
-export function danismanPromptu(): string {
+export function danismanPromptu(dil: Dil = 'tr'): string {
   const kategoriler = [...new Set(sorular.map((s) => s.kategori))].join(', ');
 
   return [
@@ -124,12 +152,13 @@ export function danismanPromptu(): string {
     'okuyarak değil, konuşurken anlarsın.',
     '',
     'DÖRT MİZAÇ',
-    TIPLER.map(mizacTarifi).join('\n'),
+    TIPLER.map((t) => mizacTarifi(t, dil)).join('\n'),
     '',
     `Mizaç şu alanlardan okunur: ${kategoriler}.`,
     NEM_KURALI,
     USLUP,
     SAGLIK_KURALI,
+    ciktiDili(dil),
   ].join('\n');
 }
 
@@ -142,13 +171,14 @@ export function danismanPromptu(): string {
  * modelin hafızasından alıp verinin üzerine oturtur — bu göstergeler zaten
  * sitedeki testin kaynağı, yani danışman ve test aynı şeye bakar.
  */
-function gostergeTablosu(): string {
+function gostergeTablosu(dil: Dil): string {
   const satirlar: string[] = [];
   for (const soru of sorular) {
     const esler = soru.secenekler
       .map((s) => {
         const uc = TIPLER.filter((t) => s.puan[t] >= 3);
-        return uc.length === 1 ? `${uc[0]}: ${s.metin}` : null;
+        if (uc.length !== 1) return null;
+        return `${uc[0]}: ${dil === 'en' ? s.metinEn : s.metin}`;
       })
       .filter(Boolean);
     if (esler.length) satirlar.push(`[${soru.kategori}] ` + esler.join(' | '));
@@ -157,16 +187,16 @@ function gostergeTablosu(): string {
 }
 
 /** Kanıt çıkarıcının kullandığı, göstergeye odaklı sürüm. */
-export function kanitPromptu(): string {
+export function kanitPromptu(dil: Dil = 'tr'): string {
   return [
     'Bir kişinin sözünden mizaç göstergesi çıkarıyorsun.',
     '',
-    TIPLER.map(mizacTarifi).join('\n'),
+    TIPLER.map((t) => mizacTarifi(t, dil)).join('\n'),
     NEM_KURALI,
     '',
     'GÖSTERGE TABLOSU — kişinin sözünü ÖNCE buradaki maddelerle eşleştir.',
     'Bir madde uyuyorsa mizacını oradan al; kendi yorumunu tablonun önüne geçirme.',
-    gostergeTablosu(),
+    gostergeTablosu(dil),
   ].join('\n');
 }
 
@@ -177,10 +207,11 @@ export function kanitPromptu(): string {
  * bağlam uzadıkça sulanıyor ve danışman numaralı listeler yapıp ders anlatmaya
  * dönüyor, hatta mizaç adını izinsiz söylüyor.
  */
-export function uslupHatirlatmasi(): string {
-  return (
+export function uslupHatirlatmasi(dil: Dil = 'tr'): string {
+  const temel =
     '[hatırlatma — kullanıcıya gösterme] Kısa konuş (en fazla 4 cümle), madde ' +
     'işaretli liste yapma, ders anlatma, kendi gözlemini anlatma ("fark ettim" ' +
-    'gibi), en fazla bir soru sor. Mizaç adını izin verilmedikçe söyleme.'
-  );
+    'gibi), en fazla bir soru sor. Mizaç adını izin verilmedikçe söyleme. ' +
+    'Kendine hayat uydurma — bedenin ve gündelik alışkanlığın yok.';
+  return dil === 'en' ? `${temel} Reply in English.` : temel;
 }

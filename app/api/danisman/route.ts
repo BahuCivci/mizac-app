@@ -62,10 +62,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ hata: 'Geçersiz istek' }, { status: 400 });
   }
 
-  const { mesajlar, kanitlar } = (govde ?? {}) as {
+  const { mesajlar, kanitlar, dil: istenenDil } = (govde ?? {}) as {
     mesajlar?: unknown;
     kanitlar?: unknown;
+    dil?: unknown;
   };
+  const dil: 'tr' | 'en' = istenenDil === 'en' ? 'en' : 'tr';
 
   if (!Array.isArray(mesajlar) || mesajlar.length === 0) {
     return NextResponse.json({ hata: 'mesajlar boş olamaz' }, { status: 400 });
@@ -104,7 +106,7 @@ export async function POST(req: NextRequest) {
   const kriz = krizTespit(son.metin);
   if (kriz) {
     return NextResponse.json({
-      cevap: krizCevabi(kriz),
+      cevap: krizCevabi(kriz, dil),
       kanitlar: oncekiKanitlar,
       durum: null,
       kriz,
@@ -118,7 +120,8 @@ export async function POST(req: NextRequest) {
     const yeniKanitSozu = kanitCikar(
       saglayici,
       son.metin,
-      mesajlar.slice(-6).map((m) => `${m.rol}: ${m.metin}`)
+      mesajlar.slice(-6).map((m) => `${m.rol}: ${m.metin}`),
+      dil
     );
 
     const oncekiDurum = oncekiKanitlar.length ? puanla(oncekiKanitlar) : null;
@@ -136,11 +139,11 @@ export async function POST(req: NextRequest) {
 
     const not = yonerge(oncekiKanitlar);
     const istem: Mesaj[] = [
-      { rol: 'sistem', metin: danismanPromptu() },
+      { rol: 'sistem', metin: danismanPromptu(dil) },
       ...mesajlar,
-      { rol: 'sistem' as const, metin: uslupHatirlatmasi() },
+      { rol: 'sistem' as const, metin: uslupHatirlatmasi(dil) },
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
-      { rol: 'sistem' as const, metin: stratejiNotu(strateji) },
+      { rol: 'sistem' as const, metin: stratejiNotu(strateji, dil) },
     ];
 
     const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });

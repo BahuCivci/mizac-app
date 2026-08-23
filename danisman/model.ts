@@ -187,7 +187,10 @@ export interface ClaudeAyar {
 
 export function claude(ayar: ClaudeAyar = {}): Saglayici {
   const anahtar = ayar.anahtar ?? process.env.ANTHROPIC_API_KEY;
-  const model = ayar.model ?? process.env.MIZAC_CLAUDE_MODEL ?? 'claude-sonnet-4-5';
+  // 'claude-sonnet-4-5' yazıyordu — böyle bir model kimliği yok, ilk gerçek
+  // istekte 404 dönerdi. Ucuzlatmak istenirse MIZAC_CLAUDE_MODEL ile
+  // 'claude-haiku-4-5' verilebilir; bu kararı kod değil kullanıcı vermeli.
+  const model = ayar.model ?? process.env.MIZAC_CLAUDE_MODEL ?? 'claude-opus-5';
 
   return {
     ad: `claude:${model}`,

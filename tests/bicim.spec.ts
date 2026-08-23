@@ -98,3 +98,56 @@ test('içi boş tesellliyi atar', () => {
   expect(c).not.toMatch(/çok normal/i);
   expect(c).toContain('Ne zamandır sürüyor');
 });
+
+test('kişiye söylemediği şeyi atfeden cümleyi atar', () => {
+  // Gerçek koşudan: kitaptan gelen "utanma/sigara" içeriği kullanıcıya
+  // atfedildi, oysa kullanıcı yalnızca hılt sormuştu.
+  const ham =
+    'Hılt, bedendeki dört sıvıdan biri. Sigara kullandığın için utandığını söylemiştin. Peki uykun nasıl?';
+  const c = cevabiBicimlendir(ham, {
+    mizacSoylenebilir: false,
+    kullaniciSozleri: 'Hılt nedir, mizaçla ilişkisi ne?',
+  });
+  expect(c).not.toMatch(/sigara/i);
+  expect(c).toContain('dört sıvıdan biri');
+});
+
+test('gerçek atfı korur', () => {
+  const ham = 'Beş alarm kurduğunu söylemiştin, o yüzden sabahları zor geliyor demek ki.';
+  const c = cevabiBicimlendir(ham, {
+    mizacSoylenebilir: false,
+    kullaniciSozleri: 'Sabahları kalkamıyorum, beş alarm kuruyorum.',
+  });
+  expect(c).toMatch(/beş alarm/i);
+});
+
+test('kişiye söylemediği hastalığı atfeden cümleyi atar', () => {
+  // Gerçek koşudan: kullanıcı yalnızca hılt sormuştu.
+  const ham =
+    'Hılt, bedendeki sıvıların adı. Senin durumunda yüz felci geçirmiş olman ve tansiyonun olması bu dengeleri etkiliyor. Uykun nasıl?';
+  const c = cevabiBicimlendir(ham, {
+    mizacSoylenebilir: false,
+    kullaniciSozleri: 'Hılt nedir, mizaçla ilişkisi ne?',
+  });
+  expect(c).not.toMatch(/felç|tansiyon/i);
+  expect(c).toContain('bedendeki sıvıların adı');
+});
+
+test('kişinin kendi söylediği hastalığı korur', () => {
+  const ham = 'Migrenin olması demek ki seni epey zorluyor.';
+  const c = cevabiBicimlendir(ham, {
+    mizacSoylenebilir: false,
+    kullaniciSozleri: 'Yıllardır migrenim var, hava değişince tutuyor.',
+  });
+  expect(c).toMatch(/migren/i);
+});
+
+test('genel eğilim cümlesi elenmez', () => {
+  const ham = 'Demevî yapıda tansiyon oynaklığı sık görülür.';
+  const c = cevabiBicimlendir(ham, {
+    mizacSoylenebilir: true,
+    kazanan: 'demevi',
+    kullaniciSozleri: 'Kalbim güm güm atıyor bazen.',
+  });
+  expect(c).toMatch(/tansiyon/i);
+});

@@ -52,6 +52,41 @@ const UYDURMA_DENEYIM =
 const BOS_TESELLI =
   /\b(bu )?(çok )?normal(dir)?\b|herkes böyle|herkeste olur|that'?s (completely |totally )?normal|everyone (feels|gets) (that|this)|it happens to everyone/i;
 
+/**
+ * Kişiye söylemediği bir şeyi atfetme.
+ *
+ * Kitaptan getirim eklendikten sonra ortaya çıktı: model, pasajda geçen bir
+ * duyguyu ya da örneği karşısındakinin sözü sanıyor. Üç koşunun ikisinde
+ * "sigara kullandığın için utanman", "hüzünlendiğini söylediğin şey" gibi
+ * cümleler kurdu — kullanıcı bunların hiçbirini söylememişti. Prompt'a kural
+ * yazmak yetmedi.
+ *
+ * Kural: atıf ifadesi içeren bir cümle, ancak içeriği kişinin gerçekten
+ * söyledikleriyle örtüşüyorsa geçer.
+ */
+// Türkçe'de atıf çok biçimli: "söylediğin", "söylemiştin", "söylemişsin",
+// "bahsettiğin", "demiştin"... Fiil köklerini alıp ek kısmını serbest
+// bırakmak, tek tek biçim saymaktan sağlam.
+const ATIF =
+  /\b(söyle|de|belirt|bahset|anlat|dile getir)\w*\s*(m[ıi][şs]|di[ğg]|ti[ğg])\w*\b|\b(söylemi[şs]tin|demi[şs]tin|dedi[ğg]in|anlattı[ğg]ın)\b|\byou (said|mentioned|told me)\b|\bas you (said|mentioned)\b/i;
+
+/**
+ * Kişiye hastalık atfetme.
+ *
+ * Atıf denetimi eklendikten sonra kalan vaka: model, kitaptan gelen bir
+ * hastalık örneğini kullanıcıya yapıştırdı — "Senin durumunda yüz felci
+ * geçirmiş olman ve tansiyonun olması..." Kullanıcı ikisinden de
+ * bahsetmemişti. Atıf fiili olmadığı için `ATIF` yakalamıyor.
+ *
+ * Kural dar tutuluyor: cümle hem KİŞİYE yönelik olmalı (sen/senin/sende…)
+ * hem de kişinin ağzından çıkmamış bir hastalık adı içermeli. Mizaçların
+ * genel eğilimini anlatan cümleler ("demevîlerde tansiyon görülebilir")
+ * kişiye yönelik olmadığı için elenmez.
+ */
+const KISIYE_YONELIK = /\b(sen|senin|sende|sana|seni)\b|\b\w+(man|men|ın|in)\s+(ve|de|da)?\s*\w*(olması|olman)\b/i;
+const HASTALIK =
+  /\b(felç|tansiyon|diyabet|şeker hastal|migren|reflü|astım|kanser|depresyon|anemi|tiroid|ülser|romatizma|sedef|egzama|sinüzit|kolesterol|kalp hastal|böbrek|karaciğer)\w*/gi;
+
 /** Hekime yönlendirme — bu kalmalı, tavsiye değil sınır çizmedir. */
 const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112|doctor|physician|emergency)\b/i;
 
@@ -75,6 +110,13 @@ export interface BicimSecenekleri {
    */
   kazanan?: string;
   /**
+   * Kişinin bu sohbette gerçekten yazdıkları.
+   *
+   * Atıf denetimi için gerekli: "söyledin" diyen bir cümlenin içeriği burada
+   * geçmiyorsa cümle uydurmadır ve düşer.
+   */
+  kullaniciSozleri?: string;
+  /**
    * Bu turda soru sorulabilir mi. Strateji "yansıtma"/"onaylama" gibi bir
    * hamle seçtiyse false gelir ve soru cümleleri ayıklanır — soru sormamak
    * temenni değil, uygulanan bir kural olsun diye.
@@ -91,14 +133,50 @@ export interface BicimSecenekleri {
  * kümesi tutmak, akışta sızan ama toplu halde ayıklanan bir cümleyle
  * sonuçlanırdı.
  */
+/** Sözcük kökleri — atıf örtüşmesi için. */
+function kokKumesi(metin: string): Set<string> {
+  return new Set(
+    metin
+      .toLocaleLowerCase('tr-TR')
+      .replace(/[^a-zçğıöşü\s]/g, ' ')
+      .split(/\s+/)
+      .filter((k) => k.length > 3)
+      .map((k) => k.slice(0, 4))
+  );
+}
+
 export function cumleGecerliMi(
   cumle: string,
-  { mizacSoylenebilir, kazanan }: Pick<BicimSecenekleri, 'mizacSoylenebilir' | 'kazanan'>
+  {
+    mizacSoylenebilir,
+    kazanan,
+    kullaniciSozleri,
+  }: Pick<BicimSecenekleri, 'mizacSoylenebilir' | 'kazanan' | 'kullaniciSozleri'>
 ): boolean {
   if (TEDAVI_ONERISI.test(cumle) && !HEKIME_YONLENDIRME.test(cumle)) return false;
   if (ROL_DEVRALMA.test(cumle)) return false;
   if (UYDURMA_DENEYIM.test(cumle) || BOS_TESELLI.test(cumle)) return false;
   if (/[　-鿿가-힯]/.test(cumle)) return false;
+
+  // Kişiye, söylemediği bir hastalık atfedilemez.
+  if (kullaniciSozleri !== undefined && KISIYE_YONELIK.test(cumle)) {
+    const kisiMetni = kullaniciSozleri.toLocaleLowerCase('tr-TR');
+    const gecenler = cumle.match(HASTALIK) ?? [];
+    for (const h of gecenler) {
+      // Kök karşılaştırması: "tansiyonun" ↔ "tansiyon"
+      const kok = h.toLocaleLowerCase('tr-TR').slice(0, 5);
+      if (!kisiMetni.includes(kok)) return false;
+    }
+  }
+
+  // Atıf varsa içeriği kişinin sözleriyle örtüşmeli.
+  if (ATIF.test(cumle) && kullaniciSozleri !== undefined) {
+    const kisi = kokKumesi(kullaniciSozleri);
+    const cumleKok = [...kokKumesi(cumle)];
+    // Atıf kalıbının kendi sözcükleri sayılmasın diye içerik sözcüklerine bak.
+    const ortak = cumleKok.filter((k) => kisi.has(k)).length;
+    if (ortak < 2) return false;
+  }
 
   if (MIZAC_ADI.test(cumle)) {
     if (!mizacSoylenebilir) return false;
@@ -112,7 +190,13 @@ export function cumleGecerliMi(
 
 export function cevabiBicimlendir(
   ham: string,
-  { mizacSoylenebilir, kazanan, soruVar = true, enFazlaCumle = 4 }: BicimSecenekleri
+  {
+    mizacSoylenebilir,
+    kazanan,
+    kullaniciSozleri,
+    soruVar = true,
+    enFazlaCumle = 4,
+  }: BicimSecenekleri
 ): string {
   // Satır bazlı temizlik: liste maddelerini ve başlıkları düz metne indir.
   const satirlar = ham
@@ -122,31 +206,16 @@ export function cevabiBicimlendir(
 
   let cumleler = cumlelereBol(satirlar.join(' '));
 
-  // Tedavi önerisi içeren cümleler atılır; hekime yönlendirme muaf.
-  cumleler = cumleler.filter(
-    (c) => !TEDAVI_ONERISI.test(c) || HEKIME_YONLENDIRME.test(c)
+  /*
+   * Cümle bazlı kuralların TAMAMI `cumleGecerliMi`'de.
+   *
+   * Bir süre burada ikinci bir kopya durdu ve tam da beklenen oldu: atıf
+   * denetimi eklenince yalnız akış yoluna girdi, toplu yol eski kopyayı
+   * kullanmaya devam etti. Buraya kural eklenmez — `cumleGecerliMi`'ye eklenir.
+   */
+  cumleler = cumleler.filter((c) =>
+    cumleGecerliMi(c, { mizacSoylenebilir, kazanan, kullaniciSozleri })
   );
-
-  // Kimliğini teslim eden cümleler atılır.
-  cumleler = cumleler.filter((c) => !ROL_DEVRALMA.test(c));
-
-  // Uydurulmuş kişisel deneyim ve içi boş teselli atılır.
-  cumleler = cumleler.filter((c) => !UYDURMA_DENEYIM.test(c) && !BOS_TESELLI.test(c));
-
-  // Kanaat oluşmadıysa mizaç adı geçmez. Model burada puanlama motorundan
-  // farklı bir mizaç söyleyebiliyor; kullanıcıya çelişki gitmemeli.
-  if (!mizacSoylenebilir) {
-    cumleler = cumleler.filter((c) => !MIZAC_ADI.test(c));
-  } else if (kazanan) {
-    // Kanaat var ama model motorunkinden başka bir mizaç adı anıyorsa o cümle
-    // düşer; iki farklı sonuç aynı ekranda görünmemeli.
-    const dogruAd = new RegExp(kazanan.replace(/i$/, '[iî]'), 'i');
-    cumleler = cumleler.filter((c) => !MIZAC_ADI.test(c) || dogruAd.test(c));
-  }
-
-  // Latin dışı sızıntı: qwen ara sıra Çince karakter üretiyor
-  // ("derin katmanlarda扎根 olduğunu" gibi). O cümle güvenilmez, atılır.
-  cumleler = cumleler.filter((c) => !/[　-鿿가-힯]/.test(c));
 
   cumleler = cumleler.slice(0, enFazlaCumle);
 

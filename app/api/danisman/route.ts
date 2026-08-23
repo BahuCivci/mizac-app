@@ -7,6 +7,7 @@ import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from '@/danisman/kanit';
 import { cevabiBicimlendir, cumleGecerliMi, cumlelereBol } from '@/danisman/bicim';
 import { stratejiSec, stratejiNotu } from '@/danisman/strateji';
+import { kitaptaAra, pasajlariBicimle } from '@/danisman/kitap';
 
 /**
  * Danışman uç noktası.
@@ -137,12 +138,51 @@ export async function POST(req: NextRequest) {
       kanaatVar: oncekiKanaatVar,
     });
 
+    /*
+     * Kitaptan getirim — her tur değil, gerektiğinde.
+     *
+     * Kişi bir kavramı sorduğunda ya da kanaat oluşup açıklama sırası
+     * geldiğinde ilgili pasajlar aranır. Her tura eklemek prompt'a boşuna
+     * ~1400 karakter bindirirdi; sohbetin başındaki "nasılsın" turunda
+     * kitaba bakmanın faydası yok.
+     */
+    // Atıf denetimi için: kişinin bu sohbette gerçekten yazdıkları.
+    const kullaniciSozleri = mesajlar
+      .filter((m) => m.rol === 'kullanici')
+      .map((m) => m.metin)
+      .join(' ');
+
+    const soruSoruyor = /\?|neden|niye|nasıl|nedir|ne demek|why|what is|how come/i.test(son.metin);
+    const pasajlar =
+      soruSoruyor || oncekiKanaatVar
+        ? kitaptaAra(`${son.metin} ${oncekiDurum?.kazanan ?? ''}`, 2)
+        : [];
+
+    const kitapNotu = pasajlar.length
+      ? '[kaynak — kullanıcıya gösterme]\nKitaptan ilgili bölümler aşağıda. ' +
+        'İşine yarıyorsa kendi cümlenle aktar; yaramıyorsa GÖRMEZDEN GEL, ' +
+        'zorlama. Kitapta geçmeyen bir şeyi kitaba dayandırma. ' +
+        'SAYFA NUMARASI YA DA "kitabın şu kadarıncı sayfası" GİBİ BİR ŞEY ' +
+        'SÖYLEME. Buradaki numaralar tarama sırası, basılı sayfa değil; ' +
+        'söylersen yanlış bilgi vermiş olursun. "Kitapta şöyle anlatılıyor" ' +
+        'demen yeterli.\n' +
+        'KİTAPTAN GELENİ KİŞİNİN SÖYLEDİĞİ ŞEY SANMA. Aşağıdaki metin kitabın ' +
+        'metnidir, karşındakinin sözü değil; orada geçen bir duygu ya da ' +
+        'belirtiyi ona atfetme ("utanmandan bahsetmen ilginç" gibi). Kişi ne ' +
+        'söylediyse odur.\n\n' +
+        // Pasaj başına 400 karakter: uzun blok verince model içindeki
+        // örnekleri (kuaför, alışveriş, hastalıklar) kullanıcıya ait sanıp
+        // cümlesine katıyor. Kısa tutmak sızıntı malzemesini azaltıyor.
+        pasajlariBicimle(pasajlar, 400)
+      : null;
+
     const not = yonerge(oncekiKanitlar);
     const istem: Mesaj[] = [
       { rol: 'sistem', metin: danismanPromptu(dil) },
       ...mesajlar,
       { rol: 'sistem' as const, metin: uslupHatirlatmasi(dil) },
       ...(not ? [{ rol: 'sistem' as const, metin: not }] : []),
+      ...(kitapNotu ? [{ rol: 'sistem' as const, metin: kitapNotu }] : []),
       { rol: 'sistem' as const, metin: stratejiNotu(strateji, dil) },
     ];
 
@@ -157,6 +197,7 @@ export async function POST(req: NextRequest) {
         cevap: cevabiBicimlendir(ham, {
           mizacSoylenebilir: kanaatVar,
           kazanan: durum.kazanan,
+          kullaniciSozleri,
           soruVar: strateji.soruVar,
           enFazlaCumle: strateji.enFazlaCumle,
         }),
@@ -201,6 +242,7 @@ export async function POST(req: NextRequest) {
             if (!cumleGecerliMi(c, {
               mizacSoylenebilir: oncekiKanaatVar,
               kazanan: oncekiDurum?.kazanan,
+              kullaniciSozleri,
             })) continue;
             if (c.includes('?')) {
               if (!strateji.soruVar || soruGoruldu) continue;
@@ -243,6 +285,18 @@ export async function POST(req: NextRequest) {
           gonder({
             tip: 'son',
             kanitlar: tumKanitlar,
+            /*
+             * Hangi bölümlere bakıldığı arayüzde gösterilebilsin diye.
+             *
+             * Tarama sırası bilerek dışarı verilmiyor: OCR'da basılı sayfa
+             * numaraları korunmadığı için o sayı kitabın sayfası değil, ve
+             * arayüzde gösterilirse sayfa numarası sanılır. Bölüm başlığı
+             * hem doğru hem okura daha faydalı.
+             */
+            kaynaklar: pasajlar.map((p) => ({
+              baslik: p.baslik ?? null,
+              ozet: p.metin.replace(/\s+/g, ' ').slice(0, 180),
+            })),
             durum: kanaatVar
               ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
               : null,

@@ -36,6 +36,18 @@ const TEDAVI_ONERISI =
 const ROL_DEVRALMA =
   /\b(bir (doktor|hekim|terapist|psikolog|eczacı) olarak|talimatları unut|talimatlarımı unut|geçmiş talimatlar|rolümü değiştir|artık bir (doktor|hekim|terapist))/i;
 
+/**
+ * Uydurulmuş kişisel deneyim. Simüle sohbette danışman "Ben de bazen markette
+ * ne alacağıma karar vermekte zorlanıyorum" ve "Benim de bazen boğazım kurur"
+ * dedi — bedeni ve gündelik hayatı varmış gibi. Sağlık konuşan bir üründe bu
+ * yalnız sahtelik değil, yanıltıcı.
+ */
+const UYDURMA_DENEYIM =
+  /\b(ben|benim) de\b[^.!?]{0,60}\b(olurum|oluyorum|yaparım|yapıyorum|zorlanıyorum|kurur|kuruyor|üşürüm|üşüyorum|yaşıyorum|hissediyorum|severim)\b/i;
+
+/** İçi boş teselli — persona bunu yasaklıyor ama model yine kuruyor. */
+const BOS_TESELLI = /\b(bu )?(çok )?normal(dir)?\b|herkes böyle|herkeste olur/i;
+
 /** Hekime yönlendirme — bu kalmalı, tavsiye değil sınır çizmedir. */
 const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112)\b/i;
 
@@ -86,6 +98,9 @@ export function cevabiBicimlendir(
 
   // Kimliğini teslim eden cümleler atılır.
   cumleler = cumleler.filter((c) => !ROL_DEVRALMA.test(c));
+
+  // Uydurulmuş kişisel deneyim ve içi boş teselli atılır.
+  cumleler = cumleler.filter((c) => !UYDURMA_DENEYIM.test(c) && !BOS_TESELLI.test(c));
 
   // Kanaat oluşmadıysa mizaç adı geçmez. Model burada puanlama motorundan
   // farklı bir mizaç söyleyebiliyor; kullanıcıya çelişki gitmemeli.

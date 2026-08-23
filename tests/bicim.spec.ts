@@ -82,3 +82,19 @@ test('motorunkiyle aynı mizaç adına izin verir', () => {
   const c = cevabiBicimlendir(ham, { mizacSoylenebilir: true, kazanan: 'balgami' });
   expect(c).toMatch(/balgam/i);
 });
+
+test('uydurulmuş kişisel deneyimi atar', () => {
+  // Gerçek koşudan: danışmanın bedeni ve market alışkanlığı yok.
+  const ham =
+    'Seçenek çokluğu yorucu olabiliyor. Ben de bazen markette ne alacağıma karar vermekte zorlanıyorum. Sende ne zaman başladı bu?';
+  const c = cevabiBicimlendir(ham, { mizacSoylenebilir: false });
+  expect(c).not.toMatch(/ben de bazen markette/i);
+  expect(c).toContain('Seçenek çokluğu');
+});
+
+test('içi boş tesellliyi atar', () => {
+  const ham = 'Bu çok normal, herkes böyle hisseder. Ne zamandır sürüyor?';
+  const c = cevabiBicimlendir(ham, { mizacSoylenebilir: false });
+  expect(c).not.toMatch(/çok normal/i);
+  expect(c).toContain('Ne zamandır sürüyor');
+});

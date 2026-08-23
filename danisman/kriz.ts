@@ -27,8 +27,17 @@ const RUHSAL =
  * Tıbbi acil. Tek başına "başım ağrıyor" değil; acil servise gitmeyi
  * gerektiren tabloları arıyoruz.
  */
+// Simüle sohbette kaçan gerçek bir vaka: "göğüsümde bir ağırlık var gibi,
+// nefes almak bile zor geliyor". Üç ayrı sebeple kaçtı — "göğüsüm" yazımı,
+// "ağırlık" sözcüğü ve "nefes almak zor" kalıbı. Danışman konuyu terlemeye
+// çevirdi. Kalıplar bu üçünü de kapsayacak şekilde genişletildi.
+// Araya kelime girebiliyor ("göğüsümde BİR ağırlık"), o yüzden sabit boşluk
+// değil sınırlı serbest aralık aranıyor. Cümle sonu geçilmiyor ki alakasız
+// iki cümle yanlışlıkla eşleşmesin.
 const TIBBI =
-  /göğsüm(de)? (ağrı|sıkış|baskı)|nefes alam|nefesim daralı|bayıl|kendimden geçt|felç|konuşamıyorum|görme kaybı|durmayan kanama|kan kusma|kolum uyuş/i;
+  /(göğsüm|göğüsüm|göğüs)[^.!?]{0,25}(ağrı|sıkış|baskı|ağırlık|daralma)/i;
+const TIBBI_2 =
+  /nefes alam|nefes almak.{0,15}(zor|güç)|nefesim (daralı|kesil|yetmi)|bayıl|kendimden geçt|felç|konuşamıyorum|görme kaybı|durmayan kanama|kan kusma|kolum uyuş/i;
 
 /**
  * Reçeteli ilacı bırakma/azaltma sorusu.
@@ -49,7 +58,7 @@ const ILAC = new RegExp(
 
 export function krizTespit(metin: string): KrizTuru | null {
   if (RUHSAL.test(metin)) return 'ruhsal';
-  if (TIBBI.test(metin)) return 'tibbi';
+  if (TIBBI.test(metin) || TIBBI_2.test(metin)) return 'tibbi';
   if (ILAC.test(metin)) return 'ilac';
   return null;
 }

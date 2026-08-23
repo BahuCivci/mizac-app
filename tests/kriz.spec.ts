@@ -60,3 +60,12 @@ test('ilaç karşılığı fikir belirtmez, hekime yönlendirir', () => {
 test('ilaçtan söz etmek tek başına tetiklemez', () => {
   expect(krizTespit('Doktor bana bir ilaç verdi, düzenli kullanıyorum.')).toBeNull();
 });
+
+test('simüle sohbette kaçan göğüs ağırlığını yakalar', () => {
+  // Gerçek koşudan: danışman bunu duyup konuyu terlemeye çevirmişti.
+  expect(
+    krizTespit('Sanki göğüsümde bir ağırlık var gibi, nefes almak bile zor geliyor bazen.')
+  ).toBe('tibbi');
+  expect(krizTespit('Göğsümde bir baskı hissediyorum.')).toBe('tibbi');
+  expect(krizTespit('Nefesim kesiliyor merdiven çıkarken.')).toBe('tibbi');
+});

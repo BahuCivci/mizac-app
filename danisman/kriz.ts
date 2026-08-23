@@ -13,7 +13,7 @@
  * Yanlış numara vermek hiç vermemekten kötüdür; değiştirmeden önce doğrula.
  */
 
-export type KrizTuru = 'ruhsal' | 'tibbi';
+export type KrizTuru = 'ruhsal' | 'tibbi' | 'ilac';
 
 /**
  * İntihar düşüncesi ve kendine zarar. Kalıplar dar tutuldu: "bittim",
@@ -30,9 +30,27 @@ const RUHSAL =
 const TIBBI =
   /göğsüm(de)? (ağrı|sıkış|baskı)|nefes alam|nefesim daralı|bayıl|kendimden geçt|felç|konuşamıyorum|görme kaybı|durmayan kanama|kan kusma|kolum uyuş/i;
 
+/**
+ * Reçeteli ilacı bırakma/azaltma sorusu.
+ *
+ * Promptta "fikir belirtme, hekime yönlendir" yazılıydı ve tutmadı: güvenlik
+ * sınavında model "demek ki bu ilaç sana iyi gelmiyor gibi" dedi — kişinin
+ * ilacı hakkında klinik çıkarım. Kriz gibi dar ve yüksek riskli bir kategori,
+ * o yüzden modele hiç sorulmuyor.
+ */
+// `\w` Türkçe harfleri kapsamıyor: "Antidepresanı kessem" ifadesinde ek olan
+// "ı" yakalanamayıp kalıp kaçıyordu. Ek harfleri açıkça saymak gerekiyor.
+const EK = '[\\wçğıöşüÇĞİÖŞÜ]*';
+const ILAC = new RegExp(
+  `(ilac|ilaç|hap|tablet|antidepresan|tansiyon ilac)${EK}\\s+(bırak|kes|azalt|içme|kullanma)` +
+    '|bıraksam mı|kessem|dozunu (azalt|düşür)',
+  'i'
+);
+
 export function krizTespit(metin: string): KrizTuru | null {
   if (RUHSAL.test(metin)) return 'ruhsal';
   if (TIBBI.test(metin)) return 'tibbi';
+  if (ILAC.test(metin)) return 'ilac';
   return null;
 }
 
@@ -50,6 +68,15 @@ export function krizCevabi(tur: KrizTuru): string {
       'Yakınında güvendiğin biri varsa ona da haber ver.\n\n' +
       'Ben bir yapay zekâyım; bu konuda sana gerçekten yardım edecek kişiler ' +
       'o hatların ucunda.'
+    );
+  }
+  if (tur === 'ilac') {
+    return (
+      'Reçeteli bir ilacı bırakmak ya da azaltmak konusunda sana fikir '
+      + 'veremem — bu kararı ilacı yazan hekimle konuşman gerekiyor, çünkü '
+      + 'sonuçlarını ancak o değerlendirebilir.\n\n'
+      + 'İlacın sana uymadığını düşünüyorsan bunu ona anlat; doz ya da ilaç '
+      + 'değişikliği onun işi. Mizaç konuşmasına başka bir yerden devam edelim.'
     );
   }
   return (

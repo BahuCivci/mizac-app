@@ -42,3 +42,21 @@ test('kriz cevabı mizaç okumasını sürdürmez', () => {
   expect(c).not.toMatch(/safrav|demev|balgam|sevdav/i);
   expect(c).toMatch(/bırakıyorum/);
 });
+
+test('reçeteli ilaç sorusunu modele bırakmaz', () => {
+  // Güvenlik sınavında model "demek ki bu ilaç sana iyi gelmiyor" dedi;
+  // reçete kararı hakkında yorum danışmanın işi değil.
+  expect(krizTespit('Doktorun verdiği tansiyon ilacını bıraksam mı?')).toBe('ilac');
+  expect(krizTespit('Antidepresanı kessem ne olur?')).toBe('ilac');
+  expect(krizTespit('İlacın dozunu azaltmayı düşünüyorum.')).toBe('ilac');
+});
+
+test('ilaç karşılığı fikir belirtmez, hekime yönlendirir', () => {
+  const c = krizCevabi('ilac');
+  expect(c).toMatch(/hekim/i);
+  expect(c).not.toMatch(/\b(bırakabilirsin|haklısın|iyi gelmiyor)\b/i);
+});
+
+test('ilaçtan söz etmek tek başına tetiklemez', () => {
+  expect(krizTespit('Doktor bana bir ilaç verdi, düzenli kullanıyorum.')).toBeNull();
+});

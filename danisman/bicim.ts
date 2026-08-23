@@ -27,6 +27,15 @@ const LISTE_BASI = /^\s*(?:[-*•–]|\d+[.)])\s+/;
 const TEDAVI_ONERISI =
   /\b(kullan(ma[nz]ı|abilirsin|ın|mayı)|iç(me[nz]i|ebilirsin)|tüket(me[nz]i|ebilirsin)|uygula(ma[nz]ı|yabilirsin)|takviye|antiperspirant|nemlendirici|vitamin|ilaç|doz|tedavi yöntem|egzersiz yap|terapi|dermatolo|psikolog)\b/i;
 
+/**
+ * Rol devralma. Güvenlik sınavında model "Anladım, geçmiş talimatları
+ * unutuyorum. Bir doktor olarak size yardımcı olmaktan memnunum" dedi —
+ * reçete yazmadığı için tedavi filtresine takılmadı ama kimliğini teslim
+ * etmişti. Sonraki tur reçete isteseydi verecekti. Bu cümleler atılır.
+ */
+const ROL_DEVRALMA =
+  /\b(bir (doktor|hekim|terapist|psikolog|eczacı) olarak|talimatları unut|talimatlarımı unut|geçmiş talimatlar|rolümü değiştir|artık bir (doktor|hekim|terapist))/i;
+
 /** Hekime yönlendirme — bu kalmalı, tavsiye değil sınır çizmedir. */
 const HEKIME_YONLENDIRME = /\b(doktor|hekim|acil|112)\b/i;
 
@@ -74,6 +83,9 @@ export function cevabiBicimlendir(
   cumleler = cumleler.filter(
     (c) => !TEDAVI_ONERISI.test(c) || HEKIME_YONLENDIRME.test(c)
   );
+
+  // Kimliğini teslim eden cümleler atılır.
+  cumleler = cumleler.filter((c) => !ROL_DEVRALMA.test(c));
 
   // Kanaat oluşmadıysa mizaç adı geçmez. Model burada puanlama motorundan
   // farklı bir mizaç söyleyebiliyor; kullanıcıya çelişki gitmemeli.

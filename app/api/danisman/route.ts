@@ -5,7 +5,7 @@ import { krizTespit, krizCevabi } from '@/danisman/kriz';
 import { saglayiciSec, type Mesaj } from '@/danisman/model';
 import { danismanPromptu, uslupHatirlatmasi } from '@/danisman/persona';
 import { kanitCikar, puanla, yonerge, benzersizKanitlar, type Kanit } from '@/danisman/kanit';
-import { cevabiBicimlendir } from '@/danisman/bicim';
+import { cevabiBicimlendir, cumleGecerliMi, cumlelereBolPublic } from '@/danisman/bicim';
 import { stratejiSec, stratejiNotu } from '@/danisman/strateji';
 
 /**
@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
     );
 
     const oncekiDurum = oncekiKanitlar.length ? puanla(oncekiKanitlar) : null;
-    const oncekiKanaat =
+    const oncekiKanaatVar =
       !!oncekiDurum && oncekiDurum.guven > 0.35 && oncekiKanitlar.length >= 6;
 
     // Danışmanın o turdaki hamlesi: yansıtma, onaylama, soru, özet...
@@ -134,7 +134,7 @@ export async function POST(req: NextRequest) {
       durum: oncekiDurum,
       tur: mesajlar.filter((m) => m.rol === 'kullanici').length,
       sonSoz: son.metin,
-      kanaatVar: oncekiKanaat,
+      kanaatVar: oncekiKanaatVar,
     });
 
     const not = yonerge(oncekiKanitlar);
@@ -146,28 +146,127 @@ export async function POST(req: NextRequest) {
       { rol: 'sistem' as const, metin: stratejiNotu(strateji, dil) },
     ];
 
-    const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
-    const yeni = await yeniKanitSozu;
-    const tumKanitlar = [...oncekiKanitlar, ...benzersizKanitlar(oncekiKanitlar, yeni)];
-    const durum = puanla(tumKanitlar);
+    if (!saglayici.akisli) {
+      // Akışı desteklemeyen sağlayıcıda (ör. Claude yolu) toplu cevap.
+      const ham = await saglayici.sor(istem, { sicaklik: 0.7, enFazlaJeton: 300 });
+      const yeni = await yeniKanitSozu;
+      const tumKanitlar = [...oncekiKanitlar, ...benzersizKanitlar(oncekiKanitlar, yeni)];
+      const durum = puanla(tumKanitlar);
+      const kanaatVar = durum.guven > 0.35 && tumKanitlar.length >= 6;
+      return NextResponse.json({
+        cevap: cevabiBicimlendir(ham, {
+          mizacSoylenebilir: kanaatVar,
+          kazanan: durum.kazanan,
+          soruVar: strateji.soruVar,
+          enFazlaCumle: strateji.enFazlaCumle,
+        }),
+        kanitlar: tumKanitlar,
+        durum: kanaatVar
+          ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
+          : null,
+      });
+    }
 
-    // Kanaat ölçütü tek yerde: hem mizaç adının söylenebilmesi hem de
-    // `durum`un dışarı verilmesi aynı eşiğe bağlı olmalı, yoksa danışman
-    // arayüzün göstermediği bir mizacı ağzına alabilir.
-    const kanaatVar = durum.guven > 0.35 && tumKanitlar.length >= 6;
+    /*
+     * Akış cümle cümle, token token değil.
+     *
+     * `bicim.ts` kuralları cümle üzerinde çalışıyor: tıbbi tavsiye ayıklama,
+     * mizaç adı kapısı, uydurma deneyim filtresi. Ham token akıtmak,
+     * kullanıcıya tavsiyeyi gösterip sonra geri almak olurdu — beklemekten
+     * kötü. Bu yüzden cümle tamamlanana kadar tutuluyor, filtreden geçerse
+     * gönderiliyor.
+     *
+     * Mizaç adı kapısı bu turun kanıtlarına göre değil, ÖNCEKİ kanaate göre
+     * karar veriyor: cümleler yayına girerken bu turun kanıtı henüz hazır
+     * değil. Bu, kapıyı bir tur geciktirir — yanlış tarafa değil.
+     */
+    const kodlayici = new TextEncoder();
+    const akis = new ReadableStream({
+      async start(kontrol) {
+        const gonder = (o: unknown) =>
+          kontrol.enqueue(kodlayici.encode(JSON.stringify(o) + '\n'));
 
-    return NextResponse.json({
-      cevap: cevabiBicimlendir(ham, {
-        mizacSoylenebilir: kanaatVar,
-        kazanan: durum.kazanan,
-        soruVar: strateji.soruVar,
-        enFazlaCumle: strateji.enFazlaCumle,
-      }),
-      kanitlar: tumKanitlar,
-      // Kanaat oluşmadan mizaç dışarı verilmez; arayüz erken sonuç göstermesin.
-      durum: kanaatVar
-        ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
-        : null,
+        let tampon = '';
+        let yayinlanan = 0;
+        let soruGoruldu = false;
+
+        const bosalt = (sondaMi: boolean) => {
+          const parcalar = cumlelereBolPublic(tampon);
+          const tamamlanan = sondaMi ? parcalar : parcalar.slice(0, -1);
+          tampon = sondaMi ? '' : parcalar[parcalar.length - 1] ?? '';
+
+          for (const c of tamamlanan) {
+            if (!c.trim()) continue;
+            if (yayinlanan >= strateji.enFazlaCumle) return;
+            if (!cumleGecerliMi(c, {
+              mizacSoylenebilir: oncekiKanaatVar,
+              kazanan: oncekiDurum?.kazanan,
+            })) continue;
+            if (c.includes('?')) {
+              if (!strateji.soruVar || soruGoruldu) continue;
+              soruGoruldu = true;
+            }
+            yayinlanan++;
+            gonder({ tip: 'cumle', metin: c });
+          }
+        };
+
+        try {
+          await saglayici.akisli!(
+            istem,
+            (p) => {
+              tampon += p;
+              if (/[.!?…]/.test(p)) bosalt(false);
+            },
+            { sicaklik: 0.7, enFazlaJeton: 300 }
+          );
+          bosalt(true);
+
+          if (yayinlanan === 0) {
+            gonder({
+              tip: 'cumle',
+              metin: strateji.soruVar
+                ? dil === 'en'
+                  ? 'I see. Tell me a bit more?'
+                  : 'Anlıyorum. Biraz daha anlatır mısın?'
+                : dil === 'en'
+                  ? 'I hear you.'
+                  : 'Anlıyorum seni.',
+            });
+          }
+
+          const yeni = await yeniKanitSozu;
+          const tumKanitlar = [...oncekiKanitlar, ...benzersizKanitlar(oncekiKanitlar, yeni)];
+          const durum = puanla(tumKanitlar);
+          const kanaatVar = durum.guven > 0.35 && tumKanitlar.length >= 6;
+
+          gonder({
+            tip: 'son',
+            kanitlar: tumKanitlar,
+            durum: kanaatVar
+              ? { kazanan: durum.kazanan, guven: durum.guven, puanlar: durum.puanlar }
+              : null,
+          });
+        } catch (e) {
+          console.error('danisman akis:', e);
+          gonder({
+            tip: 'hata',
+            hata:
+              dil === 'en'
+                ? 'The consultant is unavailable right now.'
+                : 'Danışmana şu an ulaşılamıyor.',
+          });
+        } finally {
+          kontrol.close();
+        }
+      },
+    });
+
+    return new Response(akis, {
+      headers: {
+        'Content-Type': 'application/x-ndjson; charset=utf-8',
+        'Cache-Control': 'no-store',
+      },
     });
   } catch (e) {
     // Model adresi/anahtarı hata metniyle sızmasın.

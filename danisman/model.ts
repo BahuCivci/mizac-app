@@ -28,6 +28,16 @@ export interface SorSecenekleri {
 export interface Saglayici {
   readonly ad: string;
   sor(mesajlar: Mesaj[], secenekler?: SorSecenekleri): Promise<string>;
+  /**
+   * Parça parça üretir. Her yeni metin parçası `parca` ile bildirilir, tam
+   * metin döner. Sağlayıcı desteklemiyorsa tanımsız olabilir — çağıran taraf
+   * `sor`'a düşer.
+   */
+  akisli?(
+    mesajlar: Mesaj[],
+    parca: (metin: string) => void,
+    secenekler?: SorSecenekleri
+  ): Promise<string>;
 }
 
 /**
@@ -104,6 +114,60 @@ export function ollama(ayar: OllamaAyar = {}): Saglayici {
       const d = await cevap.json();
       if (d.error) throw new Error(`Ollama: ${d.error}`);
       return d.message?.content ?? '';
+    },
+
+    async akisli(mesajlar, parca, secenekler = {}) {
+      const cevap = await denemeliIstek(() => fetch(`${adres}/api/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          stream: true,
+          keep_alive: sicakKalma,
+          options: {
+            temperature: secenekler.sicaklik ?? 0.7,
+            num_predict: secenekler.enFazlaJeton ?? 512,
+            num_ctx: baglam,
+          },
+          messages: mesajlar.map((m) => ({
+            role: m.rol === 'sistem' ? 'system' : m.rol === 'kullanici' ? 'user' : 'assistant',
+            content: m.metin,
+          })),
+        }),
+      }));
+
+      if (!cevap.ok) throw new Error(`Ollama ${cevap.status}: ${await cevap.text()}`);
+      if (!cevap.body) throw new Error('Ollama: gövde yok');
+
+      // Ollama akışta satır başına bir JSON gönderiyor; parçalar satır
+      // ortasında bölünebildiği için tampon tutuluyor.
+      const okuyucu = cevap.body.getReader();
+      const cozucu = new TextDecoder();
+      let tampon = '';
+      let tam = '';
+
+      for (;;) {
+        const { done, value } = await okuyucu.read();
+        if (done) break;
+        tampon += cozucu.decode(value, { stream: true });
+        const satirlar = tampon.split('\n');
+        tampon = satirlar.pop() ?? '';
+        for (const satir of satirlar) {
+          if (!satir.trim()) continue;
+          try {
+            const d = JSON.parse(satir);
+            if (d.error) throw new Error(`Ollama: ${d.error}`);
+            const p = d.message?.content ?? '';
+            if (p) {
+              tam += p;
+              parca(p);
+            }
+          } catch {
+            // Bozuk satır akışı kesmemeli.
+          }
+        }
+      }
+      return tam;
     },
   };
 }

@@ -83,6 +83,38 @@ export interface BicimSecenekleri {
   enFazlaCumle?: number;
 }
 
+/**
+ * Tek bir cümle yayına uygun mu.
+ *
+ * Akışlı cevapta cümleler tek tek gönderiliyor; aynı kuralların hem toplu hem
+ * parça parça uygulanabilmesi için karar burada. İki yerde iki ayrı kural
+ * kümesi tutmak, akışta sızan ama toplu halde ayıklanan bir cümleyle
+ * sonuçlanırdı.
+ */
+export function cumleGecerliMi(
+  cumle: string,
+  { mizacSoylenebilir, kazanan }: Pick<BicimSecenekleri, 'mizacSoylenebilir' | 'kazanan'>
+): boolean {
+  if (TEDAVI_ONERISI.test(cumle) && !HEKIME_YONLENDIRME.test(cumle)) return false;
+  if (ROL_DEVRALMA.test(cumle)) return false;
+  if (UYDURMA_DENEYIM.test(cumle) || BOS_TESELLI.test(cumle)) return false;
+  if (/[　-鿿가-힯]/.test(cumle)) return false;
+
+  if (MIZAC_ADI.test(cumle)) {
+    if (!mizacSoylenebilir) return false;
+    if (kazanan) {
+      const dogruAd = new RegExp(kazanan.replace(/i$/, '[iî]'), 'i');
+      if (!dogruAd.test(cumle)) return false;
+    }
+  }
+  return true;
+}
+
+/** Ham metni cümlelere böler — akış tarafı da bunu kullanır. */
+export function cumlelereBolPublic(metin: string): string[] {
+  return cumlelereBol(metin);
+}
+
 export function cevabiBicimlendir(
   ham: string,
   { mizacSoylenebilir, kazanan, soruVar = true, enFazlaCumle = 4 }: BicimSecenekleri

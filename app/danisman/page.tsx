@@ -85,16 +85,62 @@ export default function DanismanSayfasi() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mesajlar: yeniMesajlar, kanitlar, dil: lang }),
       });
-      const d = await cevap.json();
 
-      if (!cevap.ok) {
-        setHata(d.hata ?? (tr ? 'Bir şeyler ters gitti.' : 'Something went wrong.'));
+      // Akış dışı yollar (kriz karşılığı, hata, akışsız sağlayıcı) düz JSON döner.
+      if (!cevap.body || !cevap.headers.get('content-type')?.includes('ndjson')) {
+        const d = await cevap.json();
+        if (!cevap.ok) {
+          setHata(d.hata ?? (tr ? 'Bir şeyler ters gitti.' : 'Something went wrong.'));
+          return;
+        }
+        setMesajlar((m) => [...m, { rol: 'danisman', metin: d.cevap }]);
+        if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
+        if (d.durum) setDurum(d.durum);
         return;
       }
 
-      setMesajlar((m) => [...m, { rol: 'danisman', metin: d.cevap }]);
-      if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
-      if (d.durum) setDurum(d.durum);
+      // Cümleler geldikçe aynı balona ekleniyor; her cümle sunucuda
+      // filtreden geçtiği için ekrana giren şey geri alınmıyor.
+      const okuyucu = cevap.body.getReader();
+      const cozucu = new TextDecoder();
+      let tampon = '';
+      let balonAcildi = false;
+
+      const satiriIsle = (satir: string) => {
+        if (!satir.trim()) return;
+        let d: { tip?: string; metin?: string; kanitlar?: Kanit[]; durum?: Durum; hata?: string };
+        try {
+          d = JSON.parse(satir);
+        } catch {
+          return;
+        }
+        if (d.tip === 'cumle' && d.metin) {
+          const parca = d.metin;
+          setMesajlar((m) => {
+            if (!balonAcildi) {
+              balonAcildi = true;
+              return [...m, { rol: 'danisman', metin: parca }];
+            }
+            const son = m[m.length - 1];
+            return [...m.slice(0, -1), { ...son, metin: `${son.metin} ${parca}` }];
+          });
+        } else if (d.tip === 'son') {
+          if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
+          if (d.durum) setDurum(d.durum);
+        } else if (d.tip === 'hata') {
+          setHata(d.hata ?? null);
+        }
+      };
+
+      for (;;) {
+        const { done, value } = await okuyucu.read();
+        if (done) break;
+        tampon += cozucu.decode(value, { stream: true });
+        const satirlar = tampon.split('\n');
+        tampon = satirlar.pop() ?? '';
+        satirlar.forEach(satiriIsle);
+      }
+      satiriIsle(tampon);
     } catch {
       setHata(tr ? 'Bağlantı kurulamadı. Tekrar dene.' : 'Could not connect. Try again.');
     } finally {
@@ -103,6 +149,27 @@ export default function DanismanSayfasi() {
   }
 
   const profil = durum ? mizacProfiller[durum.kazanan] : null;
+
+  /**
+   * Tam profile devreder ve sonucu siteye tanıtır.
+   *
+   * Kayıt yalnızca kullanıcı bu düğmeye basınca yazılır. Danışmanın kanaati
+   * 60 soruluk testten daha az veriye dayanıyor; testin kaydını arka planda
+   * ezmek, kullanıcının haberi olmadan daha zayıf bir sonuca geçmek olurdu.
+   */
+  function raporaGit() {
+    if (!durum) return;
+    try {
+      localStorage.setItem(
+        'mizac_sonuc',
+        JSON.stringify({ tip: durum.kazanan, puanlar: durum.puanlar, tarih: Date.now(), kaynak: 'danisman' })
+      );
+    } catch {
+      // Kayıt tutulamazsa da yönlendirme çalışsın.
+    }
+    const puanStr = encodeURIComponent(JSON.stringify(durum.puanlar));
+    window.location.href = `/sonuc?tip=${durum.kazanan}&puanlar=${puanStr}`;
+  }
 
   // Model bu ortamdan erişilemiyorken sohbet arayüzü göstermek, kullanıcıyı
   // yazdırıp sonra hata vermek demek. Doğrudan gelen ziyaretçiye durumu söyle.
@@ -238,13 +305,22 @@ export default function DanismanSayfasi() {
                 ? `güven %${Math.round(durum.guven * 100)} — sohbet sürdükçe netleşir`
                 : `${Math.round(durum.guven * 100)}% confidence — it sharpens as we talk`}
             </p>
-            <Link
-              href="/mizaclar"
-              className="text-xs underline"
-              style={{ color: '#c4973a' }}
+            {/* Testte başka bir sonuç varsa saklama, göster: iki okuma
+                uyuşmuyorsa bunu kullanıcı bilmeli. */}
+            {oncekiTest && oncekiTest !== durum.kazanan && (
+              <p className="text-xs mb-3" style={{ color: '#9a8060' }}>
+                {tr
+                  ? `Not: 60 soruluk testte ${mizacProfiller[oncekiTest].isim} çıkmıştı. Test daha çok veriye bakar; ikisi ayrışıyorsa testinki daha güvenilir.`
+                  : `Note: the 60-question test said ${mizacProfiller[oncekiTest].isimEn}. The test sees more data; where they disagree, trust the test.`}
+              </p>
+            )}
+            <button
+              onClick={raporaGit}
+              className="inline-block px-5 py-2.5 rounded-full text-xs font-semibold"
+              style={{ background: profil.renk, color: '#1a1207' }}
             >
-              {tr ? 'Bu mizaç ne demek?' : 'What does this temperament mean?'}
-            </Link>
+              {tr ? 'Tam profilimi gör →' : 'See my full profile →'}
+            </button>
           </div>
         )}
 

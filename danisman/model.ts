@@ -49,7 +49,12 @@ export interface OllamaAyar {
 
 export function ollama(ayar: OllamaAyar = {}): Saglayici {
   const adres = ayar.adres ?? process.env.MIZAC_OLLAMA ?? 'http://localhost:11434';
-  const model = ayar.model ?? process.env.MIZAC_MODEL ?? 'qwen2.5vl:72b';
+  // gemma3:27b, qwen2.5vl:72b'nin yerini ölçümle aldı: Türkçesi düzgün
+  // (qwen "uzlaşmaca zamanı", "biravukatlık" gibi var olmayan sözcükler
+  // üretiyordu), strateji yönergesine uyuyor, cevapları 186 karakter
+  // civarında kalıyor ve model 17 GB — 72B'nin üçte biri.
+  // Bkz. olcum-sonuclari.md, "Model seçimi".
+  const model = ayar.model ?? process.env.MIZAC_MODEL ?? 'gemma3:27b';
   const baglam = ayar.baglam ?? VARSAYILAN_BAGLAM;
   const sicakKalma = ayar.sicakKalma ?? '30m';
 

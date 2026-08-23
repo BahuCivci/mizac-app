@@ -136,6 +136,42 @@ Bunlar `bicim.ts` ile yakalanıyor ama kaynağı model:
 sıcak Türkçe sohbet için ayarlanmamış. Asıl kaldıraç prompt değil sağlayıcı
 (`MIZAC_SAGLAYICI=claude`).
 
+## Model seçimi — 72B'den gemma3:27b'ye
+
+Modeli başta "sunucuda yüklenen tek büyük model" olduğu için seçmiştim; Türkçe
+yeteneği hiç ölçülmedi. Sohbet testinde doğru mizacı bulurken *"uzlaşmaca
+zamanı"*, *"biravukatlık yaparak"*, *"insensellikten yoksun"* gibi var olmayan
+sözcükler üretti. Doğruluk ve dil kalitesi ayrı şeyler; `dil-karsilastir.ts`
+ikincisini ölçmek için yazıldı.
+
+| Model | Türkçe | Stratejiye uyum | Ort. cevap | Latin dışı sızıntı |
+|---|---|---|---|---|
+| `qwen2.5vl:72b` (48.7 GB) | uydurma sözcükler | kısmen | uzun, dağınık | var |
+| `aya-expanse:8b` (5.1 GB) | **akıcı** | **yok** — 957 karakterlik makale, madde listesi, ilk turda mizaç adı, B12/demir tavsiyesi | 957 krk | 0/3 |
+| `gemma3:27b` (17.4 GB) | **akıcı** | **uyuyor** — yansıtmada soru sormuyor | **186 krk** | 0/3 |
+
+Gemma'nın duygulanım yansıtması:
+
+> *"İşler kötü gittiğinde kendini toparlamak için böyle bir yolun olması…
+> yorucu olmalı. Hem fiziksel olarak yatmak hem de duygusal olarak
+> ağlayabilmek, bir çeşit teslimiyet gibi sanki."*
+
+### Sohbet testi — iki model yan yana
+
+| Senaryo | qwen2.5vl:72b | gemma3:27b |
+|---|---|---|
+| balgamî | ✓ %88, tur 3 | ✓ %75, tur 3 |
+| safravî | ✓ %100, tur 2 | ✓ %78, tur 2 |
+| demevî | ✓ %56, tur 3 | ✓ %57, **tur 2** |
+| sevdavî | ✓ %100, tur 3 | ✓ %84, **tur 2** |
+
+İkisi de 4/4. Gemma'nın güven sayıları biraz düşük ama doğruya **daha erken**
+varıyor, sohbeti kıyaslanamayacak kadar iyi ve model üçte bir boyutta.
+Varsayılan `gemma3:27b` oldu.
+
+Not: aya-expanse örneği, "Türkçesi iyi model" ile "işi yapan model"in aynı şey
+olmadığını gösteriyor. Dil kalitesi gerek şart, yeter şart değil.
+
 ## İşletme notları
 
 - 72B soğuk yükleme ~90 sn, sonrası ~1.0 sn/madde → sohbet turu için yeterli

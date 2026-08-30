@@ -318,7 +318,12 @@ export function dinle(
   t.continuous = false;
   t.interimResults = true;
 
-  let sonMetin = '';
+  // Kesin (final) sonuç geldiyse gönderildi demektir. Yalnız ara (interim)
+  // metin görülüp final hiç gelmezse burada tutuluyor — mobil tarayıcılarda
+  // sık: kullanıcı konuşuyor, ekranda kelimeler beliriyor, ama tanıma "final"
+  // işaretlemeden kendiliğinden kapanıyor.
+  let sonuclandi = false;
+  let sonAraMetin = '';
 
   t.onresult = (e) => {
     let ara = '';
@@ -330,10 +335,11 @@ export function dinle(
       else ara += metin;
     }
     if (kesin) {
-      sonMetin = kesin;
+      sonuclandi = true;
       olaylar.sonuc?.(kesin.trim());
     } else if (ara) {
-      olaylar.araSonuc?.(ara.trim());
+      sonAraMetin = ara.trim();
+      olaylar.araSonuc?.(sonAraMetin);
     }
   };
 
@@ -343,10 +349,20 @@ export function dinle(
   };
 
   t.onend = () => {
-    // Kullanıcı konuştu ama tarayıcı hiç 'final' vermeden bitirdiyse eldeki
-    // ara sonucu kaybetmemek için son bir şans.
-    if (!sonMetin) olaylar.bitti?.();
-    else olaylar.bitti?.();
+    /*
+     * ASIL HATA BURADAYDI: tanıma final vermeden kapanınca ekranda görünen
+     * ara metin hiçbir yere gönderilmiyordu — kullanıcı konuşuyordu,
+     * kelimeler kutuya düşüyordu, sonra sessizce dinlemeye dönülüyordu.
+     * "Konuşuyorum, algılamadı" hissi buradan geliyordu.
+     *
+     * Final hiç gelmediyse ve elde yeterince uzun bir ara metin varsa onu
+     * son çare olarak gönderiyoruz. Tek karakterlik gürültüyü göndermemek
+     * için kısa bir eşik var.
+     */
+    if (!sonuclandi && sonAraMetin.length >= 2) {
+      olaylar.sonuc?.(sonAraMetin);
+    }
+    olaylar.bitti?.();
   };
 
   try {

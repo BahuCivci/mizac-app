@@ -128,6 +128,18 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
         />
+        {/* AdSense betiği <head> içinde ve DÜZ bir <script> olarak duruyor.
+            next/script ile afterInteractive verilince betik sayfaya ancak
+            hydration'dan sonra JavaScript'le ekleniyor, yani sunucudan gelen
+            HTML'de görünmüyor — AdSense'in doğrulama tarayıcısı da tam oraya
+            baktığı için siteyi doğrulayamıyor. Kimlik yokken hiç basılmıyor. */}
+        {REKLAM_ACIK && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className="min-h-full flex flex-col">
           <Script
@@ -137,17 +149,6 @@ export default function RootLayout({
           <Script id="ga-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
           </Script>
-          {/* AdSense betiği yalnız yayıncı kimliği verilmişse yükleniyor.
-              Kimlik yokken yüklemek, boş bir istek ve konsolda hatadan başka
-              bir şey getirmiyordu; onay gelmeden site yavaşlamasın. */}
-          {REKLAM_ACIK && (
-            <Script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
-              crossOrigin="anonymous"
-              strategy="afterInteractive"
-            />
-          )}
           <LangProvider>
             <Header />
             {children}

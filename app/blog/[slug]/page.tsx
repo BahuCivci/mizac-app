@@ -6,6 +6,8 @@ import { mizacProfiller, MizacTip } from '@/lib/mizac-data';
 import { BlogEmailCapture } from './email-capture-client';
 import { BlogShareBar } from './share-client';
 import { ReadingProgress } from './reading-progress-client';
+import Reklam from '@/components/reklam';
+import { ADSENSE_SLOT_MAKALE } from '@/lib/reklam';
 
 const siteUrl = 'https://mizac.xyz';
 
@@ -125,6 +127,10 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
         {/* İçerik */}
         <article className="prose-custom space-y-5 mb-12">
           {yazi.icerik.map((bolum, i) => {
+            /* Makale ortasına tek birim: okuyucu yazıya girmişken, ilk ekranda
+               değil. Kısa yazılarda hiç çıkmıyor — üç bloklu bir yazıyı
+               reklamla bölmek okumayı bitiriyor. */
+            const ortaya = i === 4 && yazi.icerik.length >= 9;
             if (bolum.tip === 'h2') {
               return (
                 <h2 key={i} className="text-2xl font-bold mt-8 mb-3" style={{ color: 'var(--foreground)' }}>
@@ -141,9 +147,10 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
             }
             if (bolum.tip === 'p') {
               return (
-                <p key={i} className="leading-relaxed opacity-80 text-base">
-                  {bolum.metin}
-                </p>
+                <div key={i}>
+                  <p className="leading-relaxed opacity-80 text-base">{bolum.metin}</p>
+                  {ortaya && <Reklam slot={ADSENSE_SLOT_MAKALE} />}
+                </div>
               );
             }
             if (bolum.tip === 'ul' && bolum.maddeler) {
@@ -179,6 +186,8 @@ export default async function BlogYazisiPage({ params }: { params: Promise<{ slu
             return null;
           })}
         </article>
+
+        <Reklam slot={ADSENSE_SLOT_MAKALE} />
 
         {/* İlgili mizaç detay linki */}
         {ilgiliProfil && (

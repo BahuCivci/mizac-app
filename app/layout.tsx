@@ -6,6 +6,7 @@ import { LangProvider } from "@/lib/lang-context";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Analytics } from "@vercel/analytics/react";
+import { ADSENSE_ID, REKLAM_ACIK } from "@/lib/reklam";
 import { PWARegister } from "@/components/pwa-register";
 import { SORU_SAYISI } from '@/lib/mizac-data';
 
@@ -136,13 +137,17 @@ export default function RootLayout({
           <Script id="ga-init" strategy="afterInteractive">
             {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}');`}
           </Script>
-          {/* AdSense — ADSENSE_CLIENT gerçek ID ile güncellendikten sonra etkinleştirin */}
-          {/* <Script
-            async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
-            crossOrigin="anonymous"
-            strategy="afterInteractive"
-          /> */}
+          {/* AdSense betiği yalnız yayıncı kimliği verilmişse yükleniyor.
+              Kimlik yokken yüklemek, boş bir istek ve konsolda hatadan başka
+              bir şey getirmiyordu; onay gelmeden site yavaşlamasın. */}
+          {REKLAM_ACIK && (
+            <Script
+              async
+              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_ID}`}
+              crossOrigin="anonymous"
+              strategy="afterInteractive"
+            />
+          )}
           <LangProvider>
             <Header />
             {children}

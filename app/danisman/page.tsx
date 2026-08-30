@@ -144,14 +144,36 @@ export default function DanismanSayfasi() {
     konus(cumle, lang, {
       basladi: () => {
         setSesDurumu('konusuyor');
-        // Konuşurken kulak açık: kullanıcı araya girerse yakalanacak.
-        kulakRef.current?.gozet();
+        // Kulak yalnız danışman konuşurken açılıyor.
+        //
+        // Seans boyunca açık tutmayı denedim ve mikrofon çakıştı: getUserMedia
+        // akışı ile SpeechRecognition aynı anda mikrofonu tutamıyor (iOS'ta
+        // kesin, Android'de bazı cihazlarda), tanıma "audio-capture" verip
+        // düşüyordu. İzin bir kez alındığı için tekrar tekrar açmak sormuyor.
+        void kulakAcVeGozet();
       },
       // Kuyrukta başka cümle varsa hemen 'bos'a düşmek varlığı titretiyor;
       // sıradaki cümlenin `basladi`'sı zaten durumu geri alıyor.
       bitti: () => setSesDurumu((d) => (d === 'konusuyor' ? 'bos' : d)),
       kelime: () => setAgizTetik((n) => n + 1),
     });
+  }
+
+  /** Söz kesme kulağını açar ve gözetime alır. */
+  async function kulakAcVeGozet() {
+    if (!seansRef.current) return;
+    if (!kulakRef.current) kulakRef.current = await kulakAc(sozKesildi);
+    // İzin diyaloğu beklenirken konuşma bitmiş ya da seans kapanmış olabilir.
+    if (!seansRef.current) {
+      kulakKapat();
+      return;
+    }
+    kulakRef.current?.gozet();
+  }
+
+  function kulakKapat() {
+    kulakRef.current?.kapat();
+    kulakRef.current = null;
   }
 
   /**
@@ -164,7 +186,9 @@ export default function DanismanSayfasi() {
   function sozKesildi() {
     if (!seansRef.current) return;
     sus();
-    kulakRef.current?.birak();
+    // Mikrofonu tamamen bırak: tanıma birazdan onu isteyecek ve
+    // ikisi aynı anda tutamıyor.
+    kulakKapat();
     dinlemeyeBasla();
   }
 
@@ -191,17 +215,13 @@ export default function DanismanSayfasi() {
     window.setTimeout(yokla, 420);
   }
 
-  async function seansBaslat() {
+  function seansBaslat() {
     // Ref'i elle kur: `setSeans` bir sonraki render'a kadar işlemiyor ve
     // hemen aşağıda başlayan dinleme zinciri seansRef'e bakıyor.
     seansRef.current = true;
     setSeans(true);
     setSesAcik(true);
     setHata(null);
-    // Söz kesme kulağı seans boyunca açık kalıyor: her turda mikrofon izni
-    // istemek sohbeti kesintiye uğratırdı.
-    if (!kulakRef.current) kulakRef.current = await kulakAc(sozKesildi);
-    if (!seansRef.current) return; // izin beklerken seans bitirilmiş olabilir
     dinlemeyeBasla();
   }
 
@@ -211,8 +231,7 @@ export default function DanismanSayfasi() {
     sus();
     dinleyiciRef.current?.durdur();
     dinleyiciRef.current = null;
-    kulakRef.current?.kapat();
-    kulakRef.current = null;
+    kulakKapat();
     setSesDurumu('bos');
   }
 
@@ -229,10 +248,10 @@ export default function DanismanSayfasi() {
   function dinlemeyeBasla() {
     if (dinleyiciRef.current) return;
     sus();
-    // Tanıma açıkken söz kesme gözetimi kapalı: ikisi aynı anda çalışırsa
-    // kullanıcının kendi sesi "araya girdi" diye yorumlanıp tanımayı
-    // baştan başlatıyor ve cümlenin başı kayboluyor.
-    kulakRef.current?.birak();
+    // Tanıma sırasında kulak tamamen kapalı. Yalnız gözetimi durdurmak
+    // yetmiyordu: getUserMedia akışı açık kaldığı sürece bazı cihazlarda
+    // tanıma mikrofonu alamayıp "audio-capture" ile düşüyor.
+    kulakKapat();
     setSesDurumu('dinliyor');
     dinleyiciRef.current = dinle(lang, {
       araSonuc: (m) => setGirdi(m),
@@ -240,16 +259,40 @@ export default function DanismanSayfasi() {
         setGirdi('');
         void gonderMetin(m);
       },
-      hata: (kod) =>
-        setHata(
-          kod === 'not-allowed'
-            ? tr
-              ? 'Mikrofon izni verilmedi.'
-              : 'Microphone permission denied.'
-            : tr
-              ? 'Sesin alınamadı, yazarak deneyebilirsin.'
-              : 'Could not hear you — you can type instead.'
-        ),
+      /*
+       * Hata kodları ayrı ayrı ele alınmalı; hepsini "sesin alınamadı" diye
+       * göstermek yanlış yönlendiriyordu.
+       *
+       * `no-speech` bir hata değil: tarayıcı birkaç saniye ses duymayınca
+       * bunu veriyor. Seansta düşünürken susmak buna yol açıyor ve ekranda
+       * hata çıkması saçma — sessizce yeniden dinlemeye dönmeli.
+       */
+      hata: (kod) => {
+        if (kod === 'no-speech') return;
+        const mesajlar: Record<string, [string, string]> = {
+          'not-allowed': [
+            'Mikrofon izni verilmedi. Tarayıcı ayarlarından mizac.xyz için mikrofona izin ver.',
+            'Microphone permission denied. Allow mizac.xyz to use the microphone.',
+          ],
+          'service-not-allowed': [
+            'Tarayıcı ses tanımayı engelledi. Chrome ya da Safari deneyebilirsin.',
+            'The browser blocked speech recognition. Try Chrome or Safari.',
+          ],
+          'audio-capture': [
+            'Mikrofon bulunamadı. Cihazda mikrofon var mı, başka bir uygulama kullanıyor mu bak.',
+            'No microphone found. Check the device, or whether another app is using it.',
+          ],
+          network: [
+            'Ses tanıma sunucusuna ulaşılamadı — bu tarayıcının konuşma tanıması internete bağlanıyor.',
+            'Could not reach the speech service — this browser’s recognition needs the internet.',
+          ],
+        };
+        const [trM, enM] = mesajlar[kod] ?? [
+          `Ses alınamadı (${kod}). Yazarak devam edebilirsin.`,
+          `Could not capture audio (${kod}). You can type instead.`,
+        ];
+        setHata(tr ? trM : enM);
+      },
       bitti: () => {
         dinleyiciRef.current = null;
         // Seansta kullanıcı hiç konuşmadan tanıma kapandıysa (sessizlik)
@@ -540,7 +583,7 @@ export default function DanismanSayfasi() {
             ) : (
               <button
                 type="button"
-                onClick={() => void seansBaslat()}
+                onClick={seansBaslat}
                 className="px-6 py-3 rounded-full text-sm font-semibold"
                 style={{ background: '#c4973a', color: '#1a1207' }}
               >

@@ -19,6 +19,8 @@ import {
   sesiCanlandir,
   konusuyorMu,
   kulakAc,
+  sesiUyandir,
+  dildeSesVar,
   type SesDurumu,
   type Dinleyici,
   type Kulak,
@@ -87,6 +89,15 @@ export default function DanismanSayfasi() {
   const [sesDestegi, setSesDestegi] = useState({ konusma: false, dinleme: false });
   // Her kelime sınırında artıyor; yüz bunu görüp ağzı açıyor.
   const [agizTetik, setAgizTetik] = useState(0);
+  /*
+   * Sesin gerçekten çıkıp çıkmadığı.
+   *
+   * Sessizce başarısız olmak buradaki en kötü hataydı: tarayıcı `speak()`
+   * çağrısını yutuyordu, ekranda hiçbir şey yazmıyordu ve kullanıcı
+   * danışmanı 'vasat' sanıyordu — oysa bozuktu.
+   */
+  const [sesRaporu, setSesRaporu] = useState<'bilinmiyor' | 'calisiyor' | 'engelli' | 'dilYok'>('bilinmiyor');
+  const sesDenendiRef = useRef(false);
 
   const sonRef = useRef<HTMLDivElement>(null);
   const dinleyiciRef = useRef<Dinleyici | null>(null);
@@ -141,8 +152,16 @@ export default function DanismanSayfasi() {
    * kazandırdığı saniyeleri geri verirdi.
    */
   function seslendir(cumle: string) {
+    sesDenendiRef.current = true;
+    // Tarayıcı `speak()`i yutarsa `basladi` hiç gelmiyor. 2,5 saniye içinde
+    // gelmezse engellendiğini varsayıp ekranda söylüyoruz.
+    window.setTimeout(() => {
+      if (sesDenendiRef.current) setSesRaporu((r) => (r === 'bilinmiyor' ? 'engelli' : r));
+    }, 2500);
     konus(cumle, lang, {
       basladi: () => {
+        sesDenendiRef.current = false;
+        setSesRaporu(dildeSesVar(lang) ? 'calisiyor' : 'dilYok');
         setSesDurumu('konusuyor');
         // Kulak yalnız danışman konuşurken açılıyor.
         //
@@ -222,6 +241,10 @@ export default function DanismanSayfasi() {
     setSeans(true);
     setSesAcik(true);
     setHata(null);
+    // Ses motorunu TAM BURADA uyandır: Safari ve Chrome ilk `speak()`in
+    // kullanıcı hareketinin içinde olmasını şart koşuyor. Ağ cevabında
+    // yapılan çağrı sessizce yutuluyordu.
+    sesiUyandir();
     dinlemeyeBasla();
   }
 
@@ -545,7 +568,7 @@ export default function DanismanSayfasi() {
         </div>
 
         {/* Seans kipi: konuşmaktan başka bir şey yapmayacağın hâl. */}
-        {sesDestegi.dinleme && sesDestegi.konusma && (
+        {sesDestegi.konusma && (
           <div className="mb-3 text-center">
             {seans ? (
               <>
@@ -569,6 +592,22 @@ export default function DanismanSayfasi() {
                 {sesDurumu === 'konusuyor' && (
                   <p className="text-xs mb-2 opacity-60" style={{ color: '#9a8060' }}>
                     {tr ? 'Konuşmaya başlarsan susar' : 'Start speaking and it stops'}
+                  </p>
+                )}
+                {/* Ses çıkmıyorsa sebebini söyle. Sessizce başarısız olmak,
+                    kullanıcıya danışmanı kusurlu gösteriyordu. */}
+                {sesRaporu === 'engelli' && (
+                  <p className="text-xs mb-2" style={{ color: '#c4973a' }}>
+                    {tr
+                      ? 'Tarayıcı sesi engelledi. Sayfayı yenileyip tekrar “Konuşarak başla”ya bas.'
+                      : 'The browser blocked audio. Reload and press “Start talking” again.'}
+                  </p>
+                )}
+                {sesRaporu === 'dilYok' && (
+                  <p className="text-xs mb-2" style={{ color: '#c4973a' }}>
+                    {tr
+                      ? 'Cihazında Türkçe ses yok; başka bir sesle okuyor. Ayarlar → Erişilebilirlik → Konuşma’dan Türkçe ses indirebilirsin.'
+                      : 'No Turkish voice on this device; using another. You can add one in the system speech settings.'}
                   </p>
                 )}
                 <button
@@ -643,6 +682,7 @@ export default function DanismanSayfasi() {
             type="button"
             onClick={() => {
               const yeni = !sesAcik;
+              if (yeni) sesiUyandir();
               setSesAcik(yeni);
               if (!yeni) {
                 sus();

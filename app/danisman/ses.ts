@@ -66,7 +66,50 @@ function sesSec(dil: 'tr' | 'en'): SpeechSynthesisVoice | null {
   const on = dil === 'tr' ? 'tr' : 'en';
   // Yerel (cihaz üstü) sesler ağdakilere tercih ediliyor: gecikmesiz başlıyorlar.
   const uygun = hepsi.filter((s) => s.lang.toLowerCase().startsWith(on));
-  return uygun.find((s) => s.localService) ?? uygun[0] ?? null;
+  if (uygun.length) return uygun.find((s) => s.localService) ?? uygun[0];
+
+  // İstenen dilde ses yoksa SUSMA. `lang` tanımadığı bir değere ayarlanınca
+  // bazı tarayıcılar hiç konuşmuyor; eldeki herhangi bir sesle okumak,
+  // aksanlı da olsa, sessizlikten iyi.
+  return hepsi.find((s) => s.localService) ?? hepsi[0] ?? null;
+}
+
+/** Cihazda istenen dilde ses var mı — arayüzde durumu göstermek için. */
+export function dildeSesVar(dil: 'tr' | 'en'): boolean {
+  if (!sesVar()) return false;
+  const on = dil === 'tr' ? 'tr' : 'en';
+  return window.speechSynthesis.getVoices().some((s) => s.lang.toLowerCase().startsWith(on));
+}
+
+let uyandi = false;
+
+/**
+ * Ses motorunu kullanıcı hareketi içinde uyandırır.
+ *
+ * BU FONKSİYON OLMADAN SES HİÇ ÇIKMIYORDU.
+ * Safari (Mac ve iOS) ve Chrome'un otomatik oynatma politikası, ilk
+ * `speak()` çağrısının gerçek bir kullanıcı hareketinin içinde olmasını şart
+ * koşuyor. Bizim ilk çağrımız ağ cevabı geldiğinde, tıklamadan saniyeler
+ * sonra oluyordu; tarayıcı da hata vermeden yutuyordu — ne ses ne uyarı.
+ *
+ * Tıklamanın içinde sessiz bir söylem çalıştırmak motoru açıyor, sonraki
+ * asenkron çağrılar serbest kalıyor. Bir kez yeterli.
+ */
+export function sesiUyandir(): void {
+  if (!sesVar() || uyandi) return;
+  uyandi = true;
+  try {
+    // Boş metni bazı tarayıcılar yok sayıyor; tek boşluk ve sıfır ses düzeyi.
+    const s = new SpeechSynthesisUtterance(' ');
+    s.volume = 0;
+    window.speechSynthesis.speak(s);
+  } catch {
+    uyandi = false;
+  }
+}
+
+export function sesUyandiMi(): boolean {
+  return uyandi;
 }
 
 let sonSoylem: SpeechSynthesisUtterance | null = null;

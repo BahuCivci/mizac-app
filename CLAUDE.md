@@ -35,6 +35,19 @@ süreci ölür ya da sunucu yeniden başlarsa adres değişir ve danışman **se
 cevap vermez olur — hata sayfası çıkmaz. Süreçler `nohup` ile başlatıldı,
 `sudo` olmadığı için systemd yok.
 
+**Nöbetçi kuruldu** (`danisman/sunucu/nobetci.sh`, sunucuda crontab'da her
+5 dakikada bir çalışıyor): Ollama, vekil ve tünel süreçlerinden hangisi
+ölmüşse yeniden başlatıyor. 31 Ağu 2026'da tam bu yüzden bir hafta boyunca
+fark edilmeden kesintide kaldı — `cloudflared` kendini güncelleyip süreç
+kapanmış, kimse yeniden başlatmamıştı. Nöbetçi bunu en fazla 5 dakikaya indiriyor.
+
+**Nöbetçinin yapamadığı tek şey:** tünel yeniden başlarken adresi değişirse
+(`trycloudflare.com` her seferinde rastgele bir alt alan adı veriyor),
+Vercel'deki `MIZAC_OLLAMA`'yı otomatik güncellemiyor — bilerek, Vercel kimlik
+bilgisini sunucuya koymak ayrı bir güvenlik riski olurdu. Adres değiştiğinde
+`~/mizac-lab/nobetci.log`'a satır düşüyor; şüphe duyulduğunda o log'a bakılıp
+gerekirse `vercel env` elle güncellenir.
+
 Şüphe duyulduğunda:
 
 ```bash

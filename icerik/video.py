@@ -85,11 +85,20 @@ def sahneleri_ayikla(senaryo: Path) -> list[str]:
     return sahneler
 
 
+# "Yelda" temel ses; formant tabanlı, hız değiştirmek etkisizdi (120 ile 150
+# aynı süreyi veriyordu, ölçüldü) — robotik hissin kaynağı buydu. "Yelda
+# (Enhanced)" nöral tabanlı ve hız gerçekten esniyor (130→6.7sn, 180→6.1sn).
+# Sistem Ayarları → Erişilebilirlik → Konuşulan İçerik → Sesler'den elle
+# indirilmesi gerekiyor (176 MB); indirilmemişse `say` sessizce temel
+# Yelda'ya düşer, hata vermez.
+SES = "Yelda (Enhanced)"
+
+
 def seslendir(metin: str, hedef: Path) -> float:
-    """macOS'un Yelda sesiyle seslendirir; süreyi döndürür."""
+    """macOS'un Enhanced Yelda sesiyle seslendirir; süreyi döndürür."""
     # Tırnak ve yıldız gibi işaretler seslendirmede tuhaf duruyor.
     okunacak = re.sub(r'[«»"“”*_`]', "", metin).strip()
-    calistir(["say", "-v", "Yelda", "-o", str(hedef), okunacak])
+    calistir(["say", "-v", SES, "-o", str(hedef), okunacak])
     return sure_of(hedef)
 
 

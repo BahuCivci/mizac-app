@@ -103,6 +103,28 @@ node icerik/yukle.mjs       # medyayı Vercel Blob'a
 python3 icerik/csv-url.py   # CSV'ler + parçalar
 ```
 
+**Video sesi:** macOS'un yerleşik Yelda'sı (temel sürüm) test edildi, hız
+120-150 arası fark etmiyordu — formant tabanlı, robotik hissin sebebi buydu.
+Enhanced Yelda (Sistem Ayarları → Erişilebilirlik → Konuşulan İçerik → Sesler,
+176 MB, ücretsiz) denendi, "çok yapay" bulundu. Şimdi **FreyaTTS** kullanılıyor
+— Türkçe'ye özel, Apache-2.0 (ticari kullanıma açık), üniversite sunucusunda
+GPU'da çalışıyor. XTTS v2 elendi çünkü ağırlıkları CPML lisanslı ve "ad-supported
+video" için ticari kullanımı açıkça yasaklıyor.
+
+Sesler önceden toplu üretilip `icerik/cikti/ses-onbellek/` altına iniyor
+(`danisman/sunucu/toplu-seslendir.py`, sunucuda `PYTHONPATH=~/mizac-lab/FreyaTTS`
+gerekiyor — paket o klasörün içinde). `video.py`'nin `seslendir()`'i önce
+oraya bakıyor, karşılığı yoksa (yeni içerik, henüz sunucuya gönderilmemiş)
+Enhanced Yelda'ya düşüyor — sessiz kalmıyor.
+
+Yeni içerik üretilince önbelleği tazelemek:
+```bash
+python3 icerik/toplu-ses-cikart.py   # SENARYO.md'lerden metinleri çıkar
+# → toplu-ses-girdi.json'u sunucuya gönder, toplu-seslendir.py çalıştır,
+#   cikti-ses/ çıktısını icerik/cikti/ses-onbellek/ üzerine indir
+python3 icerik/video.py --yeniden    # videoları yeniden üret
+```
+
 Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
 bekliyor): `icerik/PAYLASIM-KURULUM.md`.
 

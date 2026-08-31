@@ -33,6 +33,11 @@ KOK = Path(__file__).resolve().parent
 CIKTI = KOK / "cikti" / "gunluk"
 FONT = "/System/Library/Fonts/Supplemental/Arial.ttf"
 
+# FreyaTTS'in üniversite sunucusunda toplu ürettiği sesler buraya iniyor
+# (bkz. danisman/sunucu/toplu-seslendir.py). Yapı: <video-klasörü>/<sahne-no>.wav
+# ve tek bir kapanis.wav — CIKTI'deki video klasör adlarıyla birebir eşleşiyor.
+SES_ONBELLEK = KOK / "cikti" / "ses-onbellek"
+
 # Marka paleti — sablon.ts ile aynı olmalı, yoksa video ve görseller ayrışır.
 ZEMIN = "0x1a1207"
 KREM = "0xf5f0e8"
@@ -94,8 +99,22 @@ def sahneleri_ayikla(senaryo: Path) -> list[str]:
 SES = "Yelda (Enhanced)"
 
 
-def seslendir(metin: str, hedef: Path) -> float:
-    """macOS'un Enhanced Yelda sesiyle seslendirir; süreyi döndürür."""
+def seslendir(metin: str, hedef: Path, onbellek: Path | None = None) -> float:
+    """
+    FreyaTTS'in önceden ürettiği sesi kullanır; yoksa Enhanced Yelda'ya düşer.
+
+    NEDEN İKİ KAYNAK
+    FreyaTTS Türkçe'ye özel, nöral, ücretsiz ve ticari kullanıma açık
+    (Apache-2.0) — ama sunucuda çalışıyor, her yeni cümle için oraya gidip
+    gelmek pratik değil. Sesler toplu üretilip `cikti/ses-onbellek/` altına
+    indiriliyor (bkz. danisman/sunucu/toplu-seslendir.py). Önbellekte
+    karşılığı olmayan bir metin gelirse (yeni içerik, henüz sunucuya
+    gönderilmemiş) sessiz kalmak yerine Enhanced Yelda devreye giriyor —
+    kalite biraz düşer ama video hiç üretilmemekten iyidir.
+    """
+    if onbellek is not None and onbellek.exists():
+        shutil.copy(onbellek, hedef)
+        return sure_of(hedef)
     # Tırnak ve yıldız gibi işaretler seslendirmede tuhaf duruyor.
     okunacak = re.sub(r'[«»"“”*_`]', "", metin).strip()
     calistir(["say", "-v", SES, "-o", str(hedef), okunacak])
@@ -159,7 +178,10 @@ def kapanis_yap(hedef: Path, olcu: tuple[int, int], klasor: Path) -> None:
     w, h = olcu
     sure = 2.6
     ses = klasor / "kapanis.aiff"
-    seslendir("Kendi mizacını öğrenmek istersen, mizac nokta xyz.", ses)
+    seslendir(
+        "Kendi mizacını öğrenmek istersen, mizac nokta xyz.", ses,
+        SES_ONBELLEK / "kapanis.wav",
+    )
     gercek = max(sure_of(ses), sure)
 
     yazi = klasor / "kapanis.txt"
@@ -205,9 +227,10 @@ def video_uret(klasor: Path, bicim: str) -> str:
     parcalar: list[Path] = []
 
     try:
+        onbellek_klasor = SES_ONBELLEK / klasor.relative_to(CIKTI)
         for i, metin in enumerate(sahneler):
             ses = gecici / f"s{i}.aiff"
-            sure = seslendir(metin, ses)
+            sure = seslendir(metin, ses, onbellek_klasor / f"{i}.wav")
             parca = gecici / f"s{i}.mp4"
             sahne_yap(
                 parca, ses, sure, olcu,

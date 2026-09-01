@@ -3,13 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { mizacProfiller, type MizacTip } from '@/lib/mizac-data';
-import dynamic from 'next/dynamic';
 import { DANISMAN_ACIK } from '@/lib/ozellikler';
 import { useLang } from '@/lib/lang-context';
-
-// three.js ~600 KB ve WebGL sunucuda yok — ayrı parçaya alınıp yalnız
-// tarayıcıda yükleniyor, ilk sayfa yükünü şişirmesin.
-const Yuz = dynamic(() => import('./yuz'), { ssr: false });
+// Yüz artık SVG (eskiden three.js'ti, 600 KB'lık ayrı parça olarak
+// yükleniyordu). SVG sunucuda da render edildiği için doğrudan içe
+// aktarılıyor — yüz sayfa açılır açılmaz görünüyor, parça beklemiyor.
+import Yuz from './yuz';
 import {
   konus,
   sus,
@@ -20,6 +19,7 @@ import {
   konusuyorMu,
   kulakAc,
   sesiUyandir,
+  sesListesiniIsit,
   dildeSesVar,
   type SesDurumu,
   type Dinleyici,
@@ -85,6 +85,18 @@ export default function DanismanSayfasi() {
   seansRef.current = seans;
 
   const [sesAcik, setSesAcik] = useState(false);
+  /*
+   * Ses açık mı — ref olarak da tutuluyor, ÇÜNKÜ:
+   *
+   * "Konuşarak başla" `setSesAcik(true)` deyip hemen dinlemeyi başlatıyor.
+   * Tanıma geri çağrısı o anki render'ın kapanışını yakalıyor ve o render'da
+   * `sesAcik` hâlâ false — state bir sonraki render'a kadar güncellenmiyor.
+   * Cevap akarken `if (sesAcik)` false okuyor ve ses HİÇ çalmıyordu.
+   * Yazarak gönderince çalışıyordu (o kapanış güncel), konuşarak
+   * başlatınca çalışmıyordu — hatayı bu kadar kafa karıştırıcı yapan buydu.
+   */
+  const sesAcikRef = useRef(false);
+  sesAcikRef.current = sesAcik;
   const [sesDurumu, setSesDurumu] = useState<SesDurumu>('bos');
   const [sesDestegi, setSesDestegi] = useState({ konusma: false, dinleme: false });
   // Her kelime sınırında artıyor; yüz bunu görüp ağzı açıyor.
@@ -110,6 +122,8 @@ export default function DanismanSayfasi() {
   // yapılmamalı — sunucu/istemci çıktısı ayrışır ve hydration uyarısı verir.
   useEffect(() => {
     setSesDestegi({ konusma: sesVar(), dinleme: dinlemeVar() });
+    // Ses listesi açılışta boş geliyor; erken ısıt ki ilk cümle dilsiz kalmasın.
+    sesListesiniIsit();
   }, []);
 
   // Sekmeden çıkıp dönünce Chrome sentezi askıya alıyor; sayfadan ayrılırken
@@ -153,11 +167,18 @@ export default function DanismanSayfasi() {
    */
   function seslendir(cumle: string) {
     sesDenendiRef.current = true;
-    // Tarayıcı `speak()`i yutarsa `basladi` hiç gelmiyor. 2,5 saniye içinde
-    // gelmezse engellendiğini varsayıp ekranda söylüyoruz.
+    /*
+     * Tarayıcı `speak()`i yutarsa `basladi` hiç gelmiyor — bunu yakalamak için
+     * nöbetçi var. Ama kuyruğa da bakmak ZORUNLU: cümleler tek tek kuyruğa
+     * giriyor, sıradaki cümle önündekiler bitene kadar başlamıyor. Yalnız
+     * süreye bakan ilk sürüm bu yüzden çalışan sesi "engellendi" diye
+     * damgalıyordu. Kuyruk doluysa ses gayet iyi, sadece sırasını bekliyor.
+     */
     window.setTimeout(() => {
-      if (sesDenendiRef.current) setSesRaporu((r) => (r === 'bilinmiyor' ? 'engelli' : r));
-    }, 2500);
+      if (sesDenendiRef.current && !konusuyorMu()) {
+        setSesRaporu((r) => (r === 'bilinmiyor' ? 'engelli' : r));
+      }
+    }, 4000);
     konus(cumle, lang, {
       basladi: () => {
         sesDenendiRef.current = false;
@@ -239,6 +260,9 @@ export default function DanismanSayfasi() {
     // hemen aşağıda başlayan dinleme zinciri seansRef'e bakıyor.
     seansRef.current = true;
     setSeans(true);
+    // sesAcikRef de elle kuruluyor: aynı sebep. Render'ı beklemek, cevabın
+    // ne kadar hızlı geldiğine bahse girmek olurdu.
+    sesAcikRef.current = true;
     setSesAcik(true);
     setHata(null);
     // Ses motorunu TAM BURADA uyandır: Safari ve Chrome ilk `speak()`in
@@ -378,7 +402,7 @@ export default function DanismanSayfasi() {
           return;
         }
         setMesajlar((m) => [...m, { rol: 'danisman', metin: d.cevap }]);
-        if (sesAcik) seslendir(d.cevap);
+        if (sesAcikRef.current) seslendir(d.cevap);
         if (Array.isArray(d.kanitlar)) setKanitlar(d.kanitlar);
         if (d.durum) setDurum(d.durum);
         return;
@@ -407,7 +431,7 @@ export default function DanismanSayfasi() {
           // öncekine eklenirdi.
           const ilkCumle = !balonAcildi;
           balonAcildi = true;
-          if (sesAcik) seslendir(parca);
+          if (sesAcikRef.current) seslendir(parca);
           setMesajlar((m) =>
             ilkCumle
               ? [...m, { rol: 'danisman' as const, metin: parca }]
@@ -683,6 +707,7 @@ export default function DanismanSayfasi() {
             onClick={() => {
               const yeni = !sesAcik;
               if (yeni) sesiUyandir();
+              sesAcikRef.current = yeni;
               setSesAcik(yeni);
               if (!yeni) {
                 sus();

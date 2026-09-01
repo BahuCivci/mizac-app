@@ -95,6 +95,21 @@ let uyandi = false;
  * Tıklamanın içinde sessiz bir söylem çalıştırmak motoru açıyor, sonraki
  * asenkron çağrılar serbest kalıyor. Bir kez yeterli.
  */
+/**
+ * Ses listesini erkenden doldurur.
+ *
+ * `getVoices()` sayfa açılışında BOŞ dizi dönüyor (ölçüldü: canlı sayfada 0,
+ * `voiceschanged` sonrası 181). Liste boşken `sesSec` null dönüyor ve söylem
+ * dilsiz kalıyor. Bu, sayfa yüklenir yüklenmez çağrılıp listeyi ısıtıyor.
+ */
+export function sesListesiniIsit(): void {
+  if (!sesVar()) return;
+  window.speechSynthesis.getVoices();
+  window.speechSynthesis.addEventListener?.('voiceschanged', () => {
+    window.speechSynthesis.getVoices();
+  }, { once: true });
+}
+
 export function sesiUyandir(): void {
   if (!sesVar() || uyandi) return;
   uyandi = true;

@@ -58,6 +58,17 @@ curl -s -m 60 -X POST https://mizac.xyz/api/danisman \
 
 Boş dönüyorsa onarım adımları: `danisman/sunucu/KURULUM.md`.
 
+**Ollama TEK GPU'ya sabit tutulmalı** (`CUDA_VISIBLE_DEVICES=5`). Sabitleme
+olmadan model kartlara yayılıyor ve her katman kartlar arası PCIe trafiği
+doğuruyor — bu makinede NVLink yok. Ölçüldü: yayılmış 1.4 jeton/sn, tek kartta
+27.2 (19 kat). Danışman "cevap vermiyor" diye görünüyordu; aslında cevap
+geliyordu ama 40+ saniyede.
+
+Dahası, `CUDA_VISIBLE_DEVICES` **tek başına yetmiyor**: Vulkan arka ucu bu
+değişkeni umursamayıp bütün kartları görüyor, Ollama da "daha çok kart sunan"
+arka ucu seçip Vulkan'a gidiyordu. Vulkan kütüphanesi bu yüzden
+`~/ollama-vulkan-yedek/` altına taşındı. Oraya geri konursa yavaşlık geri gelir.
+
 Sunucu erişimi: `mta_kullanici@192.168.1.40`, FortiClient SSL-VPN gerekiyor.
 Ollama yalnız `127.0.0.1:11434`'ü dinliyor — dışarıdan doğrudan erişilmez,
 bu kasıtlı.

@@ -11,9 +11,21 @@
 cd ~/mizac-lab || exit 1
 LOG=nobetci.log
 
+# TEK GPU'YA SABİTLEMEK ZORUNLU.
+#
+# Sabitlemeden başlatılınca Ollama modeli birden çok karta yayıyor ve her
+# katman için kartlar arası PCIe trafiği doğuyor (bu makinede NVLink yok).
+# Ölçüldü: yayılmış hâlde 1.4 jeton/sn, tek kartta 27.2 — 19 kat fark.
+# Danışmanın "cevap vermiyor" görünmesinin sebebi buydu; cevap geliyordu ama
+# 40+ saniyede.
+#
+# CUDA_VISIBLE_DEVICES tek başına YETMİYOR: Vulkan arka ucu bu değişkeni
+# umursamıyor, bütün kartları görüyor ve Ollama "daha çok kart" sunduğu için
+# Vulkan'ı seçiyordu. Vulkan kütüphanesi ~/ollama-vulkan-yedek/ altına
+# taşındı; oraya geri konursa sorun geri gelir.
 if ! curl -s -o /dev/null -m 5 127.0.0.1:11434/api/tags; then
   echo "$(date -u +%FT%TZ) ollama ölü, başlatılıyor" >> "$LOG"
-  nohup ollama serve > ollama.log 2>&1 < /dev/null &
+  CUDA_VISIBLE_DEVICES=5 nohup ollama serve > ollama.log 2>&1 < /dev/null &
   sleep 8
 fi
 

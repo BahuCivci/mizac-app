@@ -93,16 +93,20 @@ class GercekTesti(Temel):
         cagrilar = []
 
         def gonder(url, **k):
+            if "status_code" in url:
+                return {"status_code": "FINISHED"}
             cagrilar.append((url, k.get("form", {})))
             if url.endswith("/media_publish"):
                 return {"id": "YAYIN"}
             return {"id": f"K{len(cagrilar)}"}
 
         sonuc = instagram.paylas("karusel", self.klasor, TABAN, "42", "tok",
-                                 kuru=False, gonder=gonder)
+                                 kuru=False, gonder=gonder, bekle=False)
 
         self.assertEqual(sonuc, "YAYIN")
-        self.assertEqual(len(cagrilar), 4)  # 2 çocuk + 1 kapsayıcı + 1 yayın
+        # 2 çocuk + 1 kapsayıcı + 1 yayın. Durum sorguları sayılmıyor —
+        # onların yayından ÖNCE geldiğini test_instagram_bekleme sınıyor.
+        self.assertEqual(len(cagrilar), 4)
         self.assertEqual(cagrilar[0][1]["is_carousel_item"], "true")
         self.assertEqual(cagrilar[2][1]["media_type"], "CAROUSEL")
         self.assertEqual(cagrilar[2][1]["children"], "K1,K2")
@@ -115,12 +119,14 @@ class GercekTesti(Temel):
         cagrilar = []
 
         def gonder(url, **k):
+            if "status_code" in url:
+                return {"status_code": "FINISHED"}
             cagrilar.append(url)
             return {"id": "YAYIN" if url.endswith("media_publish") else "K"}
 
         self.assertEqual(
             instagram.paylas("tek", self.klasor, TABAN, "42", "tok",
-                             kuru=False, gonder=gonder),
+                             kuru=False, gonder=gonder, bekle=False),
             "YAYIN",
         )
         self.assertEqual(len(cagrilar), 2)

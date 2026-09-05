@@ -21,6 +21,10 @@ class Temel(unittest.TestCase):
 
     def sahte(self, kayit):
         def gonder(url, **k):
+            # Durum sorgusu kaydedilmiyor: testler uç noktaların hangi
+            # SUNUCUYA gittiğine bakıyor, kaç istek atıldığına değil.
+            if "status_code" in url:
+                return {"status_code": "FINISHED"}
             kayit.append(url)
             return {"id": "YAYIN" if url.endswith("media_publish") else "K"}
         return gonder
@@ -30,14 +34,14 @@ class YolTesti(Temel):
     def test_varsayilan_instagram_login(self):
         kayit = []
         instagram.paylas("tek", self.klasor, "https://b", "42", "tok",
-                         kuru=False, gonder=self.sahte(kayit))
+                         kuru=False, gonder=self.sahte(kayit), bekle=False)
         self.assertTrue(all(u.startswith("https://graph.instagram.com/") for u in kayit),
                         kayit)
 
     def test_facebook_yolu_secilebilir(self):
         kayit = []
         instagram.paylas("tek", self.klasor, "https://b", "42", "tok",
-                         kuru=False, yol="facebook", gonder=self.sahte(kayit))
+                         kuru=False, yol="facebook", gonder=self.sahte(kayit), bekle=False)
         self.assertTrue(all("graph.facebook.com/v21.0" in u for u in kayit), kayit)
 
     def test_ortam_degiskeni_yolu_belirler(self):
@@ -45,7 +49,7 @@ class YolTesti(Temel):
         self.addCleanup(os.environ.pop, "IG_YOL", None)
         kayit = []
         instagram.paylas("tek", self.klasor, "https://b", "42", "tok",
-                         kuru=False, gonder=self.sahte(kayit))
+                         kuru=False, gonder=self.sahte(kayit), bekle=False)
         self.assertTrue(all("graph.facebook.com" in u for u in kayit), kayit)
 
     def test_bilinmeyen_yol_durdurur(self):
@@ -58,7 +62,7 @@ class YolTesti(Temel):
         for yol in ("instagram", "facebook"):
             kayit = []
             instagram.paylas("tek", self.klasor, "https://b", "42", "tok",
-                             kuru=False, yol=yol, gonder=self.sahte(kayit))
+                             kuru=False, yol=yol, gonder=self.sahte(kayit), bekle=False)
             kuyruklar = [u.split("/42/")[-1].split("?")[0] for u in kayit]
             self.assertEqual(kuyruklar, ["media", "media_publish"], yol)
 

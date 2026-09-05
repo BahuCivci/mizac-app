@@ -135,7 +135,16 @@ def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
         ana = _kapsayici(gonder, taban, ig_id, token, {
             "media_type": "REELS", "video_url": urller[0], "caption": metin,
         })
-        _hazir_bekle(gonder, taban, ana, token, bekle)
+
+    # HER kapsayıcı için bekleniyor, yalnız videolar için değil.
+    #
+    # Başta yalnız REELS bekleniyordu; 5 Eylül 2026'da bir KARUSEL yayınlanmak
+    # istendiğinde Meta şunu döndü:
+    #   HTTP 400 code 9007 "Media ID is not available"
+    #   "Medya yayınlanmaya hazır değil. Lütfen biraz bekle"
+    # Yani görsel kapsayıcıları da işlenmeyi bekliyor. Hazır olan kapsayıcıda
+    # bu tek bir ek istek; hazır olmayanda paylaşımı kurtarıyor.
+    _hazir_bekle(gonder, taban, ana, token, bekle)
 
     cevap = gonder(f"{taban}/{ig_id}/media_publish", yontem="POST",
                    form={"creation_id": ana, "access_token": token})

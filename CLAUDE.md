@@ -5,6 +5,14 @@
 > **Her oturumun başında [YAPILACAKLAR.md](YAPILACAKLAR.md)'ı oku.** Nerede
 > kaldığımız, bekleyen işler ve sessiz arıza çıkaran tuzaklar orada. Bağlam
 > sıkıştığında kaybolmayan tek yer o dosya.
+>
+> **İkisi farklı hızda değişir, karıştırma:**
+> - Bir iş bittiğinde ya da yeni bir engel çıktığında → `YAPILACAKLAR.md`
+> - Kalıcı bir bilgi öğrenildiğinde (bir tuzağın sebebi, bir kararın gerekçesi)
+>   → buraya, `CLAUDE.md`'ye
+>
+> Durumu güncellemeden oturumu bitirme; bir sonraki oturum yalnız bu iki
+> dosyayı görüyor.
 
 ## Proje Özeti
 Next.js 16 + React 19 + Tailwind CSS v4 ile geliştirilmiş İslami tıbb-ı nebevî / mizaç sistemi sitesi.

@@ -63,3 +63,7 @@ __pycache__/
 
 # playwright rapor çıktısı (test-results gibi, yeniden üretilebilir)
 /playwright-report
+
+# çalışmayan browser-use taslağı (795 MB, iki venv kopyası)
+# — lint'i ve Vercel deploy'unu bozuyor: 20096 dosya, sınır 15000
+/browser-use

@@ -21,7 +21,7 @@ import webbrowser
 from datetime import datetime, timedelta
 
 from paylasim import http
-from paylasim.ayar import sir
+from paylasim.ayar import secenek, sir
 from paylasim.hata import Durdur
 from paylasim.kimlik import kaydet
 
@@ -41,7 +41,24 @@ IG_TOKEN = "https://graph.facebook.com/v21.0/oauth/access_token"
 # inbox yolu için video.upload yetiyor. Denetim geçilip direct'e geçilecekse
 # video.publish de istenmeli — o zaman bu betik yeniden çalıştırılır.
 TIKTOK_KAPSAM = "user.info.basic,video.upload"
-YONLENDIRME = "http://127.0.0.1:8723/geri"
+
+# Yönlendirme adresi HTTPS olmak ZORUNDA — Meta ve TikTok http:// kabul
+# etmiyor, localhost dahil. Kendi alan adımızı kullanıyoruz: onay sonrası
+# tarayıcı mizac.xyz'e dönüyor ve `code` adres çubuğunda görünüyor. Sayfanın
+# kodu okumasına gerek yok, oradan kopyalanıyor.
+#
+# Bu adres platformun uygulama ayarlarına da BİREBİR aynı yazılmalı.
+VARSAYILAN_YONLENDIRME = "https://mizac.xyz/"
+
+
+def yonlendirme() -> str:
+    adres = secenek("OAUTH_YONLENDIRME", VARSAYILAN_YONLENDIRME)
+    if not adres.startswith("https://"):
+        raise Durdur(
+            f"yönlendirme adresi HTTPS olmalı, şu an: {adres} — "
+            "Meta ve TikTok http:// kabul etmiyor"
+        )
+    return adres
 
 
 def tiktok_yetkilendir() -> int:
@@ -49,7 +66,7 @@ def tiktok_yetkilendir() -> int:
         "client_key": sir("TIKTOK_CLIENT_KEY"),
         "scope": TIKTOK_KAPSAM,
         "response_type": "code",
-        "redirect_uri": YONLENDIRME,
+        "redirect_uri": yonlendirme(),
         "state": "mizac",
     })
     print("Tarayıcıda şu adresi aç, onayla, sonra adres çubuğundaki")
@@ -67,7 +84,7 @@ def tiktok_kod(kod: str) -> int:
             "client_secret": sir("TIKTOK_CLIENT_SECRET"),
             "code": urllib.parse.unquote(kod),
             "grant_type": "authorization_code",
-            "redirect_uri": YONLENDIRME,
+            "redirect_uri": yonlendirme(),
         },
         basliklar={"Content-Type": "application/x-www-form-urlencoded"},
     )
@@ -83,7 +100,7 @@ def tiktok_kod(kod: str) -> int:
 def instagram_yetkilendir() -> int:
     adres = IG_YETKI + "?" + urllib.parse.urlencode({
         "client_id": sir("IG_UYGULAMA_ID"),
-        "redirect_uri": YONLENDIRME,
+        "redirect_uri": yonlendirme(),
         "response_type": "code",
         "scope": IG_KAPSAM,
     })
@@ -106,7 +123,7 @@ def instagram_kod(kod: str) -> int:
             "client_id": sir("IG_UYGULAMA_ID"),
             "client_secret": sir("IG_UYGULAMA_SIRRI"),
             "grant_type": "authorization_code",
-            "redirect_uri": YONLENDIRME,
+            "redirect_uri": yonlendirme(),
             "code": kod,
         },
         basliklar={"Content-Type": "application/x-www-form-urlencoded"},

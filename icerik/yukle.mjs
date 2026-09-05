@@ -111,6 +111,12 @@ async function main() {
         const { url } = await put(anahtar, readFileSync(yol), {
           access: 'public',
           addRandomSuffix: false, // adres tahmin edilebilir kalmalı
+          // Blob varsa üzerine yaz. addRandomSuffix:false bunu TEK BAŞINA
+          // sağlamıyor — Vercel Blob "This blob already exists" deyip
+          // reddediyor. İçerik yeniden üretildiğinde (yeni seslendirme gibi)
+          // adresin sabit kalması şart: Publer'da zamanlanmış gönderiler ve
+          // paylas.py'nin ürettiği MEDYA_TABAN_URL o adresleri gösteriyor.
+          allowOverwrite: true,
           token,
         });
         defter[anahtar] = url;

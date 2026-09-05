@@ -36,11 +36,12 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
 
     satirlar.append(f"bugün: {bugun}")
     satirlar.append(f"TikTok yolu: {secenek('TIKTOK_YOL', 'inbox')}")
+    satirlar.append(f"YouTube gizliliği: {secenek('YOUTUBE_GIZLILIK', 'private')}")
     satirlar.append("")
 
     # --- token'lar
     satirlar.append("token:")
-    for platform in ("instagram", "tiktok"):
+    for platform in ("instagram", "tiktok", "youtube"):
         kalan = kimlik.kalan(platform, simdi, token_dosya)
         if kalan is None:
             satirlar.append(f"  {platform}: kurulmamış")
@@ -65,7 +66,7 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
         except Durdur:
             continue
         for is_ in isler:
-            video_gerekli = is_.tur in ("reels", "video")
+            video_gerekli = is_.tur in ("reels", "video", "shorts", "uzun")
             if video_gerekli and not (is_.klasor / "video.mp4").exists():
                 videosuz.append(f"{gun}/{is_.klasor.name}")
             if is_.anahtar not in paylasilan:

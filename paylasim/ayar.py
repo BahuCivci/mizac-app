@@ -29,6 +29,10 @@ NEREDEN = {
     "IG_UYGULAMA_ID": "developers.facebook.com → uygulaman → Ayarlar → Temel",
     "IG_UYGULAMA_SIRRI": "developers.facebook.com → uygulaman → Ayarlar → Temel",
     "MEDYA_TABAN_URL": "Vercel Blob taban adresi; icerik/PAYLASIM-KURULUM.md",
+    "YOUTUBE_ISTEMCI_ID": "console.cloud.google.com → API'ler → Kimlik bilgileri "
+                          "→ OAuth istemci kimliği (Web uygulaması)",
+    "YOUTUBE_ISTEMCI_SIRRI": "console.cloud.google.com → aynı OAuth istemcisi "
+                             "→ istemci gizli anahtarı",
 }
 
 

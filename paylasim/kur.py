@@ -5,6 +5,9 @@ Token'ları ilk kez alır. Bir kez çalıştırılır, sonrası kimlik.py'ın i�
     python3 -m paylasim.kur --platform tiktok --yetkilendir
     python3 -m paylasim.kur --platform tiktok --kod <adres-cubugundaki-code>
 
+    python3 -m paylasim.kur --platform youtube --yetkilendir
+    python3 -m paylasim.kur --platform youtube --kod <adres-cubugundaki-code>
+
     python3 -m paylasim.kur --platform instagram --kisa-token <token>
 
 NEDEN AYRI DOSYA
@@ -41,6 +44,14 @@ IG_TOKEN = "https://graph.facebook.com/v21.0/oauth/access_token"
 # inbox yolu için video.upload yetiyor. Denetim geçilip direct'e geçilecekse
 # video.publish de istenmeli — o zaman bu betik yeniden çalıştırılır.
 TIKTOK_KAPSAM = "user.info.basic,video.upload"
+
+# Google OAuth — bütün Google API'lerinde aynı iki uç nokta.
+GOOGLE_YETKI = "https://accounts.google.com/o/oauth2/v2/auth"
+GOOGLE_TOKEN = "https://oauth2.googleapis.com/token"
+
+# Yalnız yükleme kapsamı. `youtube` (tam okuma/yazma) da işi görürdü ama
+# gereğinden geniş; denetimde geniş kapsam açıklama gerektiriyor.
+YOUTUBE_KAPSAM = "https://www.googleapis.com/auth/youtube.upload"
 
 # Yönlendirme adresi HTTPS olmak ZORUNDA — Meta ve TikTok http:// kabul
 # etmiyor, localhost dahil. Kendi alan adımızı kullanıyoruz: onay sonrası
@@ -151,6 +162,65 @@ def instagram_kod(kod: str) -> int:
     return 0
 
 
+def youtube_yetkilendir() -> int:
+    adres = GOOGLE_YETKI + "?" + urllib.parse.urlencode({
+        "client_id": sir("YOUTUBE_ISTEMCI_ID"),
+        "redirect_uri": yonlendirme(),
+        "response_type": "code",
+        "scope": YOUTUBE_KAPSAM,
+        # offline olmadan refresh token HİÇ gelmiyor — access token 1 saat
+        # yaşadığı için o zaman cron ikinci saatte durur.
+        "access_type": "offline",
+        # consent olmadan Google refresh token'ı YALNIZ ilk onayda veriyor;
+        # ikinci kez çalıştırıldığında sessizce refresh'siz cevap dönüyor.
+        "prompt": "consent",
+    })
+    print("Tarayıcıda şu adresi aç, onayla, sonra adres çubuğundaki")
+    print("`code=` değerini kopyalayıp --kod ile buraya ver:\n")
+    print(adres)
+    webbrowser.open(adres)
+    return 0
+
+
+def youtube_kod(kod: str) -> int:
+    cevap = http.gonder(
+        GOOGLE_TOKEN, yontem="POST",
+        form={
+            "client_id": sir("YOUTUBE_ISTEMCI_ID"),
+            "client_secret": sir("YOUTUBE_ISTEMCI_SIRRI"),
+            "code": urllib.parse.unquote(kod),
+            "grant_type": "authorization_code",
+            "redirect_uri": yonlendirme(),
+        },
+        basliklar={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    if not cevap.get("access_token"):
+        raise Durdur(f"token alınamadı: {cevap}")
+    if not cevap.get("refresh_token"):
+        # Bunu şimdi yakalamak şart: access token 1 saat sonra ölür ve
+        # yenileyecek bir şey olmadığı için cron yarın sessizce durur.
+        raise Durdur(
+            "refresh token gelmedi — access token 1 saat sonra ölür ve "
+            "yenilenemez.\n"
+            "Google refresh token'ı yalnız İLK onayda veriyor. Şu adresten "
+            "uygulamanın erişimini kaldırıp tekrar dene:\n"
+            "  https://myaccount.google.com/permissions"
+        )
+    kaydet("youtube", cevap["access_token"],
+           datetime.now() + timedelta(seconds=int(cevap.get("expires_in", 3600))),
+           cevap["refresh_token"])
+    print("youtube token'ı kaydedildi.")
+    print()
+    print("İKİ ŞEYİ ŞİMDİ KONTROL ET, ikisi de sessizce ısırıyor:")
+    print("  1. OAuth onay ekranı \"In production\" mu? \"Testing\" ise")
+    print("     Google refresh token'ı 7 GÜNDE iptal eder.")
+    print("  2. API projesi denetimden geçti mi? Geçmediyse yüklenen video")
+    print("     gizli KİLİTLENİR ve bu geri alınamaz — itiraz hakkı yok.")
+    print("     Denetim formu: support.google.com/youtube/contact/yt_api_form")
+    print("     Geçene kadar YOUTUBE_GIZLILIK=private kalsın.")
+    return 0
+
+
 def instagram_kisa(kisa: str) -> int:
     """Graph API Explorer'dan alınan kısa ömürlü token'ı 60 günlüğe çevirir."""
     cevap = http.gonder(
@@ -171,7 +241,8 @@ def instagram_kisa(kisa: str) -> int:
 
 def main() -> int:
     a = argparse.ArgumentParser(prog="paylasim.kur")
-    a.add_argument("--platform", required=True, choices=["tiktok", "instagram"])
+    a.add_argument("--platform", required=True,
+                   choices=["tiktok", "instagram", "youtube"])
     a.add_argument("--yetkilendir", action="store_true",
                    help="onay adresini aç (tiktok ve instagram)")
     a.add_argument("--kod", help="onay sonrası adresteki code değeri")
@@ -185,6 +256,12 @@ def main() -> int:
             if s.kod:
                 return tiktok_kod(s.kod)
             a.error("tiktok için --yetkilendir ya da --kod gerekiyor")
+        elif s.platform == "youtube":
+            if s.yetkilendir:
+                return youtube_yetkilendir()
+            if s.kod:
+                return youtube_kod(s.kod)
+            a.error("youtube için --yetkilendir ya da --kod gerekiyor")
         else:
             if s.yetkilendir:
                 return instagram_yetkilendir()

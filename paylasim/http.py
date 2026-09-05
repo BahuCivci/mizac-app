@@ -24,13 +24,20 @@ KIMLIK = "mizac-paylasim/1.0"
 
 def gonder(url: str, *, yontem: str = "GET", form: dict | None = None,
            govde: dict | None = None, ikili: bytes | None = None,
-           basliklar: dict | None = None, zaman_asimi: int = 120) -> dict:
+           basliklar: dict | None = None, zaman_asimi: int = 120,
+           basliklarla: bool = False):
     """
     Tek bir istek gönderir, JSON cevabı sözlük olarak döndürür.
 
     `form`  → application/x-www-form-urlencoded (Instagram Graph API böyle)
     `govde` → application/json (TikTok böyle)
-    `ikili` → ham bayt (TikTok video yüklemesi)
+    `ikili` → ham bayt (TikTok ve YouTube video yüklemesi)
+
+    `basliklarla=True` verilirse `(gövde, başlıklar)` ikilisi dönüyor.
+    NEDEN VAR: YouTube'un resumable yüklemesi oturum adresini gövdede
+    değil `Location` BAŞLIĞINDA veriyor — TikTok'ta o adres JSON'un içinde
+    geliyordu. Başlıkları hiç okumazsak YouTube'a yükleyecek yerimiz olmaz.
+    Varsayılan `False`, yani mevcut çağıranların gördüğü şey değişmiyor.
     """
     veri = None
     ek = dict(basliklar or {})
@@ -51,13 +58,15 @@ def gonder(url: str, *, yontem: str = "GET", form: dict | None = None,
     try:
         with urllib.request.urlopen(istek, timeout=zaman_asimi) as cevap:
             ham = cevap.read().decode("utf-8", "replace")
+            gelen = dict(cevap.headers) if basliklarla else None
     except urllib.error.HTTPError as e:
         detay = e.read().decode("utf-8", "replace")[:500]
         raise Durdur(f"{yontem} {url.split('?')[0]} → HTTP {e.code}: {detay}") from e
     except urllib.error.URLError as e:
         raise Durdur(f"bağlanılamadı: {e.reason}") from e
 
-    return json.loads(ham) if ham.strip() else {}
+    sonuc = json.loads(ham) if ham.strip() else {}
+    return (sonuc, gelen) if basliklarla else sonuc
 
 
 def erisilebilir_mi(url: str) -> bool:

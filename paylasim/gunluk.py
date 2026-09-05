@@ -16,14 +16,17 @@ from paylasim.hata import Durdur
 
 # Klasör adı → (platform, tür)
 #
-# youtube-shorts ve youtube-uzun bilerek yok: YouTube Data API'de de
-# doğrulanmamış uygulamanın yüklediği video kilitli kalıyor, yani TikTok'la
-# aynı cinsten bir engel. Ayrı iş.
+# youtube-* satırları var, ama YouTube'un kilit meselesi çözülmüş değil:
+# denetimden geçmemiş projeden yüklenen video gizli kilitleniyor ve bu geri
+# alınamıyor. TikTok'un `inbox`'ı gibi bir kaçış yolu da yok. Bu yüzden
+# YOUTUBE_GIZLILIK varsayılanı `private`; ayrıntı youtube.py'ın başında.
 BICIM: dict[str, tuple[str, str]] = {
     "instagram-karusel": ("instagram", "karusel"),
     "instagram-kare": ("instagram", "tek"),
     "instagram-reels": ("instagram", "reels"),
     "tiktok-tiktok": ("tiktok", "video"),
+    "youtube-shorts": ("youtube", "shorts"),
+    "youtube-uzun": ("youtube", "uzun"),
 }
 
 

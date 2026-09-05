@@ -35,13 +35,28 @@ TIKTOK_TOKEN_UCU = "https://open.tiktokapis.com/v2/oauth/token/"
 IG_YENILE = "https://graph.instagram.com/refresh_access_token"
 IG_TOKEN_UCU = "https://graph.facebook.com/v21.0/oauth/access_token"
 
+# Google, bütün API'leri için tek token uç noktası kullanıyor.
+GOOGLE_TOKEN_UCU = "https://oauth2.googleapis.com/token"
+
 # Süre dolmadan ne kadar önce yenilensin.
 # TikTok'ta 1 saat: token 24 saat yaşıyor, günde bir çalışan cron için
 # rahat bir pay. Instagram'da 7 gün: 60 günlük token, bir haftalık pay
 # Mac uykuda kalıp birkaç gün çalıştırılamasa bile yetiyor.
+#
+# YouTube'da 10 dakika, çünkü Google'ın access token'ı yalnız 1 SAAT yaşıyor:
+# günde bir çalışan cron her seferinde yenileyecek zaten, pay yalnız tek bir
+# çalıştırmanın uzun sürmesine karşı.
+#
+# YOUTUBE'UN ASIL TUZAĞI REFRESH TOKEN'DA, ve bu koddan görünmüyor:
+# OAuth onay ekranı "Testing" durumunda ve kullanıcı türü "External" ise
+# Google refresh token'ı 7 GÜNDE iptal ediyor. O zaman burada yapılacak bir
+# şey kalmıyor — yenileme `invalid_grant` alıyor, `Durdur` fırlatılıyor,
+# hiçbir şey paylaşılmıyor. Çözüm kodda değil konsolda: onay ekranı
+# "In production" durumuna alınmalı. Denetimden (audit) ayrı ve ücretsiz.
 PAY = {
     "tiktok": timedelta(hours=1),
     "instagram": timedelta(days=7),
+    "youtube": timedelta(minutes=10),
 }
 
 
@@ -112,6 +127,21 @@ def token(platform: str, *, gonder=None, simdi: datetime | None = None,
                 },
                 basliklar={"Content-Type": "application/x-www-form-urlencoded"},
             )
+        elif platform == "youtube":
+            # Google yenileme cevabında YENİ refresh token GÖNDERMİYOR;
+            # aşağıdaki `cevap.get("refresh_token") or kayit.get("refresh")`
+            # bu yüzden önemli — eskisi korunmazsa ikinci gün token kalmaz.
+            cevap = gonder(
+                GOOGLE_TOKEN_UCU,
+                yontem="POST",
+                form={
+                    "client_id": sir("YOUTUBE_ISTEMCI_ID"),
+                    "client_secret": sir("YOUTUBE_ISTEMCI_SIRRI"),
+                    "grant_type": "refresh_token",
+                    "refresh_token": kayit["refresh"],
+                },
+                basliklar={"Content-Type": "application/x-www-form-urlencoded"},
+            )
         elif secenek("IG_YOL", "instagram") == "instagram":
             cevap = gonder(
                 IG_YENILE
@@ -127,8 +157,18 @@ def token(platform: str, *, gonder=None, simdi: datetime | None = None,
                 + f"&fb_exchange_token={kayit['access']}"
             )
     except Durdur as e:
+        ipucu = ""
+        if platform == "youtube" and "invalid_grant" in str(e):
+            # En olası sebep bu ve konsola bakmadan anlaşılmıyor.
+            ipucu = (
+                "\n  Muhtemel sebep: OAuth onay ekranı hâlâ \"Testing\" "
+                "durumunda — Google refresh token'ı 7 günde iptal ediyor.\n"
+                "  Onay ekranını \"In production\" yap, sonra: "
+                "python3 -m paylasim.kur --platform youtube --yetkilendir"
+            )
         raise Durdur(
             f"{platform} token'ı yenilenemedi, hiçbir şey paylaşılmadı: {e}"
+            + ipucu
         ) from e
 
     yeni = cevap.get("access_token")

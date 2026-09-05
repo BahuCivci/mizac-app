@@ -28,7 +28,7 @@ import sys
 from datetime import date, datetime
 
 from paylasim import defter as defter_modul
-from paylasim import gunluk, instagram, kimlik, tiktok
+from paylasim import gunluk, instagram, kimlik, tiktok, youtube
 from paylasim.ayar import secenek, sir
 from paylasim.hata import Durdur
 
@@ -66,6 +66,8 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
                     is_.tur, is_.klasor, sir("MEDYA_TABAN_URL").rstrip("/"),
                     "" if kuru else sir("IG_KULLANICI_ID"), token, kuru,
                 )
+            elif is_.platform == "youtube":
+                sonuc = youtube.paylas(is_.klasor, token, kuru, tur=is_.tur)
             else:
                 sonuc = tiktok.paylas(is_.klasor, token, kuru)
 
@@ -83,11 +85,23 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
 
     if kuru:
         print("\nHiçbir şey paylaşılmadı. Gerçekten paylaşmak için: --gercek")
-    elif secenek("TIKTOK_YOL", "inbox") == "inbox" and any(
+        return 1 if hata else 0
+
+    # Aşağıdakiler ayrı `if` — aynı günde hem TikTok hem YouTube olabiliyor
+    # ve ikisinin de elle bir devamı var.
+    if secenek("TIKTOK_YOL", "inbox") == "inbox" and any(
         i.platform == "tiktok" for i in isler
     ):
         print("\nTikTok videosu taslaklara düştü — telefonda TikTok'u açıp "
               "Post'a basman gerekiyor.")
+
+    if any(i.platform == "youtube" for i in isler):
+        gizlilik = secenek("YOUTUBE_GIZLILIK", "private")
+        if gizlilik == "private":
+            print(f"\nYouTube videosu '{gizlilik}' yüklendi. Denetimden geçmiş "
+                  "bir projede YOUTUBE_GIZLILIK=public yapabilirsin;\n"
+                  "geçmemişse video zaten kilitli kalırdı — ayrıntı: "
+                  "paylasim/youtube.py")
 
     return 1 if hata else 0
 

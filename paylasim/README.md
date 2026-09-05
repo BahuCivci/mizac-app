@@ -1,7 +1,7 @@
 # paylasim — kendi zamanlayıcımız
 
-Günün içeriğini Instagram ve TikTok'a resmî API'lerle paylaşır. Publer'ın
-yerine geçer.
+Günün içeriğini Instagram, TikTok ve YouTube'a resmî API'lerle paylaşır.
+Publer'ın yerine geçer.
 
 Tasarım: [../docs/superpowers/specs/2026-09-04-paylasim-modulu-design.md](../docs/superpowers/specs/2026-09-04-paylasim-modulu-design.md)
 
@@ -43,12 +43,15 @@ olur. `IG_YOL` varsayılanı `instagram`, yani Facebook Sayfası **gerekmiyor**.
     python3 -m paylasim.kur --platform tiktok --yetkilendir
     python3 -m paylasim.kur --platform tiktok --kod <adresteki code>
 
+    python3 -m paylasim.kur --platform youtube --yetkilendir
+    python3 -m paylasim.kur --platform youtube --kod <adresteki code>
+
 Instagram adımı 60 günlük token'ı kaydediyor ve hesabının `IG_KULLANICI_ID`
 değerini yazdırıyor — Graph API Explorer'da elle aramaya gerek yok.
 
 Sonrası kendiliğinden yenileniyor. TikTok'un access token'ı 24 saat,
-Instagram'ınki 60 gün yaşıyor; `kimlik.py` süresi dolmadan yeniliyor ve
-yenileyemezse **hiçbir şey paylaşmıyor**.
+Instagram'ınki 60 gün, YouTube'unki 1 saat yaşıyor; `kimlik.py` süresi
+dolmadan yeniliyor ve yenileyemezse **hiçbir şey paylaşmıyor**.
 
 ### 3. Cron
 
@@ -107,6 +110,46 @@ Yani **denetim gerekmiyor.** `.env`'de sandbox anahtarları duruyor
 
 Denetim geçilince `TIKTOK_YOL=direct` yap ve `kur.py`'ı `video.publish`
 kapsamıyla tekrar çalıştır.
+
+## YouTube: kilit meselesi, kaçış yolu yok
+
+TikTok'un kısıtının aynısı YouTube'da da var, ama **daha sert**:
+
+> All videos uploaded via the `videos.insert` endpoint from unverified API
+> projects created after 28 July 2020 will be restricted to private viewing mode.
+
+Üç fark, üçü de aleyhimize:
+
+| | TikTok | YouTube |
+|---|---|---|
+| Kısıt | denetimsizken `SELF_ONLY` | denetimsizken **gizli kilit** |
+| Kendi kanalına yüklerken muafiyet | — | **yok**, ölçüt proje |
+| Geri alınabilir mi | — | **hayır**, itiraz hakkı yok |
+| Kaçış yolu | `inbox` → taslak → telefonda Post | **yok** |
+
+TikTok'ta videoyu taslağa bırakıp son adımı telefondaki uygulamaya
+yaptırıyoruz. YouTube Data API'de taslağa yükleme diye bir uç nokta **yok**.
+Kilitlenen video Studio'dan elle herkese açık yapılamıyor; tek çare silip
+yeniden yüklemek.
+
+Bu yüzden `YOUTUBE_GIZLILIK` varsayılanı **`private`** — istediğimizle olan
+aynı olsun, sürpriz olmasın diye. Denetim geçilince `public` yapılıyor,
+başka bir şey değişmiyor.
+
+Denetim kod değil form: **YouTube API Services - Audit and Quota Extension
+Form** (`support.google.com/youtube/contact/yt_api_form`).
+
+### İkinci tuzak: onay ekranı "Testing"de kalmasın
+
+Google'ın OAuth onay ekranı *Testing* durumundayken refresh token **7 günde**
+iptal oluyor ve cron sekizinci gün sessizce duruyor. Onay ekranı
+**"In production"** durumuna alınmalı — denetimden ayrı ve ücretsiz bir adım.
+`kimlik.py` `invalid_grant` görünce bunu hatırlatıyor.
+
+### Kota
+
+`videos.insert` çağrısı 1600 birim, günlük varsayılan kota 10.000 birim →
+günde ~6 yükleme. Bize günde en fazla 1 gerekiyor.
 
 ## Sınır
 

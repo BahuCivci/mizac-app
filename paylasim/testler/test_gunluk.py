@@ -27,11 +27,18 @@ class IslerTesti(unittest.TestCase):
             {("instagram", "reels"), ("tiktok", "video")},
         )
 
-    def test_youtube_klasorleri_atlanir(self):
+    def test_youtube_klasorleri_taninir(self):
+        # Bu test bir zamanlar bunun TERSİNİ sınıyordu: YouTube bilerek
+        # dışarıdaydı, çünkü denetimsiz projede video kilitleniyor. Kilit
+        # hâlâ var, ama artık `private` yükleyip denetimi beklemeyi seçtik —
+        # ayrıntı youtube.py'ın başında.
         klasor_kur(self.kok, "2026-09-04",
                    ["youtube-shorts", "youtube-uzun", "instagram-kare"])
         sonuc = gunluk.isler("2026-09-04", self.kok)
-        self.assertEqual([i.klasor.name for i in sonuc], ["instagram-kare"])
+        self.assertEqual(
+            {(i.platform, i.tur) for i in sonuc},
+            {("instagram", "tek"), ("youtube", "shorts"), ("youtube", "uzun")},
+        )
 
     def test_tanimadigi_klasoru_atlar(self):
         klasor_kur(self.kok, "2026-09-04", ["instagram-kare", "bilinmeyen-sey"])
@@ -63,11 +70,12 @@ class IslerTesti(unittest.TestCase):
 
 
 class BicimTesti(unittest.TestCase):
-    def test_dort_bicim_taniniyor(self):
+    def test_alti_bicim_taniniyor(self):
         self.assertEqual(
             set(gunluk.BICIM),
             {"instagram-karusel", "instagram-kare",
-             "instagram-reels", "tiktok-tiktok"},
+             "instagram-reels", "tiktok-tiktok",
+             "youtube-shorts", "youtube-uzun"},
         )
 
 

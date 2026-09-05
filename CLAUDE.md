@@ -81,7 +81,8 @@ Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılı
 **Her oturumda kontrol et, kullanıcı sormasa bile:**
 
 ```bash
-python3 icerik/sirada.py
+python3 icerik/sirada.py       # Publer sırası (geçici — geri çekilme yolu)
+python3 -m paylasim.durum      # kendi paylaşımımızın sağlığı
 ```
 
 `ŞİMDİ YÜKLE` çıkıyorsa kullanıcıya söyle ve yüklemeyi yap. `yayında` ise
@@ -135,6 +136,16 @@ python3 icerik/toplu-ses-cikart.py   # SENARYO.md'lerden metinleri çıkar
 #   cikti-ses/ çıktısını icerik/cikti/ses-onbellek/ üzerine indir
 python3 icerik/video.py --yeniden    # videoları yeniden üret
 ```
+
+**Publer'dan çıkış sürüyor.** `paylasim/` modülü resmî API'lerle paylaşıyor
+ve token'ları kendisi yeniliyor; ayrıntı `paylasim/README.md`. TikTok
+şimdilik `inbox` yolunda — video taslaklara düşüyor, telefonda tek dokunuş
+gerekiyor. Denetim geçilince `TIKTOK_YOL=direct` olacak ve o dokunuş da
+bitecek.
+
+`icerik/sirada.py` ve `csv-url.py` **bilerek duruyor**: Instagram ve TikTok
+yeni yoldan doğrulanana kadar Publer geri çekilme yolumuz. İkisi de
+tuttuğunda silinecekler.
 
 Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
 bekliyor): `icerik/PAYLASIM-KURULUM.md`.

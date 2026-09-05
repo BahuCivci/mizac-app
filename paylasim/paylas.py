@@ -21,6 +21,8 @@ TOKEN'LAR ORTAM DEĞİŞKENİNDE DEĞİL
 `kimlik.py` token'ları dosyada tutuyor ve süresi dolmadan yeniliyor.
 Yenileme başarısızsa hiçbir şey paylaşılmıyor.
 """
+from __future__ import annotations
+
 import argparse
 import sys
 from datetime import date, datetime

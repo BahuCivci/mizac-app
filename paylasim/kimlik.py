@@ -16,6 +16,8 @@ arıza. Bu yüzden burada iki kural var:
 
 Sabit sırlar ortam değişkeninde (.env), değişen token'lar gizli/token.json'da.
 """
+from __future__ import annotations
+
 import json
 from datetime import datetime, timedelta
 from pathlib import Path

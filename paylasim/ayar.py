@@ -6,6 +6,8 @@ Anahtarlar dosyaların içine dağılırsa "hangi değişken gerekiyordu" sorusu
 cevabı kalmıyor ve eksik anahtar `KeyError` ile, yani sebebini söylemeden
 patlıyor. Burada eksik anahtar adını ve nereden alınacağını söylüyor.
 """
+from __future__ import annotations
+
 import os
 from pathlib import Path
 

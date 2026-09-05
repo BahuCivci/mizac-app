@@ -9,6 +9,8 @@ Bozuk dosyada boş kabul ediliyor, çünkü alternatifi paylaşımın büsbütü
 durması — ama o zaman da mükerrer koruması kalkıyor. İkisi arasında seçim:
 bozuk defterle devam etmek, en fazla bir günün mükerrer gitmesi demek.
 """
+from __future__ import annotations
+
 import json
 from pathlib import Path
 

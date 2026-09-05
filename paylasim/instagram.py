@@ -13,6 +13,8 @@ Karusel: her görsel için bir çocuk kapsayıcı → hepsini saran bir kapsayı
 → yayınla. Tek görsel: kapsayıcı → yayınla. Reels: kapsayıcı → FINISHED
 bekle → yayınla. Beklemeden yayınlamak "Media ID is not available" veriyor.
 """
+from __future__ import annotations
+
 import time
 import urllib.parse
 from pathlib import Path

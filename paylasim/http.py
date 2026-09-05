@@ -10,6 +10,8 @@ oysa sebep hep o gövdede yazıyor. Burada okunup mesaja konuyor.
 sahtesini veriyor. Böylece paylaşım mantığı gerçek API'ye dokunmadan
 sınanabiliyor.
 """
+from __future__ import annotations
+
 import json
 import urllib.error
 import urllib.parse

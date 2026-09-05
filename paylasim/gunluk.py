@@ -6,6 +6,8 @@ NEDEN VAR
 Hangisinin nereye, nasıl gideceğini bilen tek yer burası. Yeni bir platform
 eklemek BICIM'e bir satır.
 """
+from __future__ import annotations
+
 from pathlib import Path
 from typing import NamedTuple
 

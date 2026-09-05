@@ -16,6 +16,8 @@ bu da aynı listeye giriyor. Nöbetçi ayrı bir servis değil, oturumun kendisi
 Baktığı şeyler: token'ların ömrü, geçmişte kaçmış paylaşımlar, üretilmemiş
 videolar.
 """
+from __future__ import annotations
+
 import sys
 from datetime import date, datetime, timedelta
 

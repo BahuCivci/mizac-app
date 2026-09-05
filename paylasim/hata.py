@@ -1,4 +1,6 @@
 """Paylaşımı kesen, anlaşılır hata."""
+from __future__ import annotations
+
 
 
 class Durdur(Exception):

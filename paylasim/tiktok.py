@@ -14,6 +14,8 @@ Bedeli günde bir dokunuş. Denetim geçilince TIKTOK_YOL=direct yapılıyor ve
 o dokunuş da bitiyor. Varsayılan bilerek `inbox`: yanlış tarafa düşmek
 "postlar gitti ama kimse görmedi" demek, ve bunu fark etmek haftalar alır.
 """
+from __future__ import annotations
+
 from pathlib import Path
 
 from paylasim import http as http_modul

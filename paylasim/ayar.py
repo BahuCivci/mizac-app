@@ -50,7 +50,12 @@ def env_yukle(dosya: Path | None = None) -> int:
     if not yol.exists():
         return 0
 
-    sayi = 0
+    # Önce dosyanın tamamı okunuyor, sonra ortama yazılıyor. Sebep: şablonda
+    # boş bırakılmış bir anahtarın altına değer eklemek yapılacak en doğal şey,
+    # ve satır satır yazsaydık baştaki BOŞ değer sonraki gerçek değeri
+    # gölgelerdi — anahtar hiç yüklenmemiş gibi görünürdü. Aynı anahtar birden
+    # çok geçiyorsa son DOLU değer kazanıyor; boş bir satır dolu olanı silmiyor.
+    bulunan: dict[str, str] = {}
     for ham in yol.read_text(encoding="utf-8").splitlines():
         satir = ham.strip()
         if not satir or satir.startswith("#"):
@@ -63,7 +68,14 @@ def env_yukle(dosya: Path | None = None) -> int:
         deger = deger.strip()
         if len(deger) >= 2 and deger[0] == deger[-1] and deger[0] in "\"'":
             deger = deger[1:-1]
-        if ad and ad not in os.environ:
+        if ad and deger:
+            bulunan[ad] = deger
+
+    # Kabukta zaten tanımlı olan ezilmiyor — tek seferlik denemeler dosyayı
+    # düzenlemeyi gerektirmesin diye.
+    sayi = 0
+    for ad, deger in bulunan.items():
+        if ad not in os.environ:
             os.environ[ad] = deger
             sayi += 1
     return sayi

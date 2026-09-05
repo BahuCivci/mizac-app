@@ -27,6 +27,15 @@ from paylasim.kimlik import kaydet
 
 TIKTOK_YETKI = "https://www.tiktok.com/v2/auth/authorize/"
 TIKTOK_TOKEN = "https://open.tiktokapis.com/v2/oauth/token/"
+
+# Instagram Login yolu — Facebook Sayfası istemiyor, Creator hesaplarıyla
+# çalışıyor. Üç adım: onay → kısa ömürlü token → 60 günlük token.
+IG_YETKI = "https://www.instagram.com/oauth/authorize"
+IG_KISA = "https://api.instagram.com/oauth/access_token"
+IG_UZUN = "https://graph.instagram.com/access_token"
+IG_KAPSAM = "instagram_business_basic,instagram_business_content_publish"
+
+# Facebook Login yolu (hesap Business'a geçerse)
 IG_TOKEN = "https://graph.facebook.com/v21.0/oauth/access_token"
 
 # inbox yolu için video.upload yetiyor. Denetim geçilip direct'e geçilecekse
@@ -71,6 +80,60 @@ def tiktok_kod(kod: str) -> int:
     return 0
 
 
+def instagram_yetkilendir() -> int:
+    adres = IG_YETKI + "?" + urllib.parse.urlencode({
+        "client_id": sir("IG_UYGULAMA_ID"),
+        "redirect_uri": YONLENDIRME,
+        "response_type": "code",
+        "scope": IG_KAPSAM,
+    })
+    print("Tarayıcıda şu adresi aç, onayla, sonra adres çubuğundaki")
+    print("`code=` değerini kopyalayıp --kod ile buraya ver:\n")
+    print(adres)
+    webbrowser.open(adres)
+    return 0
+
+
+def instagram_kod(kod: str) -> int:
+    """Onay kodunu 60 günlük token'a çevirir ve hesap ID'sini yazdırır."""
+    # Instagram yönlendirmede kodun sonuna "#_" ekliyor; olduğu gibi
+    # gönderilirse "Invalid authorization code" dönüyor.
+    kod = urllib.parse.unquote(kod).split("#")[0]
+
+    kisa = http.gonder(
+        IG_KISA, yontem="POST",
+        form={
+            "client_id": sir("IG_UYGULAMA_ID"),
+            "client_secret": sir("IG_UYGULAMA_SIRRI"),
+            "grant_type": "authorization_code",
+            "redirect_uri": YONLENDIRME,
+            "code": kod,
+        },
+        basliklar={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    if not kisa.get("access_token"):
+        raise Durdur(f"kısa ömürlü token alınamadı: {kisa}")
+
+    uzun = http.gonder(
+        IG_UZUN + "?" + urllib.parse.urlencode({
+            "grant_type": "ig_exchange_token",
+            "client_secret": sir("IG_UYGULAMA_SIRRI"),
+            "access_token": kisa["access_token"],
+        })
+    )
+    if not uzun.get("access_token"):
+        raise Durdur(f"uzun ömürlü token alınamadı: {uzun}")
+
+    kaydet("instagram", uzun["access_token"],
+           datetime.now() + timedelta(seconds=int(uzun.get("expires_in", 5184000))))
+    print("instagram token'ı kaydedildi (60 gün, kendiliğinden yenilenecek).")
+
+    if kisa.get("user_id"):
+        print(f"\ngizli/.env dosyana şunu yaz:\n")
+        print(f"    IG_KULLANICI_ID={kisa['user_id']}")
+    return 0
+
+
 def instagram_kisa(kisa: str) -> int:
     """Graph API Explorer'dan alınan kısa ömürlü token'ı 60 günlüğe çevirir."""
     cevap = http.gonder(
@@ -93,9 +156,9 @@ def main() -> int:
     a = argparse.ArgumentParser(prog="paylasim.kur")
     a.add_argument("--platform", required=True, choices=["tiktok", "instagram"])
     a.add_argument("--yetkilendir", action="store_true",
-                   help="TikTok: onay adresini aç")
-    a.add_argument("--kod", help="TikTok: onay sonrası adresteki code değeri")
-    a.add_argument("--kisa-token", help="Instagram: Graph API Explorer token'ı")
+                   help="onay adresini aç (tiktok ve instagram)")
+    a.add_argument("--kod", help="onay sonrası adresteki code değeri")
+    a.add_argument("--kisa-token", help="Instagram, YALNIZ Facebook Login yolu: Graph API Explorer token'ı")
     s = a.parse_args()
 
     try:
@@ -106,9 +169,13 @@ def main() -> int:
                 return tiktok_kod(s.kod)
             a.error("tiktok için --yetkilendir ya da --kod gerekiyor")
         else:
+            if s.yetkilendir:
+                return instagram_yetkilendir()
+            if s.kod:
+                return instagram_kod(s.kod)
             if s.kisa_token:
                 return instagram_kisa(s.kisa_token)
-            a.error("instagram için --kisa-token gerekiyor")
+            a.error("instagram için --yetkilendir, --kod ya da --kisa-token gerekiyor")
     except Durdur as e:
         print(e, file=sys.stderr)
         return 1

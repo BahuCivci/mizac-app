@@ -32,14 +32,19 @@ Kabukta zaten tanımlı bir değişken ezilmiyor — tek seferlik denemeler içi
 `TIKTOK_YOL=direct python3 -m paylasim.paylas` yazmak yeterli, dosyayı
 düzenlemek gerekmiyor.
 
-Instagram hesabının **Business** olması şart (Creator API'yle yayınlamayı
-desteklemiyor) ve bir Facebook Sayfası'na bağlı olması gerekiyor.
+Instagram hesabının **Professional** olması yeterli — Creator da Business de
+olur. `IG_YOL` varsayılanı `instagram`, yani Facebook Sayfası **gerekmiyor**.
 
 ### 2. Token'lar (bir kez)
 
+    python3 -m paylasim.kur --platform instagram --yetkilendir
+    python3 -m paylasim.kur --platform instagram --kod <adresteki code>
+
     python3 -m paylasim.kur --platform tiktok --yetkilendir
     python3 -m paylasim.kur --platform tiktok --kod <adresteki code>
-    python3 -m paylasim.kur --platform instagram --kisa-token <explorer token'ı>
+
+Instagram adımı 60 günlük token'ı kaydediyor ve hesabının `IG_KULLANICI_ID`
+değerini yazdırıyor — Graph API Explorer'da elle aramaya gerek yok.
 
 Sonrası kendiliğinden yenileniyor. TikTok'un access token'ı 24 saat,
 Instagram'ınki 60 gün yaşıyor; `kimlik.py` süresi dolmadan yeniliyor ve
@@ -56,6 +61,22 @@ Modül `from __future__ import annotations` ile 3.9'a uyumlu tutuluyor; conda
 ortamına bel bağlamak cron için kırılgan olurdu.
 
 Mac uykudayken cron çalışmıyor; `durum.py` kaçan günü gösteriyor.
+
+## Instagram: iki giriş yolu
+
+| `IG_YOL` | Sunucu | Facebook Sayfası | Hesap türü |
+|---|---|---|---|
+| `instagram` (varsayılan) | `graph.instagram.com` | **gerekmiyor** | Creator ve Business |
+| `facebook` | `graph.facebook.com` | gerekiyor | Business |
+
+Meta'nın sözü: *"This API setup does not require a Facebook Page to be linked
+to the Instagram professional account."* Uç noktalar iki yolda da aynı
+(`/{ig-id}/media` → `/{ig-id}/media_publish`); değişen yalnız sunucu ve token
+akışı. `instagram` yolunda token yenilemek uygulama sırrı bile istemiyor.
+
+App Review gerekmiyor: uygulama **Development modunda** kaldığı ve hesabın
+uygulamada rolü olduğu sürece izinler çalışıyor — *"Apps in Development mode
+can only request permissions from role users."*
 
 ## TikTok: inbox ve direct
 

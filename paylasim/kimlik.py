@@ -19,16 +19,20 @@ Sabit sırlar ortam değişkeninde (.env), değişen token'lar gizli/token.json'
 from __future__ import annotations
 
 import json
+import urllib.parse
 from datetime import datetime, timedelta
 from pathlib import Path
 
 from paylasim import http as http_modul
-from paylasim.ayar import GIZLI, sir
+from paylasim.ayar import GIZLI, secenek, sir
 from paylasim.hata import Durdur
 
 DOSYA = GIZLI / "token.json"
 
 TIKTOK_TOKEN_UCU = "https://open.tiktokapis.com/v2/oauth/token/"
+# Instagram'ın iki giriş yolu iki ayrı yenileme uç noktası demek.
+# `instagram` yolunda uygulama sırrı GEREKMİYOR — token kendini yeniliyor.
+IG_YENILE = "https://graph.instagram.com/refresh_access_token"
 IG_TOKEN_UCU = "https://graph.facebook.com/v21.0/oauth/access_token"
 
 # Süre dolmadan ne kadar önce yenilensin.
@@ -107,6 +111,12 @@ def token(platform: str, *, gonder=None, simdi: datetime | None = None,
                     "refresh_token": kayit["refresh"],
                 },
                 basliklar={"Content-Type": "application/x-www-form-urlencoded"},
+            )
+        elif secenek("IG_YOL", "instagram") == "instagram":
+            cevap = gonder(
+                IG_YENILE
+                + "?grant_type=ig_refresh_token"
+                + f"&access_token={urllib.parse.quote(kayit['access'])}"
             )
         else:
             cevap = gonder(

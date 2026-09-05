@@ -103,7 +103,9 @@ class YenilemeTesti(Temel):
             kimlik.token("instagram", gonder=gonder, simdi=SIMDI, dosya=self.dosya),
             "yeni",
         )
-        self.assertIn("oauth/access_token", cagri["url"])
+        # Hangi uç nokta kullanıldığı IG_YOL'a bağlı; onu test_kimlik_ig_yol
+        # ayrıca sınıyor. Burada sınanan tek şey yenilemenin TETİKLENDİĞİ.
+        self.assertIn("access_token", cagri["url"])
 
     def test_instagram_bolca_sure_varken_yenilemez(self):
         self.yaz("instagram", "eski", SIMDI + timedelta(days=30))

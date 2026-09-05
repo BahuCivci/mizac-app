@@ -20,10 +20,24 @@ import urllib.parse
 from pathlib import Path
 
 from paylasim import http as http_modul
+from paylasim.ayar import secenek
 from paylasim.hata import Durdur
 
 SURUM = "v21.0"
-TABAN = f"https://graph.facebook.com/{SURUM}"
+
+# İki giriş yolu, aynı uç noktalar.
+#
+# `instagram` — "Instagram API with Instagram Login". Facebook Sayfası
+#   İSTEMİYOR ve Creator hesaplarıyla çalışıyor. Meta'nın sözü: "This API
+#   setup does not require a Facebook Page to be linked to the Instagram
+#   professional account." Varsayılan bu, çünkü hesabımız Creator.
+#
+# `facebook` — "Instagram API with Facebook Login". Sayfa gerektiriyor.
+#   Hesap ileride Business'a geçerse diye duruyor.
+UCLAR = {
+    "instagram": "https://graph.instagram.com",
+    "facebook": f"https://graph.facebook.com/{SURUM}",
+}
 
 EN_FAZLA_KARUSEL = 10  # Instagram sınırı
 
@@ -55,19 +69,19 @@ def medya_urlleri(tur: str, klasor: Path, taban_url: str) -> list[str]:
     raise Durdur(f"bilinmeyen tür: {tur}")
 
 
-def _kapsayici(gonder, ig_id: str, token: str, alanlar: dict) -> str:
-    cevap = gonder(f"{TABAN}/{ig_id}/media", yontem="POST",
+def _kapsayici(gonder, taban: str, ig_id: str, token: str, alanlar: dict) -> str:
+    cevap = gonder(f"{taban}/{ig_id}/media", yontem="POST",
                    form={**alanlar, "access_token": token})
     if "id" not in cevap:
         raise Durdur(f"kapsayıcı oluşmadı: {cevap}")
     return cevap["id"]
 
 
-def _hazir_bekle(gonder, kapsayici: str, token: str,
+def _hazir_bekle(gonder, taban: str, kapsayici: str, token: str,
                  bekle: bool, en_fazla: int = 60) -> None:
     for _ in range(en_fazla):
         d = gonder(
-            f"{TABAN}/{kapsayici}?fields=status_code,status"
+            f"{taban}/{kapsayici}?fields=status_code,status"
             f"&access_token={urllib.parse.quote(token)}"
         )
         kod = d.get("status_code")
@@ -81,9 +95,14 @@ def _hazir_bekle(gonder, kapsayici: str, token: str,
 
 
 def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
-           kuru: bool, *, gonder=None, erisilebilir=None, bekle: bool = True) -> str:
+           kuru: bool, *, yol: str | None = None, gonder=None,
+           erisilebilir=None, bekle: bool = True) -> str:
     """Tek bir Instagram gönderisi. Kuru çalışmada hiçbir istek atmaz."""
     gonder = gonder or http_modul.gonder
+    yol = yol or secenek("IG_YOL", "instagram")
+    if yol not in UCLAR:
+        raise Durdur(f"bilinmeyen IG_YOL: {yol} (instagram ya da facebook)")
+    taban = UCLAR[yol]
     erisilebilir = erisilebilir or http_modul.erisilebilir_mi
 
     metin = _metin(klasor)
@@ -100,25 +119,25 @@ def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
 
     if tur == "karusel":
         cocuklar = [
-            _kapsayici(gonder, ig_id, token,
+            _kapsayici(gonder, taban, ig_id, token,
                        {"image_url": u, "is_carousel_item": "true"})
             for u in urller
         ]
-        ana = _kapsayici(gonder, ig_id, token, {
+        ana = _kapsayici(gonder, taban, ig_id, token, {
             "media_type": "CAROUSEL",
             "children": ",".join(cocuklar),
             "caption": metin,
         })
     elif tur == "tek":
-        ana = _kapsayici(gonder, ig_id, token,
+        ana = _kapsayici(gonder, taban, ig_id, token,
                          {"image_url": urller[0], "caption": metin})
     else:
-        ana = _kapsayici(gonder, ig_id, token, {
+        ana = _kapsayici(gonder, taban, ig_id, token, {
             "media_type": "REELS", "video_url": urller[0], "caption": metin,
         })
-        _hazir_bekle(gonder, ana, token, bekle)
+        _hazir_bekle(gonder, taban, ana, token, bekle)
 
-    cevap = gonder(f"{TABAN}/{ig_id}/media_publish", yontem="POST",
+    cevap = gonder(f"{taban}/{ig_id}/media_publish", yontem="POST",
                    form={"creation_id": ana, "access_token": token})
     if "id" not in cevap:
         raise Durdur(f"yayınlanamadı: {cevap}")

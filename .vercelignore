@@ -1,0 +1,16 @@
+# Vercel'e gönderilmeyecekler.
+#
+# NEDEN VAR
+# Vercel bir deploy'da en fazla 15000 dosya kabul ediyor. browser-use/ iki
+# venv kopyası taşıyor ve tek başına bu sınırı aşırıyordu (20096 dosya) —
+# deploy hiç başlamıyordu. icerik/cikti da 225 MB üretim çıktısı, sitede
+# kullanılmıyor; medya Vercel Blob'dan servis ediliyor.
+/browser-use
+/icerik/cikti
+/kaynak
+/paylasim
+/playwright-report
+/test-results
+
+# danisman/ BURAYA KOYULAMAZ: app/api/danisman/route.ts ondan import ediyor.
+# Hariç tutulunca build "module not found" ile patlıyor — denendi.

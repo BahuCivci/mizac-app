@@ -34,19 +34,14 @@ import argparse
 import json
 import os
 import sys
-import time
-import urllib.error
-import urllib.parse
-import urllib.request
 from datetime import date, datetime
-from pathlib import Path
 
-from paylasim import instagram
+from paylasim import instagram, tiktok
 from paylasim.ayar import GUNLUK, VERI
+from paylasim.hata import Durdur
 
 DEFTER = VERI / "paylasildi.json"
 
-TIKTOK_TABAN = "https://open.tiktokapis.com/v2"
 
 # Klasör adı → nasıl paylaşılacağı
 BICIM = {
@@ -57,51 +52,6 @@ BICIM = {
     # youtube-* bilerek yok: YouTube Data API ayrı bir onay süreci ve bu
     # araç Instagram + TikTok için yazıldı.
 }
-
-
-class Durdur(Exception):
-    """Paylaşımı kesen, anlaşılır hata."""
-
-
-# --------------------------------------------------------------------- yardım
-
-def istek(url: str, veri: dict | None = None, yontem: str = "GET",
-          basliklar: dict | None = None, zaman_asimi: int = 120) -> dict:
-    govde = None
-    if veri is not None:
-        govde = urllib.parse.urlencode(veri).encode()
-    r = urllib.request.Request(url, data=govde, method=yontem)
-    r.add_header("User-Agent", "mizac-icerik/1.0")
-    for k, v in (basliklar or {}).items():
-        r.add_header(k, v)
-    try:
-        with urllib.request.urlopen(r, timeout=zaman_asimi) as c:
-            ham = c.read().decode("utf-8")
-    except urllib.error.HTTPError as e:
-        detay = e.read().decode("utf-8", "replace")[:500]
-        raise Durdur(f"{yontem} {url.split('?')[0]} → HTTP {e.code}: {detay}") from e
-    except urllib.error.URLError as e:
-        raise Durdur(f"bağlanılamadı: {e.reason}") from e
-    return json.loads(ham) if ham.strip() else {}
-
-
-def json_istek(url: str, govde: dict, token: str, zaman_asimi: int = 300) -> dict:
-    ham = json.dumps(govde).encode()
-    r = urllib.request.Request(url, data=ham, method="POST")
-    r.add_header("Authorization", f"Bearer {token}")
-    r.add_header("Content-Type", "application/json; charset=UTF-8")
-    try:
-        with urllib.request.urlopen(r, timeout=zaman_asimi) as c:
-            return json.loads(c.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        detay = e.read().decode("utf-8", "replace")[:500]
-        raise Durdur(f"HTTP {e.code}: {detay}") from e
-
-
-def metni_ayikla(klasor: Path) -> str:
-    """METIN.txt: açıklama + etiketler. Olduğu gibi gider."""
-    dosya = klasor / "METIN.txt"
-    return dosya.read_text(encoding="utf-8").strip() if dosya.exists() else ""
 
 
 def defteri_oku() -> dict:
@@ -118,58 +68,6 @@ def deftere_yaz(anahtar: str, kayit: dict) -> None:
     d[anahtar] = kayit
     DEFTER.parent.mkdir(parents=True, exist_ok=True)
     DEFTER.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
-
-
-# ------------------------------------------------------------------- tiktok
-
-def tiktok_paylas(klasor: Path, token: str, kuru: bool) -> str:
-    """
-    TikTok ikili yükleme kabul ediyor; Instagram'ın aksine barındırıcı gerekmiyor.
-
-    Not: uygulama denetimden geçene kadar TikTok her postu SELF_ONLY yapar —
-    yani yalnız sen görürsün. Bu bizim hatamız değil, onların kuralı.
-    """
-    video = klasor / "video.mp4"
-    if not video.exists():
-        raise Durdur("video.mp4 yok — önce: python3 icerik/video.py")
-    metin = metni_ayikla(klasor)
-    boyut = video.stat().st_size
-
-    if kuru:
-        return f"[kuru] video {boyut // 1024} KB, {len(metin)} karakter metin"
-
-    baslat = json_istek(f"{TIKTOK_TABAN}/post/publish/video/init/", {
-        "post_info": {
-            "title": metin[:2200],
-            "privacy_level": "PUBLIC_TO_EVERYONE",
-            "disable_comment": False,
-        },
-        "source_info": {
-            "source": "FILE_UPLOAD",
-            "video_size": boyut,
-            "chunk_size": boyut,
-            "total_chunk_count": 1,
-        },
-    }, token)
-
-    veri = baslat.get("data", {})
-    yukleme_url = veri.get("upload_url")
-    yayin_id = veri.get("publish_id")
-    if not yukleme_url or not yayin_id:
-        raise Durdur(f"TikTok başlatma başarısız: {baslat}")
-
-    ikili = video.read_bytes()
-    r = urllib.request.Request(yukleme_url, data=ikili, method="PUT")
-    r.add_header("Content-Type", "video/mp4")
-    r.add_header("Content-Range", f"bytes 0-{boyut - 1}/{boyut}")
-    try:
-        with urllib.request.urlopen(r, timeout=600) as c:
-            if not 200 <= c.status < 300:
-                raise Durdur(f"yükleme HTTP {c.status}")
-    except urllib.error.HTTPError as e:
-        raise Durdur(f"yükleme HTTP {e.code}: {e.read().decode('utf-8','replace')[:300]}") from e
-
-    return yayin_id
 
 
 # --------------------------------------------------------------------- akış
@@ -215,7 +113,7 @@ def gunu_paylas(gun: str, kuru: bool) -> int:
             else:
                 if not kuru and not tiktok_token:
                     raise Durdur("TIKTOK_TOKEN tanımlı değil")
-                sonuc = tiktok_paylas(kl, tiktok_token, kuru)
+                sonuc = tiktok.paylas(kl, tiktok_token, kuru)
 
             print(f"  ✓ {kl.name}: {sonuc}")
             if not kuru:

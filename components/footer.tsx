@@ -144,6 +144,10 @@ export function Footer() {
               {tr ? 'Gizlilik Politikası' : 'Privacy Policy'}
             </Link>
             <span>·</span>
+            <Link href="/kullanim-kosullari" className="hover:text-amber-600 transition-colors">
+              {tr ? 'Kullanım Koşulları' : 'Terms of Service'}
+            </Link>
+            <span>·</span>
             <span>{tr ? 'İbn-i Sina geleneğine dayalı · Tıbbi tavsiye değildir' : 'Not medical advice'}</span>
           </div>
         </div>

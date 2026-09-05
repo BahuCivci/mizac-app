@@ -72,6 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/koku-mizac`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${siteUrl}/hakkinda`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.4 },
     { url: `${siteUrl}/gizlilik`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${siteUrl}/kullanim-kosullari`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
     ...mizacPages,
     ...blogPages,
     ...karsilastirPages,

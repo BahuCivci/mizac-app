@@ -2,6 +2,10 @@
 
 # Mizaç Projesi — Claude Rehberi
 
+> **Her oturumun başında [YAPILACAKLAR.md](YAPILACAKLAR.md)'ı oku.** Nerede
+> kaldığımız, bekleyen işler ve sessiz arıza çıkaran tuzaklar orada. Bağlam
+> sıkıştığında kaybolmayan tek yer o dosya.
+
 ## Proje Özeti
 Next.js 16 + React 19 + Tailwind CSS v4 ile geliştirilmiş İslami tıbb-ı nebevî / mizaç sistemi sitesi.
 URL: **mizac.xyz** — Vercel üzerinde deploy edilmiş.

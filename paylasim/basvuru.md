@@ -1,4 +1,15 @@
-# TikTok inceleme başvurusu — hazırlık
+# TikTok inceleme başvurusu
+
+**GÖNDERİLDİ — 6 Eylül 2026, durum: In review.**
+
+Talep edilen: `video.publish` (Direct Post), yani günlük tek dokunuşun
+kalkması. Sandbox yolu bu arada çalışmaya devam ediyor; cevap ne olursa olsun
+paylaşım durmuyor.
+
+Cevap geldiğinde:
+- **Onaylanırsa** → `.env`'de `TIKTOK_YOL=direct` ve production anahtarlarına
+  dön (yorum satırında duruyorlar). Dokunuş biter.
+- **Reddedilirse** → hiçbir şey yapma. Sandbox/inbox aynen sürer.
 
 Bu dosya `developers.tiktok.com` üzerindeki **Production** başvurusu için.
 Sandbox zaten çalışıyor ve denetim gerektirmiyor (`README.md`); bu başvurunun
@@ -108,16 +119,22 @@ Boyut: `screencapture` ham kaydı saniyede ~3.5 MB üretiyor, TikTok sınırı
 50 MB. 90 saniyelik kayıt sıkıştırılmadan 300 MB olur; `ffmpeg -crf 28` ile
 indirilecek.
 
-## Kalan tek engel
+## Gönderilen demo videosu
 
-**Demo videosu.** Elde olan: telefonda çekilmiş 27.7 sn'lik kayıt — bildirim
-("mizac.xyz adlı uygulamadan gelen videonuz hazır"), düzenleme ekranı ve
-paylaşım. Eksik olan: **mizac.xyz'in gösterildiği ~15 saniye**, çünkü TikTok
-"videoda görünen sitenin alan adı formdakiyle aynı olmalı" diyor.
+İki telefon kaydının birleşimi, 48.7 sn, 720x1558, 3.9 MB (sınır 50 MB):
 
-Bu parça masaüstünden çekilemedi: Playwright'ın penceresi ön planda olmadığı
-için `screencapture` VSCode'u kaydediyor. En kolayı telefonda Safari'de
-mizac.xyz'i açıp 15 saniye kaydetmek; iki kayıt `ffmpeg` ile birleştirilir.
+1. **20.9 sn** — Safari'de mizac.xyz açılıyor ve kaydırılıyor. TikTok'un şartı:
+   "videoda görünen sitenin alan adı formdakiyle aynı olmalı."
+2. **27.7 sn** — TikTok bildirimi ("mizac.xyz adlı uygulamadan gelen videonuz
+   hazır") → düzenleme ekranı → paylaşım.
 
-Boyut: TikTok sınırı 50 MB. Telefon kaydı 19 MB; birleşince `-crf 28` ile
-sıkıştırılacak.
+Birleştirme:
+
+    ffmpeg -i site.mp4 -i akis.mp4 \
+      -filter_complex "[0:v]scale=720:-2,setsar=1,fps=30[v0];\
+                       [1:v]scale=720:-2,setsar=1,fps=30[v1];\
+                       [v0][v1]concat=n=2:v=1:a=0[v]" \
+      -map "[v]" -an -c:v libx264 -crf 28 -preset slow -pix_fmt yuv420p demo.mp4
+
+**Masaüstünden çekilemiyor:** `screencapture` Playwright'ın penceresini değil
+ön plandaki uygulamayı kaydediyor. Telefon kaydı tek pratik yol.

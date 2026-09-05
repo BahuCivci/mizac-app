@@ -19,16 +19,21 @@ Ağa çıkmazlar; her modül `gonder`'i parametre olarak alıyor.
 
 ## Kurulum
 
-### 1. Ortam değişkenleri
+### 1. Anahtarlar
 
-    export TIKTOK_CLIENT_KEY=...      # developers.tiktok.com → uygulaman
-    export TIKTOK_CLIENT_SECRET=...
-    export IG_UYGULAMA_ID=...         # developers.facebook.com → Ayarlar → Temel
-    export IG_UYGULAMA_SIRRI=...
-    export IG_KULLANICI_ID=...        # Instagram Professional hesap ID'si
-    export MEDYA_TABAN_URL=https://6khfg6gwjc8v5js8.public.blob.vercel-storage.com
+    mkdir -p paylasim/gizli
+    cp paylasim/ornek.env paylasim/gizli/.env
+    # sonra gizli/.env'i aç ve doldur
 
-`TIKTOK_YOL` isteğe bağlı; varsayılanı `inbox`.
+`gizli/` `.gitignore`'da. Anahtarlar **dosyada** duruyor, `~/.zshrc`'de değil:
+cron kabuk profilini okumaz, `export` satırları cron çalıştığında yoktur.
+
+Kabukta zaten tanımlı bir değişken ezilmiyor — tek seferlik denemeler için
+`TIKTOK_YOL=direct python3 -m paylasim.paylas` yazmak yeterli, dosyayı
+düzenlemek gerekmiyor.
+
+Instagram hesabının **Business** olması şart (Creator API'yle yayınlamayı
+desteklemiyor) ve bir Facebook Sayfası'na bağlı olması gerekiyor.
 
 ### 2. Token'lar (bir kez)
 

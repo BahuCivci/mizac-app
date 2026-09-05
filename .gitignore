@@ -67,3 +67,8 @@ __pycache__/
 # çalışmayan browser-use taslağı (795 MB, iki venv kopyası)
 # — lint'i ve Vercel deploy'unu bozuyor: 20096 dosya, sınır 15000
 /browser-use
+
+# IDE, @ ile başvurulan medya dosyalarını depo köküne kopyalıyor
+/ScreenRecording*
+/*.MP4
+/*.mov

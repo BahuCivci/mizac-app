@@ -13,6 +13,18 @@ uygulamamız tek bir hesaba, kendi içeriğini gönderiyor — tam da o tarife
 benziyor. Metin bu yüzden mizac.xyz'i **canlı bir ürün** olarak öne çıkarıyor;
 uygulamanın kendisini değil, hizmet ettiği yayını anlatıyor.
 
+## FORMU ÖNCEDEN DOLDURMA — İŞE YARAMIYOR
+
+İki kez denendi (5 Eylül 2026). TikTok Production formu, **zorunlu alanların
+hepsi dolmadan hiçbir şeyi kaydetmiyor** — demo video dahil. İkon, kategori,
+açıklama, adresler, ürünler, izinler, Direct Post anahtarı: hepsi girildi,
+`Save` tıklandı, sayfa yenilenince **tamamı uçtu**.
+
+Sandbox böyle davranmıyor (orada video istenmediği için kaydediyor).
+
+Sonuç: forma **ancak video hazırken** dokun, hepsini tek oturumda gir ve
+`Submit for review`'a kadar git.
+
 ## Doldurulacak alanlar
 
 | Alan | Değer |
@@ -21,7 +33,7 @@ uygulamanın kendisini değil, hizmet ettiği yayını anlatıyor.
 | App name | `mizac.xyz` |
 | Category | Education |
 | Description (120) | aşağıda |
-| Terms of Service URL | **eksik — sitede kullanım şartları sayfası yok** |
+| Terms of Service URL | `https://mizac.xyz/kullanim-kosullari` (5 Eyl'de yayına alındı) |
 | Privacy Policy URL | `https://mizac.xyz/gizlilik` |
 | Platforms | Web → `https://mizac.xyz/` |
 | Redirect URI | `https://mizac.xyz/` |
@@ -96,9 +108,16 @@ Boyut: `screencapture` ham kaydı saniyede ~3.5 MB üretiyor, TikTok sınırı
 50 MB. 90 saniyelik kayıt sıkıştırılmadan 300 MB olur; `ffmpeg -crf 28` ile
 indirilecek.
 
-## Önce halledilmesi gerekenler
+## Kalan tek engel
 
-1. **Kullanım şartları sayfası yok.** TikTok ayrı bir ToS adresi istiyor;
-   şu an gizlilik sayfasını verdik. Sandbox'ta sorun olmadı ama incelemede
-   gözden kaçmaz. Sitenin zaten böyle bir sayfası olmalı.
-2. **Telefon kaydı** — yalnız kullanıcı çekebilir.
+**Demo videosu.** Elde olan: telefonda çekilmiş 27.7 sn'lik kayıt — bildirim
+("mizac.xyz adlı uygulamadan gelen videonuz hazır"), düzenleme ekranı ve
+paylaşım. Eksik olan: **mizac.xyz'in gösterildiği ~15 saniye**, çünkü TikTok
+"videoda görünen sitenin alan adı formdakiyle aynı olmalı" diyor.
+
+Bu parça masaüstünden çekilemedi: Playwright'ın penceresi ön planda olmadığı
+için `screencapture` VSCode'u kaydediyor. En kolayı telefonda Safari'de
+mizac.xyz'i açıp 15 saniye kaydetmek; iki kayıt `ffmpeg` ile birleştirilir.
+
+Boyut: TikTok sınırı 50 MB. Telefon kaydı 19 MB; birleşince `-crf 28` ile
+sıkıştırılacak.

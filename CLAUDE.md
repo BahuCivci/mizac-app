@@ -152,8 +152,21 @@ taslağa düşüyor, telefonda tek dokunuşla paylaşılıyor — 5 Eylül'de u�
 denendi, çalışıyor. Sebebi `paylasim/README.md`'de yazılı; production'a
 dönmeye çalışan biri aynı duvara toslar.
 
+**YouTube:** kod hazır ama kimlik yok ve **denetim gerekiyor** — doğrulanmamış
+API projesinden yüklenen video gizli kalıyor, itiraz da edilemiyor, ve TikTok'u
+kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzden
+`YOUTUBE_GIZLILIK` varsayılanı `private`. Ayrıca OAuth onay ekranı *Testing*'de
+kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
+alınmalı.
+
+**Cron kuruldu** (`crontab -l`), her sabah 10:00, `paylasim/gunluk-calistir.sh`.
+Log: `paylasim/veri/gun.log`. Mac uykudayken çalışmaz; kaçanı `durum.py` gösterir.
+Cron'un ilk gerçek paylaşımları: TikTok 8 Eyl, Instagram 12 Eyl, YouTube 24 Eyl —
+o güne kadarki her şey Publer'a submit edilmiş ve deftere işlenmiş durumda.
+
 `icerik/sirada.py` ve `csv-url.py` hâlâ duruyor ama artık geri çekilme yolu:
-yeni hat doğrulandıkça silinecekler.
+Publer kuyruğu 17 Eylül'de boşalıyor, sonrasında silinebilirler.
+**Publer'a bir daha CSV yükleme** — çift post olur.
 
 Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
 bekliyor): `icerik/PAYLASIM-KURULUM.md`.

@@ -78,6 +78,26 @@ App Review gerekmiyor: uygulama **Development modunda** kaldığı ve hesabın
 uygulamada rolü olduğu sürece izinler çalışıyor — *"Apps in Development mode
 can only request permissions from role users."*
 
+## TikTok: neden Sandbox'tayız
+
+Production anahtarları **inceleme geçmeden çalışmıyor** — `client_key` reddediliyor.
+Ve inceleme formu, kaydedilebilmesi için bile demo video istiyor: uygulama
+zorunlu alanların hepsi dolmadan hiçbir şeyi kaydetmiyor (denendi: kaydettim
+sandım, sayfayı yenileyince her şey uçmuştu).
+
+Çıkış yolu TikTok'un kendi önerisi: *"Sandbox mode is a restricted environment
+that allows you to try out integrations without having to submit your app for
+review."* Uygulama başına 5 sandbox, her biri 10 TikTok hesabına kadar; süre
+sınırı yok. Bize 1 hesap yetiyor.
+
+"Denetimsiz uygulamanın postu gizli kalır" kuralı **Direct Post** için. Bizim
+`inbox` yolumuz yayınlamıyor, taslağa bırakıyor — yayınlamayı kullanıcı TikTok
+uygulamasında yapıyor, o yüzden kısıt uygulanmıyor. 5 Eylül 2026'da uçtan uca
+denendi: video taslağa düştü, elle paylaşıldı.
+
+Yani **denetim gerekmiyor.** `.env`'de sandbox anahtarları duruyor
+(`sb` önekli); production anahtarı yorum satırında, ileride gerekirse diye.
+
 ## TikTok: inbox ve direct
 
 | Yol | Ne oluyor |

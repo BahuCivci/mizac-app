@@ -137,15 +137,23 @@ python3 icerik/toplu-ses-cikart.py   # SENARYO.md'lerden metinleri çıkar
 python3 icerik/video.py --yeniden    # videoları yeniden üret
 ```
 
-**Publer'dan çıkış sürüyor.** `paylasim/` modülü resmî API'lerle paylaşıyor
-ve token'ları kendisi yeniliyor; ayrıntı `paylasim/README.md`. TikTok
-şimdilik `inbox` yolunda — video taslaklara düşüyor, telefonda tek dokunuş
-gerekiyor. Denetim geçilince `TIKTOK_YOL=direct` olacak ve o dokunuş da
-bitecek.
+**Publer'dan çıkış — 5 Eylül 2026 itibarıyla ikisi de kuruldu.**
+`paylasim/` modülü resmî API'lerle paylaşıyor ve token'ları kendisi yeniliyor;
+ayrıntı `paylasim/README.md`.
 
-`icerik/sirada.py` ve `csv-url.py` **bilerek duruyor**: Instagram ve TikTok
-yeni yoldan doğrulanana kadar Publer geri çekilme yolumuz. İkisi de
-tuttuğunda silinecekler.
+**Instagram:** Instagram Login yolu (`graph.instagram.com`), Facebook Sayfası
+gerekmiyor — hesap Creator. Meta uygulaması Development modunda ve orada
+kalmalı: App Review'u atlayan şey bu. Token 60 gün, kendiliğinden yenileniyor.
+
+**TikTok:** **Sandbox** anahtarlarıyla çalışıyor, denetim GEREKMİYOR.
+Production anahtarları inceleme geçmeden reddediliyor ve inceleme formu demo
+video istiyor; sandbox o zincirin tamamını atlıyor. `inbox` yolunda video
+taslağa düşüyor, telefonda tek dokunuşla paylaşılıyor — 5 Eylül'de uçtan uca
+denendi, çalışıyor. Sebebi `paylasim/README.md`'de yazılı; production'a
+dönmeye çalışan biri aynı duvara toslar.
+
+`icerik/sirada.py` ve `csv-url.py` hâlâ duruyor ama artık geri çekilme yolu:
+yeni hat doğrulandıkça silinecekler.
 
 Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
 bekliyor): `icerik/PAYLASIM-KURULUM.md`.

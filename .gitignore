@@ -60,3 +60,6 @@ __pycache__/
 # paylaşım modülünün yerel durumu (token'lar ve defter — repoya girmez)
 /paylasim/gizli
 /paylasim/veri
+
+# playwright rapor çıktısı (test-results gibi, yeniden üretilebilir)
+/playwright-report

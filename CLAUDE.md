@@ -159,8 +159,27 @@ kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzd
 kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
 alınmalı.
 
-**Cron kuruldu** (`crontab -l`), her sabah 10:00, `paylasim/gunluk-calistir.sh`.
-Log: `paylasim/veri/gun.log`. Mac uykudayken çalışmaz; kaçanı `durum.py` gösterir.
+**Zamanlayıcı — macOS TCC yüzünden izin bekliyor.** `launchd` ajanı kurulu
+(`~/Library/LaunchAgents/xyz.mizac.paylasim.plist`, her sabah 10:00) ama
+**çalışmıyor**: macOS `~/Documents`'ı koruyor ve zamanlanmış bir iş oradaki
+dosyaları okuyamıyor. Ölçülen:
+
+    cd: tamam
+    ls: 0 öğe
+    head paylasim/ayar.py: Operation not permitted
+    import paylasim: başarısız
+
+Terminalden elle çalıştırınca çalışıyor çünkü terminal kendi TCC iznini
+devrediyor; zamanlanmış iş devralmıyor. **cron da aynı duvara toslar** — bu
+yüzden cron denendi ve kaldırıldı, launchd tercih edildi (o, uykuda geçen
+saati uyanınca telafi ediyor; cron o günü büsbütün kaçırıyor).
+
+Çözüm ikisinden biri, ikisi de kullanıcının elinde:
+1. Sistem Ayarları → Gizlilik ve Güvenlik → **Tam Disk Erişimi** → `/bin/bash`
+2. Projeyi `~/Documents` dışına taşımak (TCC orayı korumuyor)
+
+Betik ve log bilerek `~/Library/Application Support/mizac/` altında — launchd
+`~/Documents`'taki bir log dosyasını bile açamayıp `EX_CONFIG (78)` veriyordu.
 Cron'un ilk gerçek paylaşımları: TikTok 8 Eyl, Instagram 12 Eyl, YouTube 24 Eyl —
 o güne kadarki her şey Publer'a submit edilmiş ve deftere işlenmiş durumda.
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.paylasim</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/bahu/Documents/mizac-app/paylasim/gunluk-calistir.sh</string>
+  </array>
+
+  <!-- Her sabah 10:00. cron'dan farkı: bu saati uykuda geçirdiyse launchd
+       makine uyanır uyanmaz çalıştırıyor, cron ise o günü büsbütün kaçırıyor.
+       Laptop için doğru olan bu. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key><integer>10</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/Users/bahu/Library/Application Support/mizac/gun.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/bahu/Library/Application Support/mizac/gun.log</string>
+
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

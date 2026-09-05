@@ -159,29 +159,33 @@ kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzd
 kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
 alınmalı.
 
-**Zamanlayıcı — macOS TCC yüzünden izin bekliyor.** `launchd` ajanı kurulu
-(`~/Library/LaunchAgents/xyz.mizac.paylasim.plist`, her sabah 10:00) ama
-**çalışmıyor**: macOS `~/Documents`'ı koruyor ve zamanlanmış bir iş oradaki
-dosyaları okuyamıyor. Ölçülen:
+**Zamanlayıcı kuruldu ve çalışıyor.** `launchd` ajanı her sabah 10:00'da
+`paylasim/gunluk-calistir.sh`'ı çağırıyor. Plist'in kopyası depoda:
+`paylasim/xyz.mizac.paylasim.plist` → `~/Library/LaunchAgents/`.
+Log: `~/Library/Application Support/mizac/gun.log`.
+
+**cron değil launchd, bilerek:** launchd 10:00'ı uykuda geçirirse makine
+uyanınca telafi ediyor; cron o günü büsbütün kaçırıyor. Laptop için tek doğru
+seçenek.
+
+**TCC tuzağı — tekrar kurulursa gerekecek.** macOS `~/Documents`'ı koruyor ve
+zamanlanmış iş terminalin iznini devralmıyor. İzin verilmeden şöyle görünüyor:
 
     cd: tamam
     ls: 0 öğe
     head paylasim/ayar.py: Operation not permitted
-    import paylasim: başarısız
 
-Terminalden elle çalıştırınca çalışıyor çünkü terminal kendi TCC iznini
-devrediyor; zamanlanmış iş devralmıyor. **cron da aynı duvara toslar** — bu
-yüzden cron denendi ve kaldırıldı, launchd tercih edildi (o, uykuda geçen
-saati uyanınca telafi ediyor; cron o günü büsbütün kaçırıyor).
+Çözüm: Sistem Ayarları → Gizlilik ve Güvenlik → **Tam Disk Erişimi** →
+`/bin/bash`. (Erişilebilirlik listesi DEĞİL — ikisi yan yana, karışıyor.)
+Verildiği `sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db
+"select client,auth_value from access where
+service='kTCCServiceSystemPolicyAllFiles' and auth_value=2;"` ile görülür.
 
-Çözüm ikisinden biri, ikisi de kullanıcının elinde:
-1. Sistem Ayarları → Gizlilik ve Güvenlik → **Tam Disk Erişimi** → `/bin/bash`
-2. Projeyi `~/Documents` dışına taşımak (TCC orayı korumuyor)
+Log dosyası da `~/Documents` dışında olmalı: launchd oradaki bir log'u
+açamayıp `EX_CONFIG (78)` veriyor, iş hiç başlamıyor.
 
-Betik ve log bilerek `~/Library/Application Support/mizac/` altında — launchd
-`~/Documents`'taki bir log dosyasını bile açamayıp `EX_CONFIG (78)` veriyordu.
-Cron'un ilk gerçek paylaşımları: TikTok 8 Eyl, Instagram 12 Eyl, YouTube 24 Eyl —
-o güne kadarki her şey Publer'a submit edilmiş ve deftere işlenmiş durumda.
+Doğrulamak için 10:00'ı bekleme: `launchctl start xyz.mizac.paylasim` deyip
+log'a bak.
 
 `icerik/sirada.py` ve `csv-url.py` hâlâ duruyor ama artık geri çekilme yolu:
 Publer kuyruğu 17 Eylül'de boşalıyor, sonrasında silinebilirler.

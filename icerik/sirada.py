@@ -2,6 +2,19 @@
 """
 Publer'a sırada hangi CSV'nin yükleneceğini söyler.
 
+    ⚠️  PUBLER EMEKLİYE AYRILDI — 6 Eylül 2026
+
+    Paylaşımı artık `paylasim/` modülü yapıyor. **Publer'a bir daha CSV
+    YÜKLEME**; yüklersen aynı içerik iki kez çıkar, çünkü modül de o günleri
+    paylaşıyor.
+
+    Bu betik yalnız Publer'ın kalan kuyruğunu görmek için duruyor. Kuyruk
+    17 Eylül 2026'da boşalıyor; ondan sonra bu dosya ve `csv-url.py`
+    silinebilir.
+
+    Bugünkü durum:  python3 -m paylasim.durum
+
+
     python3 icerik/sirada.py
 
 NEDEN VAR
@@ -94,14 +107,17 @@ def main() -> int:
             kalan = len([g for g in onceki if g >= bugun])
             if kalan:
                 # Publer'da hâlâ bekleyen gönderi var; sınır dolu, beklenecek.
-                print(f"{ad}: {son_yuklenen[-1].name} yayında — {kalan} gönderi kaldı")
-                print(f"          {onceki[-1]} günü {sirada.name} yükle")
+                print(f"{ad}: {son_yuklenen[-1].name} yayında — {kalan} gönderi kaldı, "
+                      f"son gün {onceki[-1]}")
                 continue
 
-        print(f"{ad}: ŞİMDİ YÜKLE → {sirada.name}  ({t[0]} → {t[-1]})")
+        # Eskiden "ŞİMDİ YÜKLE" derdi. Artık yüklenmemeli — modül o günleri
+        # kendisi paylaşıyor, ikinci bir yükleme çift post demek.
+        print(f"{ad}: sırada {sirada.name} vardı ({t[0]} → {t[-1]}) "
+              f"— YÜKLEME, paylaşımı artık paylasim/ yapıyor")
 
-    print(f"\nklasör: {PARCALI}")
-    print("Publer: Create → Bulk Options → Import CSV")
+    print("\nPubler emekliye ayrıldı — bu kuyruk boşalınca hesap kapatılabilir.")
+    print("Paylaşımın gerçek durumu: python3 -m paylasim.durum")
     return 0
 
 

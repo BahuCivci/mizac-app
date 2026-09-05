@@ -87,9 +87,12 @@ bir videoyla ve `private` olmalı. Denetim başvurusu:
 - **Instagram erişim ölçümü** — `paylasim/olcum.py` beğeni/yorum ile
   karşılaştırıyor. Gerçek erişim için `instagram_business_manage_insights`
   izni Meta uygulamasına eklenip yeniden yetkilendirme gerekiyor.
-- **Publer** — kuyruğu 17 Eylül'de boşalıyor. **Bir daha CSV yükleme**, çift
-  post olur. Boşaldıktan sonra `icerik/sirada.py` ve `icerik/csv-url.py`
-  silinebilir, hesap kapatılabilir.
+- **Publer** — emekliye ayrıldı (6 Eyl). `sirada.py` artık yükleme demiyor,
+  uyarıyor. Kalan kuyruk: Instagram 7 ve 9 Eyl, YouTube 10 ve 17 Eyl —
+  **silinmedi, bilerek**: içerik aynı, bizim modül de aynısını atardı, ve
+  YouTube'un yerini dolduramıyoruz (kimlik yok + denetim öncesi gizli kalır).
+  17 Eylül'de kuyruk boşalınca hesap kapatılabilir, `sirada.py` ve
+  `csv-url.py` silinebilir.
 
 ---
 

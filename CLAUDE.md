@@ -93,9 +93,12 @@ Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılı
 **Her oturumda kontrol et, kullanıcı sormasa bile:**
 
 ```bash
-python3 icerik/sirada.py       # Publer sırası (geçici — geri çekilme yolu)
-python3 -m paylasim.durum      # kendi paylaşımımızın sağlığı
+python3 -m paylasim.durum      # paylaşımın sağlığı — her oturumda çalıştır
 ```
+
+`icerik/sirada.py` **emekli.** Publer'a bir daha CSV yüklenmiyor; kuyruğu
+17 Eylül 2026'da boşalınca hesap kapatılabilir ve `sirada.py` ile
+`csv-url.py` silinebilir. Yükleme yapılırsa aynı içerik iki kez çıkar.
 
 `ŞİMDİ YÜKLE` çıkıyorsa kullanıcıya söyle ve yüklemeyi yap. `yayında` ise
 yapacak bir şey yok; çıktı sıradaki yüklemenin gününü de yazar.

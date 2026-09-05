@@ -2,141 +2,102 @@
 """
 Günün içeriğini Instagram ve TikTok'a resmî API'lerle paylaşır.
 
-    python3 icerik/paylas.py                  # BUGÜNÜ dener, HİÇBİR ŞEY paylaşmaz
-    python3 icerik/paylas.py --gun 2026-08-24 # başka bir günü dener
-    python3 icerik/paylas.py --gercek         # gerçekten paylaşır
+    python3 -m paylasim.paylas                    # BUGÜNÜ dener, HİÇBİR ŞEY paylaşmaz
+    python3 -m paylasim.paylas --gun 2026-09-04   # başka bir gün
+    python3 -m paylasim.paylas --gercek           # gerçekten paylaşır
 
 VARSAYILAN KURU ÇALIŞMADIR — bilerek.
-Bu araç senin hesabına herkese açık post atıyor; geri alınamaz bir iş. Yanlış
-güne, yanlış hesaba ya da yarım yapılandırmayla atılan bir post geri alınmaz.
-Bu yüzden paylaşmak için `--gercek` yazmak gerekir; onsuz her şeyi doğrular,
-ne yapacağını anlatır ve durur.
+Bu araç senin hesabına herkese açık post atıyor; geri alınamaz bir iş.
+Yanlış güne ya da yarım yapılandırmayla atılan post geri gelmiyor. Bu yüzden
+paylaşmak için `--gercek` yazmak gerekiyor; onsuz her şeyi doğrular, ne
+yapacağını anlatır ve durur.
 
 TARAYICI OTOMASYONU YOK
-Hesabına girip tıklayan bir bot değil. Instagram ve TikTok bunu kullanım
-şartlarında yasaklıyor ve hesabı kapatıyorlar. Burada yalnız resmî API'ler var.
+Hesabına girip tıklayan bir bot değil. Instagram ve TikTok bunu şartlarında
+yasaklıyor, tespiti de sessiz: post atılır, kimse görmez. Burada yalnız
+resmî API'ler var.
 
-INSTAGRAM HERKESE AÇIK URL İSTİYOR
-Instagram medyayı kendi sunucusundan çekiyor ("we cURL media used in publishing
-attempts"), ikili dosya yüklemesi kabul etmiyor. Bu yüzden Instagram tarafı
-`MEDYA_TABAN_URL` gerektirir: o günün klasörünün herkese açık adresi.
-TikTok'ta böyle bir şart yok, dosyayı doğrudan yüklüyoruz.
-
-GEREKEN ANAHTARLAR (ortam değişkeni)
-    IG_KULLANICI_ID      Instagram Professional hesabının ID'si
-    IG_TOKEN             instagram_business_content_publish izinli erişim anahtarı
-    MEDYA_TABAN_URL      örn. https://cdn.example.com/icerik  (gün klasörleri altında)
-    TIKTOK_TOKEN         video.publish izinli erişim anahtarı
-
-Instagram günde en fazla 100 post kabul ediyor; bizim kadansımız günde 1-2.
+TOKEN'LAR ORTAM DEĞİŞKENİNDE DEĞİL
+`kimlik.py` token'ları dosyada tutuyor ve süresi dolmadan yeniliyor.
+Yenileme başarısızsa hiçbir şey paylaşılmıyor.
 """
 import argparse
-import json
-import os
 import sys
 from datetime import date, datetime
 
-from paylasim import instagram, tiktok
-from paylasim.ayar import GUNLUK, VERI
+from paylasim import defter as defter_modul
+from paylasim import gunluk, instagram, kimlik, tiktok
+from paylasim.ayar import secenek, sir
 from paylasim.hata import Durdur
 
-DEFTER = VERI / "paylasildi.json"
 
+def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
+                token_al=None) -> int:
+    token_al = token_al or (lambda platform: kimlik.token(platform))
 
-# Klasör adı → nasıl paylaşılacağı
-BICIM = {
-    "instagram-karusel": ("instagram", "karusel"),
-    "instagram-kare": ("instagram", "tek"),
-    "instagram-reels": ("instagram", "reels"),
-    "tiktok-tiktok": ("tiktok", "video"),
-    # youtube-* bilerek yok: YouTube Data API ayrı bir onay süreci ve bu
-    # araç Instagram + TikTok için yazıldı.
-}
-
-
-def defteri_oku() -> dict:
-    if DEFTER.exists():
-        try:
-            return json.loads(DEFTER.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            return {}
-    return {}
-
-
-def deftere_yaz(anahtar: str, kayit: dict) -> None:
-    d = defteri_oku()
-    d[anahtar] = kayit
-    DEFTER.parent.mkdir(parents=True, exist_ok=True)
-    DEFTER.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
-
-
-# --------------------------------------------------------------------- akış
-
-def gunu_paylas(gun: str, kuru: bool) -> int:
-    klasor = GUNLUK / gun
-    if not klasor.is_dir():
-        print(f"{gun} için içerik yok. Önce: npm run icerik", file=sys.stderr)
+    try:
+        isler = gunluk.isler(gun, kok)
+    except Durdur as e:
+        print(e, file=sys.stderr)
         return 1
 
-    ig_id = os.environ.get("IG_KULLANICI_ID", "")
-    ig_token = os.environ.get("IG_TOKEN", "")
-    taban = os.environ.get("MEDYA_TABAN_URL", "").rstrip("/")
-    tiktok_token = os.environ.get("TIKTOK_TOKEN", "")
-
-    defter = defteri_oku()
-    isler = [(k, BICIM[k.name]) for k in sorted(klasor.iterdir())
-             if k.is_dir() and k.name in BICIM]
-
     if not isler:
-        print(f"{gun}: paylaşılacak bir şey yok (yalnız YouTube içeriği olabilir)")
+        print(f"{gun}: paylaşılacak bir şey yok")
         return 0
 
-    print(f"{gun} — {len(isler)} post" + ("  [KURU ÇALIŞMA]" if kuru else "  [GERÇEK]"))
+    print(f"{gun} — {len(isler)} post"
+          + ("  [KURU ÇALIŞMA]" if kuru else "  [GERÇEK]"))
     hata = 0
 
-    for kl, (platform, tur) in isler:
-        anahtar = f"{gun}/{kl.name}"
-        if anahtar in defter and not kuru:
-            print(f"  · {kl.name}: zaten paylaşılmış ({defter[anahtar].get('tarih','')})")
+    for is_ in isler:
+        if not kuru and defter_modul.paylasildi_mi(is_.anahtar, defter_dosya):
+            kayit = defter_modul.oku(defter_dosya)[is_.anahtar]
+            print(f"  · {is_.klasor.name}: zaten paylaşılmış "
+                  f"({kayit.get('tarih', '')})")
             continue
 
         try:
-            if platform == "instagram":
-                if not kuru and not (ig_id and ig_token):
-                    raise Durdur("IG_KULLANICI_ID / IG_TOKEN tanımlı değil")
-                if not taban:
-                    raise Durdur(
-                        "MEDYA_TABAN_URL tanımlı değil — Instagram medyayı "
-                        "herkese açık bir adresten çekmek zorunda"
-                    )
-                sonuc = instagram.paylas(tur, kl, taban, ig_id, ig_token, kuru)
-            else:
-                if not kuru and not tiktok_token:
-                    raise Durdur("TIKTOK_TOKEN tanımlı değil")
-                sonuc = tiktok.paylas(kl, tiktok_token, kuru)
+            token = "" if kuru else token_al(is_.platform)
 
-            print(f"  ✓ {kl.name}: {sonuc}")
+            if is_.platform == "instagram":
+                sonuc = instagram.paylas(
+                    is_.tur, is_.klasor, sir("MEDYA_TABAN_URL").rstrip("/"),
+                    "" if kuru else sir("IG_KULLANICI_ID"), token, kuru,
+                )
+            else:
+                sonuc = tiktok.paylas(is_.klasor, token, kuru)
+
+            print(f"  ✓ {is_.klasor.name}: {sonuc}")
             if not kuru:
-                deftere_yaz(anahtar, {
-                    "platform": platform, "tur": tur,
-                    "sonuc": sonuc, "tarih": datetime.now().isoformat(timespec="seconds"),
-                })
+                defter_modul.yaz(is_.anahtar, {
+                    "platform": is_.platform,
+                    "tur": is_.tur,
+                    "sonuc": sonuc,
+                    "tarih": datetime.now().isoformat(timespec="seconds"),
+                }, defter_dosya)
         except Durdur as e:
             hata += 1
-            print(f"  ✗ {kl.name}: {e}")
+            print(f"  ✗ {is_.klasor.name}: {e}")
 
     if kuru:
         print("\nHiçbir şey paylaşılmadı. Gerçekten paylaşmak için: --gercek")
+    elif secenek("TIKTOK_YOL", "inbox") == "inbox" and any(
+        i.platform == "tiktok" for i in isler
+    ):
+        print("\nTikTok videosu taslaklara düştü — telefonda TikTok'u açıp "
+              "Post'a basman gerekiyor.")
+
     return 1 if hata else 0
 
 
 def main() -> int:
-    a = argparse.ArgumentParser()
-    a.add_argument("--gun", default=date.today().isoformat(), help="YYYY-AA-GG (varsayılan bugün)")
+    a = argparse.ArgumentParser(prog="paylasim.paylas")
+    a.add_argument("--gun", default=date.today().isoformat(),
+                   help="YYYY-AA-GG (varsayılan bugün)")
     a.add_argument("--gercek", action="store_true",
                    help="GERÇEKTEN paylaş. Bu olmadan hiçbir şey gönderilmez.")
-    ayar = a.parse_args()
-    return gunu_paylas(ayar.gun, kuru=not ayar.gercek)
+    ayarlar = a.parse_args()
+    return gunu_paylas(ayarlar.gun, kuru=not ayarlar.gercek)
 
 
 if __name__ == "__main__":

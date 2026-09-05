@@ -41,9 +41,9 @@ import urllib.request
 from datetime import date, datetime
 from pathlib import Path
 
-KOK = Path(__file__).resolve().parent
-GUNLUK = KOK / "cikti" / "gunluk"
-DEFTER = KOK / "cikti" / "paylasildi.json"
+from paylasim.ayar import GUNLUK, VERI
+
+DEFTER = VERI / "paylasildi.json"
 
 IG_SURUM = "v21.0"
 IG_TABAN = f"https://graph.facebook.com/{IG_SURUM}"

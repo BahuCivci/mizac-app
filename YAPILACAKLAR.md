@@ -126,7 +126,61 @@ kendi sesiyle anlatması olurdu; bu bedava ve modelden bağımsız.
 
 ---
 
-## 5. Şifre değiştir — iş bitince
+## 5. Cloudflare tünel adresi — danışmanı rastgele öldürüyor
+
+**Belirti:** `mizac.xyz/danisman` haber vermeden cevap vermez oluyor. Hata
+sayfası çıkmıyor, sessizce ölüyor.
+
+**Sebep:** danışman sunucusuna `trycloudflare.com` üzerinden geçici bir
+tünelle gidiliyor ve tünel her yeniden başladığında **adres değişiyor**.
+Vercel'deki `MIZAC_OLLAMA` eski adrese bakmaya devam ediyor.
+
+6 Eylül 2026'da ölçüldü: adres **tek oturumda üç kez** değişti
+(`pcs-kruger-ing-thinks` → `peter-pathology-dramatically-whats` →
+`bargains-networking-run-preview`). Vercel `nylon-moment-picnic-then` diye
+log'larda izi bile olmayan çok eski bir adrese bakıyordu; danışman ölüydü.
+Elle güncellenip deploy edildi, ama adres yine değişti — yani elle güncelleme
+çözüm değil, sadece geciktirme.
+
+Ayrıca **iki `cloudflared` süreci birden** çalışıyordu; nöbetçi mükerrer
+başlatmış olabilir, o da ayrıca bakılmalı.
+
+**Kalıcı çözüm seçenekleri** (hiçbiri denenmedi):
+
+1. **Adlandırılmış Cloudflare tüneli** — ücretsiz, ama Cloudflare hesabı ve
+   bir alan adı gerekiyor. `mizac.xyz` zaten var. Adres sabit kalır, sorun
+   büsbütün biter. En doğru çözüm bu görünüyor.
+2. **Nöbetçi Vercel'i kendi güncellesin** — adres değişince `vercel env` ile
+   yazsın. CLAUDE.md'de bilerek yapılmadığı yazılı: Vercel kimlik bilgisini
+   üniversite sunucusuna koymak ayrı bir güvenlik riski. Bu gerekçe hâlâ
+   geçerli.
+3. **Danışmanı Claude API'ye taşı** — `danisman/model.ts` içinde
+   `MIZAC_SAGLAYICI=claude` yolu hazır duruyor. Tünel, VPN ve GPU
+   bağımlılığının tamamı ortadan kalkar; bedeli API ücreti.
+
+---
+
+## 6. Video boru hattı — ilk kanıt alındı
+
+`Wan-AI/Wan2.2-TI2V-5B` (Apache-2.0) sunucuda çalışıyor. İlk deneme
+6 Eyl 2026: 480x832, 49 kare (2 sn), 20 adım → **59 saniyede** üretildi,
+model yüklemesi ayrıca 17 sn. Kart 2.
+
+**Kalite iyi** — fotoğrafik, tutarlı, sınıf sahnesi inandırıcı.
+**Hareket az** — 2 saniyede neredeyse hiç hareket yok. Ayarlanacaklar:
+daha çok adım, daha çok kare, ve hareketi açıkça tarif eden istem.
+Ayrıca istem tam karşılanmadı ("sıraya dönüp fısıldıyor" dedim, çocuk
+hareketsiz oturuyor).
+
+Üretim betiği sunucuda: `~/mizac-lab/video-uret.py`.
+Sonraki adım: tam çözünürlük (704x1280) ve daha çok adımla süre ölçümü,
+sonra senaryonun 5 adımını 5 plana çevirip kurgu.
+
+`imageio-ffmpeg` kurulu değil, OpenCV yedeğine düşüyor — kurulmalı.
+
+---
+
+## 7. Şifre değiştir — iş bitince
 
 VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de
 sohbete yazıldı ve oturum kaydı `~/.claude/projects/` altında düz metin olarak
@@ -139,7 +193,7 @@ gereksiz. VPN şifresi `/etc/openfortivpn/config`'de (root, 600).
 
 ---
 
-## 6. Küçük işler
+## 8. Küçük işler
 
 - **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
   lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.

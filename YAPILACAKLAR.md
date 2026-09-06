@@ -75,10 +75,9 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ## 3. YouTube — kimlik KURULDU, **denetim başvurusu bekliyor**
 
-6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı: gerçek bir video yüklendi.
-Kod tarafı tamam. İlk yetkilendirme YANLIŞ hesaba (bahu.civci) yapıldı —
-video silindi, yetki geri alındı, token her yerden çıkarıldı. Doğru hesap
-**safra943@gmail.com**.
+6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı. Token `safra943@gmail.com`
+hesabından alındı; test videosu **doğru kanala** (`UCWmrrOKDhdhFt537KczSiHw`)
+yüklendi ve sonra silindi. Kod, kimlik ve kanal tamam.
 
 | Ne | Durum |
 |---|---|
@@ -88,12 +87,9 @@ video silindi, yetki geri alındı, token her yerden çıkarıldı. Doğru hesap
 | Onay ekranı | **In production** — 7 günlük token ölümü tuzağı atlatıldı |
 | Denetim | **YAPILMADI** — video yüklenir ama gizli kilitli kalır |
 
-**Senden gereken iki şey** (ayrıntı `paylasim/youtube-basvuru.md`):
+**Senden gereken tek şey** (ayrıntı `paylasim/youtube-basvuru.md`):
 
-1. **safra943@gmail.com ile yetkilendirme** — onay ekranı açıldı, dönen
-   `mizac.xyz/?code=...` adresi `kur.py --kod` ile token'a çevrilecek.
-   "Google bu uygulamayı doğrulamadı" uyarısı çıkarsa: Gelişmiş → devam et.
-2. **Adres bilgileri** — denetim formu tam yasal ad, ülke, adres, şehir, il
+1. **Adres bilgileri** — denetim formu tam yasal ad, ülke, adres, şehir, il
    ve posta kodu istiyor. Gerisi hazır.
 
 **İlk gerçek YouTube gönderisi: 24 Eylül 2026.** O güne kadar denetim

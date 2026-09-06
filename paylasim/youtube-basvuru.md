@@ -34,7 +34,7 @@ davranacağını varsay: her şey hazır olmadan başlama.
 | OAuth istemcisi | Web application, yönlendirme `https://mizac.xyz/` |
 | Onay ekranı | **In production** — 7 günlük token ölümü böylece yok |
 | Kapsam | yalnız `https://www.googleapis.com/auth/youtube.upload` |
-| Kanal | **safra943@gmail.com** altındaki mizac kanalı |
+| Kanal | `UCWmrrOKDhdhFt537KczSiHw` — `safra943@gmail.com` altında, doğrulandı |
 
 ## Bölüm bölüm cevaplar
 

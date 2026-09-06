@@ -171,11 +171,15 @@ dönmeye çalışan biri aynı duvara toslar.
 `mizac-paylasim`, proje numarası `256746085549`, kapsam yalnız
 `youtube.upload`. Gerçek yükleme denendi ve çalıştı.
 
-**KANAL: `safra943@gmail.com` altındaki kanal.** Cloud projesi
-bahu.civci@gmail.com'da duruyor ve bu sorun değil — uygulama *In production*
-olduğu için yetkiyi başka bir Google hesabı verebiliyor. İlk denemede
-yetkiyi bahu.civci verdi ve video onun boş kişisel kanalına gitti; video
-silindi, yetki geri alındı. **Yetkilendirirken hesabı doğrula.**
+**KANAL: `UCWmrrOKDhdhFt537KczSiHw`, `safra943@gmail.com` altında** —
+doğrulandı (test videosu oraya yüklendi, sonra silindi). Cloud projesi
+bahu.civci@gmail.com'da duruyor ve bu sorun değil: uygulama *In production*
+olduğu için yetkiyi başka bir Google hesabı verebiliyor.
+
+**Yetkiyi VEREN hesap kanalı belirliyor, Cloud projesinin sahibi değil.**
+İlk denemede yetkiyi bahu.civci verdi (tarayıcıda açık olan tek hesap oydu)
+ve video onun boş kişisel kanalına gitti. Video silindi, yetki geri alındı.
+Yeniden yetkilendirme gerekirse hesabı ÖNCE doğrula.
 
 **Onay ekranı *In production*'a alındı** — *Testing*'de kalsaydı Google
 refresh token'ı 7 GÜNDE iptal ederdi ve cron sekizinci gün sessizce ölürdü.

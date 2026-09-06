@@ -84,3 +84,23 @@ def erisilebilir_mi(url: str) -> bool:
             return 200 <= cevap.status < 300
     except Exception:
         return False
+
+
+def cek(url: str, zaman_asimi: int = 300) -> bytes:
+    """
+    Ham bayt indirir.
+
+    NEDEN AYRI
+    `gonder` cevabı UTF-8'e çevirip JSON olarak ayrıştırıyor; video için
+    ikisi de yanlış. Bu, dizin.py'nin Vercel Blob'dan medya indirmesi için
+    — GitHub Actions çalıştırdığında diskte içerik yok, medya oradan gelir.
+    """
+    istek = urllib.request.Request(url)
+    istek.add_header("User-Agent", KIMLIK)
+    try:
+        with urllib.request.urlopen(istek, timeout=zaman_asimi) as cevap:
+            return cevap.read()
+    except urllib.error.HTTPError as e:
+        raise Durdur(f"GET {url.split('?')[0]} → HTTP {e.code}") from e
+    except urllib.error.URLError as e:
+        raise Durdur(f"indirilemedi ({url.split('?')[0]}): {e.reason}") from e

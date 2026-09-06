@@ -32,8 +32,8 @@ TikTok süre taahhüt etmiyor; birkaç hafta.
 **Onaylanırsa üç adım** (üçüncüsü atlanıyor, dikkat):
 
 1. `paylasim/gizli/.env` → `TIKTOK_YOL=direct`
-2. Aynı dosyada production anahtarlarına dön — yorum satırında duruyorlar
-   (`awurd658jfvqm0nh`), sandbox'ınkiler (`sbawks...`) yerine
+2. Aynı dosyada production anahtarlarına dön — `.env`'de yorum satırında
+   duruyorlar (`awurd...`), sandbox'ınkiler (`sbawks...`) yerine
 3. **Yeniden yetkilendir:** eldeki token sandbox'a ait ve `video.upload`
    izinli. Direct Post için production anahtarları ve `video.publish`
    kapsamıyla yeni bir OAuth turu şart:

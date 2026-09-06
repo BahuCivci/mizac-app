@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 6 Eylül 2026 (akşam).
+Son güncelleme: 6 Eylül 2026 (gece).
 
 ---
 
@@ -40,7 +40,7 @@ gerekirse: adı düzelt, sonra `launchctl bootstrap gui/$(id -u) <plist>` —
 `sudo pmset repeat wakeorpoweron ... 09:55` hâlâ kurulu ve artık gereksiz.
 Zararı yok (Mac 9:55'te uyanıyor); istersen `sudo pmset repeat cancel`.
 
-**İlk gerçek otomatik gönderi: 7 Eylül 10:00**, `instagram-karusel`.
+
 Kontrol: `gh run list --repo BahuCivci/mizac-paylasim-durum`
 
 **Yeni içerik ürettiğinde:** `python3 -m paylasim.dizin --uret` çalıştırıp
@@ -160,23 +160,54 @@ başlatmış olabilir, o da ayrıca bakılmalı.
 
 ---
 
-## 6. Video boru hattı — ilk kanıt alındı
+## 6. Video boru hattı — nerede kaldık (6 Eyl gecesi)
 
-`Wan-AI/Wan2.2-TI2V-5B` (Apache-2.0) sunucuda çalışıyor. İlk deneme
-6 Eyl 2026: 480x832, 49 kare (2 sn), 20 adım → **59 saniyede** üretildi,
-model yüklemesi ayrıca 17 sn. Kart 2.
+`Wan-AI/Wan2.2-TI2V-5B` (Apache-2.0) Kapadokya sunucusunda, **kart 2**'de
+çalışıyor. Üretim betiği `~/mizac-lab/video-uret.py`, toplu iş
+`~/mizac-lab/toplu-video.py`, plan tarifi `~/mizac-lab/planlar.json`.
+Kurgu betiği depoda: `icerik/kurgu.py` (planları senaryo sürelerine uzatıp
+mevcut sesi ve altyazıyı bindiriyor — HENÜZ ÇALIŞTIRILMADI).
 
-**Kalite iyi** — fotoğrafik, tutarlı, sınıf sahnesi inandırıcı.
-**Hareket az** — 2 saniyede neredeyse hiç hareket yok. Ayarlanacaklar:
-daha çok adım, daha çok kare, ve hareketi açıkça tarif eden istem.
-Ayrıca istem tam karşılanmadı ("sıraya dönüp fısıldıyor" dedim, çocuk
-hareketsiz oturuyor).
+**Ölçüm:** 704x1280, 121 kare (5 sn), 30 adım → **plan başına ~5 dakika**.
+Beş planlık bir gönderi ≈ 25 dakika.
 
-Üretim betiği sunucuda: `~/mizac-lab/video-uret.py`.
-Sonraki adım: tam çözünürlük (704x1280) ve daha çok adımla süre ölçümü,
-sonra senaryonun 5 adımını 5 plana çevirip kurgu.
+**Deneme gönderisi:** 6 Eyl'in TikTok senaryosu (`2026-09-06/tiktok-tiktok`,
+"Safravî ağrıyı nasıl tarif eder?"). Amaç aynı metin + aynı sesle eski/yeni
+karşılaştırması. Planlar sunucuda `~/mizac-lab/planlar/` altında.
 
-`imageio-ffmpeg` kurulu değil, OpenCV yedeğine düşüyor — kurulmalı.
+### Öğrenilenler — istem yazarken
+
+- **"cinematic", "dim", "warm" YAZMA.** İlk turda hepsi vardı ve model koyu
+  kahverengi, neredeyse tek renk kareler verdi — yani eski yazı kartlarının
+  paletine geri döndük. Telefonda akışta koyu kare seçilmiyor.
+  Yerine: `bright`, `daylight`, `high key`, `vivid colours`, `crisp`.
+- **Hareketi AÇIKÇA iste.** `visible movement`, `handheld camera`,
+  `she leans forward` gibi. Yoksa neredeyse hareketsiz plan geliyor.
+- **KİŞİLERİN GÖRÜNÜMÜNÜ BELİRT — hâlâ düzeltilmedi.** Belirtilmeyince model
+  Doğu Asyalı kişiler üretiyor; Türk izleyiciye tıbb-ı nebevî anlatan bir
+  hesapta uyumsuz. İstemlere "Turkish man/woman, Mediterranean features"
+  eklenip planlar YENİDEN üretilmeli.
+
+### Tuzak: zombi GPU süreci
+
+`setsid` ile başlatılan üretim `pkill -f` ile ölmüyor ve kartta 17 GB tutmaya
+devam ediyor; sonraki üretim `CUDA out of memory` alıyor. Durdurmadan önce
+`nvidia-smi --query-compute-apps=pid --format=csv,noheader -i <kart>` ile
+gerçek pid'e bak. 6 Eyl'de bir plan tam bu yüzden çöktü.
+
+### Sıradaki adım
+
+1. Beş plan tamamlanınca `icerik/kurgu.py` ile kurgula, kullanıcıya gönder
+2. Kullanıcı yönü onaylarsa: istemlere görünüm ekle, yeniden üret
+3. Sonra karar: bu iş üniversite sunucusunda mı sürecek? (aşağıya bak)
+
+### Açık soru — kullanıcı sordu, cevaplanmadı
+
+Video üretimi Kapadokya sunucusunda yapılıyor ve **mizac.xyz ticari** (reklam
++ ₺99 rapor). Deneme başka, üretim başka. Kullanıcı "sen bunları Kapadokya
+sunucusunda mı ürettiriyon" diye sordu; kurumsal tarafı ona bırakıldı.
+Alternatifler: kiralık GPU (~0.4 $/saat, gönderi başına ~0.2 $) ya da hazır
+video API'si.
 
 ---
 

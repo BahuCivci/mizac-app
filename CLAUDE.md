@@ -174,14 +174,15 @@ kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzd
 kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
 alınmalı.
 
-**Zamanlayıcı GitHub'a taşınıyor — Mac artık tek dayanak değil.**
+**Zamanlayıcı GitHub'da — Mac artık dayanak değil.** (6 Eyl 2026)
 Özel depo `BahuCivci/mizac-paylasim-durum` içinde bir Actions iş akışı var;
 her sabah 07:00 UTC'de (10:00 Europe/Istanbul) çalışıyor, public depoyu
 `main`'den klonluyor, token ve defteri kendi içinde tutuyor.
 
 **İKİSİ AYNI ANDA ÇALIŞMAMALI.** launchd ve Actions ayrı defter tutuyor;
-ikisi birden açıksa aynı gönderi iki kez gider. Actions doğrulanınca launchd
-kapatılacak: `launchctl bootout gui/$(id -u)/xyz.mizac.paylasim`.
+ikisi birden açıksa aynı gönderi iki kez gider. Bu yüzden launchd
+kapatıldı ve plist'i `.devre-disi` olarak yeniden adlandırıldı. Birini
+açmadan önce diğerini kapat.
 
 **Neden ayrı, özel bir depo:** `mizac-app` public. Zamanlayıcı orada olsaydı
 token'ları taşımak için bir PAT'i public deponun sırlarına koymak gerekirdi.
@@ -201,7 +202,7 @@ taşıyor, medya Vercel Blob'dan iniyor. **Yeni içerik üretildiğinde
 `python3 -m paylasim.dizin --uret` çalıştırılıp commit edilmeli** — yoksa
 Actions o günü "içerik dizininde yok" deyip atlar.
 
-**launchd (yedek yol).** `launchd` ajanı her sabah 10:00'da
+**launchd (KAPALI, tarihçe için duruyor).** Ajan her sabah 10:00'da
 `paylasim/gunluk-calistir.sh`'ı çağırıyor. Plist'in kopyası depoda:
 `paylasim/xyz.mizac.paylasim.plist` → `~/Library/LaunchAgents/`.
 Log: `~/Library/Application Support/mizac/gun.log`.

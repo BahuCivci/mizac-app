@@ -11,8 +11,8 @@ Son güncelleme: 6 Eylül 2026 (akşam).
 
 `paylasim/` modülü Publer'ın yerini aldı. Kontrol: `python3 -m paylasim.durum`.
 
-Tetikleyen şu an **launchd** (Mac, saatte bir, tercih edilen saat 10:00).
-GitHub Actions kurulumu bir adım eksik — aşağıda, madde 1.
+Tetikleyen **GitHub Actions** (özel depo `mizac-paylasim-durum`, her sabah
+10:00 Europe/Istanbul). Mac'teki launchd bilerek kapatıldı — madde 1.
 
 | Platform | Durum | Elle iş var mı |
 |---|---|---|
@@ -22,33 +22,30 @@ GitHub Actions kurulumu bir adım eksik — aşağıda, madde 1.
 
 ---
 
-## 1. GitHub Actions — **senin çalıştırman gereken tek komut var**
+## 1. GitHub Actions — **kuruldu ve çalışıyor** (6 Eyl akşamı)
 
-Amaç: paylaşım Mac'in açık olmasına bağlı kalmasın. 6 Eylül'de tam bu yüzden
-gönderi 13:18'e kadar çıkmadı.
+Paylaşım artık Mac'e bağlı değil. Özel depo
+`BahuCivci/mizac-paylasim-durum`, her sabah 07:00 UTC = 10:00 Europe/Istanbul.
 
-Kurulan her şey hazır: özel depo `BahuCivci/mizac-paylasim-durum`, içinde
-`durum/token.json`, `durum/paylasildi.json` ve 5 sır. Eksik olan tek şey iş
-akışı dosyasının push edilmesi — `gh`'ın jetonunda `workflow` yetkisi yok.
+Doğrulandı: kuru çalışma 11 saniyede yeşil, içerik Blob'dan indi, sırlar
+log'da `***` maskeli; gerçek çalıştırma bugünün iki gönderisini de "zaten
+paylaşılmış" deyip atladı ve deftere dokunmadı.
 
-    gh auth refresh -h github.com -s workflow
-    cd ~/mizac-paylasim-durum && git add .github && \
-      git commit -m "Add the daily schedule" && git push
+**launchd KAPATILDI** — `~/Library/LaunchAgents/xyz.mizac.paylasim.plist`
+`.devre-disi` olarak yeniden adlandırıldı. İkisi ayrı defter tutuyor; ikisi
+birden açık olsaydı yarın aynı gönderi iki kez giderdi. Geri açmak
+gerekirse: adı düzelt, sonra `launchctl bootstrap gui/$(id -u) <plist>` —
+**ama önce Actions'ı durdur.**
 
-Sonra sırayla:
+`sudo pmset repeat wakeorpoweron ... 09:55` hâlâ kurulu ve artık gereksiz.
+Zararı yok (Mac 9:55'te uyanıyor); istersen `sudo pmset repeat cancel`.
 
-1. Actions → **Günlük paylaşım** → *Run workflow*, `gercek` İŞARETSİZ.
-   Kuru çalışma: içeriği Blob'dan indirmeli, medyayı doğrulamalı, hiçbir şey
-   paylaşmamalı.
-2. Geçerse `gercek` işaretli bir kez daha (o günün gönderisi zaten atılmışsa
-   defter atlar — güvenli).
-3. **Doğrulanınca launchd'yi KAPAT.** İkisi ayrı defter tutuyor; ikisi birden
-   açık kalırsa aynı gönderi iki kez gider:
-
-       launchctl bootout gui/$(id -u)/xyz.mizac.paylasim
+**İlk gerçek otomatik gönderi: 7 Eylül 10:00**, `instagram-karusel`.
+Kontrol: `gh run list --repo BahuCivci/mizac-paylasim-durum`
 
 **Yeni içerik ürettiğinde:** `python3 -m paylasim.dizin --uret` çalıştırıp
-commit et. Runner'da `icerik/cikti/gunluk/` yok; o dizin olmadan gün atlanır.
+commit et. Runner'da `icerik/cikti/gunluk/` yok; o dizin tazelenmezse yeni
+gün sessizce atlanır.
 
 ---
 

@@ -21,6 +21,10 @@ DANGEROUS_PATTERNS=(
   "> /dev/sda"
   "mkfs"
   "dd if="
+  "gh repo delete"
+  "git push --force"
+  "git push -f "
+  "git reset --hard"
 )
 
 for pattern in "${DANGEROUS_PATTERNS[@]}"; do

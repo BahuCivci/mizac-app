@@ -10,14 +10,24 @@
     <string>/Users/bahu/Documents/mizac-app/paylasim/gunluk-calistir.sh</string>
   </array>
 
-  <!-- Her sabah 10:00. cron'dan farkı: bu saati uykuda geçirdiyse launchd
-       makine uyanır uyanmaz çalıştırıyor, cron ise o günü büsbütün kaçırıyor.
-       Laptop için doğru olan bu. -->
+  <!-- Tercih edilen saat: 10:00. -->
   <key>StartCalendarInterval</key>
   <dict>
     <key>Hour</key><integer>10</integer>
     <key>Minute</key><integer>0</integer>
   </dict>
+
+  <!-- Ve saatte bir, emniyet kemeri olarak.
+       NEDEN: 6 Eylül 2026'da 10:00 kaçtı. Mac derin uykudaydı, 13:18'de
+       uyandı, ve launchd kaçan takvim işini TELAFİ ETMEDİ (`runs = 0`).
+       Belgelerin vaadi buydu ama olmadı. Saatlik tetikleme bunu kapatıyor:
+       makine gün içinde bir kez uyanırsa gönderi çıkıyor.
+       Fazladan çalışmanın zararı yok — defter (paylasildi.json) aynı postu
+       ikinci kez atmıyor, çalışma da paylaşacak bir şey yoksa saniye
+       sürmüyor. Bedeli: Mac 10:00'da uykudaysa post daha geç saatte çıkar.
+       Hiç çıkmamasından iyi. -->
+  <key>StartInterval</key>
+  <integer>3600</integer>
 
   <key>StandardOutPath</key>
   <string>/Users/bahu/Library/Application Support/mizac/gun.log</string>

@@ -47,6 +47,7 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
         print(f"{gun}: paylaşılacak bir şey yok")
         return 0
 
+    gonderilen: set[str] = set()
     print(f"{gun} — {len(isler)} post"
           + ("  [KURU ÇALIŞMA]" if kuru else "  [GERÇEK]"))
     hata = 0
@@ -72,6 +73,7 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
                 sonuc = tiktok.paylas(is_.klasor, token, kuru)
 
             print(f"  ✓ {is_.klasor.name}: {sonuc}")
+            gonderilen.add(is_.platform)
             if not kuru:
                 defter_modul.yaz(is_.anahtar, {
                     "platform": is_.platform,
@@ -87,15 +89,19 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
         print("\nHiçbir şey paylaşılmadı. Gerçekten paylaşmak için: --gercek")
         return 1 if hata else 0
 
-    # Aşağıdakiler ayrı `if` — aynı günde hem TikTok hem YouTube olabiliyor
-    # ve ikisinin de elle bir devamı var.
-    if secenek("TIKTOK_YOL", "inbox") == "inbox" and any(
-        i.platform == "tiktok" for i in isler
-    ):
+    # Bu notlar YALNIZ gerçekten gönderilmiş bir şey varsa yazılıyor.
+    #
+    # Önce "o gün o platformun işi VAR MI" diye bakıyordu; 6 Eylül 2026'da
+    # ikisi de defterden atlandığı halde "taslaklara düştü, Post'a bas" yazdı
+    # ve kullanıcıyı olmayan bir videoya yolladı. Log'a güvenilmesi gerekiyor.
+    #
+    # Ayrı `if` — aynı günde hem TikTok hem YouTube olabiliyor, ikisinin de
+    # elle bir devamı var.
+    if secenek("TIKTOK_YOL", "inbox") == "inbox" and "tiktok" in gonderilen:
         print("\nTikTok videosu taslaklara düştü — telefonda TikTok'u açıp "
               "Post'a basman gerekiyor.")
 
-    if any(i.platform == "youtube" for i in isler):
+    if "youtube" in gonderilen:
         gizlilik = secenek("YOUTUBE_GIZLILIK", "private")
         if gizlilik == "private":
             print(f"\nYouTube videosu '{gizlilik}' yüklendi. Denetimden geçmiş "

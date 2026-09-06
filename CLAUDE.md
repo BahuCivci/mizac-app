@@ -179,9 +179,13 @@ alınmalı.
 `paylasim/xyz.mizac.paylasim.plist` → `~/Library/LaunchAgents/`.
 Log: `~/Library/Application Support/mizac/gun.log`.
 
-**cron değil launchd, bilerek:** launchd 10:00'ı uykuda geçirirse makine
-uyanınca telafi ediyor; cron o günü büsbütün kaçırıyor. Laptop için tek doğru
-seçenek.
+**Saatte bir çalışıyor, 10:00 tercih edilen saat.** İlk kurulumda yalnız
+`StartCalendarInterval` (10:00) vardı ve **6 Eylül 2026'da tetiklenmedi**:
+Mac derin uykudaydı, 13:18'de uyandı, launchd kaçan takvim işini telafi
+ETMEDİ (`runs = 0`). Belgelerin vaadi buydu, pratikte olmadı. Bu yüzden
+`StartInterval 3600` eklendi — makine gün içinde bir kez uyanırsa gönderi
+çıkıyor. Fazladan çalışma zararsız: defter aynı postu iki kez atmıyor.
+Bedeli, Mac 10:00'da uykudaysa postun daha geç saatte çıkması.
 
 **TCC tuzağı — tekrar kurulursa gerekecek.** macOS `~/Documents`'ı koruyor ve
 zamanlanmış iş terminalin iznini devralmıyor. İzin verilmeden şöyle görünüyor:

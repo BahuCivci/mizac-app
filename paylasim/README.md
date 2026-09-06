@@ -53,17 +53,25 @@ Sonrası kendiliğinden yenileniyor. TikTok'un access token'ı 24 saat,
 Instagram'ınki 60 gün, YouTube'unki 1 saat yaşıyor; `kimlik.py` süresi
 dolmadan yeniliyor ve yenileyemezse **hiçbir şey paylaşmıyor**.
 
-### 3. Cron
+### 3. Zamanlayıcı
 
-    0 10 * * *  cd /Users/bahu/Documents/mizac-app && \
-                /usr/bin/python3 -m paylasim.paylas --gercek \
-                >> paylasim/veri/gun.log 2>&1
+İki seçenek var ve ikisi AYNI ANDA çalışmamalı — ayrı defter tutarlar, aynı
+gönderi iki kez gider.
+
+**GitHub Actions (tercih edilen).** Mac'in açık olmasını gerektirmiyor.
+Kurulum ve neden ayrı bir özel depoda durduğu: aşağıda, "Uzakta çalışmak".
+
+**launchd (Mac).** `xyz.mizac.paylasim.plist` → `~/Library/LaunchAgents/`.
+Log: `~/Library/Application Support/mizac/gun.log`.
 
 `/usr/bin/python3` bilerek — macOS'un yerleşiği (3.9.6), her zaman orada.
 Modül `from __future__ import annotations` ile 3.9'a uyumlu tutuluyor; conda
 ortamına bel bağlamak cron için kırılgan olurdu.
 
-Mac uykudayken cron çalışmıyor; `durum.py` kaçan günü gösteriyor.
+Mac uykudayken çalışmıyor; `durum.py` kaçan günü gösteriyor. 6 Eylül 2026'da
+tam bu oldu: 10:00 uykuda geçti, launchd kaçan işi telafi ETMEDİ (belgeler
+edeceğini söylüyor, etmedi), gönderi 13:18'e kadar çıkmadı. `StartInterval
+3600` bu yüzden eklendi — ve Actions bu yüzden var.
 
 ## Instagram: iki giriş yolu
 
@@ -150,6 +158,67 @@ iptal oluyor ve cron sekizinci gün sessizce duruyor. Onay ekranı
 
 `videos.insert` çağrısı 1600 birim, günlük varsayılan kota 10.000 birim →
 günde ~6 yükleme. Bize günde en fazla 1 gerekiyor.
+
+## Uzakta çalışmak — GitHub Actions
+
+Paylaşımın bu Mac'e bağlı kalmaması için zamanlayıcı GitHub'da da duruyor:
+**`BahuCivci/mizac-paylasim-durum`** (özel depo).
+
+### Neden ayrı, özel bir depo
+
+`mizac-app` public. Zamanlayıcı orada olsaydı token'ları oraya taşımanın tek
+yolu bir kişisel erişim jetonunu public deponun sırlarına koymak olurdu.
+Bölünce tersi oluyor: public depo kimlik gerektirmeden klonlanıyor, sırlar
+özel tarafta kalıyor, ve özel deponun kendi `GITHUB_TOKEN`'ı durumu geri
+yazmaya yetiyor. **Public depoda tek bir sır yok.**
+
+Bedeli: özel depo Actions dakikası harcıyor (public depoda sınırsız olurdu).
+Ücretsiz hak ayda 2000 dakika, bu iş günde ~1 dakika.
+
+### Orada ne var, burada ne var
+
+| Nerede | Ne |
+|---|---|
+| Özel depo | `.github/workflows/gunluk.yml`, `durum/token.json`, `durum/paylasildi.json`, sırlar |
+| Bu depo | Kodun tamamı ve `icerik-dizini.json` |
+
+İş akışı her çalıştırmada bu depoyu `main`'den klonluyor — yani buradaki bir
+düzeltme, oraya hiçbir şey kopyalamadan geçerli oluyor.
+
+### İçerik uzakta nasıl bulunuyor
+
+`icerik/cikti/gunluk/` 225 MB ve `.gitignore`'da, yani runner'da YOK.
+Medya zaten Vercel Blob'da (Instagram medyayı kendi çekiyor, herkese açık
+adres şart). Eksik olan "hangi günde hangi klasör, hangi dosyalar, hangi
+metin" bilgisiydi; onu `paylasim/icerik-dizini.json` taşıyor (429 gönderi,
+163 KB).
+
+    python3 -m paylasim.dizin --uret     # yerelde: içerik değiştiyse tazele
+    python3 -m paylasim.dizin --indir --gun 2026-09-07 --hedef /tmp/i
+
+İkincisi günü Blob'dan indirip klasörü yeniden kuruyor; `ICERIK_KLASOR`
+oraya gösterilince `paylas.py` hiçbir fark görmüyor.
+
+**Yeni içerik ürettiysen dizini tazelemeyi unutma** — yoksa Actions o günü
+"içerik dizininde yok" deyip atlar. `icerik/video.py` ve `yukle.mjs`'ten
+sonra `--uret`, sonra commit.
+
+### Kurulumun tek elle adımı
+
+`gh`'ın varsayılan jetonunda `workflow` yetkisi yok, o yüzden
+`.github/workflows/` altına dosya push edilemiyor — GitHub bunu 404 diye
+döndürüyor, yetki hatası demiyor:
+
+    gh auth refresh -h github.com -s workflow
+    cd ~/mizac-paylasim-durum && git add .github && \
+      git commit -m "Add the daily schedule" && git push
+
+### Arıza sessiz kalmasın
+
+GitHub, zamanlanmış iş başarısız olunca depo sahibine e-posta atıyor. Bu
+projede sessiz arıza en pahalı arıza (Ağustos'ta danışman bir hafta kapalı
+kaldı, kimse fark etmedi) — o e-postayı görmezden gelme.
+
 
 ## Sınır
 

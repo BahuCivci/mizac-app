@@ -3,15 +3,16 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 6 Eylül 2026.
+Son güncelleme: 6 Eylül 2026 (akşam).
 
 ---
 
 ## Şu an çalışan sistem
 
-`paylasim/` modülü Publer'ın yerini aldı. launchd her sabah 10:00'da
-`paylasim/gunluk-calistir.sh`'ı çağırıyor; o günün içeriğini resmî API'lerle
-paylaşıyor. Kontrol: `python3 -m paylasim.durum`.
+`paylasim/` modülü Publer'ın yerini aldı. Kontrol: `python3 -m paylasim.durum`.
+
+Tetikleyen şu an **launchd** (Mac, saatte bir, tercih edilen saat 10:00).
+GitHub Actions kurulumu bir adım eksik — aşağıda, madde 1.
 
 | Platform | Durum | Elle iş var mı |
 |---|---|---|
@@ -21,7 +22,37 @@ paylaşıyor. Kontrol: `python3 -m paylasim.durum`.
 
 ---
 
-## 1. TikTok incelemesi — cevap bekleniyor
+## 1. GitHub Actions — **senin çalıştırman gereken tek komut var**
+
+Amaç: paylaşım Mac'in açık olmasına bağlı kalmasın. 6 Eylül'de tam bu yüzden
+gönderi 13:18'e kadar çıkmadı.
+
+Kurulan her şey hazır: özel depo `BahuCivci/mizac-paylasim-durum`, içinde
+`durum/token.json`, `durum/paylasildi.json` ve 5 sır. Eksik olan tek şey iş
+akışı dosyasının push edilmesi — `gh`'ın jetonunda `workflow` yetkisi yok.
+
+    gh auth refresh -h github.com -s workflow
+    cd ~/mizac-paylasim-durum && git add .github && \
+      git commit -m "Add the daily schedule" && git push
+
+Sonra sırayla:
+
+1. Actions → **Günlük paylaşım** → *Run workflow*, `gercek` İŞARETSİZ.
+   Kuru çalışma: içeriği Blob'dan indirmeli, medyayı doğrulamalı, hiçbir şey
+   paylaşmamalı.
+2. Geçerse `gercek` işaretli bir kez daha (o günün gönderisi zaten atılmışsa
+   defter atlar — güvenli).
+3. **Doğrulanınca launchd'yi KAPAT.** İkisi ayrı defter tutuyor; ikisi birden
+   açık kalırsa aynı gönderi iki kez gider:
+
+       launchctl bootout gui/$(id -u)/xyz.mizac.paylasim
+
+**Yeni içerik ürettiğinde:** `python3 -m paylasim.dizin --uret` çalıştırıp
+commit et. Runner'da `icerik/cikti/gunluk/` yok; o dizin olmadan gün atlanır.
+
+---
+
+## 2. TikTok incelemesi — cevap bekleniyor
 
 **Durum:** In review (6 Eyl 00:05). App ID `7682004239296038919`.
 Talep: `video.publish` (Direct Post), yani günlük dokunuşun kalkması.
@@ -45,7 +76,7 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 2. YouTube kurulumu — **ilk gerekecek gün 24 Eylül 2026**
+## 3. YouTube kurulumu — **ilk gerekecek gün 24 Eylül 2026**
 
 O güne kadar Publer'ın YouTube kuyruğu (17 Eyl'e kadar) ve deftere işlenmiş
 günler idare ediyor. Cron 24 Eylül'e kadar YouTube'a hiç dokunmuyor.
@@ -75,7 +106,7 @@ bir videoyla ve `private` olmalı. Denetim başvurusu:
 
 ---
 
-## 3. Küçük işler
+## 4. Küçük işler
 
 - **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
   lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.
@@ -108,5 +139,12 @@ Hepsi sessizce arıza çıkaran cinsten; sebepleriyle birlikte `CLAUDE.md`'de.
   dolmadan hiçbir şeyi kaydetmez. Önceden doldurup bekletmek işe yaramaz.
 - **Instagram** her kapsayıcıyı yayınlamadan önce FINISHED bekler — yalnız
   videoları değil, karuselleri de.
+- **İki zamanlayıcı = çift post.** launchd ve GitHub Actions ayrı defter
+  tutuyor. Actions açılınca launchd kapatılmalı.
+- **`gh` jetonunda `workflow` yetkisi yok.** `.github/workflows/` altına push
+  reddediliyor ve contents API bunu **404** diye döndürüyor — "yetkin yok"
+  demiyor, "yok" diyor. `gh auth refresh -h github.com -s workflow`.
+- **`icerik-dizini.json` tazelenmezse** Actions yeni günü "içerik dizininde
+  yok" deyip atlar. İçerik üretiminden sonra `paylasim.dizin --uret`.
 - **`.env`** aynı anahtarı iki kez içeriyorsa son DOLU değer kazanır; boş bir
   satır dolu olanı gölgelemez (düzeltildi, testi var).

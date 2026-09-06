@@ -174,7 +174,34 @@ kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzd
 kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
 alınmalı.
 
-**Zamanlayıcı kuruldu ve çalışıyor.** `launchd` ajanı her sabah 10:00'da
+**Zamanlayıcı GitHub'a taşınıyor — Mac artık tek dayanak değil.**
+Özel depo `BahuCivci/mizac-paylasim-durum` içinde bir Actions iş akışı var;
+her sabah 07:00 UTC'de (10:00 Europe/Istanbul) çalışıyor, public depoyu
+`main`'den klonluyor, token ve defteri kendi içinde tutuyor.
+
+**İKİSİ AYNI ANDA ÇALIŞMAMALI.** launchd ve Actions ayrı defter tutuyor;
+ikisi birden açıksa aynı gönderi iki kez gider. Actions doğrulanınca launchd
+kapatılacak: `launchctl bootout gui/$(id -u)/xyz.mizac.paylasim`.
+
+**Neden ayrı, özel bir depo:** `mizac-app` public. Zamanlayıcı orada olsaydı
+token'ları taşımak için bir PAT'i public deponun sırlarına koymak gerekirdi.
+Bölünce public depoda tek bir sır kalmıyor — public depo kimlik gerektirmeden
+klonlanıyor, sırlar özel tarafta, ve özel deponun kendi `GITHUB_TOKEN`'ı
+durumu geri yazmaya yetiyor. Bedeli: özel depo Actions dakikası harcıyor
+(ayda 2000 ücretsiz, bu iş günde ~1 dakika).
+
+**`gh auth` jetonunda `workflow` yetkisi yok.** `.github/workflows/` altına
+push GitHub tarafından reddediliyor, ve contents API bunu **404** diye
+döndürüyor — yetki hatası demiyor, "yok" diyor. Çözüm:
+`gh auth refresh -h github.com -s workflow`.
+
+**İçerik uzakta:** `icerik/cikti/gunluk/` runner'da yok (225 MB, gitignore).
+`paylasim/icerik-dizini.json` hangi günde hangi klasör/dosya/metin olduğunu
+taşıyor, medya Vercel Blob'dan iniyor. **Yeni içerik üretildiğinde
+`python3 -m paylasim.dizin --uret` çalıştırılıp commit edilmeli** — yoksa
+Actions o günü "içerik dizininde yok" deyip atlar.
+
+**launchd (yedek yol).** `launchd` ajanı her sabah 10:00'da
 `paylasim/gunluk-calistir.sh`'ı çağırıyor. Plist'in kopyası depoda:
 `paylasim/xyz.mizac.paylasim.plist` → `~/Library/LaunchAgents/`.
 Log: `~/Library/Application Support/mizac/gun.log`.

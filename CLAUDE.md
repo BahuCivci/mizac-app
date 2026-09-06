@@ -70,6 +70,31 @@ curl -s -m 60 -X POST https://mizac.xyz/api/danisman \
 
 Boş dönüyorsa onarım adımları: `danisman/sunucu/KURULUM.md`.
 
+**Ollama'nın kartı ARTIK SABİT DEĞİL — en boşu seçiliyor.** 6 Eyl 2026'da
+ölçüldü: `CUDA_VISIBLE_DEVICES=5` yazılıydı, ama başka bir kullanıcı
+(`ahmet_ozcan`) 5. karta 28 GB'lık bir iş koymuştu. Ollama oraya ancak
+**540 MiB** sığdırabildi, model fiilen CPU'ya düştü ve hız **0.5 jeton/sn**
+oldu. Danışman "çalışıyor" görünüyordu ama kullanılamaz haldeydi. Bu arada
+kart 2 ve 3 tamamen boştu. `nobetci.sh` artık her başlatmada en çok boş
+belleği olan kartı seçiyor — paylaşımlı makinede sabit kart er geç yanlış
+kartı gösterir.
+
+**İçerik kitaptan üretiliyor (yeni).** `icerik/kitaptan.py` kitabın 244
+sayfasından konuya en yakın pasajları bulup modele yalnız onları veriyor.
+Sebebi: `lib/mizac-data.ts`'teki 825 metinden yalnız 4'ü kitapta birebir
+geçiyor ve "sevgi dili" kategorileri (sözel takdir, hediye alma, kaliteli
+zaman) kitapta HİÇ yok — Chapman'ın çerçevesi mizaçlara giydirilmiş.
+İki tuzak vardı, ikisi de düzeltildi ve testi var:
+- **Şapkalı harfler**: sitede "demevî", kitapta "demevi". Normalleştirilmezse
+  mizaç adı hiçbir sayfayla eşleşmiyor ve arama yanlış mizacı getiriyor.
+- **Tek terim baskınlığı**: "demevi" 193 sayfada geçiyor; kapsama çarpanı
+  olmadan "demevi çocuk" sorgusu çocuklardan bahsetmeyen sayfaları üste
+  koyuyordu.
+
+**Ollama tüneli de nöbetçili.** `danisman/sunucu/xyz.mizac.tunel.plist` →
+`~/Library/LaunchAgents/`. VPN koptuğunda SSH tüneli ölüyor ve VPN geri
+gelse bile tünel geri gelmiyordu; iki kez üretim yarıda kaldı.
+
 **Ollama TEK GPU'ya sabit tutulmalı** (`CUDA_VISIBLE_DEVICES=5`). Sabitleme
 olmadan model kartlara yayılıyor ve her katman kartlar arası PCIe trafiği
 doğuruyor — bu makinede NVLink yok. Ölçüldü: yayılmış 1.4 jeton/sn, tek kartta

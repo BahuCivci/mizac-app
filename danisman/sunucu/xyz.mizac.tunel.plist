@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ollama tüneli — Mac'te çalışır.
+
+  NEDEN VAR
+  Sunucudaki Ollama yalnız 127.0.0.1:11434'ü dinliyor (kasıtlı, dışarı
+  açılmasın diye). Mac'ten kullanmak için SSH port yönlendirmesi gerekiyor.
+
+  Elle `ssh -f -N -L` kurmak yetmiyor: VPN koptuğunda tünel de ölüyor ve
+  VPN nöbetçisi bağlantıyı geri getirse bile tünel geri gelmiyor. 6 Eylül
+  2026'da iki kez tam bu yüzden üretim yarıda kaldı (biri 900 saniyelik bir
+  zaman aşımıyla). KeepAlive ile launchd tüneli her ölümde yeniden kuruyor.
+
+  LaunchAgent, LaunchDaemon DEĞİL: 11435 ayrıcalıklı olmayan bir port ve
+  ssh anahtarı kullanıcının ~/.ssh'inde. Root'a gerek yok.
+
+  ServerAliveInterval: ssh kopan bağlantıyı kendi fark etsin diye. Onsuz
+  süreç canlı görünüp veri geçirmiyor — sessiz arıza.
+
+  Kurulum:
+    cp danisman/sunucu/xyz.mizac.tunel.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.tunel.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.tunel</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/ssh</string>
+    <string>-N</string>
+    <string>-o</string><string>ExitOnForwardFailure=yes</string>
+    <string>-o</string><string>ServerAliveInterval=30</string>
+    <string>-o</string><string>ServerAliveCountMax=3</string>
+    <string>-o</string><string>StrictHostKeyChecking=accept-new</string>
+    <string>-L</string><string>11435:127.0.0.1:11434</string>
+    <string>mta_kullanici@192.168.1.40</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+
+  <!-- VPN kapalıyken saniyede bir denemesin. -->
+  <key>ThrottleInterval</key>
+  <integer>30</integer>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/mizac-tunel.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/mizac-tunel.log</string>
+</dict>
+</plist>

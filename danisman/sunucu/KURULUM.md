@@ -146,3 +146,82 @@ tekrarla.
 **Bu kurulum üniversitenin kaynağına bağlı.** Oradan ayrıldığında ya da BT
 politikası değiştiğinde danışman durur. Kalıcı ürün için `MIZAC_SAGLAYICI=claude`
 ile Claude API'ye geçiş yolu `model.ts` içinde hazır duruyor.
+
+---
+
+## VPN nöbetçisi — kopmayı kendiliğinden onarsın
+
+**Sorun:** üniversite ağına FortiClient SSL-VPN ile giriliyor ve bağlantı sık
+kopuyor. Koptuğunda 192.168.1.40 erişilemiyor; elle bağlanmak her seferinde
+uygulamayı açıp şifre girmek demek.
+
+**Çözüm:** `openfortivpn` bir LaunchDaemon olarak root'ta çalışır, `KeepAlive`
+ile launchd her koptuğunda yeniden bağlar. Sunucudaki `nobetci.sh`'ın Mac
+karşılığı. Plist: `danisman/sunucu/xyz.mizac.vpn.plist`.
+
+**Şifre sohbete GİRMEZ.** Ayar dosyasını sen oluşturuyorsun, root'a ait ve
+yalnız root okuyabiliyor (mod 600).
+
+### 1. Aracı kur
+
+    brew install openfortivpn      # 6 Eyl 2026'da kuruldu, 1.24.1
+
+### 2. Ayar dosyası — bunu SEN yazıyorsun
+
+    sudo mkdir -p /etc/openfortivpn
+    sudo nano /etc/openfortivpn/config
+
+İçerik (kendi bilgilerinle):
+
+    host = vpn.<üniversite adresi>
+    port = 443
+    username = <kullanıcı adın>
+    password = <şifren>
+
+Sonra izinleri kilitle:
+
+    sudo chown root:wheel /etc/openfortivpn/config
+    sudo chmod 600 /etc/openfortivpn/config
+
+### 3. Elle bir kez dene
+
+    sudo /opt/homebrew/bin/openfortivpn -c /etc/openfortivpn/config
+
+Sertifikadan şikâyet ederse ekrana bir parmak izi yazıyor; onu ayar dosyasına
+`trusted-cert = <parmak izi>` satırı olarak ekle ve tekrar dene.
+Bağlanınca başka bir terminalde doğrula:
+
+    nc -z -G 5 192.168.1.40 22 && echo "sunucuya ulaşılıyor"
+
+Sonra Ctrl-C ile kes; kalıcısını launchd çalıştıracak.
+
+### 4. Nöbetçiyi kur
+
+    sudo cp danisman/sunucu/xyz.mizac.vpn.plist /Library/LaunchDaemons/
+    sudo chown root:wheel /Library/LaunchDaemons/xyz.mizac.vpn.plist
+    sudo chmod 644 /Library/LaunchDaemons/xyz.mizac.vpn.plist
+    sudo launchctl bootstrap system /Library/LaunchDaemons/xyz.mizac.vpn.plist
+
+Durum ve log:
+
+    sudo launchctl print system/xyz.mizac.vpn | head -20
+    tail -f /var/log/mizac-vpn.log
+
+Durdurmak:
+
+    sudo launchctl bootout system/xyz.mizac.vpn
+
+### Bilinmesi gerekenler
+
+- **FortiClient uygulamasıyla aynı anda çalıştırma.** İkisi de tun arayüzü
+  açıyor; çakışırlar. Nöbetçi kurulduktan sonra uygulamayı açma.
+- **Tüm trafik üniversiteden geçebilir.** Kurum "full tunnel" dayatıyorsa
+  VPN açıkken bütün internet trafiğin oradan akar — sürekli açık bir VPN'de
+  bunu bilerek kabul ediyorsun. Yalnız 192.168.1.40'a giden trafiği
+  yönlendirmek istersen `openfortivpn --half-internet-routes` seçeneğine bak.
+- **Yanlış şifreyle döngüye girmesin.** `ThrottleInterval 60` bu yüzden var:
+  launchd saniyede bir denerse üniversitenin kapısını döver ve hesabı
+  kilitletebilir. Şifre değişirse önce nöbetçiyi durdur, sonra ayar dosyasını
+  güncelle.
+- **Şifre diskte düz metin.** `/etc/openfortivpn/config` root'a ait ve 600;
+  ama Mac'in tam disk yedeği alınıyorsa o yedekte de düz metin durur.

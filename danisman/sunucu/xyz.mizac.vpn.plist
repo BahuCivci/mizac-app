@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VPN nöbetçisi — Mac tarafında çalışır, sunucuda DEĞİL.
+
+  NEDEN VAR
+  Üniversite ağına FortiClient SSL-VPN ile giriliyor ve bağlantı sık kopuyor.
+  Koptuğunda 192.168.1.40 erişilemez oluyor: danışman sunucusuna SSH yok,
+  GPU işi yok. Elle yeniden bağlanmak her seferinde uygulamayı açıp şifre
+  girmek demek.
+
+  Bu LaunchDaemon openfortivpn'i root olarak çalıştırıyor ve KeepAlive ile
+  süreç her öldüğünde launchd yeniden başlatıyor. Yani kopma kendiliğinden
+  onarılıyor — sunucudaki nobetci.sh'ın Mac'teki karşılığı.
+
+  LaunchAgent DEĞİL LaunchDaemon, bilerek: agent kullanıcı olarak çalışır ve
+  openfortivpn tun arayüzü açmak için root istiyor. Daemon olunca her
+  bağlanışta sudo sorulmuyor.
+
+  KURULUM: danisman/sunucu/KURULUM.md → "VPN nöbetçisi"
+
+  ThrottleInterval 60, BİLEREK yüksek: kimlik bilgisi yanlışsa launchd
+  saniyede bir yeniden denerdi ve üniversitenin kapısını döverek hesabı
+  kilitletebilirdi. Dakikada bir deneme hem yeterince hızlı hem güvenli.
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.vpn</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/opt/homebrew/bin/openfortivpn</string>
+    <string>-c</string>
+    <string>/etc/openfortivpn/config</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>KeepAlive</key>
+  <true/>
+
+  <key>ThrottleInterval</key>
+  <integer>60</integer>
+
+  <!-- Log ~/Documents dışında: TCC oradaki dosyayı açtırmıyor ve iş hiç
+       başlamıyor (paylaşım ajanında tam bu yaşandı). -->
+  <key>StandardOutPath</key>
+  <string>/var/log/mizac-vpn.log</string>
+  <key>StandardErrorPath</key>
+  <string>/var/log/mizac-vpn.log</string>
+</dict>
+</plist>

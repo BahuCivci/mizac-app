@@ -81,6 +81,20 @@ değişkeni umursamayıp bütün kartları görüyor, Ollama da "daha çok kart 
 arka ucu seçip Vulkan'a gidiyordu. Vulkan kütüphanesi bu yüzden
 `~/ollama-vulkan-yedek/` altına taşındı. Oraya geri konursa yavaşlık geri gelir.
 
+**VPN nöbetçisi (6 Eyl 2026).** VPN sık kopuyordu ve her kopmada elle
+bağlanmak gerekiyordu. `openfortivpn` bir LaunchDaemon olarak kuruldu;
+`KeepAlive` ile launchd kopan bağlantıyı kendi kaldırıyor. Kurulum ve
+tuzaklar: `danisman/sunucu/KURULUM.md` → "VPN nöbetçisi".
+
+**Şifre sohbete girmez, girmemeli.** Oturum kaydı `~/.claude/projects/`
+altında düz metin JSONL olarak diskte duruyor (bu oturum 61 MB) ve her adımda
+modele yeniden gönderiliyor. Kimlik bilgisi `/etc/openfortivpn/config`'e
+kullanıcı tarafından yazılıyor, root'a ait, mod 600.
+
+**macOS'ta FortiClient'ın CLI'ı YOK** — `/Applications/FortiClient.app` yalnız
+GUI ikilisi içeriyor. Yani şifre elde olsa bile betikle bağlanılamaz;
+`openfortivpn` bu yüzden gerekli.
+
 Sunucu erişimi: `mta_kullanici@192.168.1.40`, FortiClient SSL-VPN gerekiyor.
 Ollama yalnız `127.0.0.1:11434`'ü dinliyor — dışarıdan doğrudan erişilmez,
 bu kasıtlı.

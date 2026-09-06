@@ -263,6 +263,33 @@ Publer kuyruğu 17 Eylül'de boşalıyor, sonrasında silinebilirler.
 Ayrıntı: `icerik/ZAMANLAYICI.md`. API ile tam otomasyon (Meta/TikTok onayı
 bekliyor): `icerik/PAYLASIM-KURULUM.md`.
 
+## AdSense — birim kuruldu, onay bekleniyor
+
+Yayıncı: `ca-pub-2287930384527699` (`safra943@gmail.com`).
+
+**Durum 6 Eyl 2026: site "Hazırlanıyor"** — yani AdSense incelemesi sürüyor
+(30 Ağu'dan beri). Onay gelene kadar reklam kutuları boş kalır; bu normal.
+
+**Neden hiç reklam görünmüyordu:** onay eksikliğinden ÖNCE bir kurulum
+eksiği vardı. AdSense'te **hiç reklam birimi oluşturulmamıştı**, dolayısıyla
+`NEXT_PUBLIC_ADSENSE_SLOT_MAKALE` boştu, ve `components/reklam.tsx`
+`if (!REKLAM_ACIK || !slot) return null` ile hiçbir şey çizmiyordu. Betik
+yükleniyordu ama tek bir `<ins>` bile yoktu.
+
+6 Eylül'de `makale` adlı görüntülü birim oluşturuldu (slot `3366517986`),
+Vercel'e `NEXT_PUBLIC_ADSENSE_SLOT_MAKALE` eklendi ve deploy edildi.
+Doğrulandı: `/blog/mizac-testi-nedir` sayfasında 2 birim basılıyor.
+
+**`NEXT_PUBLIC_*` derleme zamanında gömülüyor** — değişkeni eklemek yetmez,
+yeniden deploy şart.
+
+**ads.txt yayında ve doğru** (`/ads.txt`, HTTP 200). AdSense panelinde
+"Bulunamadı" yazıyor ama bu eski bir tarama: dosya 31 Ağu 19:58'de eklendi,
+panelin son güncellemesi 30 Ağu 21:56. Yapılacak bir şey yok.
+
+**Reklam nereye konmaz — bilinçli:** test, sonuç, danışman ve ödeme
+sayfalarında reklam yok. Gerekçe `lib/reklam.ts`'in başında.
+
 ## Tailwind v4 Uyarıları
 - `bg-gradient-to-b` → **`bg-linear-to-b`** kullan (Tailwind v4'te değişti)
 - `bg-gradient-to-r` → `bg-linear-to-r` vb.

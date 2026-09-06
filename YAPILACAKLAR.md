@@ -75,8 +75,10 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ## 3. YouTube — kimlik KURULDU, **denetim başvurusu bekliyor**
 
-6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı. Gerçek bir video yüklendi
-(`pmnPXtlHJeU`, `private`, kanal "Bahunur Civci"), yani kod ve kimlik tamam.
+6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı: gerçek bir video yüklendi.
+Kod tarafı tamam. İlk yetkilendirme YANLIŞ hesaba (bahu.civci) yapıldı —
+video silindi, yetki geri alındı, token her yerden çıkarıldı. Doğru hesap
+**safra943@gmail.com**.
 
 | Ne | Durum |
 |---|---|
@@ -88,9 +90,9 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 **Senden gereken iki şey** (ayrıntı `paylasim/youtube-basvuru.md`):
 
-1. **Kanal doğru mu?** Yükleme `bahu.civci@gmail.com` altındaki tek kanala,
-   "Bahunur Civci"ye gitti. mizac için ayrı bir kanal varsa söyle, o hesapla
-   yeniden yetkilendirelim. Test videosu `private`, istersen Studio'dan sil.
+1. **safra943@gmail.com ile yetkilendirme** — onay ekranı açıldı, dönen
+   `mizac.xyz/?code=...` adresi `kur.py --kod` ile token'a çevrilecek.
+   "Google bu uygulamayı doğrulamadı" uyarısı çıkarsa: Gelişmiş → devam et.
 2. **Adres bilgileri** — denetim formu tam yasal ad, ülke, adres, şehir, il
    ve posta kodu istiyor. Gerisi hazır.
 
@@ -133,6 +135,9 @@ Hepsi sessizce arıza çıkaran cinsten; sebepleriyle birlikte `CLAUDE.md`'de.
   dolmadan hiçbir şeyi kaydetmez. Önceden doldurup bekletmek işe yaramaz.
 - **Instagram** her kapsayıcıyı yayınlamadan önce FINISHED bekler — yalnız
   videoları değil, karuselleri de.
+- **YouTube yetkisini VEREN hesap, videonun gideceği kanaldır.** Cloud
+  projesinin hangi hesapta olduğu değil. 6 Eyl 2026'da yetkiyi yanlış hesap
+  verdi ve video onun kanalına gitti. Yetkilendirmeden önce hesabı doğrula.
 - **İki zamanlayıcı = çift post.** launchd ve GitHub Actions ayrı defter
   tutuyor. Actions açılınca launchd kapatılmalı.
 - **`gh` jetonunda `workflow` yetkisi yok.** `.github/workflows/` altına push

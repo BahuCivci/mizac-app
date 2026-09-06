@@ -12,8 +12,9 @@ Denetimden geçmemiş bir API projesinden yüklenen her video **gizli
 kilitleniyor** ve bu **geri alınamıyor** — itiraz hakkı yok. Kanalın senin
 olması muafiyet değil; ölçüt projenin denetimden geçmiş olması.
 
-6 Eylül 2026'da uçtan uca denendi ve doğrulandı: yükleme çalışıyor
-(video `pmnPXtlHJeU`, `private`), yani eksik olan tek şey denetim.
+6 Eylül 2026'da uçtan uca denendi: yükleme çalışıyor. İlk deneme yanlış
+hesaba (bahu.civci) gitti, video silindi ve o hesabın yetkisi geri alındı;
+doğru hesap **safra943@gmail.com**. Yani eksik olan tek şey denetim.
 
 TikTok'u kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok —
 Data API'de taslağa yükleme uç noktası bulunmuyor.
@@ -33,7 +34,7 @@ davranacağını varsay: her şey hazır olmadan başlama.
 | OAuth istemcisi | Web application, yönlendirme `https://mizac.xyz/` |
 | Onay ekranı | **In production** — 7 günlük token ölümü böylece yok |
 | Kapsam | yalnız `https://www.googleapis.com/auth/youtube.upload` |
-| Kanal | `UCNToCxBTI-RO6NLyVt_4GGA` (Bahunur Civci), bahu.civci@gmail.com |
+| Kanal | **safra943@gmail.com** altındaki mizac kanalı |
 
 ## Bölüm bölüm cevaplar
 
@@ -43,7 +44,7 @@ Kota artışı istemiyoruz (aşağıya bak), ama denetim için tek yol bu seçen
 **2. Kuruluş ve iletişim:** "Bireysel kullanıcı olarak".
 Kuruluş büyüklüğü: "Bağımsız Geliştirici/Şahıs Şirketi".
 Birincil web sitesi: `https://mizac.xyz`.
-İletişim: Bahunur Civci, bahu.civci@gmail.com.
+İletişim: Bahunur Civci, safra943@gmail.com (TikTok başvurusunda da bu kullanıldı).
 
 > **SENDEN GEREKEN:** Tam yasal ad, ülke, adres, şehir, il, posta kodu.
 > Bunları ben dolduramam.

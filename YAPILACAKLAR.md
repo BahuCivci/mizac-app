@@ -98,7 +98,48 @@ gelmezse video yüklenir ama gizli kalır; `YOUTUBE_GIZLILIK` bu yüzden
 
 ---
 
-## 4. Küçük işler
+## 4. Video kalitesi — asıl iş burada
+
+**Sorun:** paylaşılan videolar kahverengi zemin üzerinde kayan yazıdan ibaret.
+40 saniye boyunca hareket yok, görsel yok, kesme yok. Ölçüm bunu destekliyor:
+125 takipçi, gönderi başına 2.0 beğeni. Erişim sorunu paylaşım yönteminde
+değil, izlenecek bir şey olmamasında.
+
+**Kurulan altyapı (6 Eyl 2026):**
+
+- VPN nöbetçisi çalışıyor, sunucuya SSH anahtarıyla giriliyor (şifresiz)
+- `~/mizac-lab/venv`'e `diffusers 0.40` kuruldu
+- `Wan-AI/Wan2.2-TI2V-5B-Diffusers` indiriliyor (Apache-2.0, kapısız)
+- Üretim betiği: `~/mizac-lab/video-uret.py` (sunucuda)
+
+**Lisans tuzağı — FLUX.1-dev ve LTX-Video KULLANILAMAZ.** İkisi de `other`
+lisanslı, site ticari. XTTS'in elenme sebebiyle aynı. Ayrıntı ve doğrulanmış
+temiz liste `CLAUDE.md`'de.
+
+**Sıradaki adım:** tek bir 2 saniyelik plan üretip kullanıcıya göstermek.
+Beğenilirse boru hattı: senaryonun 5 adımı → 5 plan → mevcut TTS ve altyazıyla
+kurgu.
+
+**Ayrıca konuşulması gereken:** "yapay zekâ ile yapıldığı belli" şikâyetini
+yapay zekâ videosu tam çözmeyebilir. En büyük sahicilik sıçraması kullanıcının
+kendi sesiyle anlatması olurdu; bu bedava ve modelden bağımsız.
+
+---
+
+## 5. Şifre değiştir — iş bitince
+
+VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de
+sohbete yazıldı ve oturum kaydı `~/.claude/projects/` altında düz metin olarak
+diskte duruyor. Sunucu tarafı artık SSH anahtarı kullanıyor, yani o şifre
+gereksiz. VPN şifresi `/etc/openfortivpn/config`'de (root, 600).
+
+**İkisini de değiştir**, VPN'inkini değiştirdikten sonra o dosyayı güncelle
+(önce `sudo launchctl bootout system/xyz.mizac.vpn`, sonra düzelt, sonra
+`bootstrap` — yanlış şifreyle döngü hesabı kilitletebilir).
+
+---
+
+## 6. Küçük işler
 
 - **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
   lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.

@@ -95,7 +95,35 @@ kullanıcı tarafından yazılıyor, root'a ait, mod 600.
 GUI ikilisi içeriyor. Yani şifre elde olsa bile betikle bağlanılamaz;
 `openfortivpn` bu yüzden gerekli.
 
-Sunucu erişimi: `mta_kullanici@192.168.1.40`, FortiClient SSL-VPN gerekiyor.
+**GPU durumu değişken, ölçmeden varsayma.** 6 Eyl 2026 ölçümü: kart 4-7
+%71-97 doluluk ve ~29 GB'la BAŞKASI tarafından kullanılıyor, 0'da da 29.5 GB'lık
+bir iş var. **Boş olan yalnız 2 ve 3.** Eski plan notlarında "6 kart boş"
+yazıyor — eskimiş. Her seferinde `nvidia-smi` ile bak.
+
+Disk: 1.8 T'nin 251 G'si boş (%86 dolu). En büyük tüketici `~/.ollama`, 201 GB.
+Yer gerekirse kullanılmayan Ollama modelleri ilk adaydır.
+
+**MODEL LİSANSI — ikinci kez aynı duvar.** Site reklam gösteriyor ve ₺99'luk
+rapor satıyor, yani ticari. XTTS bu yüzden elenmişti (CPML, "ad-supported
+video"yu açıkça yasaklıyor). 6 Eylül'de aynısı görsel/video modellerinde
+çıktı: **FLUX.1-dev ve LTX-Video `other` lisanslı**, kullanılamaz.
+Doğrulanmış temiz olanlar (HF API `cardData.license`):
+
+| Model | Lisans | Kapılı mı |
+|---|---|---|
+| `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | apache-2.0 | hayır |
+| `Wan-AI/Wan2.1-I2V-14B-480P-Diffusers` | apache-2.0 | hayır |
+| `black-forest-labs/FLUX.1-schnell` | apache-2.0 | **EVET** (HF girişi şart) |
+| `Qwen/Qwen-Image` | apache-2.0 | hayır |
+| `Efficient-Large-Model/Sana_1600M_1024px_diffusers` | apache-2.0 | hayır |
+
+Model seçmeden önce lisansı **doğrula**, hatırlama:
+
+    curl -s https://huggingface.co/api/models/<repo> | python3 -c \
+      "import sys,json;d=json.load(sys.stdin);print(d.get('gated'),d['cardData'].get('license'))"
+
+Sunucu erişimi: `mta_kullanici@192.168.1.40`, **SSH anahtarıyla** (6 Eyl 2026'da
+kuruldu, şifre gerekmiyor). FortiClient SSL-VPN gerekiyor.
 Ollama yalnız `127.0.0.1:11434`'ü dinliyor — dışarıdan doğrudan erişilmez,
 bu kasıtlı.
 

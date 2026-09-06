@@ -167,12 +167,26 @@ taslağa düşüyor, telefonda tek dokunuşla paylaşılıyor — 5 Eylül'de u�
 denendi, çalışıyor. Sebebi `paylasim/README.md`'de yazılı; production'a
 dönmeye çalışan biri aynı duvara toslar.
 
-**YouTube:** kod hazır ama kimlik yok ve **denetim gerekiyor** — doğrulanmamış
-API projesinden yüklenen video gizli kalıyor, itiraz da edilemiyor, ve TikTok'u
-kurtaran "taslağa bırak" numarasının YouTube'da karşılığı yok. Bu yüzden
-`YOUTUBE_GIZLILIK` varsayılanı `private`. Ayrıca OAuth onay ekranı *Testing*'de
-kaldığı sürece Google refresh token'ı 7 günde iptal ediyor — *In production*'a
-alınmalı.
+**YouTube:** kimlik KURULDU (6 Eyl 2026). Google Cloud projesi
+`mizac-paylasim`, proje numarası `256746085549`, kapsam yalnız
+`youtube.upload`. Gerçek yükleme denendi ve çalıştı: video `pmnPXtlHJeU`,
+`private`, kanal `UCNToCxBTI-RO6NLyVt_4GGA` ("Bahunur Civci",
+bahu.civci@gmail.com).
+
+**Onay ekranı *In production*'a alındı** — *Testing*'de kalsaydı Google
+refresh token'ı 7 GÜNDE iptal ederdi ve cron sekizinci gün sessizce ölürdü.
+
+**Eksik olan tek şey denetim (audit), ve bu TikTok'takinden kötü:**
+doğrulanmamış API projesinden yüklenen video gizli KİLİTLENİYOR, kanalın
+senin olması muafiyet değil, ve **itiraz edilemiyor**. TikTok'u kurtaran
+"taslağa bırak" numarasının karşılığı yok — Data API'de taslak uç noktası
+bulunmuyor. Bu yüzden `YOUTUBE_GIZLILIK` varsayılanı `private`: kilidi
+görmezden gelmek yerine onunla aynı şeyi istiyoruz.
+
+Başvuru metni ve eksikler: `paylasim/youtube-basvuru.md`. Formun zorunlu
+kanıtı olduğu için `/gizlilik` sayfasına "8. YouTube API Servisleri" bölümü
+eklendi (YouTube şartları, Google Gizlilik Politikası bağlantısı, yetkinin
+nasıl geri alınacağı, silme politikası).
 
 **Zamanlayıcı GitHub'da — Mac artık dayanak değil.** (6 Eyl 2026)
 Özel depo `BahuCivci/mizac-paylasim-durum` içinde bir Actions iş akışı var;

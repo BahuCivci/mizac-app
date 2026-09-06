@@ -118,7 +118,36 @@ export default function GizlilikPage() {
           </section>
 
           <section>
-            <h2 className="font-bold text-base mb-3" style={{ color: 'var(--earth)' }}>8. İletişim</h2>
+            <h2 className="font-bold text-base mb-3" style={{ color: 'var(--earth)' }}>8. YouTube API Servisleri</h2>
+            <p className="opacity-80 mb-3">
+              Sitenin günlük videoları, site sahibinin kendi YouTube kanalına <strong>YouTube API Servisleri</strong>
+              {' '}aracılığıyla yükleniyor. Bu bölüm, YouTube&apos;un geliştirici şartlarının gerektirdiği açıklamadır.
+            </p>
+            <ul className="space-y-2 opacity-80 pl-4">
+              <li>✦ Bu özelliği kullanan tek kişi site sahibidir; ziyaretçilerden YouTube ile ilgili hiçbir veri toplanmaz.</li>
+              <li>✦ Saklanan tek şey, site sahibinin kendi hesabı için verdiği yükleme yetkisinin (OAuth) belirtecidir. Yalnızca sunucuda tutulur, üçüncü taraflarla paylaşılmaz.</li>
+              <li>✦ İstenen tek izin video yüklemedir (<code>youtube.upload</code>). Kanal verileri, izleyici bilgileri ve analiz verileri okunmaz.</li>
+              <li>✦ Yetki istendiği an geri alınabilir:{' '}
+                <a href="https://myaccount.google.com/permissions" className="underline" target="_blank" rel="noopener noreferrer">
+                  Google Hesabı → Üçüncü taraf erişimi
+                </a>. Yetki geri alındığında sakladığımız belirteç geçersiz olur ve ilk çalıştırmada silinir.
+              </li>
+              <li>✦ Saklanan belirteç talep üzerine derhal silinir; iletişim adresi aşağıdadır.</li>
+            </ul>
+            <p className="opacity-80 mt-3">
+              Bu özelliği kullanırken{' '}
+              <a href="https://www.youtube.com/t/terms" className="underline" target="_blank" rel="noopener noreferrer">
+                YouTube Hizmet Şartları
+              </a>{' '}
+              geçerlidir. Google&apos;ın verilerinizi nasıl işlediği:{' '}
+              <a href="https://policies.google.com/privacy" className="underline" target="_blank" rel="noopener noreferrer">
+                Google Gizlilik Politikası
+              </a>.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="font-bold text-base mb-3" style={{ color: 'var(--earth)' }}>9. İletişim</h2>
             <p className="opacity-80">
               Gizlilik politikamız veya kişisel verileriniz hakkında sorularınız için:{' '}
               <strong>mizac.xyz/hakkinda</strong> adresindeki iletişim bilgilerini kullanabilirsiniz.

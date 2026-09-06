@@ -18,7 +18,7 @@ Tetikleyen **GitHub Actions** (özel depo `mizac-paylasim-durum`, her sabah
 |---|---|---|
 | Instagram | Çalışıyor, gerçek post atıldı | Hayır |
 | TikTok | Çalışıyor (sandbox) | **Evet — günde bir dokunuş** |
-| YouTube | Kod hazır, kimlik yok | — |
+| YouTube | Kimlik tamam, denetim yok — video gizli kalır | Hayır |
 
 ---
 
@@ -73,33 +73,30 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 3. YouTube kurulumu — **ilk gerekecek gün 24 Eylül 2026**
+## 3. YouTube — kimlik KURULDU, **denetim başvurusu bekliyor**
 
-O güne kadar Publer'ın YouTube kuyruğu (17 Eyl'e kadar) ve deftere işlenmiş
-günler idare ediyor. Cron 24 Eylül'e kadar YouTube'a hiç dokunmuyor.
+6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı. Gerçek bir video yüklendi
+(`pmnPXtlHJeU`, `private`, kanal "Bahunur Civci"), yani kod ve kimlik tamam.
 
-Kod tarafı bitti: `paylasim/youtube.py`, testleriyle. Eksik olan kimlik.
+| Ne | Durum |
+|---|---|
+| Google Cloud projesi `mizac-paylasim` | kuruldu, numara `256746085549` |
+| YouTube Data API v3 | etkin |
+| OAuth istemcisi + token | çalışıyor, GitHub sırlarında da var |
+| Onay ekranı | **In production** — 7 günlük token ölümü tuzağı atlatıldı |
+| Denetim | **YAPILMADI** — video yüklenir ama gizli kilitli kalır |
 
-**Adımlar:**
+**Senden gereken iki şey** (ayrıntı `paylasim/youtube-basvuru.md`):
 
-1. Google Cloud Console → yeni proje (ya da mevcut biri)
-2. **YouTube Data API v3**'ü etkinleştir
-3. OAuth istemcisi oluştur (tür: Web application),
-   yönlendirme adresi `https://mizac.xyz/`
-4. **Onay ekranını *In production*'a al.** *Testing*'de kaldığı sürece Google
-   refresh token'ı **7 günde** iptal ediyor — cron sekizinci gün sessizce
-   ölür. Ücretsiz, denetimden bağımsız, ama atlanırsa fark edilmesi zor.
-5. Client ID ve secret'ı `paylasim/gizli/.env`'e yaz
-6. `python3 -m paylasim.kur --platform youtube --yetkilendir`
+1. **Kanal doğru mu?** Yükleme `bahu.civci@gmail.com` altındaki tek kanala,
+   "Bahunur Civci"ye gitti. mizac için ayrı bir kanal varsa söyle, o hesapla
+   yeniden yetkilendirelim. Test videosu `private`, istersen Studio'dan sil.
+2. **Adres bilgileri** — denetim formu tam yasal ad, ülke, adres, şehir, il
+   ve posta kodu istiyor. Gerisi hazır.
 
-**Denetim ayrı bir mesele ve TikTok'takinden kötü:** doğrulanmamış API
-projesinden yüklenen video **gizli kalıyor**, kanalın senin olması muafiyet
-değil, ve **itiraz edilemiyor**. TikTok'u kurtaran "taslağa bırak" numarasının
-YouTube'da karşılığı yok — Data API'de taslağa yükleme uç noktası bulunmuyor.
-
-Bu yüzden `YOUTUBE_GIZLILIK` varsayılanı `private`. İlk gerçek çalıştırma tek
-bir videoyla ve `private` olmalı. Denetim başvurusu:
-`support.google.com/youtube/contact/yt_api_form`
+**İlk gerçek YouTube gönderisi: 24 Eylül 2026.** O güne kadar denetim
+gelmezse video yüklenir ama gizli kalır; `YOUTUBE_GIZLILIK` bu yüzden
+`private` — kilidi görmezden gelmek yerine onunla aynı şeyi istiyoruz.
 
 ---
 

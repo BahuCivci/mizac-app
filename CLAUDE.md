@@ -120,6 +120,19 @@ kullanıcı tarafından yazılıyor, root'a ait, mod 600.
 GUI ikilisi içeriyor. Yani şifre elde olsa bile betikle bağlanılamaz;
 `openfortivpn` bu yüzden gerekli.
 
+**Makinede Slurm VAR ve biz onu atlıyoruz.** `sinfo`/`squeue`/`sbatch`
+kurulu ve aktif; GPU bölümleri `gpu-1`, `gpu-2` (4 saat), `gpu-4` (8 saat),
+`batch` (7 gün), kaynak tanımı `gpu:8`. Biz SSH ile girip
+`CUDA_VISIBLE_DEVICES` ile kartı elle seçiyoruz. Kuyruk boş ve diğer ağır
+kullanıcı da Slurm dışında çalışıyor, ama bu izin değil. Riski somut: biri
+Slurm'e iş atarsa bizim elle tuttuğumuz kartı boş sanıp oraya verebilir.
+Doğrusu: `srun --partition=gpu-1 --gres=gpu:1 --time=1:00:00 ...`.
+Kullanıcıya soruldu, karar bekleniyor.
+
+**`pgrep -f` KENDİ KOMUTUNU EŞLER.** 7 Eylül'de bir saat boşa gitti: bitmiş
+bir kurulumu `pgrep -f "pip install"` ile yoklarken desen kendi ssh komut
+satırımı yakaladı ve hep "sürüyor" döndü. Desen `"pip insta[l]l"` yazılmalı.
+
 **GPU durumu değişken, ölçmeden varsayma.** 6 Eyl 2026 ölçümü: kart 4-7
 %71-97 doluluk ve ~29 GB'la BAŞKASI tarafından kullanılıyor, 0'da da 29.5 GB'lık
 bir iş var. **Boş olan yalnız 2 ve 3.** Eski plan notlarında "6 kart boş"
@@ -197,7 +210,37 @@ node icerik/yukle.mjs       # medyayı Vercel Blob'a
 python3 icerik/csv-url.py   # CSV'ler + parçalar
 ```
 
-**Video sesi:** macOS'un yerleşik Yelda'sı (temel sürüm) test edildi, hız
+**Video sesi — 7 Eyl 2026'dan itibaren Chatterbox.** Kullanıcı FreyaTTS'i
+"hiç doğal durmuyor" bulup karşılaştırma istedi; aynı cümleler iki sesle
+üretilip dinletildi, Chatterbox seçildi.
+
+`ResembleAI/chatterbox`, **MIT** lisanslı (ticari kullanıma açık — bu projede
+belirleyici olan bu), 23 dil destekliyor ve `tr` listede. Ayrıca **ses
+klonlama** yapıyor: 20-30 saniyelik örnekten o sesle okuyor. Şimdilik hazır
+ses kullanılıyor; kullanıcı kendi sesini istemedi.
+
+**AYRI ORTAMDA, `~/mizac-lab/venv-tts`.** Ana ortama kurma — 7 Eylül'de
+kuruldu ve torch'u 2.13→2.6, transformers'ı 5.15→5.2, diffusers'ı 0.40→0.29
+düşürdü; video üretimi ve vLLM bozuldu. Onarımı iki tur sürdü, çünkü cu12
+paketlerini silmek ortak `nvidia/` dizinindeki cu13 `.so` dosyalarını da
+götürdü ("undefined symbol: ncclCommResume"). Çözüm: cu13 paketlerini
+`--force-reinstall --no-deps` ile yeniden kurmak.
+
+**`setuptools<81` şart.** Chatterbox'ın filigran paketi `perth`
+`pkg_resources` kullanıyor; setuptools 81 onu kaldırdı ve model sessizce
+`PerthImplicitWatermarker = None` ile başlamıyor.
+
+**Uzun metni KESİYOR.** Tek çağrıda 18 saniyelik metin 7 saniyeye indi.
+Cümle cümle üretilip birleştiriliyor; hız cümle başına 2-3 sn, bir gönderinin
+anlatımı ~10 sn.
+
+Kullanım: `~/mizac-lab/anlatim.py` (adımları sürelerine yerleştirip tek ses
+izi yazıyor), kurgu `icerik/kurgu.py`.
+
+**FreyaTTS hâlâ duruyor** ve `icerik/video.py` onu kullanıyor — boru hattı
+Chatterbox'a HENÜZ bağlanmadı, deneme elle yapıldı.
+
+**Video sesi (eski):** macOS'un yerleşik Yelda'sı (temel sürüm) test edildi, hız
 120-150 arası fark etmiyordu — formant tabanlı, robotik hissin sebebi buydu.
 Enhanced Yelda (Sistem Ayarları → Erişilebilirlik → Konuşulan İçerik → Sesler,
 176 MB, ücretsiz) denendi, "çok yapay" bulundu. Şimdi **FreyaTTS** kullanılıyor
@@ -267,6 +310,16 @@ nasıl geri alınacağı, silme politikası).
 Özel depo `BahuCivci/mizac-paylasim-durum` içinde bir Actions iş akışı var;
 her sabah 07:00 UTC'de (10:00 Europe/Istanbul) çalışıyor, public depoyu
 `main`'den klonluyor, token ve defteri kendi içinde tutuyor.
+
+**Token'ı YERELDE yenilersen özel depoya senkronla.** TikTok yenilemede
+refresh token'ı da değiştirebiliyor; yerel ve Actions ayrı kopyalar tutuyor.
+Yerelde `kimlik.token()` çağıran bir şey çalıştırdıysan:
+
+    cp paylasim/gizli/token.json ~/mizac-paylasim-durum/durum/token.json
+    cd ~/mizac-paylasim-durum && git commit -am "token" && git push
+
+Yapılmazsa Actions eski refresh token'la kalır ve bir gün sessizce 401 alır.
+7 Eyl 2026'da ramak kaldı: yerelde yenilendi, TikTok o sefer döndürmedi.
 
 **İKİSİ AYNI ANDA ÇALIŞMAMALI.** launchd ve Actions ayrı defter tutuyor;
 ikisi birden açıksa aynı gönderi iki kez gider. Bu yüzden launchd

@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 6 Eylül 2026 (gece).
+Son güncelleme: 7 Eylül 2026 (gece).
 
 ---
 
@@ -160,58 +160,61 @@ başlatmış olabilir, o da ayrıca bakılmalı.
 
 ---
 
-## 6. Video boru hattı — nerede kaldık (6 Eyl gecesi)
+## 6. Kitaptan video — NEREDE KALDIK (7 Eyl gecesi)
 
-`Wan-AI/Wan2.2-TI2V-5B` (Apache-2.0) Kapadokya sunucusunda, **kart 2**'de
-çalışıyor. Üretim betiği `~/mizac-lab/video-uret.py`, toplu iş
-`~/mizac-lab/toplu-video.py`, plan tarifi `~/mizac-lab/planlar.json`.
-Kurgu betiği depoda: `icerik/kurgu.py` (planları senaryo sürelerine uzatıp
-mevcut sesi ve altyazıyı bindiriyor — HENÜZ ÇALIŞTIRILMADI).
+Hedef: kitabın tamamını videoya çevirmek. Kullanıcı onayladı, izin olduğunu
+söyledi ama güvenli yol seçildi — kitabın cümleleri okunmuyor, bilgi kendi
+cümlelerimizle anlatılıyor, kaynak belirtiliyor.
 
-**Ölçüm:** 704x1280, 121 kare (5 sn), 30 adım → **plan başına ~5 dakika**.
-Beş planlık bir gönderi ≈ 25 dakika.
+### Boru hattı (hepsi yazıldı, çalışıyor)
 
-**Deneme gönderisi:** 6 Eyl'in TikTok senaryosu (`2026-09-06/tiktok-tiktok`,
-"Safravî ağrıyı nasıl tarif eder?"). Amaç aynı metin + aynı sesle eski/yeni
-karşılaştırması. Planlar sunucuda `~/mizac-lab/planlar/` altında.
+| Adım | Dosya | Durum |
+|---|---|---|
+| Kitabı pasajlara böl | `icerik/kitap-bol.py` | 315 pasaj hazır |
+| Pasajdan tarif üret | `icerik/gonderi-uret.py` | **çalışıyor, ~158/315** |
+| Anlatımı seslendir | Chatterbox, `~/mizac-lab/anlatim.py` | çalışıyor |
+| Planları üret | `~/mizac-lab/toplu-video.py` | çalışıyor |
+| Kurgula | `icerik/kurgu.py` | çalışıyor |
 
-### Öğrenilenler — istem yazarken
+**Ölçüm:** 315 video × 25 dk = **131 saat GPU**, 4 kartta ~1.4 gün.
 
-- **"cinematic", "dim", "warm" YAZMA.** İlk turda hepsi vardı ve model koyu
-  kahverengi, neredeyse tek renk kareler verdi — yani eski yazı kartlarının
-  paletine geri döndük. Telefonda akışta koyu kare seçilmiyor.
-  Yerine: `bright`, `daylight`, `high key`, `vivid colours`, `crisp`.
-- **Hareketi AÇIKÇA iste.** `visible movement`, `handheld camera`,
-  `she leans forward` gibi. Yoksa neredeyse hareketsiz plan geliyor.
-- **KİŞİLERİN GÖRÜNÜMÜNÜ BELİRT — hâlâ düzeltilmedi.** Belirtilmeyince model
-  Doğu Asyalı kişiler üretiyor; Türk izleyiciye tıbb-ı nebevî anlatan bir
-  hesapta uyumsuz. İstemlere "Turkish man/woman, Mediterranean features"
-  eklenip planlar YENİDEN üretilmeli.
+### Yarın ilk iş
 
-### Tuzak: zombi GPU süreci
+1. `ls icerik/cikti/tarifler/*.json | wc -l` — 315'e ulaştı mı
+2. Tarifleri DENETLE (kesik anlatım, eksik alan, kapanışta mizac.xyz var mı)
+3. Sonra toplu video üretimi
 
-`setsid` ile başlatılan üretim `pkill -f` ile ölmüyor ve kartta 17 GB tutmaya
-devam ediyor; sonraki üretim `CUDA out of memory` alıyor. Durdurmadan önce
-`nvidia-smi --query-compute-apps=pid --format=csv,noheader -i <kart>` ile
-gerçek pid'e bak. 6 Eyl'de bir plan tam bu yüzden çöktü.
+### Bugün pahalıya öğrenilenler — hepsi düzeltildi
 
-### Sıradaki adım
-
-1. Beş plan tamamlanınca `icerik/kurgu.py` ile kurgula, kullanıcıya gönder
-2. Kullanıcı yönü onaylarsa: istemlere görünüm ekle, yeniden üret
-3. Sonra karar: bu iş üniversite sunucusunda mı sürecek? (aşağıya bak)
-
-### Açık soru — kullanıcı sordu, cevaplanmadı
-
-Video üretimi Kapadokya sunucusunda yapılıyor ve **mizac.xyz ticari** (reklam
-+ ₺99 rapor). Deneme başka, üretim başka. Kullanıcı "sen bunları Kapadokya
-sunucusunda mı ürettiriyon" diye sordu; kurumsal tarafı ona bırakıldı.
-Alternatifler: kiralık GPU (~0.4 $/saat, gönderi başına ~0.2 $) ya da hazır
-video API'si.
+- **Kapanış kitabı tanıtıyordu.** "Siteye çağrı yap" dedim ama siteyi
+  adıyla söylemedim; model kaynak kitabı reklam etti (214 tarifin 186'sı),
+  biri `varligintahlili.com` uydurdu. Doğrulayıcı artık reddediyor.
+- **Yönergedeki örnekler şablona dönüşüyor.** Üç kez oldu. Somut örnek
+  verince model onu birebir kopyalıyor (311 kancanın 201'i iki örneğimin
+  tekrarıydı). Örnek verme, biçimi tarif et.
+- **OCR çöpü uydurmayı tetikliyor.** Anlamsız pasaj alan model makul bir şey
+  uyduruyordu (%68'inde pasajda olmayan bebekler). Çöp filtresi eklendi:
+  557 → 315 pasaj.
+- **Tünel gün içinde üç kez düştü**; betik ilk hatada çıkıyordu, artık
+  6 kez yeniden deniyor.
 
 ---
 
-## 7. Şifre değiştir — iş bitince
+## 7. VPN sağlık nöbetçisi — KURULMADI
+
+`danisman/sunucu/vpn-saglik.sh` yazıldı ama yüklenmedi. Sebebi 7 Eylül'de
+görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log "Tunnel is up" diyordu
+ama tek paket geçmiyordu. Mevcut nöbetçi yalnız süreç ölümüne bakıyor.
+
+Kurulum (root gerekiyor, tek seferlik):
+
+    sudo cp danisman/sunucu/vpn-saglik.sh /usr/local/bin/
+    sudo chmod +x /usr/local/bin/vpn-saglik.sh
+    # sonra plist yazılıp bootstrap edilecek
+
+---
+
+## 8. Şifre değiştir — iş bitince
 
 VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de
 sohbete yazıldı ve oturum kaydı `~/.claude/projects/` altında düz metin olarak
@@ -224,7 +227,7 @@ gereksiz. VPN şifresi `/etc/openfortivpn/config`'de (root, 600).
 
 ---
 
-## 8. Küçük işler
+## 9. Küçük işler
 
 - **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
   lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.

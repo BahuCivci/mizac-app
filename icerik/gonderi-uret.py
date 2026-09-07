@@ -33,6 +33,7 @@ import argparse
 import json
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -103,13 +104,23 @@ def sor(pasaj: str, model: str = MODEL, uc: str = OLLAMA,
             "options": {"num_ctx": 8192, "temperature": 0.7},
         }).encode(),
         headers={"Content-Type": "application/json"})
-    try:
-        with urllib.request.urlopen(istek, timeout=zaman_asimi) as c:
-            ham = json.load(c)["response"]
-    except urllib.error.URLError as e:
+    # BAĞLANTI KOPARSA BEKLE VE YENİDEN DENE, çıkma.
+    # VPN ve SSH tüneli gün içinde birkaç kez düşüyor; nöbetçiler onları
+    # geri getiriyor ama saniyeler sürüyor. Betik ilk hatada çıkınca
+    # 7 Eylül'de üretim üç kez yarıda kaldı (en son 155/315'te).
+    son = None
+    for deneme in range(6):
+        try:
+            with urllib.request.urlopen(istek, timeout=zaman_asimi) as c:
+                ham = json.load(c)["response"]
+            break
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as e:
+            son = e
+            time.sleep(min(30 * (deneme + 1), 120))
+    else:
         raise SystemExit(
-            f"modele ulaşılamadı ({e.reason}). Tünel açık mı?\n"
-            "  launchctl list | grep mizac.tunel") from e
+            f"modele 6 denemede ulaşılamadı ({son}). Tünel açık mı?\n"
+            "  launchctl list | grep mizac.tunel")
 
     try:
         return json.loads(ham)

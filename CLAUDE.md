@@ -120,6 +120,24 @@ kullanıcı tarafından yazılıyor, root'a ait, mod 600.
 GUI ikilisi içeriyor. Yani şifre elde olsa bile betikle bağlanılamaz;
 `openfortivpn` bu yüzden gerekli.
 
+**Üretim şimdilik üniversite sunucusunda — kullanıcı onayladı (7 Eyl 2026).**
+Soru soruldu: mizac.xyz ticari (reklam + ₺99 rapor), makine kurumun.
+Kullanıcının cevabı: "evet şimdilik öyle, sonradan ileride düzene oturunca
+sunucu kiralayacağım." Yani bu geçici bir düzen; tekrar sorma, ama kalıcı
+çözüm kiralık GPU. Taşınma maliyeti yarım gün: model Apache-2.0, betikler
+taşınabilir, tek bağımlılık GPU.
+
+**Slurm KULLANILIYOR (7 Eyl 2026'dan itibaren).** Önce SSH ile girip
+`CUDA_VISIBLE_DEVICES` ile kart elle seçiliyordu; makinede `sinfo`/`sbatch`
+kurulu ve aktif olduğu için doğru yola geçildi. İş dosyası
+`~/mizac-lab/is.sbatch` (`--partition=gpu-1 --gres=gpu:1 --time=01:00:00`).
+Kartı Slurm seçiyor, yani elle kart seçmeye ve zombi süreç temizliğine gerek
+kalmıyor. Bölümler: `gpu-1`/`gpu-2` 4 saat, `gpu-4` 8 saat, `batch` 7 gün.
+
+    sbatch is.sbatch ; squeue -u $USER ; sacct -j <id>
+
+**Slurm'den önce böyleydi (tarihçe):**
+
 **Makinede Slurm VAR ve biz onu atlıyoruz.** `sinfo`/`squeue`/`sbatch`
 kurulu ve aktif; GPU bölümleri `gpu-1`, `gpu-2` (4 saat), `gpu-4` (8 saat),
 `batch` (7 gün), kaynak tanımı `gpu:8`. Biz SSH ile girip

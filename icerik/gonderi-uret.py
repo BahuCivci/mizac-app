@@ -60,10 +60,16 @@ ANLATIM KURALLARI
   * Pasajdaki EN SOMUT gözlemi al ve okuyucunun kendi hayatından
     tanıyacağı bir cümleye çevir. İkinci kişiye seslen.
   * En fazla 14 kelime.
-  KÖTÜ: "Mizaç, kişiliğimizin temelini oluşturur ve davranışlarımızı şekillendirir."
-  KÖTÜ: "Mizaç nedir? Her bebek aynı değil."
-  İYİ : "Bebeğin oyuncağıyla saatlerce aynı köşede oturuyor mu?"
-  İYİ : "Bir kere gösteriyorsun, anında taklit ediyor."
+  * Kanca YALNIZ BU PASAJDAN çıkmalı. Pasajda bebeklerden söz edilmiyorsa
+    bebekten bahsetme; yemekten söz ediliyorsa yemekten bahset.
+  KÖTÜ (tanım cümlesi): "Mizaç, kişiliğimizin temelini oluşturur."
+  KÖTÜ (pasajla ilgisiz): pasaj felsefe tarihinden söz ederken
+    "Bebeğin taklit etme hızına şaşırdın mı?" demek.
+
+  Aşağıdaki kalıpları EZBERLEME, bunlar yalnız biçimi gösteriyor:
+  soru sorabilirsin ("... fark ettin mi?"), gözlem kurabilirsin
+  ("Sabah kalkar kalkmaz ..."), ya da doğrudan seslenebilirsin.
+  Hangisini seçersen seç, içerik pasajdan gelecek.
 - 5. adım kapanış: siteye çağrı. Her seferinde farklı cümle kur.
 - Toplam 5 cümle, her biri 12-25 kelime. Tıbbi teşhis ya da tedavi vaadi kurma.
 

@@ -63,6 +63,31 @@ def harf_orani(s: str) -> float:
     return harf / len(s)
 
 
+SESLI = set("aeıioöuüAEIİOÖUÜ")
+EN_COK_BOZUKLUK = 0.18   # bunun üstü OCR çöpü sayılıyor
+
+
+def bozukluk(metin: str) -> float:
+    """
+    OCR çöpü ölçüsü: sesli harfi olmayan ya da 1-2 harflik "kelime" oranı.
+
+    NEDEN VAR — 7 Eyl 2026'da pahalıya öğrenildi
+    Harf oranı eşiği (0.72) çöpü geçiriyordu: kaynakça satırları, ters
+    taranmış sayfalar ("Bo TSeUITe gol SN 11g yi og eseuno") pasaj olarak
+    kabul ediliyordu. Modele anlamsız metin verilince makul görünen bir şey
+    UYDURUYOR — 557 tarifin 381'inde kanca pasajda hiç geçmeyen bebek ve
+    çocuklardan bahsediyordu. Sebep prompt değil, girdiydi.
+
+    Ölçüldü: ortanca %16, temiz Türkçe metinde %2-3, çöpte %55-64.
+    """
+    kelimeler = [w.strip('.,;:()"\'') for w in metin.split()]
+    kelimeler = [w for w in kelimeler if w]
+    if not kelimeler:
+        return 1.0
+    kotu = sum(1 for w in kelimeler if len(w) <= 2 or not (set(w) & SESLI))
+    return kotu / len(kelimeler)
+
+
 def temizle(s: str) -> str:
     """OCR artıklarını sadeleştirir; cümle yapısını bozmaz."""
     s = re.sub(r"(\w)-\n(\w)", r"\1\2", s)      # satır sonu tiresi
@@ -166,7 +191,13 @@ def pasajlar(kaynak=None) -> list[dict]:
         sayfa, blm = nerede(bas_konum)
         bulunan.append({"sayfa": sayfa, "bolum": blm,
                         "metin": " ".join(yigin), "kelime": sayi})
-    return bulunan
+
+    # OCR çöpünü burada eliyoruz, pasaj kurulduktan SONRA: tek tek sayfa
+    # bozuk olabilir ama pasaj sayfaları aşıyor, asıl ölçüm pasajın kendisi.
+    temiz = [p for p in bulunan if bozukluk(p["metin"]) <= EN_COK_BOZUKLUK]
+    for p in temiz:
+        p["bozukluk"] = round(bozukluk(p["metin"]), 3)
+    return temiz
 
 
 def main() -> int:

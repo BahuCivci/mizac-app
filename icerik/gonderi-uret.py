@@ -52,8 +52,7 @@ ANLATIM KURALLARI
 - Pasajdaki bilgiyi KENDİ CÜMLELERİNLE anlat. Kitabın cümlelerini kopyalama.
 - Pasajda GEÇMEYEN hiçbir şey ekleme. Bilmiyorsan yazma.
 - Pasajdaki en somut, en görüntülü ayrıntıyı MUTLAKA kullan. Genel ifade
-  ("güçlü kişilik") değil, sınanabilir detay ("aynanın karşısına geçip
-  şarkı söyler") değerlidir.
+  değil, okuyucunun sınayabileceği bir detay değerlidir.
 - 1. adım KANCADIR ve en zor kısım budur. Kurallar:
   * "Mizaç" kelimesiyle BAŞLAMA. Tanım cümlesi kurma.
   * Soyut giriş yapma ("kişiliğimizin temelini oluşturur" gibi) — YASAK.
@@ -66,10 +65,9 @@ ANLATIM KURALLARI
   KÖTÜ (pasajla ilgisiz): pasaj felsefe tarihinden söz ederken
     "Bebeğin taklit etme hızına şaşırdın mı?" demek.
 
-  Aşağıdaki kalıpları EZBERLEME, bunlar yalnız biçimi gösteriyor:
-  soru sorabilirsin ("... fark ettin mi?"), gözlem kurabilirsin
-  ("Sabah kalkar kalkmaz ..."), ya da doğrudan seslenebilirsin.
-  Hangisini seçersen seç, içerik pasajdan gelecek.
+  * Biçim serbest: soru sorabilirsin, bir gözlem aktarabilirsin ya da
+    doğrudan seslenebilirsin. Ama CÜMLENİN İÇERİĞİ tamamen bu pasajdan
+    gelecek. Bu yönergede geçen hiçbir örnek ifadeyi kullanma.
 - 5. adım kapanış: siteye çağrı. Her seferinde farklı cümle kur.
 - Toplam 5 cümle, her biri 12-25 kelime. Tıbbi teşhis ya da tedavi vaadi kurma.
 
@@ -131,6 +129,15 @@ def gecerli(tarif: dict) -> str:
         for yasak in ("cinematic", "dim ", "moody"):
             if yasak in x["istem"].lower():
                 return f"{i}. adımın isteminde '{yasak.strip()}' geçiyor"
+
+    # KALIP KİLİDİ. Bu model yönergedeki somut örnekleri şablon olarak
+    # kopyalıyor: 311 kancanın 201'i iki örneğimin tekrarıydı ("aynanın
+    # karşısına geçip" 156 kez, "sabah kalkar kalkmaz" 45 kez). Örnekler
+    # yönergeden çıkarıldı, ama bir daha sızarsa burada yakalansın.
+    kanca = a[0]["anlatim"].lower()
+    for kalip in ("aynanın karşısına", "sabah kalkar kalkmaz"):
+        if kalip in kanca:
+            return f"kanca ezberlenmiş kalıbı tekrarlıyor: '{kalip}'"
     return ""
 
 

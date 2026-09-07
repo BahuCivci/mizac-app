@@ -68,7 +68,12 @@ ANLATIM KURALLARI
   * Biçim serbest: soru sorabilirsin, bir gözlem aktarabilirsin ya da
     doğrudan seslenebilirsin. Ama CÜMLENİN İÇERİĞİ tamamen bu pasajdan
     gelecek. Bu yönergede geçen hiçbir örnek ifadeyi kullanma.
-- 5. adım kapanış: siteye çağrı. Her seferinde farklı cümle kur.
+- 5. adım KAPANIŞ ve tek bir yere çağırır: **mizac.xyz**.
+  * Alan adını AYNEN "mizac.xyz" yaz. Başka alan adı UYDURMA.
+  * Kitabı, yazarı ya da kitabın satın alınmasını TANITMA. Kitap kaynaktır,
+    ürün değil. (Ölçüldü: 214 tarifin 186'sında kapanış kitabı tanıtıyordu,
+    biri "varligintahlili.com" diye olmayan bir adres uydurmuştu.)
+  * Her seferinde farklı cümle kur.
 - Toplam 5 cümle, her biri 12-25 kelime. Tıbbi teşhis ya da tedavi vaadi kurma.
 
 GÖRSEL İSTEMİ KURALLARI (İngilizce yaz)
@@ -134,6 +139,12 @@ def gecerli(tarif: dict) -> str:
     # kopyalıyor: 311 kancanın 201'i iki örneğimin tekrarıydı ("aynanın
     # karşısına geçip" 156 kez, "sabah kalkar kalkmaz" 45 kez). Örnekler
     # yönergeden çıkarıldı, ama bir daha sızarsa burada yakalansın.
+    kapanis = a[4]["anlatim"].lower()
+    if "mizac.xyz" not in kapanis.replace(" ", ""):
+        return "kapanışta mizac.xyz geçmiyor"
+    if re.search(r"varl[iı][gğ][iı]ntahlili\.|\.com\b", kapanis):
+        return "kapanışta uydurma alan adı var"
+
     kanca = a[0]["anlatim"].lower()
     for kalip in ("aynanın karşısına", "sabah kalkar kalkmaz"):
         if kalip in kanca:

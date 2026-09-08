@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tünel adresi nöbetçisi — Mac'te, kullanıcı olarak çalışır.
+
+  Beş dakikada bir sunucudaki tünel adresini okuyup Vercel'dekiyle
+  karşılaştırıyor; değişmişse `MIZAC_OLLAMA`'yı güncelleyip deploy ediyor.
+
+  NEDEN GEREKLİ: `trycloudflare.com` tünelleri her yeniden başlatmada yeni
+  bir adres alıyor ve danışman sessizce ölüyor. 6-8 Eylül 2026'da üç kez
+  elle düzeltildi; 8 Eylül'de adres yirmi dakika içinde iki kez değişti.
+
+  LaunchAgent, Daemon DEĞİL: `vercel` kimliği kullanıcının ev dizininde
+  (`~/Library/Application Support/com.vercel.cli`), root olarak
+  çalıştırılırsa bulunamaz.
+
+  Kurulum:
+    cp danisman/sunucu/xyz.mizac.tunel-adres.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.tunel-adres.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.tunel-adres</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/bahu/Documents/mizac-app/danisman/sunucu/tunel-adres-guncelle.sh</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>300</integer>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/mizac-tunel-adres-cikti.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/mizac-tunel-adres-cikti.log</string>
+</dict>
+</plist>

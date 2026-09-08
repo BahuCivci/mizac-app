@@ -53,6 +53,31 @@ cevap vermez olur — hata sayfası çıkmaz. Süreçler `nohup` ile başlatıld
 fark edilmeden kesintide kaldı — `cloudflared` kendini güncelleyip süreç
 kapanmış, kimse yeniden başlatmamıştı. Nöbetçi bunu en fazla 5 dakikaya indiriyor.
 
+**8 EYLÜL 2026'DA BULUNAN ASIL ARIZA — tünel adresi neden sürekli
+değişiyordu.** `nobetci.sh` tüneli `pgrep -u "$USER"` ile yokluyordu, ama
+**cron ortamında `$USER` tanımlı değil**. Boş kullanıcıyla arama hep
+başarısız dönüyor, nöbetçi de her 5 dakikada bir "tünel ölü" sanıp yenisini
+açıyordu — eskisini öldürmeden. Sonuç: **2181 birikmiş cloudflared süreci**
+ve 2234 yeniden başlatma (~8 gün). Adres her turda değiştiği için danışman
+sürekli ölüyordu; üç gün boyunca elle düzeltilen şey buydu.
+Düzeltme: `pgrep -u "$(id -un)"`. Süreçler temizlendi.
+
+İkinci hata aynı yerde: adres deseni `https://[a-z0-9-]*\.trycloudflare\.com`
+hata mesajındaki `api.trycloudflare.com`'u da yakalıyordu. Gerçek hızlı
+tünel adresleri çok kelimeli; desen `[a-z0-9]+-[a-z0-9-]+` oldu.
+
+**Adres artık Mac'ten otomatik güncelleniyor.**
+`danisman/sunucu/tunel-adres-guncelle.sh` + `xyz.mizac.tunel-adres.plist`
+(LaunchAgent, 5 dakikada bir). Sunucudan değil Mac'ten, çünkü Vercel kimliği
+zaten Mac'te — üniversite makinesine koymak ayrı bir risk olurdu.
+
+**Boş adresle env güncelleme YAPMA.** 8 Eyl'de adres boş geldi, değişken
+silindi ama yerine konamadı; danışman büsbütün kaldı. Betikte koruma var.
+
+**Kalıcı çözüm hâlâ adlandırılmış tünel**, ama `mizac.xyz`'in DNS'i Vercel'de
+ve Cloudflare'in ücretsiz planı alt alan adını ayrı yönetmeye izin vermiyor —
+tamamını taşımak gerekiyor. Ayrı bir karar; şimdilik köprü çalışıyor.
+
 **Nöbetçinin yapamadığı tek şey:** tünel yeniden başlarken adresi değişirse
 (`trycloudflare.com` her seferinde rastgele bir alt alan adı veriyor),
 Vercel'deki `MIZAC_OLLAMA`'yı otomatik güncellemiyor — bilerek, Vercel kimlik

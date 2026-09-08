@@ -185,15 +185,23 @@ def main() -> int:
         if hedef.exists():
             print(f"  {no:04d} atlandı (var)")
             continue
-        try:
-            tarif = sor(p["metin"], k.model)
-        except Exception as e:
-            print(f"  {no:04d} HATA: {type(e).__name__}: {e}")
-            atlanan += 1
-            continue
-
-        sorun = gecerli(tarif)
-        if sorun:
+        # DOĞRULAMA HATASINDA YENİDEN DENE. Model rastgele takılıyor:
+        # ilk turda 315 tarifin 78'i "kapanışta mizac.xyz geçmiyor" ile
+        # reddedildi. Tek denemede pes etmek o pasajları büsbütün kaybettiriyor.
+        tarif = None
+        sorun = "denenmedi"
+        for deneme in range(3):
+            try:
+                aday = sor(p["metin"], k.model)
+            except Exception as e:
+                print(f"  {no:04d} HATA: {type(e).__name__}: {e}")
+                break
+            sorun = gecerli(aday)
+            if not sorun:
+                tarif = aday
+                break
+            print(f"  {no:04d} deneme {deneme+1}: {sorun}")
+        if tarif is None:
             print(f"  {no:04d} REDDEDİLDİ: {sorun}")
             atlanan += 1
             continue

@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 7 Eylül 2026 (gece).
+Son güncelleme: 8 Eylül 2026.
 
 ---
 
@@ -200,7 +200,41 @@ cümlelerimizle anlatılıyor, kaynak belirtiliyor.
 
 ---
 
-## 7. VPN sağlık nöbetçisi — KURULMADI
+## 7. Takvim değişimi — KARAR VERİLDİ (8 Eyl 2026)
+
+Kitaptan üretilen 315 video, takvimdeki **video yuvalarının** yerine geçecek.
+Görsel gönderiler (karusel + kare) olduğu gibi kalacak.
+
+**Bugünkü takvim:** 405 bekleyen gönderi, 345 gün, 23 Ağu 2027'de bitiyor.
+
+| Tür | Adet | Ne olacak |
+|---|---|---|
+| tiktok-tiktok | 148 | yeni videoyla değişecek |
+| instagram-reels | 49 | yeni videoyla değişecek |
+| youtube-shorts | 48 | yeni videoyla değişecek |
+| youtube-uzun | 11 | yeni videoyla değişecek |
+| instagram-karusel | 100 | **kalacak** |
+| instagram-kare | 49 | **kalacak** |
+
+256 video yuvası var, elimizde 315 video olacak; kalan 59 takvimi uzatır.
+
+**Neden hepsi değil:** yeni içerik dikey video; karusel ve kare görsel
+gönderiler ve onların yerini tutamaz. Karusel Instagram'da kaydetme/paylaşma
+oranı yüksek bir biçim, hepsini atmak kayıp olurdu.
+
+**Uygulama sırası** (üretim bitince):
+1. Videoları Vercel Blob'a yükle (Instagram medyayı adresten çekiyor, şart)
+2. `icerik/cikti/gunluk/<gün>/<klasör>/video.mp4` yerine yenisini koy
+3. METIN.txt'leri tarifin anlatımından yeniden yaz
+4. `python3 -m paylasim.dizin --uret` ve commit — YOKSA Actions günü atlar
+
+**Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
+şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da
+istedi. Görsel üretimi ayrı bir boru hattı gerektiriyor.
+
+---
+
+## 8. VPN sağlık nöbetçisi — KURULMADI
 
 `danisman/sunucu/vpn-saglik.sh` yazıldı ama yüklenmedi. Sebebi 7 Eylül'de
 görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log "Tunnel is up" diyordu
@@ -214,7 +248,7 @@ Kurulum (root gerekiyor, tek seferlik):
 
 ---
 
-## 8. Şifre değiştir — iş bitince
+## 9. Şifre değiştir — iş bitince
 
 VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de
 sohbete yazıldı ve oturum kaydı `~/.claude/projects/` altında düz metin olarak
@@ -227,7 +261,7 @@ gereksiz. VPN şifresi `/etc/openfortivpn/config`'de (root, 600).
 
 ---
 
-## 9. Küçük işler
+## 10. Küçük işler
 
 - **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
   lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.

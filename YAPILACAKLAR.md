@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 8 Eylül 2026.
+Son güncelleme: 8 Eylül 2026 (gece).
 
 ---
 
@@ -160,43 +160,51 @@ başlatmış olabilir, o da ayrıca bakılmalı.
 
 ---
 
-## 6. Kitaptan video — NEREDE KALDIK (7 Eyl gecesi)
+## 6. Kitaptan video — NEREDE KALDIK (8 Eyl gecesi)
 
-Hedef: kitabın tamamını videoya çevirmek. Kullanıcı onayladı, izin olduğunu
-söyledi ama güvenli yol seçildi — kitabın cümleleri okunmuyor, bilgi kendi
-cümlelerimizle anlatılıyor, kaynak belirtiliyor.
+**Her şey SUNUCUDA çalışıyor, Mac kapalı olabilir.**
 
-### Boru hattı (hepsi yazıldı, çalışıyor)
+    ssh mta_kullanici@192.168.1.40
+    ls ~/mizac-lab/gecici/*/sureler.json | wc -l     # üretilen video
+    ls ~/mizac-lab/icerik/cikti/tarifler/*.json | wc -l   # tarif
+    pgrep -c -f "gonderi-ya[p]"                      # işçi sayısı
 
-| Adım | Dosya | Durum |
+8 Eyl gecesi: video **92/315**, tarif **276/315**, 7 işçi (kart 1-7).
+Kart 0'da başkasının 26 günlük VLLM servisi var, dokunulmadı.
+
+### Sabah yapılacak
+
+1. `python3 icerik/kurgu-toplu.py --hepsi` — sunucudan çekip Mac'te kurgular
+   (sunucudaki ffmpeg'de `drawtext` yok, altyazı orada basılamıyor)
+2. Birkaçını gözden geçir
+3. Takvime yerleştirme (madde 7)
+
+### Boru hattı
+
+| Adım | Nerede | Dosya |
 |---|---|---|
-| Kitabı pasajlara böl | `icerik/kitap-bol.py` | 315 pasaj hazır |
-| Pasajdan tarif üret | `icerik/gonderi-uret.py` | **çalışıyor, ~158/315** |
-| Anlatımı seslendir | Chatterbox, `~/mizac-lab/anlatim.py` | çalışıyor |
-| Planları üret | `~/mizac-lab/toplu-video.py` | çalışıyor |
-| Kurgula | `icerik/kurgu.py` | çalışıyor |
+| Kitabı böl | Mac | `icerik/kitap-bol.py` |
+| Tarif üret | Sunucu | `icerik/gonderi-uret.py` |
+| Ses + planlar | Sunucu | `~/mizac-lab/gonderi-yap.py` |
+| Kurgu | **Mac** | `icerik/kurgu-toplu.py` |
 
-**Ölçüm:** 315 video × 25 dk = **131 saat GPU**, 4 kartta ~1.4 gün.
+**Ölçüm:** gönderi başına ~30 dk (5 plan × ~6 dk). 7 işçiyle saatte ~14.
 
-### Yarın ilk iş
+### Bu işte öğrenilenler — hepsi ölçülerek
 
-1. `ls icerik/cikti/tarifler/*.json | wc -l` — 315'e ulaştı mı
-2. Tarifleri DENETLE (kesik anlatım, eksik alan, kapanışta mizac.xyz var mı)
-3. Sonra toplu video üretimi
-
-### Bugün pahalıya öğrenilenler — hepsi düzeltildi
-
-- **Kapanış kitabı tanıtıyordu.** "Siteye çağrı yap" dedim ama siteyi
-  adıyla söylemedim; model kaynak kitabı reklam etti (214 tarifin 186'sı),
-  biri `varligintahlili.com` uydurdu. Doğrulayıcı artık reddediyor.
-- **Yönergedeki örnekler şablona dönüşüyor.** Üç kez oldu. Somut örnek
-  verince model onu birebir kopyalıyor (311 kancanın 201'i iki örneğimin
-  tekrarıydı). Örnek verme, biçimi tarif et.
-- **OCR çöpü uydurmayı tetikliyor.** Anlamsız pasaj alan model makul bir şey
-  uyduruyordu (%68'inde pasajda olmayan bebekler). Çöp filtresi eklendi:
-  557 → 315 pasaj.
-- **Tünel gün içinde üç kez düştü**; betik ilk hatada çıkıyordu, artık
-  6 kez yeniden deniyor.
+- **Yönergeye somut örnek koyma**, model onu şablona çeviriyor. Üç kez oldu;
+  311 kancanın 201'i iki örneğimin kopyasıydı.
+- **OCR çöpü uydurma tetikliyor.** Anlamsız pasaj alan model makul bir şey
+  uyduruyor (%68'inde pasajda olmayan bebekler). Filtre: sesli harfsiz ya da
+  2 harften kısa kelime oranı > %18 → at. 557 pasajdan 315'i kaldı.
+- **Kapanışta siteyi ADIYLA söyle.** "Siteye çağır" deyince model kaynak
+  kitabı tanıttı (214'ün 186'sı) ve bir kez olmayan alan adı uydurdu.
+- **İnsan varsa görünümü belirt**, yoksa Doğu Asyalı kişiler geliyor.
+- **Chatterbox kaçıyor:** 17 kelimeye 28 sn ses üretti. Süre kelime sayısıyla
+  denetleniyor, sapıtırsa yeniden üretiliyor.
+- **drawtext'e satır sonu geçirilemiyor.** İki tür kaçırma da bozuldu;
+  `textfile=` ile dosyadan okutmak tek çalışan yol.
+- **`pgrep -f` kendi komutunu eşler.** İki kez yanılttı.
 
 ---
 

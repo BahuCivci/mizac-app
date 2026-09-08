@@ -145,6 +145,14 @@ def gecerli(tarif: dict) -> str:
         for yasak in ("cinematic", "dim ", "moody"):
             if yasak in x["istem"].lower():
                 return f"{i}. adımın isteminde '{yasak.strip()}' geçiyor"
+        # İNSAN VARSA GÖRÜNÜM BELİRTİLMELİ. Belirtilmeyince model Doğu
+        # Asyalı kişiler üretiyor — 8 Eyl'de 913 istemin 138'inde eksikti ve
+        # bir videoda arka planda Çince yazı olan bir çocuk çıktı.
+        ist = x["istem"].lower()
+        if re.search(r"\b(man|woman|boy|girl|child|children|person|people|"
+                     r"family|father|mother|couple|teacher|student)\b", ist) \
+                and not re.search(r"turkish|mediterranean|anatolian", ist):
+            return f"{i}. adımda insan var ama görünüm belirtilmemiş"
 
     # KALIP KİLİDİ. Bu model yönergedeki somut örnekleri şablon olarak
     # kopyalıyor: 311 kancanın 201'i iki örneğimin tekrarıydı ("aynanın

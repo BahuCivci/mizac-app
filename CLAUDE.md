@@ -253,6 +253,12 @@ node icerik/yukle.mjs       # medyayı Vercel Blob'a
 python3 icerik/csv-url.py   # CSV'ler + parçalar
 ```
 
+**`yukle.mjs` DEFTERE BAKIP ATLIYOR.** Yüklenenler `cikti/blob-adresler.json`
+içinde; bir dosyanın kaydı varsa içeriği değişse bile yeniden yüklenmiyor.
+Var olan bir medyayı değiştirdiysen o anahtarı defterden sil, yoksa Blob
+eskisini sunmaya devam eder ve paylaşım eskisini atar — hiçbir yerde hata
+görünmez. `takvime-yerlestir.py` bunu kendisi yapıyor.
+
 **Video sesi — 7 Eyl 2026'dan itibaren Chatterbox.** Kullanıcı FreyaTTS'i
 "hiç doğal durmuyor" bulup karşılaştırma istedi; aynı cümleler iki sesle
 üretilip dinletildi, Chatterbox seçildi.

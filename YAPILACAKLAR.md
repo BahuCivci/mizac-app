@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 8 Eylül 2026 (gece).
+Son güncelleme: 9 Eylül 2026.
 
 ---
 
@@ -160,24 +160,23 @@ başlatmış olabilir, o da ayrıca bakılmalı.
 
 ---
 
-## 6. Kitaptan video — NEREDE KALDIK (8 Eyl gecesi)
+## 6. Kitaptan video — ÜRETİM BİTTİ (9 Eyl 2026)
 
-**Her şey SUNUCUDA çalışıyor, Mac kapalı olabilir.**
+**SUNUCUDAKİ ÜRETİM BİTTİ (9 Eyl 2026).** 315 tarif, 315 ham gönderi
+(ses + 5 plan). Yedi işçinin hepsi `KALAN_YOK` deyip durdu.
 
     ssh mta_kullanici@192.168.1.40
-    ls ~/mizac-lab/gecici/*/sureler.json | wc -l     # üretilen video
-    ls ~/mizac-lab/icerik/cikti/tarifler/*.json | wc -l   # tarif
-    pgrep -c -f "gonderi-ya[p]"                      # işçi sayısı
+    ls ~/mizac-lab/gecici/*/sureler.json | wc -l     # 315
+    ls ~/mizac-lab/icerik/cikti/tarifler/*.json | wc -l   # 315
 
-8 Eyl gecesi: video **92/315**, tarif **276/315**, 7 işçi (kart 1-7).
-Kart 0'da başkasının 26 günlük VLLM servisi var, dokunulmadı.
+**TARİFLER SUNUCUDA ÜRETİLİYOR, MAC'TE OLMAYABİLİR.** Kurgu altyazıyı
+tariften okuyor; eksikse çakılır. Kurgudan önce:
 
-### Sabah yapılacak
+    rsync -a mta_kullanici@192.168.1.40:'~/mizac-lab/icerik/cikti/tarifler/' \
+      icerik/cikti/tarifler/
 
-1. `python3 icerik/kurgu-toplu.py --hepsi` — sunucudan çekip Mac'te kurgular
-   (sunucudaki ffmpeg'de `drawtext` yok, altyazı orada basılamıyor)
-2. Birkaçını gözden geçir
-3. Takvime yerleştirme (madde 7)
+Kurgu Mac'te: `python3 icerik/kurgu-toplu.py --hepsi` (~35 sn/video).
+Ölçüldü: 199 videonun hepsi 1080x1920, 29-47 sn, sesli, bozuk yok.
 
 ### Boru hattı
 
@@ -205,6 +204,17 @@ Kart 0'da başkasının 26 günlük VLLM servisi var, dokunulmadı.
 - **drawtext'e satır sonu geçirilemiyor.** İki tür kaçırma da bozuldu;
   `textfile=` ile dosyadan okutmak tek çalışan yol.
 - **`pgrep -f` kendi komutunu eşler.** İki kez yanılttı.
+- **Aralık bölüşümü işçileri boşta bırakıyor.** Yedi işçiye baştan pay
+  verilince üçü sabaha kalmadan bitirdi, 114 gönderi dördün üzerinde
+  birikti. İşçi kendi işini `mkdir` kilidiyle kapıyor artık — dosya
+  sisteminde atomik, ikinci deneme `FileExistsError` alıyor.
+- **Toplu iş tek dosyaya takılıp ölmesin.** `kurgu-toplu.py --hepsi`
+  listeyi sunucudan alıp tarifi yerelden okuyordu; 0015 Mac'te yoktu ve
+  kurgu 185. videoda çakılıp kalan 130'u hiç denemedi.
+- **Altyazıda satır sonu var, başlıkta olamaz.** Altyazılar ekranda ikiye
+  bölünsün diye `\n` taşıyor; metnin başlığına öyle konunca YouTube
+  başlığın yarısını alıyor ve gövde başlığa yapışıyor. Başlık tek satıra
+  indiriliyor.
 
 ---
 
@@ -230,11 +240,32 @@ Görsel gönderiler (karusel + kare) olduğu gibi kalacak.
 gönderiler ve onların yerini tutamaz. Karusel Instagram'da kaydetme/paylaşma
 oranı yüksek bir biçim, hepsini atmak kayıp olurdu.
 
-**Uygulama sırası** (üretim bitince):
-1. Videoları Vercel Blob'a yükle (Instagram medyayı adresten çekiyor, şart)
-2. `icerik/cikti/gunluk/<gün>/<klasör>/video.mp4` yerine yenisini koy
-3. METIN.txt'leri tarifin anlatımından yeniden yaz
-4. `python3 -m paylasim.dizin --uret` ve commit — YOKSA Actions günü atlar
+**Uygulama** — `icerik/takvime-yerlestir.py` 2, 3 ve blob defteri
+adımını birlikte yapıyor:
+
+    python3 icerik/takvime-yerlestir.py --deneme --kac 6   # önce göz at
+    python3 icerik/takvime-yerlestir.py
+    node icerik/yukle.mjs                 # Blob'a (vercel env pull gerekiyor)
+    python3 -m paylasim.dizin --uret      # YOKSA Actions günü atlar
+    git commit paylasim/icerik-dizini.json
+
+**17 Eylül'e kadar olan günlere dokunulmuyor** — o gönderiler Publer
+kuyruğunda ve oradan çıkacak. Değiştirilebilir yuva: **254**.
+
+**`youtube-uzun` yuvaları `youtube-shorts` oluyor.** Yeni içeriğin tamamı
+1080x1920 ve ~35 sn; YouTube bunu zaten Short sayıyor, "uzun" kalırsa
+açıklamaya `#Shorts` eklenmiyor ve keşfedilme yolu kapanıyor.
+
+**BLOB DEFTERİ TUZAĞI.** `yukle.mjs` `cikti/blob-adresler.json`'da kaydı
+olan dosyayı atlıyor. Video değişince kayıt silinmezse yeni dosya hiç
+yüklenmez, Blob eskisini sunmaya devam eder ve paylaşım eskisini atar —
+hiçbir yerde hata görünmez. `takvime-yerlestir.py` kaydı kendisi siliyor.
+
+**Videolar yeniden kodlanmadı.** Ortalama 26 MB (CRF 20, 1080x1920).
+Ölçüldü: yeniden kodlama dosyayı yarıya indiriyor ama 315 video için ~2
+saat CPU istiyor, buna karşılık kazandırdığı tek şey yükleme süresi —
+Blob'a yükleme tek akışta 11.5 Mbps, sekiz koşut işçiyle zaten sorun değil.
+Platformlar hepsini yeniden kodluyor.
 
 **Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
 şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da

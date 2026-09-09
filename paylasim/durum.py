@@ -14,7 +14,7 @@ kullanıyor: CLAUDE.md `sirada.py`'ı her oturumda çalıştırmayı zaten söyl
 bu da aynı listeye giriyor. Nöbetçi ayrı bir servis değil, oturumun kendisi.
 
 Baktığı şeyler: token'ların ömrü, geçmişte kaçmış paylaşımlar, üretilmemiş
-videolar.
+videolar ve Blob penceresinin kaç gün ileriye yettiği.
 """
 from __future__ import annotations
 
@@ -27,6 +27,51 @@ from paylasim.ayar import GUNLUK, secenek
 from paylasim.hata import Durdur
 
 GERIYE_BAK = 7  # kaç gün geriye bakılsın
+ILERI_BAK = 25  # Blob penceresi kaç gün ileriye yetiyor (pencere 21 gün)
+
+
+def pencere_ucu(bugun: date, taban) -> tuple[int | None, str]:
+    """
+    Blob'daki videolar kaç gün ileriye yetiyor — ölçerek.
+
+    NEDEN GEREKLİ: 9 Eyl 2026'dan beri Blob arşiv değil kayan pencere
+    (`icerik/blob-pencere.mjs`, ayrıntı CLAUDE.md). Pencereyi Mac tazeliyor;
+    Mac uzun süre kapalı kalırsa ya da tazeleyici bozulursa videolar sessizce
+    tükeniyor ve arıza ancak paylaşım gününde görülüyor. Bu ölçüm o günü
+    haftalar öncesinden haber veriyor.
+
+    İlk eksik günü buluyor; hepsi yerindeyse None döndürüyor.
+    """
+    from urllib.error import HTTPError, URLError
+    from urllib.request import Request, urlopen
+
+    try:
+        temel = secenek("MEDYA_TABAN_URL", "").rstrip("/")
+    except Exception:
+        temel = ""
+    if not temel:
+        return None, "MEDYA_TABAN_URL tanımlı değil, pencere ölçülemedi"
+
+    for ileri in range(ILERI_BAK + 1):
+        gun = (bugun + timedelta(days=ileri)).isoformat()
+        try:
+            isler = gunluk.isler(gun, taban)
+        except Durdur:
+            continue
+        for is_ in isler:
+            if not (is_.klasor / "video.mp4").exists():
+                continue
+            url = f"{temel}/{gun}/{is_.klasor.name}/video.mp4"
+            try:
+                with urlopen(Request(url, method="HEAD"), timeout=15) as c:
+                    if c.status == 200:
+                        continue
+            except HTTPError:
+                pass
+            except (URLError, TimeoutError, OSError):
+                return None, "Blob'a ulaşılamadı, pencere ölçülemedi"
+            return ileri, f"{gun}/{is_.klasor.name}"
+    return None, ""
 
 
 def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list[str]:
@@ -86,6 +131,16 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
         satirlar.append("  üret: python3 icerik/video.py")
     else:
         satirlar.append("eksik video yok")
+
+    satirlar.append("")
+    ileri, ayrinti = pencere_ucu(bugun, taban)
+    if ileri is None:
+        satirlar.append(f"Blob penceresi: {ayrinti or f'{ILERI_BAK}+ gün yetiyor'}")
+    elif ileri <= 2:
+        satirlar.append(f"Blob penceresi BİTİYOR — {ileri} gün sonra video yok ({ayrinti})")
+        satirlar.append("  tazele: node --env-file=.env.local icerik/blob-pencere.mjs")
+    else:
+        satirlar.append(f"Blob penceresi: {ileri} gün yetiyor (ilk eksik {ayrinti})")
 
     return satirlar
 

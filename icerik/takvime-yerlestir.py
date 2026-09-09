@@ -122,6 +122,15 @@ def yerlestir(klasor: Path, video: Path, defter: dict, deneme: bool) -> str:
             return f"  {klasor.parent.name}/{klasor.name}: ATLANDI (shorts zaten var)"
         hedef = yeni
 
+    # ZATEN YERİNDE OLANI YENİDEN KOYMA. Betik üretim sürerken de
+    # çalıştırılabiliyor (eşleşme kararlı: videolar sırayla kurgulanıyor,
+    # her tur öncekinin önekini aynı yuvalara veriyor). Koruma olmasaydı
+    # ikinci tur bütün blob kayıtlarını silip yüklenmiş yüzlerce videoyu
+    # yeniden yükletirdi.
+    varolan = hedef / "video.mp4"
+    if varolan.exists() and varolan.stat().st_size == video.stat().st_size:
+        return f"  {hedef.parent.name}/{hedef.name} zaten yerinde ({video.name})"
+
     if not deneme:
         if hedef is not klasor:
             klasor.rename(hedef)

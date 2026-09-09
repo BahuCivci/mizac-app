@@ -34,7 +34,10 @@ davranacağını varsay: her şey hazır olmadan başlama.
 | OAuth istemcisi | Web application, yönlendirme `https://mizac.xyz/` |
 | Onay ekranı | **In production** — 7 günlük token ölümü böylece yok |
 | Kapsam | yalnız `https://www.googleapis.com/auth/youtube.upload` |
-| Kanal | `UCWmrrOKDhdhFt537KczSiHw` — `safra943@gmail.com` altında, doğrulandı |
+| Kanal | **bahusworld** — `https://www.youtube.com/@bahusworldyoutube` |
+| Kanal kimliği | `UCWmrrOKDhdhFt537KczSiHw` — `safra943@gmail.com` altında |
+| Doğrulama | Kanalın herkese açık sayfasındaki `externalId` ile token'ın
+  yetkili olduğu kimlik karşılaştırıldı, aynı (9 Eyl 2026). |
 
 ## Bölüm bölüm cevaplar
 
@@ -81,15 +84,20 @@ Google iş ortağı yöneticisi: **Hayır**.
 
 **7. Onaylar:** hepsi işaretlenecek.
 
-## Zorunlu ekran görüntüleri — SENDEN GEREKEN
+## Zorunlu ekran görüntüleri — ALINDI (9 Eyl 2026)
 
-1. **Gizlilik politikası ekran görüntüleri.** Google şunları görmek istiyor:
-   YouTube bölümleri, Google Gizlilik Politikası bağlantısı, veri silme
-   politikası. **6 Eylül'de `/gizlilik` sayfasına "8. YouTube API Servisleri"
-   bölümü eklendi ve üçü de orada.** Sayfanın o bölümünün görüntüsü yeter.
-2. **Ana sayfa ekran görüntüsü** — gizlilik politikası bağlantısının
-   göründüğü yer (footer).
-3. **Hizmet şartları belgesi** — `/kullanim-kosullari` sayfasının çıktısı.
+Üçü de `paylasim/youtube-basvuru-ekler/` altında, canlı siteden alındı.
+Hangisinin formda nereye gittiği o klasördeki `BENIOKU.md`'de.
+
+1. `yt-1-gizlilik-youtube-bolumu.png` — `/gizlilik` sayfasının
+   "8. YouTube API Servisleri" bölümü. Google'ın istediği üçü de tek
+   karede: YouTube Hizmet Şartları, Google Gizlilik Politikası bağlantısı,
+   silme politikası.
+2. `yt-2-anasayfa-altbilgi.png` — ana sayfa altbilgisi, gizlilik
+   bağlantısı işaretli.
+3. `yt-3-kullanim-kosullari.png` — `/kullanim-kosullari`, tam sayfa.
+
+**Sayfalar değişirse bunlar eskir**; yeniden alma yöntemi `BENIOKU.md`'de.
 
 ## Reddedilirse ne olur
 

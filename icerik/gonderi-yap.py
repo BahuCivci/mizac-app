@@ -162,6 +162,9 @@ def main() -> int:
     a.add_argument("--toplu", action="store_true")
     a.add_argument("--bas", type=int, default=0)
     a.add_argument("--kac", type=int, default=1)
+    a.add_argument("--liste", help="numaraları satır satır içeren dosya")
+    a.add_argument("--adim", type=int, default=1,
+                   help="listeden her N. öğeyi al (işçi paylaştırma)")
     k = a.parse_args()
 
     if k.no is not None:
@@ -172,7 +175,15 @@ def main() -> int:
         return 2
 
     mevcut = sorted(int(f.stem) for f in TARIFLER.glob("*.json"))
-    secilen = [n for n in mevcut if n >= k.bas][:k.kac]
+    if k.liste:
+        # LİSTEDEN ÇALIŞ. Aralık bölüşümü işçiler kendi payını bitirince
+        # boşta kalmalarına yol açıyor: 9 Eyl'de üç işçi işini bitirip
+        # durdu, kalan 114 gönderi dört işçinin üzerinde birikti.
+        # Liste + adım ile iş yeniden bölüşülebiliyor.
+        hepsi = [int(s) for s in Path(k.liste).read_text().split()]
+        secilen = hepsi[k.bas::k.adim] if k.adim > 1 else hepsi[k.bas:k.bas+k.kac]
+    else:
+        secilen = [n for n in mevcut if n >= k.bas][:k.kac]
     print(f"{len(secilen)} gönderi üretilecek", flush=True)
     for n in secilen:
         try:

@@ -132,6 +132,35 @@ def sor(pasaj: str, model: str = MODEL, uc: str = OLLAMA,
         return json.loads(m.group(0))
 
 
+KISI = re.compile(r"\b(man|woman|boy|girl|child|children|person|people|"
+                  r"family|father|mother|couple|teacher|student)\b", re.I)
+NITELIK = re.compile(r"turkish|mediterranean|anatolian", re.I)
+
+
+def duzelt(tarif: dict) -> dict:
+    """
+    Düzeltilebilir kusurları yamalar; reddetmeye gerek bırakmaz.
+
+    NEDEN VAR — 9 Eyl 2026
+    İki kusur üç denemede de geçmiyordu ve 9 pasaj büsbütün kaybolacaktı:
+    kapanışta site adının olmaması (5 tarif) ve insan tarif edilirken
+    görünümün belirtilmemesi (4 tarif). İkisi de tek satırlık ekleme;
+    modeli tekrar tekrar denemektense burada düzeltmek hem ucuz hem kesin.
+    """
+    a = tarif.get("adimlar")
+    if not isinstance(a, list) or len(a) != 5:
+        return tarif
+    for x in a:
+        if isinstance(x.get("istem"), str) and KISI.search(x["istem"]) \
+                and not NITELIK.search(x["istem"]):
+            x["istem"] = x["istem"].rstrip(". ") + ", Turkish, Mediterranean features"
+    son = a[4]
+    if isinstance(son.get("anlatim"), str) and \
+            "mizac.xyz" not in son["anlatim"].lower().replace(" ", ""):
+        son["anlatim"] = son["anlatim"].rstrip(". ") + ". Devamı mizac.xyz'de."
+    return tarif
+
+
 def gecerli(tarif: dict) -> str:
     """Tarif kullanılabilir mi; değilse sebebini döndürür."""
     a = tarif.get("adimlar")
@@ -204,6 +233,7 @@ def main() -> int:
             except Exception as e:
                 print(f"  {no:04d} HATA: {type(e).__name__}: {e}")
                 break
+            aday = duzelt(aday)
             sorun = gecerli(aday)
             if not sorun:
                 tarif = aday

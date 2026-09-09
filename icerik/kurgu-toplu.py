@@ -165,13 +165,19 @@ def main() -> int:
     for no in numaralar:
         hedef = CIKTI / f"{no:04d}.mp4"
         if hedef.exists():
-            print(f"  {no:04d} atlandı (var)")
+            print(f"  {no:04d} atlandı (var)", flush=True)
             continue
         try:
             y = kurgula(no)
-            print(f"  {no:04d} ✓ {sure(y):.0f} sn")
+            print(f"  {no:04d} ✓ {sure(y):.0f} sn", flush=True)
         except subprocess.CalledProcessError as e:
-            print(f"  {no:04d} HATA: {(e.stderr or '')[-200:]}")
+            print(f"  {no:04d} HATA: {(e.stderr or '')[-200:]}", flush=True)
+        except Exception as e:
+            # TEK BİR EKSİK DOSYA TOPLU İŞİ DÜŞÜRMESİN. 9 Eyl'de tam bu oldu:
+            # `--hepsi` listeyi SUNUCUDAN alıyor ama tarifi YERELDEN okuyor;
+            # tarifler sunucuda üretildiği için 0015 Mac'te yoktu ve kurgu
+            # 185. videoda çakılıp kalan 130'u hiç denemedi.
+            print(f"  {no:04d} HATA: {type(e).__name__}: {e}", flush=True)
     return 0
 
 

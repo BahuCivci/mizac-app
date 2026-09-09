@@ -156,10 +156,57 @@ def yap(no: int) -> Path:
     return klasor
 
 
+def sirada_ne_var() -> int | None:
+    """
+    Üretilmemiş ve başka işçinin tutmadığı en küçük numarayı ATOMİK olarak
+    kapar. Yoksa None.
+
+    NEDEN KİLİT: `mkdir` dosya sisteminde atomik; iki işçi aynı anda
+    denerse yalnız biri başarılı olur. Böylece aynı gönderi iki kez
+    üretilmiyor ve önceden bölüştürmeye gerek kalmıyor — 9 Eyl sabahı
+    işçilerin üçü payını bitirip boşta kalmıştı.
+    """
+    for f in sorted(TARIFLER.glob("*.json")):
+        no = int(f.stem)
+        klasor = GECICI / f"{no:04d}"
+        if (klasor / "sureler.json").exists():
+            continue
+        kilit = klasor / ".calisiliyor"
+        try:
+            klasor.mkdir(parents=True, exist_ok=True)
+            kilit.mkdir()          # atomik: ikinci deneme FileExistsError
+        except FileExistsError:
+            continue
+        return no
+    return None
+
+
+def surekli() -> int:
+    """Kalan bitene kadar sırayla üretir. Her işçi bunu çalıştırıyor."""
+    yapilan = 0
+    while True:
+        no = sirada_ne_var()
+        if no is None:
+            print(f"KALAN_YOK ({yapilan} üretildi)", flush=True)
+            return 0
+        try:
+            yap(no)
+            yapilan += 1
+        except Exception as e:
+            print(f"  {no:04d} HATA: {type(e).__name__}: {e}", flush=True)
+            # Kilidi bırak ki başka işçi deneyebilsin
+            try:
+                (GECICI / f"{no:04d}" / ".calisiliyor").rmdir()
+            except OSError:
+                pass
+
+
 def main() -> int:
     a = argparse.ArgumentParser(prog="gonderi-yap")
     a.add_argument("--no", type=int)
     a.add_argument("--toplu", action="store_true")
+    a.add_argument("--surekli", action="store_true",
+                   help="kalan bitene kadar kendi iş al")
     a.add_argument("--bas", type=int, default=0)
     a.add_argument("--kac", type=int, default=1)
     a.add_argument("--liste", help="numaraları satır satır içeren dosya")
@@ -167,6 +214,8 @@ def main() -> int:
                    help="listeden her N. öğeyi al (işçi paylaştırma)")
     k = a.parse_args()
 
+    if k.surekli:
+        return surekli()
     if k.no is not None:
         yap(k.no)
         return 0

@@ -84,7 +84,8 @@ def main() -> int:
 
     if not (eksik or uymayan):
         # "kayıtsız" hata değil: 9 Eyl 2026'dan beri Blob arşiv değil kayan
-        # pencere (`blob-pencere.mjs`). Pencere dışındaki videolar bilerek
+        # pencere (`icerik/pencere-hazirla.py` + `pencere-yukle.mjs`).
+        # Pencere dışındaki videolar bilerek
         # orada değil. Bu betik yalnız "duranlar doğru mu" diye bakıyor;
         # "yaklaşan günler eksiksiz mi" sorusunun yeri pencere betiği.
         print("Blob'da duranların hepsi güncel"

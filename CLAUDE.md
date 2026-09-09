@@ -261,9 +261,20 @@ ile döndü. **Kota aşılmışken üzerine yazma bile reddediliyor** — tek do
 
 Çözüm: videoların tamamı Mac'te (`icerik/cikti/gonderiler/`, 4.6 GB asıl +
 `gunluk/` içinde yerleştirilmiş kopyalar), Blob'da yalnız önümüzdeki
-**21 günün** videosu duruyor. `icerik/blob-pencere.mjs` pencereye gireni
-yüklüyor, çıkanı siliyor; Mac'te launchd ile 6 saatte bir
-(`paylasim/xyz.mizac.blob-pencere.plist`). Ölçüldü: 1197 MB → **321 MB**.
+**21 günün** videosu duruyor. Mac'te launchd ile 6 saatte bir
+(`paylasim/xyz.mizac.blob-pencere.plist` → `icerik/blob-pencere-calistir.sh`).
+Ölçüldü: 1197 MB → **321 MB**.
+
+**İŞ İKİ AŞAMA, ve sebebi TCC** (aşağıdaki "Tam Disk Erişimi çocuk sürece
+geçmiyor" maddesi). `icerik/pencere-hazirla.py` sistem python3'üyle çalışıp
+neyin yükleneceğine karar veriyor ve dosyaları `~/mizac-pencere/` altına
+kopyalıyor; `icerik/pencere-yukle.mjs` node ile ORADA çalışıp yüklüyor ve
+pencere dışını siliyor — proje klasörüne hiç dokunmadan. Tek parça node
+çözümü launchd altında sessizce asılı kalıyordu.
+
+`~/mizac-pencere/` kendi `node_modules`'ını taşıyor (`@vercel/blob`, 11 MB).
+Yoksa betik "kurulu değil" deyip çıkıyor; kurulumu:
+`cd ~/mizac-pencere && npm install @vercel/blob`.
 
 **Neden Blob'a hiç gerek var:** Instagram medyayı kendi sunucusuyla
 indiriyor, herkese açık adres şart. TikTok (`FILE_UPLOAD`) ve YouTube

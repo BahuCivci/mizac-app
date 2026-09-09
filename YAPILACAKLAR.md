@@ -267,17 +267,18 @@ Blob'un ücretsiz planı 1 GB; ilk yükleme 218 dosyanın 183'ünde
 "Storage quota exceeded" aldı ve kota aşılmışken üzerine yazma bile
 reddediliyor. Kullanıcı seçti: sıkıştırma değil kayan pencere.
 
-    node --env-file=.env.local icerik/blob-pencere.mjs --deneme
-    node --env-file=.env.local icerik/blob-pencere.mjs
+    bash icerik/blob-pencere-calistir.sh     # elle de aynı yol
 
 Blob'da yalnız önümüzdeki 21 günün videosu duruyor; Mac'te launchd
-6 saatte bir tazeliyor (`paylasim/xyz.mizac.blob-pencere.plist`, kuruldu).
-Ölçüldü: 1197 MB → 321 MB, pencerede 16 video.
+6 saatte bir tazeliyor (`paylasim/xyz.mizac.blob-pencere.plist`, kuruldu ve
+uçtan uca sınandı: penceredeki bir video Blob'dan silindi, ajan tek turda
+geri koydu). Ölçüldü: 1197 MB → 321 MB, pencerede 16 video.
 Gerekçesi ve Instagram'ın neden adres istediği CLAUDE.md'de.
 
 **Doğrulama:** `python3 icerik/blob-dogrula.py` Blob'da duranların
 yereldekiyle aynı olup olmadığını HEAD ile ölçüyor. "Yaklaşan günler
-eksiksiz mi" sorusunun yeri o değil, `blob-pencere.mjs --deneme`.
+eksiksiz mi" sorusunun yeri o değil, `paylasim.durum`un "Blob penceresi"
+satırı ya da `icerik/pencere-hazirla.py`.
 
 **Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
 şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da
@@ -290,30 +291,6 @@ kitaptan slayt metinleri üretilip aynı şablona verilecek, çizim tarafına
 hiç dokunulmayacak. Videolardaki tarif üretimi (`gonderi-uret.py`) örnek
 alınabilir; oradaki üç tuzak burada da geçerli (örnek verme, OCR çöpünü
 ele, kapanışta siteyi adıyla söyle).
-
----
-
-## 8b. Blob penceresi nöbetçisi — KURULDU ama İZİN BEKLİYOR
-
-`paylasim/xyz.mizac.blob-pencere.plist` yüklendi ve 6 saatte bir çalışıyor,
-ama **node `~/Documents`'ı okuyamadığı için iş yapamıyor**. bash'in Tam Disk
-Erişimi çocuğuna geçmiyor; ayrıntı ve ölçüm CLAUDE.md'de.
-
-**Tek seferlik, kullanıcının yapması gereken:**
-Sistem Ayarları → Gizlilik ve Güvenlik → **Tam Disk Erişimi** →
-`+` → `/opt/homebrew/bin/node` (Finder'da `Cmd+Shift+G` ile yol yazılır).
-`/bin/bash` zaten o listede.
-
-Sonra doğrula:
-
-    launchctl kickstart -p gui/$(id -u)/xyz.mizac.blob-pencere
-    tail /tmp/mizac-blob-pencere.log     # "tamam" yazmalı
-
-**İzin verilene kadar sistem güvende:** pencerede 22 günlük video var ve
-`python3 -m paylasim.durum` her oturumda kaç gün kaldığını yazıyor. Elle
-tazelemek yeterli:
-
-    node --env-file=.env.local icerik/blob-pencere.mjs
 
 ---
 

@@ -1,48 +1,68 @@
 #!/bin/bash
 # Blob kayan penceresini tazeler. MAC'te, launchd ile 6 saatte bir.
+# Elle de çalıştırılabilir:  bash icerik/blob-pencere-calistir.sh
 #
-# NEDEN SARMALAYICI: launchd'ye doğrudan `node --env-file=...` verilemiyor —
-# çalışma dizini dar, PATH yalnız /usr/bin:/bin:/usr/sbin:/sbin (ölçüldü,
-# `timeout` bile yok), ve token `.env.local`'dan geliyor.
+# NE YAPIYOR
+# Blob'da yalnız yaklaşan ~21 günün videosu duruyor; bu betik pencereye
+# gireni yüklüyor, çıkanı siliyor. Gerekçesi CLAUDE.md'de: Instagram medyayı
+# herkese açık bir adresten çekiyor ama Blob'un ücretsiz planı 1 GB ve 254
+# video tam kalitede 6.6 GB tutuyor.
 #
-# LOG ~/Documents DIŞINDA. macOS zamanlanmış işe orayı açtırmıyor; launchd
-# oradaki bir log'u açamayınca EX_CONFIG (78) verip işi hiç başlatmıyor.
+# NEDEN İKİ AŞAMA — ölçülmüş bir macOS engeli
+# launchd altında `/opt/homebrew/bin/node` `~/Documents`'ı okuyamıyor:
+# `/bin/bash`'e verilen Tam Disk Erişimi ÇOCUĞUNA GEÇMİYOR ve node hata
+# vermeden SESSİZCE ASILI KALIYOR. Aynı işte `/usr/bin/python3` ve
+# `/bin/cat` aynı dosyayı sorunsuz okuyor — engel imzasız homebrew
+# ikilisine özel. Bu yüzden:
+#   1. Python (Documents'ı okuyabiliyor) neyin yükleneceğine karar verip
+#      dosyaları `~/mizac-pencere/` altına kopyalar.
+#   2. node (proje klasörüne hiç dokunmaz) yükler ve pencere dışını siler.
+# Böylece ayar değiştirmeye gerek kalmıyor.
 #
-# BEKÇİ NEDEN VAR — 9 Eyl 2026'da ölçüldü
-# `/bin/bash`'in Tam Disk Erişimi ÇOCUĞUNA GEÇMİYOR. bash `~/Documents`'ı
-# okuyabiliyor ama `/opt/homebrew/bin/node` okuyamıyor: en basit
-# `node -e 'console.log(1)'` bile çalışma dizini proje içindeyken SESSİZCE
-# ASILI KALIYOR — hata vermiyor, dönmüyor. Sistem `/usr/bin/python3` ve
-# `/bin/cat` aynı dosyayı sorunsuz okuyor, yani engel node'a özel.
-# Asılı kalan iş launchd'ye "hâlâ çalışıyor" görünüyor ve SONRAKİ BÜTÜN
-# TURLARI ENGELLİYOR. Bekçi bunu 120 saniyede kesiyor ve sebebini yazıyor.
-#
-# ÇÖZÜMÜ: Sistem Ayarları → Gizlilik ve Güvenlik → Tam Disk Erişimi'ne
-# `/opt/homebrew/bin/node` eklemek (`/bin/bash` zaten orada).
+# LOG ~/Documents DIŞINDA: launchd oradaki bir log'u açamayınca
+# EX_CONFIG (78) verip işi hiç başlatmıyor.
 set -u
 KOK="$HOME/Documents/mizac-app"
+CALISMA="$HOME/mizac-pencere"
 LOG="/tmp/mizac-blob-pencere.log"
+PY="/usr/bin/python3"
 NODE="/opt/homebrew/bin/node"
-BEKLE=120
+BEKLE=900          # saniye; 16 videoluk pencere en kötü ihtimalle bu kadar sürer
 
 yaz() { echo "$(date '+%F %T') $*" >> "$LOG"; }
+
+# Bekçi: asılı kalan iş launchd'ye "çalışıyor" görünüp SONRAKİ BÜTÜN TURLARI
+# engelliyor. Ne olursa olsun kesip sebebini yazıyoruz.
+calistir() {
+  "$@" >> "$LOG" 2>&1 &
+  local pid=$! i=0
+  while [ $i -lt $BEKLE ] && kill -0 "$pid" 2>/dev/null; do sleep 1; i=$((i + 1)); done
+  if kill -0 "$pid" 2>/dev/null; then
+    kill -9 "$pid" 2>/dev/null
+    yaz "ASILI KALDI, öldürüldü: $*"
+    return 1
+  fi
+  wait "$pid"
+}
 
 cd "$KOK" || { yaz "proje klasörü yok"; exit 1; }
 [ -f .env.local ] || { yaz ".env.local yok — vercel env pull gerekiyor"; exit 1; }
 
 yaz "pencere tazeleniyor"
-"$NODE" --env-file=.env.local icerik/blob-pencere.mjs >> "$LOG" 2>&1 &
-pid=$!
-for ((i = 0; i < BEKLE; i++)); do
-  kill -0 "$pid" 2>/dev/null || break
-  sleep 1
-done
-if kill -0 "$pid" 2>/dev/null; then
-  kill -9 "$pid" 2>/dev/null
-  yaz "ASILI KALDI, öldürüldü — node ~/Documents'ı okuyamıyor."
-  yaz "  Sistem Ayarları → Gizlilik ve Güvenlik → Tam Disk Erişimi → $NODE"
-  yaz "  O verilene kadar pencereyi elle tazele:"
-  yaz "  cd $KOK && node --env-file=.env.local icerik/blob-pencere.mjs"
+
+# Çalışma alanını depodakiyle eşitle: betik ve token burada tazeleniyor ki
+# depoda düzeltilen bir şey sessizce eski sürümle çalışmasın.
+mkdir -p "$CALISMA"
+cp "$KOK/icerik/pencere-yukle.mjs" "$CALISMA/" || { yaz "betik kopyalanamadı"; exit 1; }
+grep -m1 BLOB_READ_WRITE_TOKEN "$KOK/.env.local" > "$CALISMA/.env" || { yaz "token yok"; exit 1; }
+chmod 600 "$CALISMA/.env"
+if [ ! -d "$CALISMA/node_modules/@vercel/blob" ]; then
+  yaz "@vercel/blob kurulu değil: cd $CALISMA && npm install @vercel/blob"
   exit 1
 fi
-wait "$pid" && yaz "tamam" || yaz "BAŞARISIZ (çıkış $?)"
+
+calistir "$PY" "$KOK/icerik/pencere-hazirla.py" || { yaz "hazırlık BAŞARISIZ"; exit 1; }
+cd "$CALISMA" || exit 1
+calistir "$NODE" --env-file=.env pencere-yukle.mjs || { yaz "yükleme BAŞARISIZ"; exit 1; }
+rm -rf "$CALISMA/yuklenecek"
+yaz "tamam"

@@ -91,6 +91,76 @@ def metin_uret(tarif: dict) -> str:
     return f"✦ {kanca}\n\n{govde}\n\n{CAGRI}\n{KAYNAK}\n{ETIKETLER}\n"
 
 
+GUNLER = ("Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma",
+          "Cumartesi", "Pazar")
+
+
+def senaryo_uret(tarif: dict, gun: str, bicim: str) -> str:
+    """
+    Videonun ne olduğunu anlatan not.
+
+    Eskisi "videoyu çekmen gerekiyor" diyordu ve artık yanlış: video hazır.
+    Yerine kitaptaki pasajın hangi sayfadan geldiği ve beş planın ne olduğu
+    yazılıyor — klasöre bakan insanın gerçekten işine yarayan bilgi bu.
+    """
+    satirlar = [
+        f"# {tarif['bolum']}",
+        "",
+        f"{gun} · {bicim} · pasaj {tarif['pasaj_no']} · sayfa {tarif['sayfa']}",
+        "",
+        f"> Video hazır: `video.mp4`. Kaynak: {tarif['kaynak']}.",
+        "",
+    ]
+    for i, a in enumerate(tarif["adimlar"], 1):
+        satirlar += [
+            f"**{i}. plan**",
+            f"- anlatım: {a['anlatim'].strip()}",
+            f"- altyazı: {' / '.join(a['altyazi'].split(chr(10)))}",
+            f"- görüntü: {a['istem'].strip()}",
+            "",
+        ]
+    return "\n".join(satirlar)
+
+
+def bugun_yaz(gun_yolu: Path) -> None:
+    """
+    `_BUGUN.txt`'i klasörün BUGÜNKÜ haline göre yeniden yazar.
+
+    Dosyayı hiçbir betik okumuyor; klasöre bakan insan için duruyor. Ama
+    eskisi "VIDEO ÇEKİLECEK" diyor ve video artık hazır — yanlış bilgi
+    vermektense yeniden kurmak daha ucuz.
+    """
+    import datetime
+    gun = gun_yolu.name
+    tarih = datetime.date.fromisoformat(gun)
+    kayitlar = []
+    for klasor in sorted(gun_yolu.iterdir()):
+        if not klasor.is_dir():
+            continue
+        metin = klasor / "METIN.txt"
+        if not metin.exists():
+            continue
+        ilk = next((x.strip() for x in metin.read_text(encoding="utf-8").splitlines()
+                    if x.strip()), "")
+        konu = ilk.lstrip("✦💧💨🔥🌍 ").strip()
+        hazir = ("Video hazır (video.mp4)." if (klasor / "video.mp4").exists()
+                 else "Görseller hazır.")
+        platform, _, tur = klasor.name.partition("-")
+        kayitlar.append((platform.upper(), tur, klasor.name, konu, hazir))
+
+    satirlar = [f"{gun} — {GUNLER[tarih.weekday()]}",
+                f"Bugün {len(kayitlar)} post var.", ""]
+    for i, (platform, tur, klasor, konu, hazir) in enumerate(kayitlar, 1):
+        satirlar += [f"{i}) {platform} · {tur}",
+                     f"   klasör : {klasor}/",
+                     f"   konu   : {konu}",
+                     f"   yapılacak: {hazir}", ""]
+    satirlar.append("Not: Karusel görsellerinin sırası önemli — "
+                    "son kare mizac.xyz çağrısıdır.")
+    (gun_yolu / "_BUGUN.txt").write_text("\n".join(satirlar) + "\n",
+                                         encoding="utf-8")
+
+
 def yuvalar(baslangic: str) -> list[Path]:
     """Değiştirilecek video klasörleri, tarihe göre sıralı."""
     bulunan = []
@@ -115,30 +185,35 @@ def yerlestir(klasor: Path, video: Path, defter: dict, deneme: bool) -> str:
 
     hedef = klasor
     if klasor.name == "youtube-uzun":
-        yeni = klasor.parent / "youtube-shorts"
-        if yeni.exists():
+        yeni_yol = klasor.parent / "youtube-shorts"
+        if yeni_yol.exists():
             # Aynı günde ikisi birden varsa taşıma çakışır. Bugünkü takvimde
             # böyle bir gün yok; yine de sessizce üzerine yazmaktansa atla.
             return f"  {klasor.parent.name}/{klasor.name}: ATLANDI (shorts zaten var)"
-        hedef = yeni
+        hedef = yeni_yol
 
-    # ZATEN YERİNDE OLANI YENİDEN KOYMA. Betik üretim sürerken de
+    # ZATEN YERİNDE OLANI YENİDEN KOPYALAMA. Betik üretim sürerken de
     # çalıştırılabiliyor (eşleşme kararlı: videolar sırayla kurgulanıyor,
     # her tur öncekinin önekini aynı yuvalara veriyor). Koruma olmasaydı
     # ikinci tur bütün blob kayıtlarını silip yüklenmiş yüzlerce videoyu
-    # yeniden yükletirdi.
+    # yeniden yükletirdi. Metin ve senaryo yine de yazılıyor: ikisi de
+    # ucuz, ve önceki turda eksik kalmışlarsa burada tamamlanıyorlar.
     varolan = hedef / "video.mp4"
-    if varolan.exists() and varolan.stat().st_size == video.stat().st_size:
-        return f"  {hedef.parent.name}/{hedef.name} zaten yerinde ({video.name})"
+    zaten = varolan.exists() and varolan.stat().st_size == video.stat().st_size
 
     if not deneme:
-        if hedef is not klasor:
-            klasor.rename(hedef)
-        shutil.copy2(video, hedef / "video.mp4")
+        if not zaten:
+            if hedef is not klasor:
+                klasor.rename(hedef)
+            shutil.copy2(video, hedef / "video.mp4")
+            defter.pop(f"{hedef.parent.name}/{hedef.name}/video.mp4", None)
+            defter.pop(f"{klasor.parent.name}/{klasor.name}/video.mp4", None)
         (hedef / "METIN.txt").write_text(metin_uret(tarif), encoding="utf-8")
-        defter.pop(f"{hedef.parent.name}/{hedef.name}/video.mp4", None)
-        defter.pop(f"{klasor.parent.name}/{klasor.name}/video.mp4", None)
+        (hedef / "SENARYO.md").write_text(
+            senaryo_uret(tarif, hedef.parent.name, hedef.name), encoding="utf-8")
 
+    if zaten:
+        return f"  {hedef.parent.name}/{hedef.name} zaten yerinde ({video.name})"
     tur = "→shorts " if hedef is not klasor else ""
     return (f"  {hedef.parent.name}/{hedef.name} {tur}← {video.name} "
             f"(pasaj {tarif['pasaj_no']}, {tarif['bolum'][:28]})")
@@ -171,6 +246,8 @@ def main() -> int:
     if not k.deneme:
         BLOB_DEFTER.write_text(json.dumps(defter, indent=2, ensure_ascii=False),
                                encoding="utf-8")
+        for gun_yolu in {klasor.parent for klasor, _ in ciftler}:
+            bugun_yaz(gun_yolu)
 
     artan = len(vd) - len(yv)
     if artan > 0:

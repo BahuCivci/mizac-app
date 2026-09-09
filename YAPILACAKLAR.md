@@ -269,7 +269,15 @@ Platformlar hepsini yeniden kodluyor.
 
 **Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
 şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da
-istedi. Görsel üretimi ayrı bir boru hattı gerektiriyor.
+istedi.
+
+**Sanıldığı kadar zor değil — görsel modeli GEREKMİYOR.** Karusel kartları
+fotoğraf değil: `icerik/sablon.ts`'teki `kareSvg()` bir SVG kuruyor,
+`uret.ts` onu `sharp` ile PNG'ye basıyor. Yani iş tamamen metin işi —
+kitaptan slayt metinleri üretilip aynı şablona verilecek, çizim tarafına
+hiç dokunulmayacak. Videolardaki tarif üretimi (`gonderi-uret.py`) örnek
+alınabilir; oradaki üç tuzak burada da geçerli (örnek verme, OCR çöpünü
+ele, kapanışta siteyi adıyla söyle).
 
 ---
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Blob kayan penceresi — Mac'te, kullanıcı olarak çalışır.
+
+  Önümüzdeki 21 günün videosunu Vercel Blob'a koyuyor, geçmişte kalanı
+  siliyor. Günlük paylaşımı yapan GitHub Actions medyayı oradan indiriyor.
+
+  NEDEN GEREKLİ: Instagram medyayı herkese açık bir adresten çekiyor, ama
+  Blob'un ücretsiz planı 1 GB ve 254 video tam kalitede 6.6 GB tutuyor.
+  Pencere ile Blob'da bir seferde ~320 MB duruyor.
+
+  NEDEN TAKVİM DEĞİL ARALIK: bu projede launchd'nin kaçırdığı takvim işini
+  telafi ETMEDİĞİ ölçüldü (6 Eyl 2026, Mac derin uykudaydı, runs = 0).
+  `StartInterval` makine uyanır uyanmaz çalışıyor. 21 günlük tampon
+  sayesinde birkaç gün kaçırmak zararsız.
+
+  LaunchAgent, Daemon DEĞİL: `.env.local` ve Vercel kimliği kullanıcının ev
+  dizininde; root olarak çalıştırılırsa bulunamaz.
+
+  Kurulum:
+    cp paylasim/xyz.mizac.blob-pencere.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.blob-pencere.plist
+  Elle çalıştırıp doğrulamak:
+    launchctl kickstart -p gui/$(id -u)/xyz.mizac.blob-pencere
+    tail /tmp/mizac-blob-pencere.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.blob-pencere</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/bahu/Documents/mizac-app/icerik/blob-pencere-calistir.sh</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>21600</integer>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/mizac-blob-pencere-cikti.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/mizac-blob-pencere-cikti.log</string>
+</dict>
+</plist>

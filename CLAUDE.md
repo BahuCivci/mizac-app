@@ -253,6 +253,33 @@ node icerik/yukle.mjs       # medyayı Vercel Blob'a
 python3 icerik/csv-url.py   # CSV'ler + parçalar
 ```
 
+**BLOB ARŞİV DEĞİL, KAYAN PENCERE (9 Eyl 2026).** Vercel Blob'un ücretsiz
+planı **1 GB**. Kitaptan üretilen 254 video tam kalitede 6.6 GB tutuyor ve
+yükleme tam bu duvara tosladı: 218 dosyanın 183'ü "Storage quota exceeded"
+ile döndü. **Kota aşılmışken üzerine yazma bile reddediliyor** — tek dosyayla
+ölçüldü, yani önce yer açmadan hiçbir şey yüklenemiyor.
+
+Çözüm: videoların tamamı Mac'te (`icerik/cikti/gonderiler/`, 4.6 GB asıl +
+`gunluk/` içinde yerleştirilmiş kopyalar), Blob'da yalnız önümüzdeki
+**21 günün** videosu duruyor. `icerik/blob-pencere.mjs` pencereye gireni
+yüklüyor, çıkanı siliyor; Mac'te launchd ile 6 saatte bir
+(`paylasim/xyz.mizac.blob-pencere.plist`). Ölçüldü: 1197 MB → **321 MB**.
+
+**Neden Blob'a hiç gerek var:** Instagram medyayı kendi sunucusuyla
+indiriyor, herkese açık adres şart. TikTok (`FILE_UPLOAD`) ve YouTube
+(resumable) dosyayı doğrudan alıyor — adres YALNIZ Instagram için.
+Instagram'ın doğrudan yükleme yolu (`rupload.facebook.com`,
+`upload_type=resumable`) **yalnız Facebook Login for Business** uygulamalara
+açık; biz Instagram Login yolundayız (hesap Creator, Facebook Sayfası yok —
+App Review'u atlayan şey bu). Belgeden doğrulandı, hatırlanmadı.
+
+**Mac 21 günden uzun kapalı kalırsa** o günün videosu Blob'da olmaz ve
+paylaşım GÜRÜLTÜLÜ biçimde hata verir (indirme 404) — sessiz atlama değil.
+Tampon bilerek geniş tutuldu.
+
+**Görseller pencereye girmiyor**, hepsi sürekli Blob'da: 816 PNG toplam
+42 MB, yani kotanın %4'ü. Silip yeniden yüklemenin getirisi yok.
+
 **`yukle.mjs` DEFTERE BAKIP ATLIYOR.** Yüklenenler `cikti/blob-adresler.json`
 içinde; bir dosyanın kaydı varsa içeriği değişse bile yeniden yüklenmiyor.
 Var olan bir medyayı değiştirdiysen o anahtarı defterden sil, yoksa Blob

@@ -83,7 +83,12 @@ def main() -> int:
         print(f"  {x}")
 
     if not (eksik or uymayan):
-        print("hepsi güncel")
+        # "kayıtsız" hata değil: 9 Eyl 2026'dan beri Blob arşiv değil kayan
+        # pencere (`blob-pencere.mjs`). Pencere dışındaki videolar bilerek
+        # orada değil. Bu betik yalnız "duranlar doğru mu" diye bakıyor;
+        # "yaklaşan günler eksiksiz mi" sorusunun yeri pencere betiği.
+        print("Blob'da duranların hepsi güncel"
+              f" ({len(kayitsiz)} dosya bilerek yüklü değil — kayan pencere)")
         return 0
 
     if k.defteri_duzelt:

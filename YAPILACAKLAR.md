@@ -261,11 +261,23 @@ olan dosyayı atlıyor. Video değişince kayıt silinmezse yeni dosya hiç
 yüklenmez, Blob eskisini sunmaya devam eder ve paylaşım eskisini atar —
 hiçbir yerde hata görünmez. `takvime-yerlestir.py` kaydı kendisi siliyor.
 
-**Videolar yeniden kodlanmadı.** Ortalama 26 MB (CRF 20, 1080x1920).
-Ölçüldü: yeniden kodlama dosyayı yarıya indiriyor ama 315 video için ~2
-saat CPU istiyor, buna karşılık kazandırdığı tek şey yükleme süresi —
-Blob'a yükleme tek akışta 11.5 Mbps, sekiz koşut işçiyle zaten sorun değil.
-Platformlar hepsini yeniden kodluyor.
+**BLOB KOTASI — kayan pencereye geçildi (9 Eyl akşamı).**
+Videolar tam kalitede (ortalama 26 MB) duruyor ve yeniden kodlanmıyor. Ama
+Blob'un ücretsiz planı 1 GB; ilk yükleme 218 dosyanın 183'ünde
+"Storage quota exceeded" aldı ve kota aşılmışken üzerine yazma bile
+reddediliyor. Kullanıcı seçti: sıkıştırma değil kayan pencere.
+
+    node --env-file=.env.local icerik/blob-pencere.mjs --deneme
+    node --env-file=.env.local icerik/blob-pencere.mjs
+
+Blob'da yalnız önümüzdeki 21 günün videosu duruyor; Mac'te launchd
+6 saatte bir tazeliyor (`paylasim/xyz.mizac.blob-pencere.plist`, kuruldu).
+Ölçüldü: 1197 MB → 321 MB, pencerede 16 video.
+Gerekçesi ve Instagram'ın neden adres istediği CLAUDE.md'de.
+
+**Doğrulama:** `python3 icerik/blob-dogrula.py` Blob'da duranların
+yereldekiyle aynı olup olmadığını HEAD ile ölçüyor. "Yaklaşan günler
+eksiksiz mi" sorusunun yeri o değil, `blob-pencere.mjs --deneme`.
 
 **Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
 şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da

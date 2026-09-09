@@ -449,6 +449,25 @@ service='kTCCServiceSystemPolicyAllFiles' and auth_value=2;"` ile görülür.
 Log dosyası da `~/Documents` dışında olmalı: launchd oradaki bir log'u
 açamayıp `EX_CONFIG (78)` veriyor, iş hiç başlamıyor.
 
+**TAM DİSK ERİŞİMİ ÇOCUK SÜRECE GEÇMİYOR (9 Eyl 2026, ölçüldü).**
+`/bin/bash`'e izin verilmiş olması yeterli değil: bash `~/Documents`'ı
+okuyor ama başlattığı `/opt/homebrew/bin/node` okuyamıyor. Üstelik hata
+vermiyor — en basit `node -e 'console.log(1)'` bile çalışma dizini proje
+içindeyken **sessizce asılı kalıyor**. Aynı launchd işinde
+`/usr/bin/python3` ve `/bin/cat` aynı dosyayı sorunsuz okuyor, yani engel
+node'a özel (imzasız/homebrew ikili).
+
+İki sonucu var:
+- Asılı iş launchd'ye "çalışıyor" görünüyor ve **sonraki bütün turları
+  engelliyor**. Bu yüzden `blob-pencere-calistir.sh` kendi bekçisini
+  taşıyor: 120 saniyede kesiyor ve sebebini log'a yazıyor.
+- Çözümü, bash için yapılanın aynısı: Tam Disk Erişimi listesine
+  `/opt/homebrew/bin/node` eklemek.
+
+Zamanlanmış bir işe yeni bir ikili soktuğunda **önce onun okuyabildiğini
+ölç** — `~/Documents` içinde `cd` edip küçük bir dosya okutan bir deneme
+işi yeter.
+
 Doğrulamak için 10:00'ı bekleme: `launchctl start xyz.mizac.paylasim` deyip
 log'a bak.
 

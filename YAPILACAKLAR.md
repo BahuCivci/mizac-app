@@ -293,6 +293,30 @@ ele, kapanışta siteyi adıyla söyle).
 
 ---
 
+## 8b. Blob penceresi nöbetçisi — KURULDU ama İZİN BEKLİYOR
+
+`paylasim/xyz.mizac.blob-pencere.plist` yüklendi ve 6 saatte bir çalışıyor,
+ama **node `~/Documents`'ı okuyamadığı için iş yapamıyor**. bash'in Tam Disk
+Erişimi çocuğuna geçmiyor; ayrıntı ve ölçüm CLAUDE.md'de.
+
+**Tek seferlik, kullanıcının yapması gereken:**
+Sistem Ayarları → Gizlilik ve Güvenlik → **Tam Disk Erişimi** →
+`+` → `/opt/homebrew/bin/node` (Finder'da `Cmd+Shift+G` ile yol yazılır).
+`/bin/bash` zaten o listede.
+
+Sonra doğrula:
+
+    launchctl kickstart -p gui/$(id -u)/xyz.mizac.blob-pencere
+    tail /tmp/mizac-blob-pencere.log     # "tamam" yazmalı
+
+**İzin verilene kadar sistem güvende:** pencerede 22 günlük video var ve
+`python3 -m paylasim.durum` her oturumda kaç gün kaldığını yazıyor. Elle
+tazelemek yeterli:
+
+    node --env-file=.env.local icerik/blob-pencere.mjs
+
+---
+
 ## 8. VPN sağlık nöbetçisi — KURULMADI
 
 `danisman/sunucu/vpn-saglik.sh` yazıldı ama yüklenmedi. Sebebi 7 Eylül'de

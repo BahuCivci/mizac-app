@@ -36,7 +36,7 @@ from __future__ import annotations
 
 import argparse
 import json
-import shutil
+import os
 import sys
 from pathlib import Path
 
@@ -205,7 +205,18 @@ def yerlestir(klasor: Path, video: Path, defter: dict, deneme: bool) -> str:
         if not zaten:
             if hedef is not klasor:
                 klasor.rename(hedef)
-            shutil.copy2(video, hedef / "video.mp4")
+            # KOPYA DEĞİL SABİT BAĞLANTI. Asıl `cikti/gonderiler/` altında;
+            # kopyalayınca aynı 26 MB iki kez yer kaplıyordu — 254 gönderide
+            # 6.5 GB. İkisi aynı disk bölümünde olduğu için `os.link` bunu
+            # bedavaya çözüyor ve dosya her iki yerden de normal görünüyor.
+            # Güvenli, çünkü bu dosyalar bir kez yazılıp bir daha
+            # değiştirilmiyor; yerine yenisi konurken de `os.replace` ile
+            # bağlantı koparılıyor, aslın üzerine yazılmıyor.
+            hedef_video = hedef / "video.mp4"
+            gecici = hedef / "video.mp4.yeni"
+            gecici.unlink(missing_ok=True)
+            os.link(video, gecici)
+            os.replace(gecici, hedef_video)
             defter.pop(f"{hedef.parent.name}/{hedef.name}/video.mp4", None)
             defter.pop(f"{klasor.parent.name}/{klasor.name}/video.mp4", None)
         (hedef / "METIN.txt").write_text(metin_uret(tarif), encoding="utf-8")

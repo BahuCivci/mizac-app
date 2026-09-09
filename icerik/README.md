@@ -1,110 +1,67 @@
-# Sosyal Medya İçerik Üreticisi
+# icerik/ — içerik üretimi ve teslimi
 
-Instagram, TikTok ve YouTube için bir yıllık post takvimini, metinleri ve
-görselleri üretir. Next uygulamasından **bağımsızdır** — siteyi build etmez,
-çalıştırmaz, etkilemez. Uygulamanın verisini yalnızca *okur*.
+Burada üç ayrı boru hattı var. Karıştırmamak için hangisinin nerede
+çalıştığı ve neyi ürettiği aşağıda.
 
-```bash
-npm run icerik                              # yarından itibaren 365 gün
-npm run icerik -- --baslangic 2026-09-01    # başka bir tarihten başlat
-npm run icerik -- --gun 90                  # sadece 90 günlük plan
-npm run icerik -- --gorselsiz               # sadece metinler (hızlı)
-```
+## 1. Kitaptan video (asıl üretim, 2026 Eylül)
 
-Sonra: `open icerik/cikti/index.html`
+Kitabın metninden günlük dikey videolar üretir.
 
-## Neden böyle kurgulandı
-
-365 postu elle yazmak yerine, içerik uygulamanın kendi verisinden türetilir.
-Sitede bir mizaç açıklaması düzeltilirse, üretilen postlar da düzelir. Tek
-kaynak: `lib/mizac-data.ts`, `lib/uyum-data.ts`, `lib/blog-data.ts`.
-
-Her post dosyasında içeriğin uygulamada tam olarak nereden geldiği yazar
-(`Veri kaynağı: mizacProfiller.safravi.beslenme`), böylece bir hata görülürse
-kaynağına gidilebilir.
-
-## Dosyalar
-
-| Dosya | İşi |
-|---|---|
-| `temalar.ts` | İçerik sütunları, haftalık yayın kadansı, etiketler, ölçüler |
-| `kaynak.ts` | Uygulama verisinden içerik atomlarını çıkarır |
-| `sablon.ts` | SVG post şablonları (sharp ile PNG'ye çevrilir) |
-| `uret.ts` | Takvimi kurar, metinleri ve görselleri yazar |
-| `kayit.mjs` | Node çözümleyici kancası — `@/` alias'ı ve uzantısız import'lar için |
-| `video.py` | Senaryolardan video üretir (macOS `say` + ffmpeg, maliyet sıfır) |
-| `paylas.py` | Günün içeriğini Instagram/TikTok'a resmî API'lerle gönderir |
-
-## Çıktı — `icerik/cikti/` (git'e girmez)
-
-**Hiçbir şey çalıştırmadan kullanmak için:** `cikti/gunluk/` klasörünü açın.
-Her gün için bir klasör var; içinde `_BUGUN.txt` (o gün ne paylaşılacak),
-görseller (`1.png, 2.png…` yükleme sırasına göre) ve `METIN.txt` (açıklama +
-etiketler). Video günlerinde ayrıca `kapak.png` ve `SENARYO.md`.
-
-**Tarayıcıda gezinmeyi tercih ederseniz:** `open icerik/cikti/index.html` —
-gün gün akış, ok tuşları/kaydırma ile ilerler, metni kopyalar, görseli indirir.
-
-| Yol | Ne işe yarar |
-|---|---|
-| `index.html` | Tarayıcıda gün gün akış (isteğe bağlı) |
-| `zamanlayici/*.csv` | Meta Business Suite / Later / Buffer'a toplu yükleme |
-| `gunluk/<tarih>/` | Gün gün klasörler — görseller + METIN.txt + senaryo |
-| `postlar/*.md` | Post başına brief + video senaryosu |
-| `takvim.csv` | Sheets/Excel'e aktarılabilir genel takvim |
-
-Ölçüler: karusel/kare 1080×1350, reels/tiktok/shorts 1080×1920, uzun 1280×720.
-
-## Yayın kadansı
-
-`temalar.ts` içindeki `KADANS`'tan değiştirilir. Varsayılan haftalık plan:
-
-| Gün | Platform | Biçim |
+| Betik | Nerede çalışır | Ne yapar |
 |---|---|---|
-| Pazartesi | Instagram | karusel |
-| Salı | TikTok | video (test sorusu) |
-| Çarşamba | Instagram | tek görsel |
-| Perşembe | YouTube | Shorts |
-| Cuma | Instagram + TikTok | reels + video |
-| Cumartesi | Instagram | karusel (uyum) |
-| Pazar | TikTok | video |
+| `kitap-bol.py` | Mac | Kitabı anlatım boyunda pasajlara böler, OCR çöpünü eler |
+| `gonderi-uret.py` | **Sunucu** | Pasajdan 5 adımlık tarif üretir (anlatım, altyazı, görüntü istemi) |
+| `gonderi-yap.py` | **Sunucu** | Tariften ses + 5 plan üretir (Chatterbox + Wan 2.2) |
+| `kurgu-toplu.py` | Mac | Sunucudan çeker, altyazıyı basar, videoyu kurgular |
+| `takvime-yerlestir.py` | Mac | Bitmiş videoyu takvimdeki yuvaya koyar, metnini yazar |
 
-Ayın ilk Pazar'ı ayrıca uzun YouTube videosu. Toplam ≈ 429 post/yıl.
+Çıktı: `cikti/gonderiler/` (asıllar) ve `cikti/gunluk/<gün>/<biçim>/`
+(takvimdeki yerleri — videolar asla kopyalanmaz, **sabit bağlantı** kurulur).
 
-## mizac.xyz reklamı
+## 2. Blob teslimi (medyanın Instagram'a ulaşması)
 
-Sitenin görünmesi isteğe bağlı değil, şablona gömülü:
+Instagram medyayı herkese açık bir adresten çekiyor, ama Vercel Blob'un
+ücretsiz planı 1 GB. Bu yüzden Blob arşiv değil **kayan pencere**:
 
-1. **Her görselin altında** `mizac.xyz` bandı (`altBilgi()` — kaldırma)
-2. **Her karuselin son karesi** doğrudan siteye çağrı (`kapanisSvg()`)
-3. **Her açıklama metninde** platforma özel CTA satırı (`temalar.ts` → `CTA`)
-4. **Her video senaryosunun kapanış sahnesi** siteyi söyler ve ekranda gösterir
+| Betik | Ne yapar |
+|---|---|
+| `blob-pencere-calistir.sh` | **Tek giriş noktası.** launchd 6 saatte bir çağırıyor; elle de çalışır |
+| `pencere-hazirla.py` | Neyin eksik olduğuna karar verir, dosyaları `~/mizac-pencere/`'ye kopyalar |
+| `pencere-yukle.mjs` | `~/mizac-pencere/` içinde çalışıp yükler ve pencere dışını siler |
+| `blob-dogrula.py` | Blob'dakiler yereldekiyle aynı mı — HEAD ile ölçer |
+| `yukle.mjs` | Görselleri Blob'a yükler (videolar pencere betiğinin işi) |
 
-## Video üretimi
+İkiye bölünmesinin sebebi macOS: launchd altında node `~/Documents`'ı
+okuyamıyor. Ayrıntı `pencere-hazirla.py`'nin başında.
 
-```bash
-python3 icerik/video.py              # eksik olan tüm videoları üret (~40 dk)
-python3 icerik/video.py --gun 2026-08-24
-```
+## 3. Şablondan içerik (eski üretim, hâlâ karusel ve kareler için)
 
-Senaryodaki sahneleri Türkçe sistem sesiyle seslendirip kapak görseli ve marka
-renkli kartlarla birleştirir, sonda mizac.xyz kartı ekler. Dışarıya hiçbir şey
-gitmez, hiçbir servise ödeme yapılmaz.
+| Betik | Ne yapar |
+|---|---|
+| `uret.ts` | Bütün takvimi üretir — karusel/kare görselleri, METIN.txt'ler |
+| `sablon.ts`, `temalar.ts`, `kaynak.ts` | `uret.ts`'in şablonları ve veri kaynağı |
+| `kitaptan.py` | Bir konuya en yakın kitap pasajlarını bulur |
+| `video.py`, `kurgu.py` | Eski slayt videoları (kitaptan üretim bunların yerini aldı) |
+| `toplu-ses-cikart.py` | Seslendirilecek metinleri toplar |
 
-## Paylaşım
+**Karusel ve kare metinleri hâlâ şablondan geliyor, kitaptan değil** —
+sıradaki iş bu. Kartlar fotoğraf değil, `sablon.ts` SVG kuruyor ve `sharp`
+PNG'ye basıyor; yani görsel modeli gerekmiyor, iş tamamen metin işi.
 
-```bash
-python3 icerik/paylas.py             # doğrular, HİÇBİR ŞEY göndermez
-python3 icerik/paylas.py --gercek    # gerçekten paylaşır
-```
+## Emekli — 17 Eylül 2026'da silinebilir
 
-Kurulum ve platform onayları: `PAYLASIM-KURULUM.md`.
+`sirada.py`, `csv-url.py`: Publer'a CSV yükleme dönemine ait. Publer kuyruğu
+17 Eylül'de boşalıyor; **o güne kadar da yükleme yapma**, çift post olur.
 
-## Sınırlar
+`tarih-sikistir.py`: yazıldı, denendi, hiç uygulanmadı. Publer'ın 5 gönderi
+sınırı kalkınca gerekçesi zayıfladı.
 
-- Üretilen videolar **slayt videosudur** — yüz, gerçek ses ve çekim yok.
-  Kendi çekimini isterseniz senaryolar `postlar/` klasöründe.
-- Görsellerde sistem fontu kullanılır (Helvetica). Marka fontu isterseniz
-  `sablon.ts` içindeki `font-family` değerlerini değiştirin.
-- Metin sarma karakter sayısı tahminiyle yapılır; çok uzun başlıklarda
-  satır sonları ideal olmayabilir.
+## cikti/ (git'te değil, yeniden üretilebilir)
+
+| Klasör | Boyut | Ne |
+|---|---|---|
+| `gunluk/` | takvim | Günlük gönderi klasörleri — paylaşımın okuduğu yer |
+| `gonderiler/` | 7.5 GB | Kurgulanmış videoların asılları |
+| `ham/` | 7.5 GB | Sunucudan inen ses + planlar; yalnız yeniden kurgu için gerekli |
+| `ses-onbellek/` | 844 MB | Eski boru hattının seslendirmeleri |
+| `tarifler/` | 1.2 MB | Kitaptan üretilen 315 tarif |

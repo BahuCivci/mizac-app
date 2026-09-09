@@ -87,7 +87,7 @@ Google iş ortağı yöneticisi: **Hayır**.
 ## Zorunlu ekran görüntüleri — ALINDI (9 Eyl 2026)
 
 Üçü de `paylasim/youtube-basvuru-ekler/` altında, canlı siteden alındı.
-Hangisinin formda nereye gittiği o klasördeki `BENIOKU.md`'de.
+Hangisinin formda nereye gittiği o klasördeki `README.md`'de.
 
 1. `yt-1-gizlilik-youtube-bolumu.png` — `/gizlilik` sayfasının
    "8. YouTube API Servisleri" bölümü. Google'ın istediği üçü de tek
@@ -97,7 +97,7 @@ Hangisinin formda nereye gittiği o klasördeki `BENIOKU.md`'de.
    bağlantısı işaretli.
 3. `yt-3-kullanim-kosullari.png` — `/kullanim-kosullari`, tam sayfa.
 
-**Sayfalar değişirse bunlar eskir**; yeniden alma yöntemi `BENIOKU.md`'de.
+**Sayfalar değişirse bunlar eskir**; yeniden alma yöntemi `README.md`'de.
 
 ## Reddedilirse ne olur
 

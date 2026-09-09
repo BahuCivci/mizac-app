@@ -321,11 +321,33 @@ gereksiz. VPN şifresi `/etc/openfortivpn/config`'de (root, 600).
 
 ---
 
+## 9b. Klasör düzeni — toparlandı (9 Eyl 2026 gecesi)
+
+Disk 35 GB'a düşmüştü; 41 GB'a çıktı.
+
+- **6.5 GB çiftleme kaldırıldı.** `cikti/gunluk/` içindeki 254 video,
+  `cikti/gonderiler/` içindeki asılların birebir kopyasıydı. Özdeş oldukları
+  sağlamayla doğrulandı (254/254) ve **sabit bağlantıya** çevrildi.
+  `takvime-yerlestir.py` artık kopyalamıyor, bağlıyor — bir daha birikmez.
+- **browser-use'un iki venv'i silindi** (796 MB). Elle yazılmış üç dosya
+  (`agent1.py`, `test_cloak.py`, `agent.rtf`) duruyor; klasör 20 KB.
+- `icerik-paketi.zip` (38 MB, 9 Ağu, Publer dönemine ait), kökteki başıboş
+  ekran görüntüleri ve `__pycache__`'ler silindi.
+- `icerik/README.md` yeniden yazıldı: üç boru hattının hangi betikleri
+  içerdiği ve hangisinin nerede çalıştığı orada. Karışık görünmesinin sebebi
+  buydu — betikler üç ayrı işe ait ama hepsi tek klasörde.
+
+**Dokunulmayanlar, sebebiyle:** `cikti/ham` (7.5 GB) yeniden kurgu için
+gerekli, `cikti/ses-onbellek` (844 MB) eski boru hattının çıktısı. İkisi de
+silinebilir ama önce kitaptan üretimin tamamen oturması beklenmeli.
+
+---
+
 ## 10. Küçük işler
 
-- **`browser-use/`** — 795 MB, hiç çalışmadı (dört ayrı katmanda kırık), bugün
-  lint'i ve Vercel deploy'unu bozdu. Artık yok sayılıyor ama silinmedi.
-  Kullanıcıya soruldu, cevap gelmedi.
+- **`browser-use/`** — venv'leri silindi (796 MB kazanıldı, 9 Eyl). Elle
+  yazılmış üç dosya duruyor. Hiç çalışmamıştı; gerekirse `agent1.py`
+  bakılacak tek yer.
 - **`icerik/tarih-sikistir.py`** — yazıldı, kuru çalışması doğrulandı, hiç
   uygulanmadı, commit'lenmedi. Takvimi sıkıştırıp üç platformda da her gün
   paylaşım yapmak içindi. Publer'dan çıkınca 5 gönderi sınırı kalktığı için

@@ -73,7 +73,15 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 3. YouTube — kimlik KURULDU, **denetim başvurusu bekliyor**
+## 3. YouTube — kimlik KURULDU, **başvuru DOLDURULMAYI bekliyor**
+
+**10 Eyl 2026: eksik hiçbir bilgi kalmadı.** Yasal ad, ülke, şehir, adres ve
+posta kodu kullanıcıdan alındı ve `paylasim/gizli/youtube-basvuru-kisisel.md`
+içinde duruyor — **gizli tarafta, çünkü bu depo public**. Ekran görüntüleri
+de hazır (`paylasim/youtube-basvuru-ekler/`). Formun bütün cevapları
+`paylasim/youtube-basvuru.md`'de kelimesi kelimesine yazılı.
+
+Geriye yalnız formu doldurup göndermek kaldı.
 
 6 Eylül 2026'da kuruldu ve uçtan uca doğrulandı. Token `safra943@gmail.com`
 hesabından alındı; test videosu **doğru kanala** (`UCWmrrOKDhdhFt537KczSiHw`)
@@ -294,34 +302,41 @@ ele, kapanışta siteyi adıyla söyle).
 
 ---
 
-## 7b. Karusel ve kare metinleri kitaptan — YARISI HAZIR (10 Eyl 2026)
+## 7b. Karusel ve kare metinleri kitaptan — BİTTİ (10 Eyl 2026)
 
-Videolar kitaptan üretildi, karusel ve kare gönderiler hâlâ
-`lib/mizac-data.ts` şablonundan geliyordu. Doldurulacak yuva: **98 karusel,
-48 kare**.
+**146 yuvanın hepsi dolduruldu**: 98 karusel + 48 kare. Takvimdeki her
+gönderi artık kitaptan geliyor.
 
-| Parça | Durum |
+| Parça | Ne yapar |
 |---|---|
-| `icerik/kart-uret.py` | Yazıldı. Pasajlardan başlık + madde üretir; modele gider |
-| `icerik/kart-yerlestir.ts` | Yazıldı ve kuru çalıştı. SVG→PNG basıp takvime koyar |
+| `icerik/kart-uret.py` | Pasajlardan başlık + madde üretir (model, sıcaklık 0.4) |
+| `icerik/kart-yerlestir.ts` | Aynı SVG şablonuyla PNG basıp takvime koyar |
 
-**Görsel modeli GEREKMİYOR** — kartlar fotoğraf değil, `sablon.ts` SVG
-kuruyor, `sharp` PNG'ye basıyor. Bütün mesele metindi.
+Karusel üç ardışık pasajın sentezi, kare tek pasajdan. Görsel modeli
+gerekmedi — kartlar `sablon.ts`'in SVG'si, `sharp` PNG'ye basıyor.
 
-**Tasarım:** karusel üç ardışık pasajın SENTEZİ (kapak + 3 slayt + kapanış),
-kare tek pasajdan tek kart. Böylece karusel videonun aynısını tekrarlamıyor.
-Uzunluk sınırları şablonun geometrisinden ölçüldü: başlık 64, karusel
-maddesi 72, kare maddesi 88 karakter — karuselde her madde AYRI BİR KARTIN
-başlığı olarak 68 puntoyla basılıyor.
+### Bu işte öğrenilenler
 
-**Kaldığı yer:** üretim VPN koptuğu için hiç çalışamadı (madde 8). VPN
-gelince:
-
-    python3 icerik/kart-uret.py --deneme --kac 3    # önce göz at
-    python3 icerik/kart-uret.py
-    node --import ./icerik/kayit.mjs icerik/kart-yerlestir.ts
-    node icerik/yukle.mjs
-    python3 -m paylasim.dizin --uret
+- **Denemeye SEBEBİ geri ver.** Körlemesine dört deneme 154 kartın 54'ünü
+  kaybetti ve 51'i aynı iki kurala takılıyordu; sebep söylenince 18'i geldi.
+- **Kuralların hepsi eşit değil.** Uzunluk/madde sayısı serttir (şablona
+  sığmaz). "Yalın Mizaç ile başlama" ve "okuyucuya hitap et" ise videodaki
+  SÖZLÜ KANCA kuralından devralınmıştı ve karusel kapağı okunuyor. Yuvayı
+  boş bırakıp eski şablon metnini orada tutmak, düz bir başlıktan kötü.
+  Yumuşak kurallar dört deneme zorlanıyor, sonra yedek kart kabul ediliyor
+  ve kartın içine hangi kuralı geçemediği yazılıyor (29 kart böyle).
+- **Sıcaklık 0.7 → 0.4.** 0.7'de Türkçe bozuluyordu ("Bir cümleye hayatını
+  değiştirebilirsin"); 0.4'te bozukluk kalmadı ve kartlar birbirine benzemedi.
+- **aya-expanse ELENDİ.** Türkçesi daha iyi ama biçime hiç uymuyor: 72
+  karakterlik karta 180 karakterlik paragraf, 3 yerine 4 madde, ve tam da
+  yasakladığımız soyutluk. Biçim uyumu daha zor kazanılan şey.
+- **"sovdavi" HATA DEĞİL.** Kitabın taraması 88 kez öyle yazıyor, site 245
+  kez "sevdavi". Kullanıcı ikisinin aynı olduğunu söyledi. Yayınlanan metin
+  siteyle aynı olsun diye normalleştirildi — düzeltme değil, tutarlılık
+  tercihi. Bu sayede 29 videonun sesini yeniden üretmek gerekmedi.
+- **`yukle.mjs` VİDEOYA DOKUNMUYOR** (10 Eyl). Defterde kaydı olmayanı eksik
+  sayıyor, dolayısıyla kayan pencere dışındaki 254 videoyu da yüklemek
+  istiyordu: 6.2 GB, kotanın altı katı. Kuru çalışma okunarak yakalandı.
 
 ---
 

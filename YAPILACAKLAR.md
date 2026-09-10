@@ -73,6 +73,13 @@ kaldıran komut da yok.
 bir uyarı/düğme olmalı; yoksa ödeme yöntemi ya da Pro gerekebilir.
 Panel tarayıcıda oturum istiyor, oraya giremem.
 
+### PENCERE AJANI DURDURULDU (10 Eyl akşamı)
+
+`launchctl bootout gui/$(id -u)/xyz.mizac.blob-pencere`. Blob askıdayken
+ajan her 6 saatte bir bütün pencereyi (~420 MB) `~/mizac-pencere/` altına
+kopyalayıp yüklemeye çalışıp düşerdi. Blob dönünce geri aç:
+`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.blob-pencere.plist`
+
 ### GEÇİCİ ÇÖZÜM KURULDU — medya siteden sunuluyor
 
 11-20 Eylül'ün medyası `public/medya/` altına kondu (28 dosya, 4.2 MB —
@@ -107,6 +114,28 @@ bu boşuna iş ve şimdi gürültülü hata üretiyor. Sıra tersine çevrilmeli
 **Yedek yol (askı uzarsa):** görseller küçük (40 KB), `public/medya/` altına
 konup `mizac.xyz` üzerinden sunulabilir; 12-16 Eylül'ün hepsi görsel.
 Instagram Reels videosu (30 MB) ilk 18 Eylül'de, ona kadar zaman var.
+
+---
+
+## 1c. ACİL — `main` DALI 6 EYLÜL'DEN KALMA (10 Eyl 2026)
+
+**Actions runner public depoyu `ref: main`'den klonluyor** ve oradaki
+`paylasim/icerik-dizini.json` **6 Eylül** üretimi. Yani kitaptan üretilen
+254 video ve 149 kartın HİÇBİRİ üretimde görünmüyor.
+
+    git log origin/main..HEAD --oneline | wc -l    # 21 commit
+
+`paylasim` dalı `origin`'e push edildi (iş güvende), ama **`main`'e
+birleştirilmedi** — o üretimi etkileyen bir karar, kullanıcıya soruldu.
+
+**SON TARİH 12 EYLÜL.** O gün runner'ın kuracağı karusel, 6 Eylül dizinine
+göre eski dosya adlarını arayacak; sitede ise yeni kartlar duruyor. Dosya
+sayısı bile tutmuyor (eski 4, yeni 5 kare).
+
+**Yapılacak:** `git checkout main && git merge paylasim && git push`.
+Testler geçiyor (183/183) ve site zaten bu içeriği sunuyor (CLI ile deploy
+edildi), yani birleştirme üretimde bir şey bozmuyor; eksik olan yalnız
+runner'ın gördüğü dal.
 
 ---
 

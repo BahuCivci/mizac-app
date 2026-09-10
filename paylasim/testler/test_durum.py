@@ -54,14 +54,31 @@ class KacanTesti(Temel):
         self.gun_kur("2026-09-03")
         self.assertIn("2026-09-03", self.rapor())
 
+    def kacan_bolumu(self) -> str:
+        """
+        Yalnız 'paylaşılmamış' listesi.
+
+        Raporun TAMAMINDA tarih aramak fazla geniş bir ölçüt: 10 Eyl 2026'da
+        eklenen "Blob penceresi" satırı ilk eksik günü adıyla yazıyor ve o
+        gün meşru olarak gelecekte oluyor. Testin kastı kaçan listesiydi.
+        """
+        satirlar = self.rapor().splitlines()
+        try:
+            bas = next(i for i, s in enumerate(satirlar) if s.startswith("paylaşılmamış"))
+        except StopIteration:
+            return ""
+        son = next((i for i, s in enumerate(satirlar[bas:], bas) if not s.strip()),
+                   len(satirlar))
+        return "\n".join(satirlar[bas:son])
+
     def test_paylasilmis_gun_kacan_sayilmaz(self):
         self.gun_kur("2026-09-03")
         defter.yaz("2026-09-03/tiktok-tiktok", {"sonuc": "x"}, self.defter)
-        self.assertNotIn("2026-09-03", self.rapor())
+        self.assertNotIn("2026-09-03", self.kacan_bolumu())
 
     def test_gelecek_gun_kacan_sayilmaz(self):
         self.gun_kur("2026-09-20")
-        self.assertNotIn("2026-09-20", self.rapor())
+        self.assertNotIn("2026-09-20", self.kacan_bolumu())
 
 
 class VideoTesti(Temel):

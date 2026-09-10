@@ -64,9 +64,34 @@ pencere ajanı dosya yükleyebildi (yazma sağlam). 10 Eyl **11:40** → mağaza
 **Sebebi büyük olasılıkla 9 Eyl'deki kota aşımı** (1197 MB / 1000 MB).
 Temizlikten sonra 334 MB'a indi ama askı kendiliğinden kalkmadı.
 
+**ASKI HESAP DÜZEYİNDE, mağaza düzeyinde değil.** Yeni mağaza açmayı
+denedim: `Cannot create another store when usage threshold limit is reached
+(400)`. Yani depoyu 334 MB'a indirmek eşiği geri almıyor; CLI'da askıyı
+kaldıran komut da yok.
+
 **SENDEN GEREKEN:** Vercel paneli → Storage → `mizac-medya`. Askıyı kaldıran
 bir uyarı/düğme olmalı; yoksa ödeme yöntemi ya da Pro gerekebilir.
 Panel tarayıcıda oturum istiyor, oraya giremem.
+
+### GEÇİCİ ÇÖZÜM KURULDU — medya siteden sunuluyor
+
+11-20 Eylül'ün medyası `public/medya/` altına kondu (28 dosya, 4.2 MB —
+hepsi eski, küçük içerik) ve `MEDYA_TABAN_URL` üç yerde birden
+`https://mizac.xyz/medya` oldu: yerel `.env`, Actions iş akışı, ve depo.
+Doğrulandı: adresler 200 dönüyor, içerik türleri doğru (`image/png`,
+`video/mp4`), 12 Eylül klasörü uçtan uca kuruluyor.
+
+**Videolar sitede GÖSTERİLMİYOR** — hiçbir sayfaya bağlı değil, sitemap'te
+yok. `public/` yalnız dosyaya adres veriyor; Instagram medyayı o adresten
+kendi sunucusuna çekip yayınlıyor. Blob'un yaptığı işin aynısı.
+
+**18 EYLÜL SINIRI.** O günden itibaren videolar 30 MB (kitaptan üretilen
+yeni içerik) ve bilerek alınmadı — depoyu şişirirdi. Blob o güne kadar geri
+gelmezse başka bir barındırma gerekir.
+
+**Blob dönünce geri alma:** üç yerdeki `MEDYA_TABAN_URL`'yi Blob adresine
+döndür (`.env`'de eski satır yorumda duruyor), `public/medya/` klasörünü sil,
+`node icerik/yukle.mjs` ve pencere betiğini çalıştır.
 
 **SON TARİH: 12 Eylül 2026.** O gün `instagram-karusel` var ve Instagram
 görselleri herkese açık adresten çekiyor. 10 ve 11 Eylül Publer'dan çıktı,

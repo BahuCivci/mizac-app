@@ -30,7 +30,7 @@ GERIYE_BAK = 7  # kaç gün geriye bakılsın
 ILERI_BAK = 25  # Blob penceresi kaç gün ileriye yetiyor (pencere 21 gün)
 
 
-def pencere_ucu(bugun: date, taban) -> tuple[int | None, str]:
+def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
     """
     Blob'daki videolar kaç gün ileriye yetiyor — ölçerek.
 
@@ -59,6 +59,11 @@ def pencere_ucu(bugun: date, taban) -> tuple[int | None, str]:
         except Durdur:
             continue
         for is_ in isler:
+            # PAYLAŞILMIŞ GÖNDERİYİ SORMA. Bugünün gönderisi sabah çıkmış
+            # olabilir (ya da Publer kuyruğundan çıkmıştır) ve medyası artık
+            # gerekmiyor; onu "eksik" saymak her sabah yanlış alarm veriyordu.
+            if paylasilan is not None and is_.anahtar in paylasilan:
+                continue
             if not (is_.klasor / "video.mp4").exists():
                 continue
             url = f"{temel}/{gun}/{is_.klasor.name}/video.mp4"
@@ -133,7 +138,7 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
         satirlar.append("eksik video yok")
 
     satirlar.append("")
-    ileri, ayrinti = pencere_ucu(bugun, taban)
+    ileri, ayrinti = pencere_ucu(bugun, taban, paylasilan)
     if ileri is None:
         satirlar.append(f"Blob penceresi: {ayrinti or f'{ILERI_BAK}+ gün yetiyor'}")
     elif ileri <= 2:

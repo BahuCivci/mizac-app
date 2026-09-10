@@ -168,6 +168,11 @@ def duzelt(kart: dict) -> dict:
     """
     if isinstance(kart.get("baslik"), str):
         b = kirp(kart["baslik"]).rstrip(":")
+        # "Mizaç, bedenin diliyle kendini gösterir." → özneyi at, cümle
+        # kendi başına ayakta kalıyor ve başlığın ilk kelimesi boşa gitmiyor.
+        # Yalnız VİRGÜLLÜ halde güvenli; "Mizaç bir karışımdır" gibi
+        # yüklemli cümlede özneyi atmak cümleyi bozardı.
+        b = re.sub(r"^\s*miza[çc]\s*,\s*", "", b, flags=re.I)
         kirpilmis = ETIKET_ONEKI.sub("", b).strip()
         # Kırpınca elde bir şey kalmıyorsa dokunma.
         if len(kirpilmis) >= 12:
@@ -217,6 +222,19 @@ def bozuk_kelime(metin: str) -> str:
         if re.search(r"[bcçdfgğhjklmnprsştvyz]{4,}", k, re.I):
             return k
     return ""
+
+
+# YUMUŞAK KURALLAR — kaliteyi zorlar ama kartı yok etmez.
+# 10 Eyl'de ölçüldü: körlemesine deneme 154 kartın 54'ünü, geri bildirimli
+# deneme 36'sını kaybetti ve neredeyse hepsi bu iki kurala takılıyordu.
+# Oysa ikisi de videodaki SÖZLÜ KANCA kuralından devralınmıştı; karusel
+# kapağı okunuyor, düz bir cümle orada kabul edilebilir. Yuvayı boş bırakıp
+# eski şablon metnini orada tutmak daha kötü.
+YUMUSAK = ("başlık yalın", "okuyucuya hitap")
+
+
+def sert_mi(sebep: str) -> bool:
+    return not any(y in sebep for y in YUMUSAK)
 
 
 def gecerli(kart: dict, tur: str) -> str:
@@ -304,12 +322,23 @@ def uret(is_: dict, deneme_sayisi: int = 4) -> dict | None:
         .replace("{madde}", str(sinir))
     metin = "\n\n".join(f"PASAJ {i}:\n{p['metin']}"
                         for i, p in enumerate(is_["pasajlar"], 1))
+    # DENEMEYE GERİ BİLDİRİM VER. 10 Eyl'de ölçüldü: körlemesine dört deneme
+    # 154 kartın 54'ünü kaybetti ve 51'i AYNI iki kurala takılıyordu —
+    # model neyi yanlış yaptığını bilmediği için her turda tekrarlıyor.
+    # Sebebi söyleyince aynı kural bir daha nadiren çıkıyor.
+    uyari = ""
+    yedek: dict | None = None
+    yedek_sebep = ""
     for _ in range(deneme_sayisi):
         try:
-            kart = duzelt(sor(f"{yonerge}\n\n{metin}"))
+            kart = duzelt(sor(f"{yonerge}{uyari}\n\n{metin}"))
         except (json.JSONDecodeError, KeyError):
             continue
         sebep = gecerli(kart, tur)
+        if sebep and not sert_mi(sebep):
+            # Yalnız yumuşak kurala takıldı: yedekte tut, daha iyisini ara.
+            if yedek is None:
+                yedek, yedek_sebep = kart, sebep
         if not sebep:
             kart.update({
                 "tur": tur,
@@ -319,6 +348,18 @@ def uret(is_: dict, deneme_sayisi: int = 4) -> dict | None:
             })
             return kart
         is_["son_sebep"] = sebep
+        uyari = (f"\n\nÖNCEKİ DENEMEN REDDEDİLDİ. Sebep: {sebep}. "
+                 "Bu kez o hatayı yapma, kuralların geri kalanına da uy.")
+
+    if yedek is not None:
+        yedek.update({
+            "tur": tur, "bolum": is_["pasajlar"][0]["bolum"],
+            "sayfa": [p["sayfa"] for p in is_["pasajlar"]],
+            "kaynak": "Varlığın Tahlili — Zeynep Işık Büyükbay",
+            "not": f"yumuşak kural geçilemedi: {yedek_sebep}",
+        })
+        is_["son_sebep"] = f"yedekle geçildi ({yedek_sebep})"
+        return yedek
     return None
 
 

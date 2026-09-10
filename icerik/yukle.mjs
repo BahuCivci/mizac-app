@@ -39,6 +39,14 @@ const DEFTER = join(KOK, 'cikti', 'blob-adresler.json');
 // dışarıya açılmamalı — kimseye faydası yok, gereksiz yere görünür oluyorlar.
 const UZANTILAR = new Set(['.png', '.jpg', '.jpeg', '.mp4']);
 
+// VİDEOLAR BU BETİĞİN İŞİ DEĞİL — 10 Eyl 2026'da eklendi.
+// 9 Eyl'den beri Blob arşiv değil kayan pencere: videoların yalnız önümüzdeki
+// ~21 günlük kısmı orada duruyor (`icerik/blob-pencere-calistir.sh`).
+// Bu betik defterde kaydı olmayanı "eksik" sayıyor, dolayısıyla pencere
+// dışındaki 254 videoyu da yüklemek istiyordu: 6.2 GB, yani 1 GB'lık kotanın
+// altı katı. Ölçülerek yakalandı, çalıştırılmadan önce.
+const PENCEREYE_BIRAK = (yol) => yol.endsWith('video.mp4');
+
 // Vercel Blob eşzamanlı isteklerde cömert ama sınırsız değil; 8 ölçüldüğünde
 // hız kazancı düzleşiyor, üstü 429 riskini artırıyor.
 const ESZAMANLI = 8;
@@ -81,7 +89,7 @@ async function main() {
   }
 
   const defter = defteriOku();
-  let hepsi = dosyalariTara(GUNLUK).sort();
+  let hepsi = dosyalariTara(GUNLUK).filter((y) => !PENCEREYE_BIRAK(y)).sort();
   const eksik = hepsi.filter((y) => !defter[relative(GUNLUK, y)]);
   const isler = sinir ? eksik.slice(0, sinir) : eksik;
 

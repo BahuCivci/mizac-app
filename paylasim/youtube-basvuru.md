@@ -49,8 +49,12 @@ Kuruluş büyüklüğü: "Bağımsız Geliştirici/Şahıs Şirketi".
 Birincil web sitesi: `https://mizac.xyz`.
 İletişim: Bahunur Civci, safra943@gmail.com (TikTok başvurusunda da bu kullanıldı).
 
-> **SENDEN GEREKEN:** Tam yasal ad, ülke, adres, şehir, il, posta kodu.
-> Bunları ben dolduramam.
+**Kişisel bilgiler burada DEĞİL — bu depo public.**
+Ad, açık adres, şehir ve posta kodu `paylasim/gizli/youtube-basvuru-kisisel.md`
+içinde (gitignore'da). 10 Eyl 2026'da kullanıcıdan alındı; formun 2. bölümü
+oradan doldurulacak.
+
+> Orada iki nokta "doğrula" olarak işaretli: kimlikteki ad ve posta kodu.
 
 **3. İş modeli:**
 

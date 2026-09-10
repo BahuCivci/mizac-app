@@ -1,0 +1,12 @@
+GEÇİCİ MEDYA — Vercel Blob askıya alındığı için (10 Eylül 2026).
+
+Bu klasör normalde BOŞ olmalı. Medya Vercel Blob'dan sunuluyor; Blob'un
+kullanım eşiği dolduğu için hesap düzeyinde askıya alındı ve bütün dosyalar
+herkese açık okumada 403 dönmeye başladı.
+
+Buradaki dosyalar 11-20 Eylül 2026 arasının gönderileri. Hepsi eski, küçük
+içerik (2.3 MB); 18 Eylül'den itibaren gelen 30 MB'lık videolar BİLEREK
+alınmadı — depoyu şişirirdi.
+
+Blob geri geldiğinde: MEDYA_TABAN_URL'yi Blob adresine döndür ve bu klasörü
+sil. Ayrıntı: YAPILACAKLAR.md madde 1b.

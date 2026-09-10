@@ -49,6 +49,42 @@ gün sessizce atlanır.
 
 ---
 
+## 1b. ACİL — Blob mağazası ASKIDA (10 Eyl 2026)
+
+**Vercel Blob mağazası `mizac-medya` faturalandırma durumu "Inactive".**
+Bütün 832 dosya herkese açık okumada **403** dönüyor. Token'la listeleme ve
+yazma çalışıyor; kırılan yalnız herkese açık okuma.
+
+    vercel blob get-store        # Billing State: Inactive
+
+**Zaman çizelgesi:** 9 Eyl ~23:00 → 842 dosyanın hepsi 200. 10 Eyl 07:36 →
+pencere ajanı dosya yükleyebildi (yazma sağlam). 10 Eyl **11:40** → mağazanın
+"Updated At"i. 12:00 → Actions paylaşımı indirme adımında düştü.
+
+**Sebebi büyük olasılıkla 9 Eyl'deki kota aşımı** (1197 MB / 1000 MB).
+Temizlikten sonra 334 MB'a indi ama askı kendiliğinden kalkmadı.
+
+**SENDEN GEREKEN:** Vercel paneli → Storage → `mizac-medya`. Askıyı kaldıran
+bir uyarı/düğme olmalı; yoksa ödeme yöntemi ya da Pro gerekebilir.
+Panel tarayıcıda oturum istiyor, oraya giremem.
+
+**SON TARİH: 12 Eylül 2026.** O gün `instagram-karusel` var ve Instagram
+görselleri herkese açık adresten çekiyor. 10 ve 11 Eylül Publer'dan çıktı,
+17 Eylül de öyle; aradaki 12-16 Eylül bizim modülün işi.
+
+**Bugün gönderi KAÇMADI** — 10 Eylül'ünkini Publer zaten atmıştı. Actions
+koşusu gönderiye sıra gelmeden, indirme adımında düştü.
+
+**Tasarım kusuru, ayrıca not:** iş akışı önce medyayı indiriyor, sonra
+defterde "zaten paylaşılmış mı" diye bakıyor. Publer'ın kapattığı günlerde
+bu boşuna iş ve şimdi gürültülü hata üretiyor. Sıra tersine çevrilmeli.
+
+**Yedek yol (askı uzarsa):** görseller küçük (40 KB), `public/medya/` altına
+konup `mizac.xyz` üzerinden sunulabilir; 12-16 Eylül'ün hepsi görsel.
+Instagram Reels videosu (30 MB) ilk 18 Eylül'de, ona kadar zaman var.
+
+---
+
 ## 2. TikTok incelemesi — cevap bekleniyor
 
 **Durum:** In review (6 Eyl 00:05). App ID `7682004239296038919`.

@@ -19,6 +19,12 @@
 # Mac uyanana kadar ölü kalır.
 
 set -u
+# PATH'İ ELLE KUR. launchd'nin PATH'i /usr/bin:/bin:/usr/sbin:/sbin ve içinde
+# `node` YOK. `vercel` bir node betiği (`#!/usr/bin/env node`), dolayısıyla
+# mutlak yolla çağrılsa bile "env: node: No such file or directory" ile
+# düşüyor. 10 Eyl 2026'da tam bu oldu: ajan adresi güncelleyemedi, danışman
+# eskimiş adresle saatlerce ölü kaldı.
+export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
 KOK="$HOME/Documents/mizac-app"
 SUNUCU="mta_kullanici@192.168.1.40"
 LOG="/tmp/mizac-tunel-adres.log"
@@ -46,9 +52,18 @@ cd "$KOK" || exit 1
 # BOŞ DEĞERLE GÜNCELLEME YAPMA. 8 Eyl'de tam bu oldu: adres boş geldi,
 # değişken silindi ama yerine konamadı ve danışman büsbütün kaldı.
 if [ -z "$adres" ]; then yaz "adres boş, dokunulmadı"; exit 0; fi
+# ÖNCE SİLİP SONRA YAZMAK TEHLİKELİ: silme tutar, yazma tutmazsa değişken
+# büsbütün kaybolur ve danışman hata sayfası bile göstermeden ölür. 8 Eyl'de
+# yaşandı. Artık eski değer saklanıyor ve yazma başarısızsa geri konuyor.
+eski=$(cat "$SON" 2>/dev/null)
 "$VERCEL" env rm MIZAC_OLLAMA production --yes >> "$LOG" 2>&1
 if ! printf '%s' "$adres" | "$VERCEL" env add MIZAC_OLLAMA production >> "$LOG" 2>&1; then
-  yaz "env yazılamadı — DEĞİŞKEN ŞU AN YOK, elle bak"
+  yaz "env yazılamadı"
+  if [ -n "$eski" ] && printf '%s' "$eski" | "$VERCEL" env add MIZAC_OLLAMA production >> "$LOG" 2>&1; then
+    yaz "eski adres geri konuldu: $eski"
+  else
+    yaz "GERİ DE KONULAMADI — DEĞİŞKEN ŞU AN YOK, elle bak"
+  fi
   exit 1
 fi
 if "$VERCEL" --prod --yes >/dev/null 2>&1; then

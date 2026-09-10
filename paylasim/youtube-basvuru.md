@@ -3,7 +3,20 @@
 **GÖNDERİLDİ — 10 Eylül 2026.** Google "E-postanız gönderildi / YouTube API
 Hizmetleri Formu'nu gönderdiğiniz için teşekkür ederiz" dedi; onay ekranının
 görüntüsü `youtube-basvuru-ekler/yt-5-gonderim-onayi.png`.
-Cevap `safra943@gmail.com`'a gelecek. Google süre taahhüt etmiyor.
+Google'dan teslim bildirimi geldi (10 Eyl 2026, `safra943@gmail.com`):
+"Thank you for submitting the YouTube API Services Form. We will follow up
+with a response once the application has been reviewed."
+
+Bu **karar değil, teslim alındı bildirimi**. Karar için ikinci bir e-posta
+gelecek; Google süre taahhüt etmiyor.
+
+**Karar gelene kadar hiçbir şey değişmiyor:** `YOUTUBE_GIZLILIK` `private`
+kalmalı. Denetimden geçmemiş projeden yüklenen video zaten gizli
+kilitleniyor; `public` yapmak kilidi kaldırmıyor, yalnız görünmez kılıyor.
+
+**Onay gelirse** yapılacak tek şey: `paylasim/gizli/.env` içinde
+`YOUTUBE_GIZLILIK=public`, ve özel depodaki Actions ortamında aynısı.
+**Reddedilirse** sebep yazılı gelir; eksik tamamlanıp yeniden gönderilebilir.
 
 **Bu dosya artık kayıt.** Gönderilen cevaplar aşağıda duruyor; yeniden
 denetim istenirse ya da form reddedilirse buradan devam edilir.

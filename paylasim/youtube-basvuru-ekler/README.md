@@ -16,8 +16,13 @@ ayarla, ilgili sayfaya git, `/gizlilik`'te 8. bölümün `<section>`'ını
 hedefleyerek öğe görüntüsü al; ana sayfada altbilgiyi görünür kılıp
 gizlilik bağlantısını çerçevele; koşullar sayfasında tam sayfa görüntü al.
 
-## Hâlâ eksik olan tek şey
+| `yt-4-oauth-ve-yukleme-akisi.png` | 1. proje — KOŞULLU kanıt | OAuth rıza ekranı, tek kapsam (`youtube.upload`), yükleme akışı (arayüz yok, zamanlanmış iş) ve yetki iptali. `yt-4a/4b/4c` bunun ham parçaları. |
+| `yt-5-gonderim-onayi.png` | — | Google'ın gönderim onayı |
 
-Formun **2. bölümü** yasal ad, ülke, adres, şehir, il ve posta kodu
-istiyor. Bunları yalnız kullanıcı doldurabilir; gerisi
-`paylasim/youtube-basvuru.md` içinde kelimesi kelimesine hazır.
+## Durum: GÖNDERİLDİ (10 Eylül 2026)
+
+Form dolduruldu ve gönderildi. Cevap `safra943@gmail.com`'a gelecek.
+
+**Koşullu kanıt neden gerekti:** OAuth türü "Evet" ve kullanım alanı "Video
+Yükleme" seçilince form dördüncü bir dosya istiyor. İlk gönderim denemesi
+bu yüzden reddedildi; `yt-4` o boşluk için üretildi.

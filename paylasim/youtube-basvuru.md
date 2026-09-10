@@ -1,9 +1,23 @@
 # YouTube Data API — denetim başvurusu
 
-**HENÜZ GÖNDERİLMEDİ.** Formda yalnız senin bilebileceğin iki alan var (adres
-ve ekran görüntüleri); gerisi burada hazır.
+**GÖNDERİLDİ — 10 Eylül 2026.** Google "E-postanız gönderildi / YouTube API
+Hizmetleri Formu'nu gönderdiğiniz için teşekkür ederiz" dedi; onay ekranının
+görüntüsü `youtube-basvuru-ekler/yt-5-gonderim-onayi.png`.
+Cevap `safra943@gmail.com`'a gelecek. Google süre taahhüt etmiyor.
+
+**Bu dosya artık kayıt.** Gönderilen cevaplar aşağıda duruyor; yeniden
+denetim istenirse ya da form reddedilirse buradan devam edilir.
 
 Form: `support.google.com/youtube/contact/yt_api_form`
+
+**Formda notlardan ayrılan iki nokta** (ikisi de bilerek):
+1. **Gelir modeli "freemium" işaretlendi**, "ücretsiz hizmet" değil. Not
+   öyle diyordu ama site ₺99'luk rapor satıyor; denetim formunda yanlış
+   beyan olmaz. Reklam sorusu ayrıca "YouTube içeriğinde reklam yok" diye
+   cevaplandı, bu doğru.
+2. **Demo hesabı verilmedi.** İstemcinin arayüzü yok. "Erişimle ilgili özel
+   talimatlar" alanına neden demo hesabı olmadığı ve her çağrının sonucunun
+   kanalda herkese açık göründüğü yazıldı.
 ("YouTube Data API Servisleri — Denetim ve Kota Artırma Formu")
 
 ## Neden gerekiyor

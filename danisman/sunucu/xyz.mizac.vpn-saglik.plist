@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  VPN sağlık nöbetçisi — Mac'te ROOT olarak çalışır (LaunchDaemon).
+
+  NEDEN AYRI BİR NÖBETÇİ: `xyz.mizac.vpn` KeepAlive ile kurulu ama o yalnız
+  SÜREÇ ÖLÜRSE devreye giriyor. VPN'in asıl arızası başka: süreç yaşıyor,
+  `ppp0` ayakta, log "Tunnel is up" diyor, ama tek paket geçmiyor.
+  7 Eylül 2026'da saatlerce, 10 Eylül 2026'da yine böyle oldu — ikincisinde
+  kart üretimi ortasında koptu.
+
+  Bu nöbetçi süreci değil BAĞLANTIYI sınıyor: sunucunun 22. portuna
+  ulaşılabiliyor mu. Üç turda da ulaşılamazsa VPN servisini yeniden
+  başlatıyor (`launchctl kickstart -k`), ve iki müdahale arasında en az
+  10 dakika bekliyor — kimlik yanlışsa ya da üniversite tarafı kapalıysa
+  dakikada bir kapıyı dövmemek için.
+
+  DAEMON, Agent DEĞİL: `launchctl kickstart system/...` root istiyor.
+
+  Kurulum (tek seferlik, root):
+    sudo cp danisman/sunucu/vpn-saglik.sh /usr/local/bin/
+    sudo chmod 755 /usr/local/bin/vpn-saglik.sh
+    sudo cp danisman/sunucu/xyz.mizac.vpn-saglik.plist /Library/LaunchDaemons/
+    sudo launchctl bootstrap system /Library/LaunchDaemons/xyz.mizac.vpn-saglik.plist
+
+  Bakmak:
+    tail /var/log/mizac-vpn-saglik.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.vpn-saglik</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/usr/local/bin/vpn-saglik.sh</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <!-- İki dakikada bir; üç başarısız turdan sonra müdahale, yani arıza en
+       geç ~6 dakikada kapanıyor. -->
+  <key>StartInterval</key>
+  <integer>120</integer>
+
+  <key>StandardOutPath</key>
+  <string>/var/log/mizac-vpn-saglik-cikti.log</string>
+  <key>StandardErrorPath</key>
+  <string>/var/log/mizac-vpn-saglik-cikti.log</string>
+</dict>
+</plist>

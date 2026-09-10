@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 9 Eylül 2026.
+Son güncelleme: 10 Eylül 2026.
 
 ---
 
@@ -294,17 +294,63 @@ ele, kapanışta siteyi adıyla söyle).
 
 ---
 
-## 8. VPN sağlık nöbetçisi — KURULMADI
+## 7b. Karusel ve kare metinleri kitaptan — YARISI HAZIR (10 Eyl 2026)
+
+Videolar kitaptan üretildi, karusel ve kare gönderiler hâlâ
+`lib/mizac-data.ts` şablonundan geliyordu. Doldurulacak yuva: **98 karusel,
+48 kare**.
+
+| Parça | Durum |
+|---|---|
+| `icerik/kart-uret.py` | Yazıldı. Pasajlardan başlık + madde üretir; modele gider |
+| `icerik/kart-yerlestir.ts` | Yazıldı ve kuru çalıştı. SVG→PNG basıp takvime koyar |
+
+**Görsel modeli GEREKMİYOR** — kartlar fotoğraf değil, `sablon.ts` SVG
+kuruyor, `sharp` PNG'ye basıyor. Bütün mesele metindi.
+
+**Tasarım:** karusel üç ardışık pasajın SENTEZİ (kapak + 3 slayt + kapanış),
+kare tek pasajdan tek kart. Böylece karusel videonun aynısını tekrarlamıyor.
+Uzunluk sınırları şablonun geometrisinden ölçüldü: başlık 64, karusel
+maddesi 72, kare maddesi 88 karakter — karuselde her madde AYRI BİR KARTIN
+başlığı olarak 68 puntoyla basılıyor.
+
+**Kaldığı yer:** üretim VPN koptuğu için hiç çalışamadı (madde 8). VPN
+gelince:
+
+    python3 icerik/kart-uret.py --deneme --kac 3    # önce göz at
+    python3 icerik/kart-uret.py
+    node --import ./icerik/kayit.mjs icerik/kart-yerlestir.ts
+    node icerik/yukle.mjs
+    python3 -m paylasim.dizin --uret
+
+---
+
+## 8. VPN sağlık nöbetçisi — BETİK VE PLIST HAZIR, KURULUM ROOT BEKLİYOR
 
 `danisman/sunucu/vpn-saglik.sh` yazıldı ama yüklenmedi. Sebebi 7 Eylül'de
 görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log "Tunnel is up" diyordu
 ama tek paket geçmiyordu. Mevcut nöbetçi yalnız süreç ölümüne bakıyor.
 
+**10 Eyl 2026'da ÜÇÜNCÜ KEZ oldu** ve kart üretimini ortasından kesti:
+`openfortivpn` süreci yaşıyor (PID vardı), `ppp0` ayakta ve adres almış,
+ama `192.168.1.40`'a da VPN ağ geçidine de tek ping gitmiyor. Mevcut
+`xyz.mizac.vpn` nöbetçisi yalnız süreç ölümüne baktığı için görmüyor.
+
+Elle düzeltmesi: `sudo launchctl kickstart -k system/xyz.mizac.vpn`
+
+Plist yazıldı (`danisman/sunucu/xyz.mizac.vpn-saglik.plist`) ve betikteki
+kaçak karakter (satır 40, U+100000 klavye artığı) temizlendi.
+
 Kurulum (root gerekiyor, tek seferlik):
 
     sudo cp danisman/sunucu/vpn-saglik.sh /usr/local/bin/
-    sudo chmod +x /usr/local/bin/vpn-saglik.sh
-    # sonra plist yazılıp bootstrap edilecek
+    sudo chmod 755 /usr/local/bin/vpn-saglik.sh
+    sudo cp danisman/sunucu/xyz.mizac.vpn-saglik.plist /Library/LaunchDaemons/
+    sudo launchctl bootstrap system /Library/LaunchDaemons/xyz.mizac.vpn-saglik.plist
+
+İki dakikada bir 22. portu yokluyor, üç turda da geçmezse VPN'i yeniden
+başlatıyor; iki müdahale arası en az 10 dakika. Bakmak:
+`tail /var/log/mizac-vpn-saglik.log`
 
 ---
 

@@ -37,7 +37,7 @@ fi
 
 n=$(( $(cat "$SAYAC" 2>/dev/null || echo 0) + 1 ))
 echo "$n" > "$SAYAC"
-yaz "ulaşılamıyor ($n/$ESIK)"􀀀
+yaz "ulaşılamıyor ($n/$ESIK)"
 [ "$n" -lt "$ESIK" ] && exit 0
 
 simdi=$(date +%s)

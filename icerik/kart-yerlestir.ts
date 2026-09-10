@@ -33,7 +33,12 @@ const GUNLUK = path.join(KOK, 'cikti', 'gunluk');
 const KARTLAR = path.join(KOK, 'cikti', 'kartlar');
 const DEFTER = path.join(KOK, 'cikti', 'blob-adresler.json');
 
-const SON_PUBLER_GUNU = '2026-09-17';
+// 10 Eyl 2026'da öne çekildi: 2026-09-17 idi, çünkü o güne kadarki her gün
+// Publer kuyruğundaydı. Ama gerçekte 12-16 Eylül BİZİM modülün işi; yalnız
+// 17 Eylül Publer'da kaldı ve o bir video günü, kart günü değil. Yani bu
+// sınırı geriye çekmek tam olarak 3 kart yuvası kazandırıyor (12, 14, 16)
+// ve eski şablon içeriği o kadar erken bitiyor.
+const SON_PUBLER_GUNU = '2026-09-11';
 const GOLD = '#c4973a';
 const ETIKETLER = '#mizaç #mizaçtesti #tıbbınebevi #kişilikanalizi #huy #kendinitanı #keşfet';
 const CAGRI = 'Kendi mizacını öğren → mizac.xyz';

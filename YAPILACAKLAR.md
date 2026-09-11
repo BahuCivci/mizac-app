@@ -103,7 +103,31 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 3. YouTube — kimlik KURULDU, **başvuru DOLDURULMAYI bekliyor**
+## 3. YouTube — başvuru gönderildi, **ek kanıt istendi (11 Eyl 2026)**
+
+**11 Eyl 13:28, YouTube API Services:** denetim için "api istemcisinin
+YouTube'a nasıl yüklediğini baştan sona gösteren, İngilizce ayrıntılı bir
+senaryo ya da ekran kaydı, sonucuyla birlikte" istedi. **Süre 7 iş günü →
+~22 Eylül 2026.** Gönderen: `youtube-disputes+1tk3az7cpxe631n@google.com`.
+
+Hazırlandı, `paylasim/youtube-basvuru-ekler/gosterim/`:
+- `yanit.txt` — İngilizce adım adım senaryo (e-posta gövdesi)
+- `screencast.mp4` — 68 sn, İngilizce altyazılı
+- `1-consent … 6-studio-details.png` — numaralı kanıtlar
+- `terminal-ham.txt` — gerçek koşunun düzenlenmemiş çıktısı
+
+**Gerçek bir gösterim yüklemesi yapıldı:** günlük işin kullandığı fonksiyonla
+(`youtube.paylas`) açıkça "API demonstration" başlıklı bir video yüklendi —
+`q6IZlzMdKnc`, gizli, bahusworld kanalında, Studio'da **Shorts** sekmesinde
+(Videolar'da değil: 34 sn dikey video Short sayılıyor). Takvime ve deftere
+dokunulmadı. İnceleme bitince silinebilir.
+
+Cevap Gmail'de (`safra943`) taslak olarak hazırlandı, ekleriyle; gönderim
+kullanıcının onayını bekliyor.
+
+---
+
+## 3-eski. YouTube — kimlik KURULDU, başvuru dolduruldu
 
 **10 Eyl 2026: eksik hiçbir bilgi kalmadı.** Yasal ad, ülke, şehir, adres ve
 posta kodu kullanıcıdan alındı ve `paylasim/gizli/youtube-basvuru-kisisel.md`

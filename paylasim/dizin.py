@@ -34,8 +34,10 @@ from pathlib import Path
 
 from paylasim import gunluk
 from paylasim import http as http_modul
-from paylasim.ayar import GUNLUK, KOK, sir
+from paylasim import defter as defter_modul
+from paylasim.ayar import GUNLUK, KOK, secenek, sir
 from paylasim.hata import Durdur
+from paylasim.medya import adres as medya_adresi
 
 DOSYA = KOK / "paylasim" / "icerik-dizini.json"
 
@@ -100,7 +102,8 @@ def oku(dosya: Path | None = None) -> dict:
 
 
 def indir(gun: str, hedef: Path, *, dizin: dict | None = None,
-          taban_url: str | None = None, cek=None) -> Path:
+          taban_url: str | None = None, cek=None,
+          duzen: str = "klasor", atla: frozenset = frozenset()) -> Path:
     """
     Bir günün klasörünü `hedef` altında yeniden kurar.
 
@@ -131,8 +134,16 @@ def indir(gun: str, hedef: Path, *, dizin: dict | None = None,
         klasor.mkdir(parents=True, exist_ok=True)
         (klasor / "METIN.txt").write_text(ayrinti.get("metin", ""),
                                           encoding="utf-8")
+        # PAYLAŞILMIŞ GÖNDERİNİN MEDYASINI İNDİRME. 10 Eyl 2026'da o günün
+        # tek gönderisi Publer'dan çoktan çıkmıştı, ama runner medyayı defterden
+        # ÖNCE indirmeye kalktı; barındırma kapalı olduğu için koşu hiç gereği
+        # yokken düştü. METIN.txt yine yazılıyor ki klasör dursun ve paylaşım
+        # adımı "zaten paylaşılmış" diyebilsin.
+        if f"{gun}/{klasor_adi}" in atla:
+            continue
         for ad in ayrinti.get("medya", []):
-            (klasor / ad).write_bytes(cek(f"{taban}/{gun}/{klasor_adi}/{ad}"))
+            (klasor / ad).write_bytes(
+                cek(medya_adresi(taban, gun, klasor_adi, ad, duzen)))
 
     return hedef
 
@@ -142,7 +153,9 @@ def main() -> int:
     a.add_argument("--uret", action="store_true",
                    help="yereldeki içerikten dizini üret ve yaz")
     a.add_argument("--indir", action="store_true",
-                   help="bir günü hedef klasöre kur (Blob'dan indirerek)")
+                   help="bir günü hedef klasöre kur (medya barındırmasından indirerek)")
+    a.add_argument("--defter",
+                   help="bu defterde paylaşılmış görünen klasörlerin medyasını indirme")
     a.add_argument("--gun", default=date.today().isoformat())
     a.add_argument("--hedef", help="--indir için kök klasör")
     ayarlar = a.parse_args()
@@ -160,7 +173,13 @@ def main() -> int:
             if not ayarlar.hedef:
                 print("--indir için --hedef gerekiyor", file=sys.stderr)
                 return 2
-            kok = indir(ayarlar.gun, Path(ayarlar.hedef))
+            atla = frozenset()
+            if ayarlar.defter:
+                atla = frozenset(defter_modul.oku(Path(ayarlar.defter)))
+            # Düzeni burada, CLI'da okuyoruz — `indir` ortamdan okumuyor ki
+            # testler runner'daki MEDYA_DUZEN'den etkilenmesin.
+            kok = indir(ayarlar.gun, Path(ayarlar.hedef),
+                        duzen=secenek("MEDYA_DUZEN", "klasor"), atla=atla)
             dosyalar = sorted(p for p in (kok / ayarlar.gun).rglob("*")
                               if p.is_file())
             print(f"{ayarlar.gun}: {len(dosyalar)} dosya → {kok}")

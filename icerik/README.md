@@ -18,21 +18,23 @@ Kitabın metninden günlük dikey videolar üretir.
 Çıktı: `cikti/gonderiler/` (asıllar) ve `cikti/gunluk/<gün>/<biçim>/`
 (takvimdeki yerleri — videolar asla kopyalanmaz, **sabit bağlantı** kurulur).
 
-## 2. Blob teslimi (medyanın Instagram'a ulaşması)
+## 2. Medya teslimi (Instagram'ın ve runner'ın medyaya ulaşması)
 
-Instagram medyayı herkese açık bir adresten çekiyor, ama Vercel Blob'un
-ücretsiz planı 1 GB. Bu yüzden Blob arşiv değil **kayan pencere**:
+Instagram medyayı herkese açık bir adresten çekiyor; runner da TikTok ve
+YouTube'a baytları yollamak için dosyayı indiriyor. Medya **GitHub
+Releases**'te (`medya` sürümü), **kayan pencere** olarak: yalnız yaklaşan
+~21 günün, henüz paylaşılmamış gönderilerinin dosyaları orada durur.
 
 | Betik | Ne yapar |
 |---|---|
-| `blob-pencere-calistir.sh` | **Tek giriş noktası.** launchd 6 saatte bir çağırıyor; elle de çalışır |
-| `pencere-hazirla.py` | Neyin eksik olduğuna karar verir, dosyaları `~/mizac-pencere/`'ye kopyalar |
-| `pencere-yukle.mjs` | `~/mizac-pencere/` içinde çalışıp yükler ve pencere dışını siler |
-| `blob-dogrula.py` | Blob'dakiler yereldekiyle aynı mı — HEAD ile ölçer |
-| `yukle.mjs` | Görselleri Blob'a yükler (videolar pencere betiğinin işi) |
+| `pencere.py` | Tek parça. Gerekeni release'e yükler, paylaşılanı ve pencere dışını siler. launchd 6 saatte bir çağırıyor (`paylasim/xyz.mizac.medya-pencere.plist`) |
 
-İkiye bölünmesinin sebebi macOS: launchd altında node `~/Documents`'ı
-okuyamıyor. Ayrıntı `pencere-hazirla.py`'nin başında.
+Dosya adları düz: `<gün>__<klasör>__<dosya>` (release adında `/` olamıyor).
+Adresi tek yerde kuran fonksiyon `paylasim/medya.py`.
+
+11 Eylül 2026'ya kadar medya Vercel Blob'daydı; ücretsiz plan dolunca Vercel
+30 gün erişimi kapattı ve Blob'a ait bütün betikler kaldırıldı. Gerekçe ve
+Instagram'ın GitHub adresini kabul ettiğinin ölçümü CLAUDE.md'de.
 
 ## 3. Şablondan içerik (eski üretim, hâlâ karusel ve kareler için)
 

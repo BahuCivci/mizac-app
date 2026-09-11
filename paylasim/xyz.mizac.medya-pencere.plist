@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Medya penceresi — Mac'te, kullanıcı olarak, 6 saatte bir.
+
+  Yaklaşan ~21 günün medyasını GitHub Releases'teki `medya` sürümüne koyuyor,
+  paylaşılanı ve pencereden çıkanı siliyor. Günlük paylaşımı yapan GitHub
+  Actions medyayı oradan indiriyor; Instagram da oradan çekiyor.
+
+  ESKİSİNİN (xyz.mizac.blob-pencere) YERİNE. O Vercel Blob'a yüklüyordu; Blob'un
+  ücretsiz planı dolunca Vercel 30 gün erişimi kapattı (10 Eyl 2026).
+
+  BASH EBEVEYN, PYTHON ÇOCUK — ve bu ayrıntı ölçüldü (11 Eyl 2026).
+  Tam Disk Erişimi /bin/bash'te. launchd /usr/bin/python3'ü DOĞRUDAN başlatınca
+  "can't open file …/pencere.py: Operation not permitted" ile düştü; bash'in
+  çocuğu olarak ~/Documents'ı okuyabiliyor (9 Eyl'deki deneme de böyleydi).
+  `exec` YOK ve komuttan sonra `; exit $?` var: tek komutlu `bash -c` kendini
+  örtük olarak exec'le değiştirir, bash ortadan kalkar ve izin de gider.
+  (homebrew'un node'u bash'in çocuğu olarak da okuyamıyordu, asılı kalıyordu —
+  o yüzden node yok.) gh dosyaları proje dışındaki ~/mizac-pencere/'den okuyor.
+
+  NEDEN TAKVİM DEĞİL ARALIK: launchd'nin uykuda kaçan takvim işini telafi
+  etmediği bu projede ölçüldü (6 Eyl 2026). 21 günlük tampon birkaç günlük
+  kaçırmayı zararsız kılıyor; `python3 -m paylasim.durum` kaç gün kaldığını yazıyor.
+
+  Kurulum:
+    cp paylasim/xyz.mizac.medya-pencere.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.medya-pencere.plist
+  Elle:
+    launchctl kickstart -p gui/$(id -u)/xyz.mizac.medya-pencere
+    tail /tmp/mizac-medya-pencere.log
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>xyz.mizac.medya-pencere</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>/usr/bin/python3 /Users/bahu/Documents/mizac-app/icerik/pencere.py; exit $?</string>
+  </array>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StartInterval</key>
+  <integer>21600</integer>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/mizac-medya-pencere.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/mizac-medya-pencere.log</string>
+</dict>
+</plist>

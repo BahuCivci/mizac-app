@@ -16,12 +16,10 @@
  * O gönderiler Publer kuyruğunda ve oradan çıkacak; şimdi değiştirmek ya
  * hiçbir şeyi değiştirmez ya da yarısı eski yarısı yeni bir takvim doğurur.
  *
- * BLOB DEFTERİNDEN KAYIT DÜŞÜYOR
- * `yukle.mjs` `cikti/blob-adresler.json`'da kaydı olan dosyayı atlıyor.
- * Kayıt silinmezse yeni görsel hiç yüklenmez ve Blob eskisini sunmaya devam
- * eder — hiçbir yerde hata görünmeden. Görseller kayan pencereye girmiyor,
- * hepsi sürekli Blob'da duruyor (816 PNG = 42 MB), o yüzden yükleme
- * `yukle.mjs`'in işi.
+ * MEDYA BARINDIRMASI AYRI İŞ
+ * Basılan görseller `icerik/pencere.py` ile GitHub Releases'e çıkıyor; o betik
+ * dosyayı ad VE boyutla karşılaştırdığı için değişen kart kendiliğinden yeniden
+ * yükleniyor. Blob dönemindeki "defterden kaydı düş" adımına gerek kalmadı.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +29,6 @@ import { kareSvg, kapanisSvg } from './sablon';
 const KOK = path.resolve(import.meta.dirname);
 const GUNLUK = path.join(KOK, 'cikti', 'gunluk');
 const KARTLAR = path.join(KOK, 'cikti', 'kartlar');
-const DEFTER = path.join(KOK, 'cikti', 'blob-adresler.json');
 
 // 10 Eyl 2026'da öne çekildi: 2026-09-17 idi, çünkü o güne kadarki her gün
 // Publer kuyruğundaydı. Ama gerçekte 12-16 Eylül BİZİM modülün işi; yalnız
@@ -83,8 +80,7 @@ async function gorselYaz(svg: string, hedef: string) {
   await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(hedef);
 }
 
-async function yerlestir(klasor: string, kart: Kart, defter: Record<string, string>,
-                         deneme: boolean): Promise<string> {
+async function yerlestir(klasor: string, kart: Kart, deneme: boolean): Promise<string> {
   const gun = path.basename(path.dirname(klasor));
   const ad = path.basename(klasor);
   const etiket = kart.bolum.replace(/^Bölüm\s*\d+\s*—\s*/, '').slice(0, 28);
@@ -109,13 +105,11 @@ async function yerlestir(klasor: string, kart: Kart, defter: Record<string, stri
     for (const f of fs.readdirSync(klasor)) {
       if (/^\d+\.png$/.test(f)) {
         fs.rmSync(path.join(klasor, f));
-        delete defter[`${gun}/${ad}/${f}`];
       }
     }
     for (let i = 0; i < kareler.length; i++) {
       const dosya = `${i + 1}.png`;
       await gorselYaz(kareler[i], path.join(klasor, dosya));
-      delete defter[`${gun}/${ad}/${dosya}`];
     }
     fs.writeFileSync(path.join(klasor, 'METIN.txt'), metinUret(kart));
   }
@@ -142,14 +136,11 @@ async function main() {
   ];
   if (kac) ciftler = ciftler.slice(0, kac);
 
-  const defter: Record<string, string> =
-    fs.existsSync(DEFTER) ? JSON.parse(fs.readFileSync(DEFTER, 'utf8')) : {};
 
-  for (const [klasor, kart] of ciftler) console.log(await yerlestir(klasor, kart, defter, deneme));
+  for (const [klasor, kart] of ciftler) console.log(await yerlestir(klasor, kart, deneme));
 
-  if (!deneme) fs.writeFileSync(DEFTER, JSON.stringify(defter, null, 2));
   console.log(`\n${ciftler.length} yuva dolduruldu.`);
-  console.log('Sonraki adım: node icerik/yukle.mjs  ve  python3 -m paylasim.dizin --uret');
+  console.log('Sonraki adım: python3 -m paylasim.dizin --uret  ve  /usr/bin/python3 icerik/pencere.py');
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

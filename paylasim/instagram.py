@@ -19,6 +19,7 @@ import time
 import urllib.parse
 from pathlib import Path
 
+from paylasim.medya import adres as medya_adresi
 from paylasim import http as http_modul
 from paylasim.ayar import secenek
 from paylasim.hata import Durdur
@@ -47,10 +48,11 @@ def _metin(klasor: Path) -> str:
     return dosya.read_text(encoding="utf-8").strip() if dosya.exists() else ""
 
 
-def medya_urlleri(tur: str, klasor: Path, taban_url: str) -> list[str]:
-    """Klasördeki medyanın herkese açık adresleri."""
+def medya_urlleri(tur: str, klasor: Path, taban_url: str,
+                  duzen: str = "klasor") -> list[str]:
+    """Klasördeki medyanın herkese açık adresleri. Düzen: `paylasim.medya`."""
     def adres(ad: str) -> str:
-        return f"{taban_url}/{klasor.parent.name}/{klasor.name}/{ad}"
+        return medya_adresi(taban_url, klasor.parent.name, klasor.name, ad, duzen)
 
     if tur in ("karusel", "tek"):
         gorseller = sorted(klasor.glob("[0-9]*.png"), key=lambda p: int(p.stem))
@@ -96,7 +98,8 @@ def _hazir_bekle(gonder, taban: str, kapsayici: str, token: str,
 
 def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
            kuru: bool, *, yol: str | None = None, gonder=None,
-           erisilebilir=None, bekle: bool = True) -> str:
+           erisilebilir=None, bekle: bool = True,
+           duzen: str = "klasor") -> str:
     """Tek bir Instagram gönderisi. Kuru çalışmada hiçbir istek atmaz."""
     gonder = gonder or http_modul.gonder
     yol = yol or secenek("IG_YOL", "instagram")
@@ -106,7 +109,7 @@ def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
     erisilebilir = erisilebilir or http_modul.erisilebilir_mi
 
     metin = _metin(klasor)
-    urller = medya_urlleri(tur, klasor, taban_url)
+    urller = medya_urlleri(tur, klasor, taban_url, duzen)
 
     if kuru:
         ulasilmaz = [u for u in urller if not erisilebilir(u)]

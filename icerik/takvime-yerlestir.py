@@ -27,10 +27,11 @@ Yeni içeriğin tamamı 1080x1920 ve ~35 saniye; YouTube bunu zaten Short
 sayıyor. "uzun" olarak bırakılırsa açıklamaya `#Shorts` eklenmiyor ve
 gönderi keşfedilme yolunu kaybediyor. Yuvanın türü içeriğe uymalı.
 
-BLOB DEFTERİNDEN KAYIT DÜŞÜYOR
-`icerik/yukle.mjs` `cikti/blob-adresler.json`'da kaydı olan dosyayı
-atlıyor. Kayıt silinmezse yeni video hiç yüklenmez ve Blob'da eskisi kalır —
-paylaşım da eskisini atar. Sessiz ve bulması zor bir hata olurdu.
+MEDYA BARINDIRMASI AYRI İŞ
+Yerleştirilen video `icerik/pencere.py` ile GitHub Releases'e çıkıyor; o
+betik release'teki dosyayı ad VE boyutla karşılaştırdığı için değişen video
+kendiliğinden yeniden yükleniyor. Blob dönemindeki "defterden kaydı düş"
+adımına gerek kalmadı.
 """
 from __future__ import annotations
 
@@ -44,10 +45,29 @@ KOK = Path(__file__).resolve().parent.parent
 GUNLUK = KOK / "icerik" / "cikti" / "gunluk"
 GONDERILER = KOK / "icerik" / "cikti" / "gonderiler"
 TARIFLER = KOK / "icerik" / "cikti" / "tarifler"
-BLOB_DEFTER = KOK / "icerik" / "cikti" / "blob-adresler.json"
 
 # Publer kuyruğunun son günü. Bu tarihe kadar olan gönderiler oradan çıkıyor.
-SON_PULER_GUNU = "2026-09-17"
+# SINIR TARİHİ DEĞİL, DEFTER. 11 Eyl 2026'ya kadar burada "2026-09-17"
+# yazıyordu — o güne kadarki her günün Publer'da olduğu varsayılıyordu.
+# Yanlıştı: yalnız 17 Eylül Publer'daydı, 12-16 Eylül bizim modülün işiydi ve
+# eski şablon içeriğiyle bekliyordu. Şimdi yuva, ancak iki defterden birinde
+# paylaşılmış görünüyorsa korunuyor; tarih yalnız alt sınır.
+SON_PULER_GUNU = "2026-09-11"
+DEFTERLER = (
+    Path.home() / "mizac-paylasim-durum" / "durum" / "paylasildi.json",  # Actions'ın
+    KOK / "paylasim" / "veri" / "paylasildi.json",                       # yerelin
+)
+
+
+def paylasilmislar() -> set:
+    """İki defterin birleşimi — biri eskiyse bile paylaşılmışı ezmeyelim."""
+    anahtarlar: set = set()
+    for d in DEFTERLER:
+        try:
+            anahtarlar |= set(json.loads(d.read_text(encoding="utf-8")))
+        except (OSError, json.JSONDecodeError):
+            pass
+    return anahtarlar
 
 VIDEO_BICIMLERI = ("instagram-reels", "tiktok-tiktok", "youtube-shorts",
                    "youtube-uzun")
@@ -164,10 +184,13 @@ def bugun_yaz(gun_yolu: Path) -> None:
 def yuvalar(baslangic: str) -> list[Path]:
     """Değiştirilecek video klasörleri, tarihe göre sıralı."""
     bulunan = []
+    paylasilmis = paylasilmislar()
     for gun in sorted(GUNLUK.iterdir()):
         if not gun.is_dir() or gun.name <= baslangic:
             continue
         for bicim in VIDEO_BICIMLERI:
+            if f"{gun.name}/{bicim}" in paylasilmis:
+                continue
             klasor = gun / bicim
             if (klasor / "video.mp4").exists():
                 bulunan.append(klasor)
@@ -179,7 +202,7 @@ def videolar() -> list[Path]:
     return sorted(GONDERILER.glob("*.mp4"))
 
 
-def yerlestir(klasor: Path, video: Path, defter: dict, deneme: bool) -> str:
+def yerlestir(klasor: Path, video: Path, deneme: bool) -> str:
     """Bir yuvayı doldurur; ne yapıldığını anlatan bir satır döndürür."""
     tarif = json.loads((TARIFLER / f"{video.stem}.json").read_text(encoding="utf-8"))
 
@@ -217,8 +240,6 @@ def yerlestir(klasor: Path, video: Path, defter: dict, deneme: bool) -> str:
             gecici.unlink(missing_ok=True)
             os.link(video, gecici)
             os.replace(gecici, hedef_video)
-            defter.pop(f"{hedef.parent.name}/{hedef.name}/video.mp4", None)
-            defter.pop(f"{klasor.parent.name}/{klasor.name}/video.mp4", None)
         (hedef / "METIN.txt").write_text(metin_uret(tarif), encoding="utf-8")
         (hedef / "SENARYO.md").write_text(
             senaryo_uret(tarif, hedef.parent.name, hedef.name), encoding="utf-8")
@@ -247,16 +268,13 @@ def main() -> int:
     if k.kac:
         ciftler = ciftler[: k.kac]
 
-    defter = json.loads(BLOB_DEFTER.read_text(encoding="utf-8")) if BLOB_DEFTER.exists() else {}
     print(f"{len(yv)} yuva, {len(vd)} video → {len(ciftler)} eşleşme"
           f"{'  [DENEME]' if k.deneme else ''}")
 
     for klasor, video in ciftler:
-        print(yerlestir(klasor, video, defter, k.deneme))
+        print(yerlestir(klasor, video, k.deneme))
 
     if not k.deneme:
-        BLOB_DEFTER.write_text(json.dumps(defter, indent=2, ensure_ascii=False),
-                               encoding="utf-8")
         for gun_yolu in {klasor.parent for klasor, _ in ciftler}:
             bugun_yaz(gun_yolu)
 
@@ -265,8 +283,8 @@ def main() -> int:
         print(f"\n{artan} video yuva bulamadı — takvimi uzatmak için duruyor.")
     elif artan < 0:
         print(f"\n{-artan} yuva boş kaldı — o kadar video kurgulanmamış.")
-    print("\nSonraki adım: node icerik/yukle.mjs  ve  "
-          "python3 -m paylasim.dizin --uret")
+    print("\nSonraki adım: python3 -m paylasim.dizin --uret  ve  "
+          "/usr/bin/python3 icerik/pencere.py")
     return 0
 
 

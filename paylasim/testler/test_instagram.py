@@ -26,6 +26,22 @@ class Temel(unittest.TestCase):
 
 
 class UrlTesti(Temel):
+    def test_duz_duzen(self):
+        (self.klasor / "video.mp4").write_bytes(b"mp4")
+        urller = instagram.medya_urlleri("reels", self.klasor, TABAN, duzen="duz")
+        self.assertEqual(urller, [f"{TABAN}/2026-09-04__instagram-karusel__video.mp4"])
+
+    def test_duzen_ortamdan_okunmaz(self):
+        # Runner'da MEDYA_DUZEN=duz tanımlı. Fonksiyon onu okusaydı buradaki
+        # klasör düzeni testleri runner'da düşer, iş akışının "Testler"
+        # adımı da paylaşımı hiç başlatmazdı.
+        import os
+        from unittest import mock
+        self.gorsel(1)
+        with mock.patch.dict(os.environ, {"MEDYA_DUZEN": "duz"}):
+            urller = instagram.medya_urlleri("tek", self.klasor, TABAN)
+        self.assertEqual(urller, [f"{TABAN}/2026-09-04/instagram-karusel/1.png"])
+
     def test_karusel_sayisal_sirada(self):
         self.gorsel(1, 2, 10, 3)
         urller = instagram.medya_urlleri("karusel", self.klasor, TABAN)

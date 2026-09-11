@@ -66,6 +66,7 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
                 sonuc = instagram.paylas(
                     is_.tur, is_.klasor, sir("MEDYA_TABAN_URL").rstrip("/"),
                     "" if kuru else sir("IG_KULLANICI_ID"), token, kuru,
+                    duzen=secenek("MEDYA_DUZEN", "klasor"),
                 )
             elif is_.platform == "youtube":
                 sonuc = youtube.paylas(is_.klasor, token, kuru, tur=is_.tur)

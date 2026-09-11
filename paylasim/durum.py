@@ -14,7 +14,7 @@ kullanıyor: CLAUDE.md `sirada.py`'ı her oturumda çalıştırmayı zaten söyl
 bu da aynı listeye giriyor. Nöbetçi ayrı bir servis değil, oturumun kendisi.
 
 Baktığı şeyler: token'ların ömrü, geçmişte kaçmış paylaşımlar, üretilmemiş
-videolar ve Blob penceresinin kaç gün ileriye yettiği.
+videolar ve medya penceresinin (GitHub Releases) kaç gün ileriye yettiği.
 """
 from __future__ import annotations
 
@@ -25,9 +25,10 @@ from paylasim import defter as defter_modul
 from paylasim import gunluk, kimlik
 from paylasim.ayar import GUNLUK, secenek
 from paylasim.hata import Durdur
+from paylasim.medya import adres as medya_adresi
 
 GERIYE_BAK = 7  # kaç gün geriye bakılsın
-ILERI_BAK = 25  # Blob penceresi kaç gün ileriye yetiyor (pencere 21 gün)
+ILERI_BAK = 25  # medya penceresi kaç gün ileriye yetiyor (pencere 21 gün)
 
 
 def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
@@ -35,7 +36,7 @@ def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
     Blob'daki videolar kaç gün ileriye yetiyor — ölçerek.
 
     NEDEN GEREKLİ: 9 Eyl 2026'dan beri Blob arşiv değil kayan pencere
-    (`icerik/blob-pencere.mjs`, ayrıntı CLAUDE.md). Pencereyi Mac tazeliyor;
+    (`icerik/pencere.py`, GitHub Releases). Pencereyi Mac tazeliyor;
     Mac uzun süre kapalı kalırsa ya da tazeleyici bozulursa videolar sessizce
     tükeniyor ve arıza ancak paylaşım gününde görülüyor. Bu ölçüm o günü
     haftalar öncesinden haber veriyor.
@@ -51,6 +52,7 @@ def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
         temel = ""
     if not temel:
         return None, "MEDYA_TABAN_URL tanımlı değil, pencere ölçülemedi"
+    duzen = secenek("MEDYA_DUZEN", "klasor")
 
     for ileri in range(ILERI_BAK + 1):
         gun = (bugun + timedelta(days=ileri)).isoformat()
@@ -64,18 +66,22 @@ def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
             # gerekmiyor; onu "eksik" saymak her sabah yanlış alarm veriyordu.
             if paylasilan is not None and is_.anahtar in paylasilan:
                 continue
-            if not (is_.klasor / "video.mp4").exists():
-                continue
-            url = f"{temel}/{gun}/{is_.klasor.name}/video.mp4"
-            try:
-                with urlopen(Request(url, method="HEAD"), timeout=15) as c:
-                    if c.status == 200:
-                        continue
-            except HTTPError:
-                pass
-            except (URLError, TimeoutError, OSError):
-                return None, "Blob'a ulaşılamadı, pencere ölçülemedi"
-            return ileri, f"{gun}/{is_.klasor.name}"
+            # YALNIZ VİDEO DEĞİL, BÜTÜN MEDYA. 11 Eyl 2026'dan beri görseller
+            # de pencereyle birlikte GitHub Releases'te; karusel günü görsel
+            # eksikse paylaşım yine düşer.
+            for dosya in sorted(is_.klasor.iterdir()):
+                if dosya.suffix.lower() not in (".png", ".jpg", ".jpeg", ".mp4"):
+                    continue
+                url = medya_adresi(temel, gun, is_.klasor.name, dosya.name, duzen)
+                try:
+                    with urlopen(Request(url, method="HEAD"), timeout=15) as c:
+                        if c.status == 200:
+                            continue
+                except HTTPError:
+                    pass
+                except (URLError, TimeoutError, OSError):
+                    return None, "medya barındırmasına ulaşılamadı, pencere ölçülemedi"
+                return ileri, f"{gun}/{is_.klasor.name}/{dosya.name}"
     return None, ""
 
 
@@ -140,12 +146,12 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
     satirlar.append("")
     ileri, ayrinti = pencere_ucu(bugun, taban, paylasilan)
     if ileri is None:
-        satirlar.append(f"Blob penceresi: {ayrinti or f'{ILERI_BAK}+ gün yetiyor'}")
+        satirlar.append(f"Medya penceresi: {ayrinti or f'{ILERI_BAK}+ gün yetiyor'}")
     elif ileri <= 2:
-        satirlar.append(f"Blob penceresi BİTİYOR — {ileri} gün sonra video yok ({ayrinti})")
-        satirlar.append("  tazele: node --env-file=.env.local icerik/blob-pencere.mjs")
+        satirlar.append(f"Medya penceresi BİTİYOR — {ileri} gün sonra medya yok ({ayrinti})")
+        satirlar.append("  tazele: /usr/bin/python3 icerik/pencere.py")
     else:
-        satirlar.append(f"Blob penceresi: {ileri} gün yetiyor (ilk eksik {ayrinti})")
+        satirlar.append(f"Medya penceresi: {ileri} gün yetiyor (ilk eksik {ayrinti})")
 
     return satirlar
 

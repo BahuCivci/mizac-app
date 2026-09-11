@@ -137,6 +137,26 @@ class IndirTesti(unittest.TestCase):
         self.assertIn("2027-01-01", str(tutulan.exception))
 
 
+    def test_duz_duzende_release_adlari(self):
+        # 11 Eyl 2026'dan beri medya GitHub Releases'te; dosya adında "/" yok.
+        dizin.indir("2026-09-07", self.hedef, dizin=self.dizin,
+                    taban_url="https://gh/o/r/releases/download/medya/",
+                    cek=self.cek, duzen="duz")
+        self.assertEqual(self.istenen, [
+            "https://gh/o/r/releases/download/medya/2026-09-07__instagram-karusel__1.png",
+            "https://gh/o/r/releases/download/medya/2026-09-07__instagram-karusel__2.png",
+        ])
+
+    def test_paylasilmis_klasorun_medyasi_indirilmez(self):
+        # 10 Eyl 2026: gönderi çoktan çıkmıştı, runner yine de medyayı
+        # indirmeye kalkıp barındırma kapalı olduğu için boşuna düştü.
+        dizin.indir("2026-09-07", self.hedef, dizin=self.dizin,
+                    taban_url="https://blob.example", cek=self.cek,
+                    atla=frozenset({"2026-09-07/instagram-karusel"}))
+        self.assertEqual(self.istenen, [])
+        self.assertTrue(
+            (self.hedef / "2026-09-07" / "instagram-karusel" / "METIN.txt").exists())
+
 class GercekDizinTesti(unittest.TestCase):
     """Depoya işlenmiş dizin, `gunluk.BICIM` ile tutarlı olmalı."""
 

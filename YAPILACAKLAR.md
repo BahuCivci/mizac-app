@@ -367,12 +367,17 @@ Elle düzeltmesi: `sudo launchctl kickstart -k system/xyz.mizac.vpn`
 Plist yazıldı (`danisman/sunucu/xyz.mizac.vpn-saglik.plist`) ve betikteki
 kaçak karakter (satır 40, U+100000 klavye artığı) temizlendi.
 
-Kurulum (root gerekiyor, tek seferlik):
+Kurulum — TEK KOMUT, Mac başındayken (root istiyor, Claude'da şifresiz sudo
+yok ve şifre sohbete girmemeli):
 
-    sudo cp danisman/sunucu/vpn-saglik.sh /usr/local/bin/
-    sudo chmod 755 /usr/local/bin/vpn-saglik.sh
-    sudo cp danisman/sunucu/xyz.mizac.vpn-saglik.plist /Library/LaunchDaemons/
-    sudo launchctl bootstrap system /Library/LaunchDaemons/xyz.mizac.vpn-saglik.plist
+    sudo bash danisman/sunucu/vpn-saglik-kur.sh
+
+**Aciliyeti düştü (11 Eyl 2026):** paylaşım artık VPN'e hiç bağlı değil —
+GitHub Actions + GitHub Releases + Mac'teki pencere işi internetten
+çalışıyor. VPN'e bağlı kalanlar: sunucudaki üretim işleri ve tünel adresi
+güncelleyicisi. Danışmanın kendisi sunucudaki cloudflared üzerinden gidiyor,
+Mac'in VPN'inden geçmiyor; yalnız VPN ölüyken tünel adresi de değişirse
+güncelleyici yeni adresi göremez.
 
 İki dakikada bir 22. portu yokluyor, üç turda da geçmezse VPN'i yeniden
 başlatıyor; iki müdahale arası en az 10 dakika. Bakmak:

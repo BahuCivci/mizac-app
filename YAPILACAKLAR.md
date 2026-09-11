@@ -103,7 +103,7 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 3. YouTube — başvuru gönderildi, **ek kanıt istendi (11 Eyl 2026)**
+## 3. YouTube — ek kanıt istendi ve **gönderildi (11 Eyl 2026)**, cevap bekleniyor
 
 **11 Eyl 13:28, YouTube API Services:** denetim için "api istemcisinin
 YouTube'a nasıl yüklediğini baştan sona gösteren, İngilizce ayrıntılı bir
@@ -122,8 +122,11 @@ Hazırlandı, `paylasim/youtube-basvuru-ekler/gosterim/`:
 (Videolar'da değil: 34 sn dikey video Short sayılıyor). Takvime ve deftere
 dokunulmadı. İnceleme bitince silinebilir.
 
-Cevap Gmail'de (`safra943`) taslak olarak hazırlandı, ekleriyle; gönderim
-kullanıcının onayını bekliyor.
+**CEVAP GÖNDERİLDİ — 11 Eyl 2026, kullanıcının onayıyla.** `safra943`'ten
+aynı yazışmaya: senaryo gövdede, 8 ek (ekran kaydı + 7 görüntü). Gönderimden
+sonra yazışmada 3 mesaj ve son mesaj bizim, 8 ekli olarak doğrulandı.
+Şimdi YouTube'un cevabı bekleniyor. Onay gelirse `YOUTUBE_GIZLILIK=public`
+(yerel `.env` + özel deponun iş akışı); reddedilirse sebep yazılı gelir.
 
 ---
 

@@ -397,7 +397,14 @@ senin olması muafiyet değil, ve **itiraz edilemiyor**. TikTok'u kurtaran
 bulunmuyor. Bu yüzden `YOUTUBE_GIZLILIK` varsayılanı `private`: kilidi
 görmezden gelmek yerine onunla aynı şeyi istiyoruz.
 
-Başvuru metni ve eksikler: `paylasim/youtube-basvuru.md`. Formun zorunlu
+Başvuru metni ve eksikler: `paylasim/youtube-basvuru.md`.
+
+**Denetim ekibi senaryo/ekran kaydı istedi ve gönderildi (11 Eyl 2026).**
+Kanıtlar `paylasim/youtube-basvuru-ekler/gosterim/`. Gösterim için kanala
+gerçek bir video yüklendi: `q6IZlzMdKnc`, "API demonstration" başlıklı, gizli,
+Studio'da **Shorts** sekmesinde — 34 sn dikey video "Videolar"da görünmüyor,
+listede aranırken yanıltıyor. İnceleme bitince silinebilir. Denetim ekibi
+cevaplarını `youtube-disputes+…@google.com`'dan, aynı yazışmaya yapıyor. Formun zorunlu
 kanıtı olduğu için `/gizlilik` sayfasına "8. YouTube API Servisleri" bölümü
 eklendi (YouTube şartları, Google Gizlilik Politikası bağlantısı, yetkinin
 nasıl geri alınacağı, silme politikası).

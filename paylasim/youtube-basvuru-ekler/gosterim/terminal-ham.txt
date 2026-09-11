@@ -1,0 +1,10 @@
+$ python3 -m paylasim (youtube.paylas)   # 2026-09-11 10:52:01 UTC
+  file: youtube-shorts/video.mp4  (29.8 MB, 1080x1920, 33 s)
+  title: mizac.xyz — YouTube Data API upload demonstration (11 September 2026)
+  OAuth: stored grant of the channel owner, scope https://www.googleapis.com/auth/youtube.upload
+  access token refreshed from the stored refresh token (token value not shown)
+  -> POST https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status  [JSON metadata]
+  <- 1.4s resumable session opened (Location header returned)
+  -> PUT https://www.googleapis.com/upload/youtube/v3/videos?uploadType=resumable&part=snippet,status  [no body]
+  <- 17.7s video id=q6IZlzMdKnc uploadStatus=uploaded privacyStatus=private title="mizac.xyz — YouTube Data API upload demonstration (11 Septem"
+  DONE in 19s -> https://www.youtube.com/shorts/q6IZlzMdKnc

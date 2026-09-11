@@ -1,0 +1,65 @@
+Subject: Re: YouTube API Services review — mizac.xyz (project 256746085549)
+
+Hello YouTube API Services Team,
+
+Thank you for the review. Below is a step-by-step script of how our API client
+uses the YouTube API Services, including a live run and its end result. A short
+screencast (screencast.mp4, 68 seconds, captions in English) and the screenshots
+referenced below are attached: 1-consent, 2-schedule, 3a-code-session,
+3b-code-upload, 4-live-run, 5-studio-shorts, 6-studio-details.
+
+API client:   mizac.xyz — Google Cloud project number 256746085549
+Channel:      bahusworld — https://www.youtube.com/@bahusworldyoutube
+              (UCWmrrOKDhdhFt537KczSiHw), owned by the applicant; the only
+              channel the client uploads to.
+Scope:        https://www.googleapis.com/auth/youtube.upload — nothing else
+Endpoint:     youtube.videos.insert (resumable) — nothing else
+
+1. What the client is
+mizac.xyz is a Turkish-language educational site about classical temperament
+theory. Once a day it publishes one short educational video, produced from our
+own written material, to our own YouTube channel. The API client has no user
+interface and no users other than the channel owner: it is a scheduled job.
+
+2. One-time authorization (OAuth) — screenshot 1
+The channel owner (safra943@gmail.com) granted access once through Google's
+standard consent screen, requesting only the youtube.upload scope. The refresh
+token is stored privately. The grant can be revoked at any time from the Google
+Account third-party access page, as our privacy policy explains
+(https://mizac.xyz/gizlilik, section 8 "YouTube API Servisleri").
+
+3. Daily schedule — screenshot 2
+A GitHub Actions workflow runs every day at 07:00 UTC. It takes that day's video
+and its title/description and calls the upload function below.
+
+4. The upload — screenshots 3a and 3b
+The client refreshes the access token, opens a resumable upload session with the
+video's metadata:
+    POST https://www.googleapis.com/upload/youtube/v3/videos
+         ?uploadType=resumable&part=snippet,status
+and then sends the video file to the session URL with PUT.
+
+5. Live run, 11 September 2026 — screenshot 4
+For this review we ran the same function once more, uploading a clearly labelled
+demonstration video (29.8 MB, 1080x1920, 33 seconds). The call returned:
+    video id = q6IZlzMdKnc, uploadStatus = uploaded, privacyStatus = private
+Screenshot 4 is the real console output of that run (tokens are not printed).
+
+6. End result — screenshots 5 and 6
+The video is on the bahusworld channel in YouTube Studio. Uploads are private
+until this review is complete, because videos uploaded from an unverified
+project are locked as private; after approval they will be published as public
+Shorts.
+
+What the client does NOT do: it does not read, list, modify or delete any
+YouTube data; it does not access any other channel or any viewer data; it does
+not use YouTube Analytics; and it does not embed or display YouTube content on
+our site.
+
+Quota: one upload per day (1,600 units) against the default 10,000. We are not
+requesting a quota increase; we submitted the form to complete the compliance
+review.
+
+Best regards,
+Bahu Civci
+mizac.xyz

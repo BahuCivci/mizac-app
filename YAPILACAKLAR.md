@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 10 Eylül 2026.
+Son güncelleme: 11 Eylül 2026.
 
 ---
 
@@ -49,93 +49,33 @@ gün sessizce atlanır.
 
 ---
 
-## 1b. ACİL — Blob mağazası ASKIDA (10 Eyl 2026)
+## 1b. Medya barındırması — ÇÖZÜLDÜ: GitHub Releases (11 Eyl 2026)
 
-**Vercel Blob mağazası `mizac-medya` faturalandırma durumu "Inactive".**
-Bütün 832 dosya herkese açık okumada **403** dönüyor. Token'la listeleme ve
-yazma çalışıyor; kırılan yalnız herkese açık okuma.
+Vercel Blob'un ücretsiz planı 9 Eyl'de doldu ve Vercel **30 gün** erişimi
+kapattı — belgesi açık, panelde kaldıran düğme yok, yeni mağaza da
+açtırmıyor. Beklemek 18 Eylül'ü (ilk 30 MB'lık kitap videoları) kurtarmazdı.
 
-    vercel blob get-store        # Billing State: Inactive
+Medya artık `BahuCivci/mizac-app`'in **`medya` sürümünde**, kayan pencere:
 
-**Zaman çizelgesi:** 9 Eyl ~23:00 → 842 dosyanın hepsi 200. 10 Eyl 07:36 →
-pencere ajanı dosya yükleyebildi (yazma sağlam). 10 Eyl **11:40** → mağazanın
-"Updated At"i. 12:00 → Actions paylaşımı indirme adımında düştü.
+    /usr/bin/python3 icerik/pencere.py --deneme    # ne yüklenecek/silinecek
+    tail /tmp/mizac-medya-pencere.log              # launchd 6 saatte bir
 
-**Sebebi büyük olasılıkla 9 Eyl'deki kota aşımı** (1197 MB / 1000 MB).
-Temizlikten sonra 334 MB'a indi ama askı kendiliğinden kalkmadı.
+- Instagram'ın GitHub adresini kabul ettiği **ölçüldü**: yayınlanmayan bir
+  Reels kapsayıcısı 26 sn'de FINISHED.
+- İlk yükleme 61 dosya / 430 MB, ikinci tur 0/0.
+- Ajan `xyz.mizac.medya-pencere`; bash üzerinden çalışıyor (sistem python'u
+  launchd'de ancak bash'in çocuğu olarak ~/Documents'ı okuyabiliyor).
+- `public/medya/` geçici siteden-sunma yedeğiydi; runner GitHub'dan
+  indirmeyi uçtan uca geçince (13 Eyl videosu, 12 Eyl karuseli) kaldırıldı.
+- Blob'a ait bütün betikler kaldırıldı (`yukle.mjs`, `blob-dogrula.py`,
+  iki aşamalı pencere, `~/mizac-pencere/`'deki token kopyası).
 
-**ASKI HESAP DÜZEYİNDE, mağaza düzeyinde değil.** Yeni mağaza açmayı
-denedim: `Cannot create another store when usage threshold limit is reached
-(400)`. Yani depoyu 334 MB'a indirmek eşiği geri almıyor; CLI'da askıyı
-kaldıran komut da yok.
+**Runner `main`'i okuyor** — 10 Eyl'de `main` dört gün gerideydi, kitap
+içeriği üretimde görünmüyordu. Birleştirildi; kural CLAUDE.md'de.
 
-**SENDEN GEREKEN:** Vercel paneli → Storage → `mizac-medya`. Askıyı kaldıran
-bir uyarı/düğme olmalı; yoksa ödeme yöntemi ya da Pro gerekebilir.
-Panel tarayıcıda oturum istiyor, oraya giremem.
-
-### PENCERE AJANI DURDURULDU (10 Eyl akşamı)
-
-`launchctl bootout gui/$(id -u)/xyz.mizac.blob-pencere`. Blob askıdayken
-ajan her 6 saatte bir bütün pencereyi (~420 MB) `~/mizac-pencere/` altına
-kopyalayıp yüklemeye çalışıp düşerdi. Blob dönünce geri aç:
-`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.blob-pencere.plist`
-
-### GEÇİCİ ÇÖZÜM KURULDU — medya siteden sunuluyor
-
-11-20 Eylül'ün medyası `public/medya/` altına kondu (28 dosya, 4.2 MB —
-hepsi eski, küçük içerik) ve `MEDYA_TABAN_URL` üç yerde birden
-`https://mizac.xyz/medya` oldu: yerel `.env`, Actions iş akışı, ve depo.
-Doğrulandı: adresler 200 dönüyor, içerik türleri doğru (`image/png`,
-`video/mp4`), 12 Eylül klasörü uçtan uca kuruluyor.
-
-**Videolar sitede GÖSTERİLMİYOR** — hiçbir sayfaya bağlı değil, sitemap'te
-yok. `public/` yalnız dosyaya adres veriyor; Instagram medyayı o adresten
-kendi sunucusuna çekip yayınlıyor. Blob'un yaptığı işin aynısı.
-
-**18 EYLÜL SINIRI.** O günden itibaren videolar 30 MB (kitaptan üretilen
-yeni içerik) ve bilerek alınmadı — depoyu şişirirdi. Blob o güne kadar geri
-gelmezse başka bir barındırma gerekir.
-
-**Blob dönünce geri alma:** üç yerdeki `MEDYA_TABAN_URL`'yi Blob adresine
-döndür (`.env`'de eski satır yorumda duruyor), `public/medya/` klasörünü sil,
-`node icerik/yukle.mjs` ve pencere betiğini çalıştır.
-
-**SON TARİH: 12 Eylül 2026.** O gün `instagram-karusel` var ve Instagram
-görselleri herkese açık adresten çekiyor. 10 ve 11 Eylül Publer'dan çıktı,
-17 Eylül de öyle; aradaki 12-16 Eylül bizim modülün işi.
-
-**Bugün gönderi KAÇMADI** — 10 Eylül'ünkini Publer zaten atmıştı. Actions
-koşusu gönderiye sıra gelmeden, indirme adımında düştü.
-
-**Tasarım kusuru, ayrıca not:** iş akışı önce medyayı indiriyor, sonra
-defterde "zaten paylaşılmış mı" diye bakıyor. Publer'ın kapattığı günlerde
-bu boşuna iş ve şimdi gürültülü hata üretiyor. Sıra tersine çevrilmeli.
-
-**Yedek yol (askı uzarsa):** görseller küçük (40 KB), `public/medya/` altına
-konup `mizac.xyz` üzerinden sunulabilir; 12-16 Eylül'ün hepsi görsel.
-Instagram Reels videosu (30 MB) ilk 18 Eylül'de, ona kadar zaman var.
-
----
-
-## 1c. ACİL — `main` DALI 6 EYLÜL'DEN KALMA (10 Eyl 2026)
-
-**Actions runner public depoyu `ref: main`'den klonluyor** ve oradaki
-`paylasim/icerik-dizini.json` **6 Eylül** üretimi. Yani kitaptan üretilen
-254 video ve 149 kartın HİÇBİRİ üretimde görünmüyor.
-
-    git log origin/main..HEAD --oneline | wc -l    # 21 commit
-
-`paylasim` dalı `origin`'e push edildi (iş güvende), ama **`main`'e
-birleştirilmedi** — o üretimi etkileyen bir karar, kullanıcıya soruldu.
-
-**SON TARİH 12 EYLÜL.** O gün runner'ın kuracağı karusel, 6 Eylül dizinine
-göre eski dosya adlarını arayacak; sitede ise yeni kartlar duruyor. Dosya
-sayısı bile tutmuyor (eski 4, yeni 5 kare).
-
-**Yapılacak:** `git checkout main && git merge paylasim && git push`.
-Testler geçiyor (183/183) ve site zaten bu içeriği sunuyor (CLI ile deploy
-edildi), yani birleştirme üretimde bir şey bozmuyor; eksik olan yalnız
-runner'ın gördüğü dal.
+**13 ve 15 Eylül de kitaptan** artık: videolar yerleştirilirken korunacak
+yuvayı tarih değil DEFTER belirliyor. Eski şablonla çıkacak yalnız 17 Eylül
+kaldı (Publer'ın kuyruğunda).
 
 ---
 
@@ -343,7 +283,7 @@ adımını birlikte yapıyor:
 
     python3 icerik/takvime-yerlestir.py --deneme --kac 6   # önce göz at
     python3 icerik/takvime-yerlestir.py
-    node icerik/yukle.mjs                 # Blob'a (vercel env pull gerekiyor)
+    /usr/bin/python3 icerik/pencere.py     # yaklaşan günlerin medyası GitHub'a
     python3 -m paylasim.dizin --uret      # YOKSA Actions günü atlar
     git commit paylasim/icerik-dizini.json
 
@@ -354,29 +294,10 @@ kuyruğunda ve oradan çıkacak. Değiştirilebilir yuva: **254**.
 1080x1920 ve ~35 sn; YouTube bunu zaten Short sayıyor, "uzun" kalırsa
 açıklamaya `#Shorts` eklenmiyor ve keşfedilme yolu kapanıyor.
 
-**BLOB DEFTERİ TUZAĞI.** `yukle.mjs` `cikti/blob-adresler.json`'da kaydı
-olan dosyayı atlıyor. Video değişince kayıt silinmezse yeni dosya hiç
-yüklenmez, Blob eskisini sunmaya devam eder ve paylaşım eskisini atar —
-hiçbir yerde hata görünmez. `takvime-yerlestir.py` kaydı kendisi siliyor.
+**Blob defteri tuzağı artık yok** — `yukle.mjs` ve `blob-adresler.json` 11 Eyl'de
+kaldırıldı; `icerik/pencere.py` release'teki dosyayı ad VE boyutla karşılaştırıyor.
 
-**BLOB KOTASI — kayan pencereye geçildi (9 Eyl akşamı).**
-Videolar tam kalitede (ortalama 26 MB) duruyor ve yeniden kodlanmıyor. Ama
-Blob'un ücretsiz planı 1 GB; ilk yükleme 218 dosyanın 183'ünde
-"Storage quota exceeded" aldı ve kota aşılmışken üzerine yazma bile
-reddediliyor. Kullanıcı seçti: sıkıştırma değil kayan pencere.
-
-    bash icerik/blob-pencere-calistir.sh     # elle de aynı yol
-
-Blob'da yalnız önümüzdeki 21 günün videosu duruyor; Mac'te launchd
-6 saatte bir tazeliyor (`paylasim/xyz.mizac.blob-pencere.plist`, kuruldu ve
-uçtan uca sınandı: penceredeki bir video Blob'dan silindi, ajan tek turda
-geri koydu). Ölçüldü: 1197 MB → 321 MB, pencerede 16 video.
-Gerekçesi ve Instagram'ın neden adres istediği CLAUDE.md'de.
-
-**Doğrulama:** `python3 icerik/blob-dogrula.py` Blob'da duranların
-yereldekiyle aynı olup olmadığını HEAD ile ölçüyor. "Yaklaşan günler
-eksiksiz mi" sorusunun yeri o değil, `paylasim.durum`un "Blob penceresi"
-satırı ya da `icerik/pencere-hazirla.py`.
+**Medya barındırması:** madde 1b.
 
 **Sırada bekleyen ilgili iş:** karusel ve kare gönderilerin METİNLERİ de eski
 şablondan geliyor (`lib/mizac-data.ts`), kitaptan değil. Kullanıcı bunu da
@@ -424,7 +345,7 @@ gerekmedi — kartlar `sablon.ts`'in SVG'si, `sharp` PNG'ye basıyor.
   kez "sevdavi". Kullanıcı ikisinin aynı olduğunu söyledi. Yayınlanan metin
   siteyle aynı olsun diye normalleştirildi — düzeltme değil, tutarlılık
   tercihi. Bu sayede 29 videonun sesini yeniden üretmek gerekmedi.
-- **`yukle.mjs` VİDEOYA DOKUNMUYOR** (10 Eyl). Defterde kaydı olmayanı eksik
+- **`yukle.mjs` VİDEOYA DOKUNMUYORDU** (10 Eyl; betik 11 Eyl'de kaldırıldı, tarihçe). Defterde kaydı olmayanı eksik
   sayıyor, dolayısıyla kayan pencere dışındaki 254 videoyu da yüklemek
   istiyordu: 6.2 GB, kotanın altı katı. Kuru çalışma okunarak yakalandı.
 

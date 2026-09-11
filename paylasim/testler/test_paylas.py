@@ -53,6 +53,26 @@ class KuruTesti(Temel):
                                      token_al=token_al)
         self.assertEqual(kod, 0)
 
+    def test_kuru_calisma_paylasilmisi_atlar(self):
+        # 11 Eyl 2026: runner paylaşılmış gönderinin medyasını artık
+        # indirmiyor. Kuru çalışma deftere bakmasaydı o gönderinin videosunu
+        # arayıp "video.mp4 yok" diye düşerdi — gerçek çalışma ise atlıyor.
+        import contextlib
+        import io
+        from paylasim import defter
+        gun = self.gun_kur()
+        (self.kok / gun / "tiktok-tiktok" / "video.mp4").unlink()
+        defter.yaz(f"{gun}/tiktok-tiktok", {"sonuc": "TT1"}, self.defter)
+        once = self.defter.read_text(encoding="utf-8")
+        cikti = io.StringIO()
+        with patch("paylasim.http.erisilebilir_mi", return_value=True), \
+                contextlib.redirect_stdout(cikti):
+            kod = paylas.gunu_paylas(gun, kuru=True, kok=self.kok,
+                                     defter_dosya=self.defter)
+        self.assertEqual(kod, 0)
+        self.assertIn("zaten paylaşılmış", cikti.getvalue())
+        self.assertEqual(self.defter.read_text(encoding="utf-8"), once)
+
     def test_icerik_yoksa_hata_kodu(self):
         self.kok.mkdir(parents=True)
         self.assertEqual(

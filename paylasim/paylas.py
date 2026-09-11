@@ -53,7 +53,12 @@ def gunu_paylas(gun: str, kuru: bool, *, kok=None, defter_dosya=None,
     hata = 0
 
     for is_ in isler:
-        if not kuru and defter_modul.paylasildi_mi(is_.anahtar, defter_dosya):
+        # KURU ÇALIŞMA DA DEFTERE BAKAR. Bakmıyordu: 11 Eyl 2026'dan beri runner
+        # paylaşılmış gönderinin medyasını indirmiyor, kuru çalışma da o
+        # gönderinin videosunu arayıp düşüyordu ("video.mp4 yok"). Kuru
+        # çalışma gerçeğin provası; gerçekte atlanacak olanı o da atlamalı.
+        # Defteri yalnız OKUYOR — yazmıyor, token da istemiyor.
+        if defter_modul.paylasildi_mi(is_.anahtar, defter_dosya):
             kayit = defter_modul.oku(defter_dosya)[is_.anahtar]
             print(f"  · {is_.klasor.name}: zaten paylaşılmış "
                   f"({kayit.get('tarih', '')})")

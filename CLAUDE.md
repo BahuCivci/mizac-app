@@ -247,55 +247,63 @@ böyle bir engel yok.
 
 **İçerik tazeleme** (yeni gönderi üretildiyse):
 ```bash
-python3 icerik/video.py     # eksik videolar
-vercel env pull             # BLOB_READ_WRITE_TOKEN
-node icerik/yukle.mjs       # medyayı Vercel Blob'a
-python3 icerik/csv-url.py   # CSV'ler + parçalar
+python3 icerik/takvime-yerlestir.py                         # video yuvaları
+node --import ./icerik/kayit.mjs icerik/kart-yerlestir.ts   # kart yuvaları
+python3 -m paylasim.dizin --uret     # içerik dizini — YOKSA Actions günü atlar
+/usr/bin/python3 icerik/pencere.py   # yaklaşan günlerin medyası GitHub'a
+# sonra commit ve MAIN'e geçir — runner main'i okuyor
 ```
 
-**BLOB ARŞİV DEĞİL, KAYAN PENCERE (9 Eyl 2026).** Vercel Blob'un ücretsiz
-planı **1 GB**. Kitaptan üretilen 254 video tam kalitede 6.6 GB tutuyor ve
-yükleme tam bu duvara tosladı: 218 dosyanın 183'ü "Storage quota exceeded"
-ile döndü. **Kota aşılmışken üzerine yazma bile reddediliyor** — tek dosyayla
-ölçüldü, yani önce yer açmadan hiçbir şey yüklenemiyor.
+**MEDYA GITHUB RELEASES'TE (11 Eyl 2026) — Vercel Blob BIRAKILDI.**
+Blob'un ücretsiz planı 9 Eyl'de doldu (1197 MB / 1 GB). Vercel'in belgesi:
+"you will not be able to access Vercel Blob if limits are exceeded. In this
+scenario, you will have to wait until 30 days have passed". Panelde kaldıran
+düğme YOK (tek çıkış Pro denemesi), yeni mağaza da açtırmıyor ("usage
+threshold limit is reached"). 10 Eyl'den beri her okuma 403.
 
-Çözüm: videoların tamamı Mac'te (`icerik/cikti/gonderiler/`, 4.6 GB asıl +
-`gunluk/` içinde yerleştirilmiş kopyalar), Blob'da yalnız önümüzdeki
-**21 günün** videosu duruyor. Mac'te launchd ile 6 saatte bir
-(`paylasim/xyz.mizac.blob-pencere.plist` → `icerik/blob-pencere-calistir.sh`).
-Ölçüldü: 1197 MB → **321 MB**.
+Medya artık public depo `BahuCivci/mizac-app`'in **`medya` sürümünde**, kayan
+pencere olarak: yalnız yaklaşan ~21 günün, henüz PAYLAŞILMAMIŞ gönderilerinin
+dosyaları. `icerik/pencere.py` tek parça — gerekeni yükler, paylaşılanı ve
+pencere dışını siler, ad VE boyutla karşılaştırır. launchd 6 saatte bir
+(`paylasim/xyz.mizac.medya-pencere.plist`). Ölçüldü: ilk tur 61 dosya /
+430 MB, ikinci tur 0 yükleme 0 silme.
 
-**İŞ İKİ AŞAMA, ve sebebi TCC** (aşağıdaki "Tam Disk Erişimi çocuk sürece
-geçmiyor" maddesi). `icerik/pencere-hazirla.py` sistem python3'üyle çalışıp
-neyin yükleneceğine karar veriyor ve dosyaları `~/mizac-pencere/` altına
-kopyalıyor; `icerik/pencere-yukle.mjs` node ile ORADA çalışıp yüklüyor ve
-pencere dışını siliyor — proje klasörüne hiç dokunmadan. Tek parça node
-çözümü launchd altında sessizce asılı kalıyordu.
+**Instagram GitHub adresini kabul ediyor — ÖLÇÜLDÜ, varsayılmadı.** GitHub
+dosyayı 302 yönlendirmeyle ve `application/octet-stream` olarak veriyor.
+11 Eyl'de gerçek bir Reels videosuyla YAYINLANMAYAN bir kapsayıcı açıldı
+(`media_publish` çağrılmadı), 26 saniyede FINISHED.
 
-`~/mizac-pencere/` kendi `node_modules`'ını taşıyor (`@vercel/blob`, 11 MB).
-Yoksa betik "kurulu değil" deyip çıkıyor; kurulumu:
-`cd ~/mizac-pencere && npm install @vercel/blob`.
+**Dosya adları düz:** `<gün>__<klasör>__<dosya>` — release adında `/` olamıyor.
+Adres TEK yerde kuruluyor: `paylasim/medya.py`. Ayar iki yerde:
+`MEDYA_TABAN_URL=https://github.com/BahuCivci/mizac-app/releases/download/medya`
+ve `MEDYA_DUZEN=duz` — yerel `paylasim/gizli/.env` ve özel deponun iş akışı.
 
-**Neden Blob'a hiç gerek var:** Instagram medyayı kendi sunucusuyla
-indiriyor, herkese açık adres şart. TikTok (`FILE_UPLOAD`) ve YouTube
-(resumable) dosyayı doğrudan alıyor — adres YALNIZ Instagram için.
-Instagram'ın doğrudan yükleme yolu (`rupload.facebook.com`,
-`upload_type=resumable`) **yalnız Facebook Login for Business** uygulamalara
+**Düzen ortamdan OKUNMAZ, çağıran verir.** Fonksiyonlar `MEDYA_DUZEN`'i
+kendileri okusaydı runner'da testler düz düzene geçer, klasör düzenini
+bekleyen testler düşer ve iş akışının "Testler" adımı paylaşımı hiç
+başlatmazdı. Bunu `test_duzen_ortamdan_okunmaz` koruyor.
+
+**Runner paylaşılmış gönderinin medyasını indirmiyor** (`dizin --indir
+--defter`). 10 Eyl'de günün gönderisi Publer'dan çoktan çıkmışken koşu
+medyayı indirmeye kalkıp barındırma kapalı olduğu için boşuna düştü.
+Kuru çalışma da deftere bakıyor; bakmasaydı paylaşılmış gönderinin artık
+indirilmeyen medyasını arayıp düşerdi (11 Eyl'de runner'da görüldü).
+
+**Neden barındırma şart:** Instagram medyayı kendi sunucusuyla herkese açık
+adresten çekiyor; runner da TikTok (`FILE_UPLOAD`) ve YouTube (resumable)
+için dosyayı indirmek zorunda. Instagram'ın doğrudan yükleme yolu
+(`rupload.facebook.com`) **yalnız Facebook Login for Business** uygulamalara
 açık; biz Instagram Login yolundayız (hesap Creator, Facebook Sayfası yok —
-App Review'u atlayan şey bu). Belgeden doğrulandı, hatırlanmadı.
+App Review'u atlayan şey bu). Belgeden doğrulandı.
 
-**Mac 21 günden uzun kapalı kalırsa** o günün videosu Blob'da olmaz ve
-paylaşım GÜRÜLTÜLÜ biçimde hata verir (indirme 404) — sessiz atlama değil.
-Tampon bilerek geniş tutuldu.
+**Mac 21 günden uzun kapalı kalırsa** o günün medyası release'te olmaz ve
+runner indirmede GÜRÜLTÜLÜ düşer. `python3 -m paylasim.durum` her oturumda
+"Medya penceresi: N gün yetiyor" diye kalan tamponu yazıyor.
 
-**Görseller pencereye girmiyor**, hepsi sürekli Blob'da: 816 PNG toplam
-42 MB, yani kotanın %4'ü. Silip yeniden yüklemenin getirisi yok.
-
-**`yukle.mjs` DEFTERE BAKIP ATLIYOR.** Yüklenenler `cikti/blob-adresler.json`
-içinde; bir dosyanın kaydı varsa içeriği değişse bile yeniden yüklenmiyor.
-Var olan bir medyayı değiştirdiysen o anahtarı defterden sil, yoksa Blob
-eskisini sunmaya devam eder ve paylaşım eskisini atar — hiçbir yerde hata
-görünmez. `takvime-yerlestir.py` bunu kendisi yapıyor.
+**RUNNER `main` DALINI OKUR.** İş akışı public depoyu `ref: main` ile
+klonluyor. 10 Eyl'de `main` dört gün gerideydi ve içerik dizini 6 Eylül
+üretimiydi — kitaptan üretilen hiçbir şey üretimde görünmüyordu. İçerik ya
+da kod değişince iş `main`'e geçmeden bitmiş sayılmaz.
 
 **Video sesi — 7 Eyl 2026'dan itibaren Chatterbox.** Kullanıcı FreyaTTS'i
 "hiç doğal durmuyor" bulup karşılaştırma istedi; aynı cümleler iki sesle
@@ -471,10 +479,12 @@ node'a özel (imzasız/homebrew ikili).
 
 İki sonucu var:
 - Asılı iş launchd'ye "çalışıyor" görünüyor ve **sonraki bütün turları
-  engelliyor**. Bu yüzden `blob-pencere-calistir.sh` kendi bekçisini
-  taşıyor: 120 saniyede kesiyor ve sebebini log'a yazıyor.
-- Çözümü, bash için yapılanın aynısı: Tam Disk Erişimi listesine
-  `/opt/homebrew/bin/node` eklemek.
+  engelliyor**. Zamanlanmış işlerde node artık hiç yok.
+- **Sistem python'u yalnız bash'in ÇOCUĞU olarak okuyabiliyor** (11 Eyl 2026).
+  launchd `/usr/bin/python3`'ü doğrudan başlatınca "can't open file …:
+  Operation not permitted". Plist bu yüzden `/bin/bash -c "…; exit $?"`
+  kullanıyor — `exec` yok, çünkü tek komutlu `bash -c` kendini örtük olarak
+  exec'le değiştirir ve bash (izinle birlikte) ortadan kalkar.
 
 Zamanlanmış bir işe yeni bir ikili soktuğunda **önce onun okuyabildiğini
 ölç** — `~/Documents` içinde `cd` edip küçük bir dosya okutan bir deneme

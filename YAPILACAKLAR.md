@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 11 Eylül 2026.
+Son güncelleme: 12 Eylül 2026.
 
 ---
 
@@ -50,6 +50,12 @@ gün sessizce atlanır.
 ---
 
 ## 1b. Medya barındırması — ÇÖZÜLDÜ: GitHub Releases (11 Eyl 2026)
+
+**İLK GERÇEK PAYLAŞIM GITHUB'DAN — 12 Eyl 2026, 11:15.** Kitaptan üretilen
+karusel, 5 kart, medya GitHub Releases'ten: 
+https://www.instagram.com/p/DdLiKqjFqGe/ (Instagram API'si CAROUSEL_ALBUM,
+5 kart olarak doğruladı). Zamanlanmış koşu ~5 saat geç kaldığı için elle
+başlatıldı; zamanlama aynı gün düzeltildi (CLAUDE.md, "Dört zamanlama").
 
 Vercel Blob'un ücretsiz planı 9 Eyl'de doldu ve Vercel **30 gün** erişimi
 kapattı — belgesi açık, panelde kaldıran düğme yok, yeni mağaza da

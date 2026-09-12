@@ -411,8 +411,22 @@ nasıl geri alınacağı, silme politikası).
 
 **Zamanlayıcı GitHub'da — Mac artık dayanak değil.** (6 Eyl 2026)
 Özel depo `BahuCivci/mizac-paylasim-durum` içinde bir Actions iş akışı var;
-her sabah 07:00 UTC'de (10:00 Europe/Istanbul) çalışıyor, public depoyu
-`main`'den klonluyor, token ve defteri kendi içinde tutuyor.
+public depoyu `main`'den klonluyor, token ve defteri kendi içinde tutuyor.
+
+**Dört zamanlama, ilk çalışan paylaşır** (12 Eyl 2026): 05:17, 07:00, 07:43,
+09:11 UTC. Tek `0 7` varken koşular SİSTEMLİ olarak ~5 saat geç başladı
+(7-11 Eyl: 13:13, 11:56, 12:06, 12:00, 11:59 UTC) — GitHub tam saat
+başındaki zamanlamaları yoğunluktan geciktiriyor. Sonraki koşular defterden
+"zaten paylaşılmış" diyor; `concurrency: paylasim` iki koşunun defteri aynı
+anda okumasını önlüyor, yani çift paylaşım yok.
+
+**Defteri yazmadan önce `git pull --rebase`.** Koşu sürerken özel depoya
+başka bir şey itilirse düz push reddedilir, defter kaydedilmez ve sonraki
+koşu aynı gönderiyi YENİDEN atar. 12 Eyl'de iş akışı değişikliği itilirken
+elle bir koşu başlatıldı ve bu adım sayesinde defter sorunsuz yazıldı.
+
+**Sağlık raporunda bugünün gönderisi "bekleyen"**, "kaçan" değil: koşu
+saatlerce gecikebildiği için sabah bakınca telafi komutu önermek yanlıştı.
 
 **Token'ı YERELDE yenilersen özel depoya senkronla.** TikTok yenilemede
 refresh token'ı da değiştirebiliyor; yerel ve Actions ayrı kopyalar tutuyor.

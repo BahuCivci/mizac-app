@@ -81,6 +81,13 @@ class KacanTesti(Temel):
         self.assertNotIn("2026-09-20", self.kacan_bolumu())
 
 
+    def test_bugun_kacan_degil_bekleyen(self):
+        # Zamanlanmış koşu saatlerce gecikebiliyor; sabah bakıldığında
+        # bugünün gönderisi kaçan değil, bekleyen.
+        self.gun_kur("2026-09-04")
+        self.assertNotIn("2026-09-04", self.kacan_bolumu())
+        self.assertIn("bugün bekleyen", self.rapor())
+
 class VideoTesti(Temel):
     def test_eksik_video_bildirilir(self):
         self.gun_kur("2026-09-04", video=False)

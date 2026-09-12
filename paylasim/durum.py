@@ -113,6 +113,7 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
     # --- kaçan paylaşımlar ve eksik videolar
     paylasilan = defter_modul.oku(defter_dosya)
     kacan: list[str] = []
+    bekleyen: list[str] = []
     videosuz: list[str] = []
 
     for geri in range(GERIYE_BAK, -1, -1):
@@ -126,7 +127,11 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
             if video_gerekli and not (is_.klasor / "video.mp4").exists():
                 videosuz.append(f"{gun}/{is_.klasor.name}")
             if is_.anahtar not in paylasilan:
-                kacan.append(is_.anahtar)
+                # BUGÜN KAÇAN SAYILMAZ. Zamanlanmış koşu GitHub'da saatlerce
+                # gecikebiliyor (7-11 Eyl 2026: hep ~5 saat); sabah bakınca
+                # bugünün gönderisi "paylaşılmamış" ve yanında telafi komutu
+                # çıkıyordu — gereksiz, hatta telafi edilirse zararlı.
+                (bekleyen if geri == 0 else kacan).append(is_.anahtar)
 
     if kacan:
         satirlar.append(f"paylaşılmamış ({len(kacan)}):")
@@ -134,6 +139,10 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
         satirlar.append("  telafi: python3 -m paylasim.paylas --gun <gün> --gercek")
     else:
         satirlar.append(f"son {GERIYE_BAK} günde kaçan yok")
+    if bekleyen:
+        satirlar.append(f"bugün bekleyen ({len(bekleyen)}): " + ", ".join(
+            a.split("/", 1)[1] for a in bekleyen))
+        satirlar.append("  zamanlanmış koşu henüz gelmedi; akşama kadar çıkmazsa telafi et")
     satirlar.append("")
 
     if videosuz:

@@ -136,6 +136,13 @@ bağlanmak gerekiyordu. `openfortivpn` bir LaunchDaemon olarak kuruldu;
 `KeepAlive` ile launchd kopan bağlantıyı kendi kaldırıyor. Kurulum ve
 tuzaklar: `danisman/sunucu/KURULUM.md` → "VPN nöbetçisi".
 
+**KeepAlive yalnız SÜREÇ ölümünü görüyor**; VPN'in asıl arızası süreç
+yaşarken paket geçmemesi (7 ve 10 Eyl). Bu yüzden ikinci bir nöbetçi var:
+`xyz.mizac.vpn-saglik` (LaunchDaemon, root, 12 Eyl 2026'da kuruldu) iki
+dakikada bir sunucunun 22. portunu yokluyor, üç turda da geçmezse
+`kickstart -k` ile VPN'i yeniden başlatıyor. Sağlıklıyken
+`/var/log/mizac-vpn-saglik.log` hiç oluşmuyor — yokluğu arıza değil.
+
 **Şifre sohbete girmez, girmemeli.** Oturum kaydı `~/.claude/projects/`
 altında düz metin JSONL olarak diskte duruyor (bu oturum 61 MB) ve her adımda
 modele yeniden gönderiliyor. Kimlik bilgisi `/etc/openfortivpn/config`'e

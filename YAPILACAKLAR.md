@@ -384,11 +384,22 @@ gerekmedi — kartlar `sablon.ts`'in SVG'si, `sharp` PNG'ye basıyor.
 
 ---
 
-## 8. VPN sağlık nöbetçisi — BETİK VE PLIST HAZIR, KURULUM ROOT BEKLİYOR
+## 8. VPN sağlık nöbetçisi — KURULDU (12 Eyl 2026)
 
-`danisman/sunucu/vpn-saglik.sh` yazıldı ama yüklenmedi. Sebebi 7 Eylül'de
-görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log "Tunnel is up" diyordu
-ama tek paket geçmiyordu. Mevcut nöbetçi yalnız süreç ölümüne bakıyor.
+**12 Eyl 2026'da kuruldu, doğrulandı:** `launchctl print
+system/xyz.mizac.vpn-saglik` → `runs = 1`, `last exit code = 0`; betik ve
+plist yerinde, `root:wheel`. Kurulum ilk denemede OLMAMIŞTI — kullanıcı
+"yaptım" dedi ama dosyalar kopyalanmamış, sudo kaydı da yoktu; ikinci
+denemede proje klasöründen çalıştırılınca oldu. "Yaptım" denince DOĞRULA.
+
+**Sağlıklıyken `/var/log/mizac-vpn-saglik.log` HİÇ OLUŞMAZ** — betik yalnız
+ulaşamadığında ve bağlantı geri geldiğinde yazıyor. Log'un yokluğu arıza
+değil. Müdahale dalı (kickstart) gerçek bir kopmada henüz görülmedi; ilk
+kopmada log'a `ulaşılamıyor (n/3)` → `VPN yeniden başlatılıyor` düşmeli.
+
+Sebebi 7 Eylül'de görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log
+"Tunnel is up" diyordu ama tek paket geçmiyordu. Eski nöbetçi yalnız süreç
+ölümüne bakıyor.
 
 **10 Eyl 2026'da ÜÇÜNCÜ KEZ oldu** ve kart üretimini ortasından kesti:
 `openfortivpn` süreci yaşıyor (PID vardı), `ppp0` ayakta ve adres almış,

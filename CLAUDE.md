@@ -435,6 +435,14 @@ elle bir koşu başlatıldı ve bu adım sayesinde defter sorunsuz yazıldı.
 **Sağlık raporunda bugünün gönderisi "bekleyen"**, "kaçan" değil: koşu
 saatlerce gecikebildiği için sabah bakınca telafi komutu önermek yanlıştı.
 
+**Rapor RUNNER'IN defterini okur, telafi RUNNER'DAN yapılır** (12 Eyl 2026).
+Rapor yerel `paylasim/veri/paylasildi.json`'u okuyordu; runner'ın o sabah
+attığı karusel orada yoktu. Ertesi gün "kaçan" görünüp yanında yerel
+`paylas --gercek` önerecekti — o da yerel deftere baktığı için aynı
+gönderiyi İKİNCİ kez atardı. Şimdi `durum` önce `~/mizac-paylasim-durum`'u
+çekip oradaki defteri ve token'ı okuyor; telafi satırı `gh workflow run`.
+Yerelden gerçek paylaşım yapma — defterler ayrışır.
+
 **Token'ı YERELDE yenilersen özel depoya senkronla.** TikTok yenilemede
 refresh token'ı da değiştirebiliyor; yerel ve Actions ayrı kopyalar tutuyor.
 Yerelde `kimlik.token()` çağıran bir şey çalıştırdıysan:

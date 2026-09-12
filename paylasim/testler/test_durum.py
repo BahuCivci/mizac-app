@@ -48,6 +48,41 @@ class TokenTesti(Temel):
         kimlik.kaydet("instagram", "a", datetime(2026, 11, 1), None, self.token)
         self.assertIn("2026-11-01", self.rapor())
 
+    def test_refreshli_dolmus_token_alarm_vermez(self):
+        # YouTube'un access token'ı 1 saat yaşıyor; koşudan sonra hep dolmuş.
+        self.gun_kur("2026-09-04")
+        kimlik.kaydet("youtube", "a", datetime(2026, 9, 4, 8), "r", self.token)
+        self.assertNotIn("SÜRESİ DOLMUŞ", self.rapor())
+        self.assertIn("koşuda yenilenir", self.rapor())
+
+    def test_refreshsiz_dolmus_token_alarm_verir(self):
+        self.gun_kur("2026-09-04")
+        kimlik.kaydet("instagram", "a", datetime(2026, 9, 1), None, self.token)
+        self.assertIn("SÜRESİ DOLMUŞ", self.rapor())
+
+
+class OzelDepoTesti(unittest.TestCase):
+    def setUp(self):
+        self.gecici = tempfile.TemporaryDirectory()
+        self.addCleanup(self.gecici.cleanup)
+        self.depo = Path(self.gecici.name) / "ozel"
+
+    def test_depo_yoksa_yerele_duser_ve_soyler(self):
+        defter_yol, token_yol, not_ = durum.ozel_durum(self.depo)
+        self.assertIsNone(defter_yol)
+        self.assertIsNone(token_yol)
+        self.assertIn("YEREL", not_)
+
+    def test_git_olmayan_klasoru_cekmeden_okur(self):
+        # `git -C` depo olmayan klasörde üst dizinlerde depo arar; çekilmemeli.
+        (self.depo / "durum").mkdir(parents=True)
+        (self.depo / "durum" / "paylasildi.json").write_text("{}")
+        (self.depo / "durum" / "token.json").write_text("{}")
+        defter_yol, token_yol, not_ = durum.ozel_durum(self.depo)
+        self.assertEqual(defter_yol, self.depo / "durum" / "paylasildi.json")
+        self.assertEqual(token_yol, self.depo / "durum" / "token.json")
+        self.assertIn("git deposu değil", not_)
+
 
 class KacanTesti(Temel):
     def test_dun_paylasilmamis_is_bildirilir(self):
@@ -87,6 +122,13 @@ class KacanTesti(Temel):
         self.gun_kur("2026-09-04")
         self.assertNotIn("2026-09-04", self.kacan_bolumu())
         self.assertIn("bugün bekleyen", self.rapor())
+
+    def test_telafi_runnerdan_onerilir(self):
+        # Yerel `paylas --gercek` yerel deftere bakar; runner'ın attığını
+        # bilmez ve ikinci kez atar.
+        self.gun_kur("2026-09-03")
+        self.assertIn("gh workflow run", self.kacan_bolumu())
+        self.assertNotIn("paylasim.paylas", self.rapor())
 
 class VideoTesti(Temel):
     def test_eksik_video_bildirilir(self):

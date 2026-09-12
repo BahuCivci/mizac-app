@@ -18,8 +18,10 @@ videolar ve medya penceresinin (GitHub Releases) kaç gün ileriye yettiği.
 """
 from __future__ import annotations
 
+import subprocess
 import sys
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 from paylasim import defter as defter_modul
 from paylasim import gunluk, kimlik
@@ -29,6 +31,45 @@ from paylasim.medya import adres as medya_adresi
 
 GERIYE_BAK = 7  # kaç gün geriye bakılsın
 ILERI_BAK = 25  # medya penceresi kaç gün ileriye yetiyor (pencere 21 gün)
+
+# Gönderileri GitHub Actions atıyor; defteri ve token'ı bu özel deponun
+# klonuna yazıyor. Yereldeki kopyalar yalnız biri elle eşitlerse güncel.
+OZEL_DEPO = Path.home() / "mizac-paylasim-durum"
+
+# TELAFİ RUNNER'DAN. Yerel `paylas --gercek` YEREL deftere bakıyor; runner'ın
+# attığı bir gönderiyi orada bulamayıp aynı gönderiyi ikinci kez atar.
+TELAFI = ("gh workflow run gunluk.yml -R BahuCivci/mizac-paylasim-durum "
+          "-f gun=<gün> -f gercek=true")
+
+
+def ozel_durum(depo: Path = OZEL_DEPO) -> tuple[Path | None, Path | None, str]:
+    """
+    Runner'ın defteri ve token'ı — önce çekerek. (defter, token, not)
+
+    NEDEN: 12 Eyl 2026'da rapor yerel defteri okuyordu. Runner'ın o sabah
+    attığı karusel yerelde yoktu ve "bekleyen" göründü; ertesi gün "kaçan"
+    olacak ve yanında yerel telafi komutu çıkacaktı — o da aynı karuseli
+    ikinci kez atardı.
+
+    Yol yoksa (None, None, not) döner ve rapor yerel kopyaya düşer.
+    """
+    defter_yol = depo / "durum" / "paylasildi.json"
+    token_yol = depo / "durum" / "token.json"
+    if not defter_yol.exists():
+        return None, None, (f"özel depo yok ({depo}) — YEREL defter okunuyor, "
+                            "runner'ın paylaştıkları görünmeyebilir")
+    token = token_yol if token_yol.exists() else None
+    # .git'i kendimiz yoklıyoruz: `git -C` klasör depo değilse üst dizinlerde
+    # depo arar ve BAŞKA bir depoyu çekebilir.
+    if not (depo / ".git").exists():
+        return defter_yol, token, "özel depo git deposu değil — çekilmeden okunuyor"
+    try:
+        c = subprocess.run(["git", "-C", str(depo), "pull", "-q", "--ff-only"],
+                           capture_output=True, text=True, timeout=30)
+        tamam = c.returncode == 0
+    except (OSError, subprocess.TimeoutExpired):
+        tamam = False
+    return defter_yol, token, "" if tamam else "özel depo çekilemedi — son çekilen hâl okunuyor"
 
 
 def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
@@ -97,10 +138,16 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
 
     # --- token'lar
     satirlar.append("token:")
+    tokenlar = kimlik.oku(token_dosya)
     for platform in ("instagram", "tiktok", "youtube"):
         kalan = kimlik.kalan(platform, simdi, token_dosya)
         if kalan is None:
             satirlar.append(f"  {platform}: kurulmamış")
+        elif kalan <= timedelta(0) and tokenlar.get(platform, {}).get("refresh"):
+            # YouTube'un access token'ı 1 saat, TikTok'unki 24 saat yaşıyor;
+            # günde bir koşan runner'ın token'ı günün çoğunda "dolmuş" görünür.
+            # Asıl kimlik refresh token — koşu onunla yeniliyor.
+            satirlar.append(f"  {platform}: erişim süresi dolmuş, refresh var — koşuda yenilenir")
         elif kalan <= timedelta(0):
             satirlar.append(f"  {platform}: SÜRESİ DOLMUŞ")
         elif kalan <= kimlik.PAY[platform]:
@@ -136,7 +183,7 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
     if kacan:
         satirlar.append(f"paylaşılmamış ({len(kacan)}):")
         satirlar.extend(f"  {a}" for a in kacan)
-        satirlar.append("  telafi: python3 -m paylasim.paylas --gun <gün> --gercek")
+        satirlar.append(f"  telafi: {TELAFI}")
     else:
         satirlar.append(f"son {GERIYE_BAK} günde kaçan yok")
     if bekleyen:
@@ -166,7 +213,10 @@ def rapor(bugun: date, *, kok=None, defter_dosya=None, token_dosya=None) -> list
 
 
 def main() -> int:
-    print("\n".join(rapor(date.today())))
+    defter_dosya, token_dosya, not_ = ozel_durum()
+    satirlar = rapor(date.today(), defter_dosya=defter_dosya, token_dosya=token_dosya)
+    satirlar.insert(1, f"kaynak: {not_}" if not_ else "kaynak: runner'ın defteri ve token'ı (özel depo)")
+    print("\n".join(satirlar))
     return 0
 
 

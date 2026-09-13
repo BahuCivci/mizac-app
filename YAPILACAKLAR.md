@@ -397,6 +397,14 @@ ulaşamadığında ve bağlantı geri geldiğinde yazıyor. Log'un yokluğu arı
 değil. Müdahale dalı (kickstart) gerçek bir kopmada henüz görülmedi; ilk
 kopmada log'a `ulaşılamıyor (n/3)` → `VPN yeniden başlatılıyor` düşmeli.
 
+**YENİDEN KURULUM BEKLİYOR (isteğe bağlı, 13 Eyl 2026):** kurulu betik
+uyku arasındaki başarısızlıkları "üst üste" sayıyor. Mac pilde ve uyku
+1 dakika; gece üç kısa uyanışta (00:56, 05:41, 08:41) sayaç doldu ve VPN
+boşuna yeniden başlatıldı. Depodaki betik düzeltildi (son başarısızlık
+300 sn'den eskiyse seri sıfırlanıyor). Zararı küçük — o anlarda VPN zaten
+kopuk — ama kurulum aynı tek komut:
+`cd /Users/bahu/Documents/mizac-app && sudo bash danisman/sunucu/vpn-saglik-kur.sh`
+
 Sebebi 7 Eylül'de görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log
 "Tunnel is up" diyordu ama tek paket geçmiyordu. Eski nöbetçi yalnız süreç
 ölümüne bakıyor.

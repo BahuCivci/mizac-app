@@ -35,6 +35,15 @@ if nc -z -G 5 "$HEDEF" "$PORT" 2>/dev/null; then
   exit 0
 fi
 
+# UYKU ARASI "ÜST ÜSTE" SAYILMAZ. Mac uyurken tur atılmıyor, kısa
+# uyanışlarda (DarkWake) ise VPN henüz kalkmamış oluyor. 13 Eyl 2026'da
+# sayaç gece boyunca birikti (00:56, 05:41, 08:41) ve VPN boşuna yeniden
+# başlatıldı. Turlar 120 sn arayla; son başarısızlık 300 sn'den eskiyse
+# seri kopmuş demektir, baştan say.
+if [ -f "$SAYAC" ] && [ $(( $(date +%s) - $(stat -f %m "$SAYAC") )) -gt 300 ]; then
+  rm -f "$SAYAC"
+fi
+
 n=$(( $(cat "$SAYAC" 2>/dev/null || echo 0) + 1 ))
 echo "$n" > "$SAYAC"
 yaz "ulaşılamıyor ($n/$ESIK)"

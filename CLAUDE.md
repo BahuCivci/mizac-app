@@ -427,6 +427,14 @@ başındaki zamanlamaları yoğunluktan geciktiriyor. Sonraki koşular defterden
 "zaten paylaşılmış" diyor; `concurrency: paylasim` iki koşunun defteri aynı
 anda okumasını önlüyor, yani çift paylaşım yok.
 
+**Dört saat gecikmeyi ÇÖZMEDİ, yalnız güvenceye aldı** (13 Eyl 2026 ölçümü):
+o gün ilk koşu 10:19 UTC'de (13:19 TR) geldi — 05:17 ve 07:00 zamanlamaları
+o saate kadar hiç tetiklenmedi. Gönderiler pratikte öğleden sonra çıkıyor.
+Hangi cron'un tetiklediği koşu listesinde görünmüyor; iş akışı artık
+"Hangi gün" adımında `tetikleyen:` satırı yazıyor. Sabah şartsa kalıcı yol
+dışarıdan `workflow_dispatch` (ör. Vercel Cron) — o da özel depoya yetkili
+bir PAT ister.
+
 **Defteri yazmadan önce `git pull --rebase`.** Koşu sürerken özel depoya
 başka bir şey itilirse düz push reddedilir, defter kaydedilmez ve sonraki
 koşu aynı gönderiyi YENİDEN atar. 12 Eyl'de iş akışı değişikliği itilirken

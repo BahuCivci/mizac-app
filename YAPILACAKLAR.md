@@ -88,6 +88,8 @@ kaldı (Publer'ın kuyruğunda).
 ## 2. TikTok incelemesi — cevap bekleniyor
 
 **Durum:** In review (6 Eyl 00:05). App ID `7682004239296038919`.
+13 Eyl'de panele bakıldı: hâlâ In review, Review comments boş, üstte
+"high volume of requests" gecikme uyarısı. Yapılacak bir şey yok.
 Talep: `video.publish` (Direct Post), yani günlük dokunuşun kalkması.
 
 Cevap nereye gelir: panelde **Review comments**, ve `safra943@gmail.com`.

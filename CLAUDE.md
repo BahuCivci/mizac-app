@@ -220,6 +220,16 @@ bu kasıtlı.
 Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılıyor.
 429 gönderi (24 Ağu 2026 → 23 Ağu 2027) hazır, her günde en az bir gönderi var.
 
+**15 Eyl 2026'dan itibaren HER GÜN AYNI VİDEO ÜÇ PLATFORMA** (Reels +
+TikTok + Shorts), kartlar olduğu günlerde Instagram'a ikinci gönderi.
+Önceki takvim platformları sırayla döndürüyordu: bir yılda YouTube yalnız
+60 gün paylaşım görüyordu. Kullanıcının isteğiyle değişti (14 Eyl).
+`icerik/takvime-yerlestir.py` bugün ve öncesini dondurup yarından itibaren
+her güne sıradaki videoyu üç yuvaya sabit bağlantıyla koyuyor; tekrar
+çalıştırmak güvenli. Kitap 24 Tem 2027'de bitiyor — sonrası için yeni
+video üretilip betik yeniden çalıştırılmalı. Release'te gün başına üç kopya
+duruyor (ad düz ve klasör başına); pencere ~3 kat büyüdü.
+
 **Her oturumda kontrol et, kullanıcı sormasa bile:**
 
 ```bash

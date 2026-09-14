@@ -3,13 +3,25 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 12 Eylül 2026.
+Son güncelleme: 14 Eylül 2026.
 
 ---
 
 ## Şu an çalışan sistem
 
 `paylasim/` modülü Publer'ın yerini aldı. Kontrol: `python3 -m paylasim.durum`.
+
+**15 Eyl 2026'dan itibaren her gün aynı kitap videosu üç platforma**
+(Reels + TikTok + Shorts); kartlar olduğu günlerde Instagram'a ikinci
+gönderi. Takvim `icerik/takvime-yerlestir.py` ile yeniden dizildi: 313 gün
+video, 98 karusel, 49 kare. **Kitap 24 Tem 2027'de bitiyor** — ondan önce
+yeni video üretilip betik yeniden çalıştırılmalı; 25 Tem sonrası kartı
+olmayan günler dizinde hiç yok ve runner o günleri "dizinde yok" diye
+düşürür.
+
+YouTube videoları denetim bitene kadar gizli (kilitli) yükleniyor; onay
+gelince `YOUTUBE_GIZLILIK=public`. Onaydan önceki günlerin videoları
+istenirse yeniden yüklenebilir — dosyalar Mac'te.
 
 Tetikleyen **GitHub Actions** (özel depo `mizac-paylasim-durum`, her sabah
 10:00 Europe/Istanbul). Mac'teki launchd bilerek kapatıldı — madde 1.

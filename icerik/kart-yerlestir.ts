@@ -69,11 +69,10 @@ function yuvalar(tur: 'karusel' | 'kare'): string[] {
 }
 
 function metinUret(kart: Kart): string {
-  // İlk satır başlık; gövde maddeler. Karusel metninde "kaydır" çağrısı
-  // duruyor çünkü kaydırmayan okuyucu içeriğin çoğunu görmüyor.
-  const kaydir = kart.tur === 'karusel' ? '\nKaydır 👉\n' : '';
+  // İlk satır başlık; gövde maddeler. "Kaydır 👉" YOK: kartlar Reels olarak
+  // çıkıyor, videoda kaydırılacak bir şey yok (14 Eyl 2026).
   return [`✦ ${kart.baslik}`, '', ...kart.maddeler.map((m) => `✦ ${m}`),
-          kaydir, CAGRI, KAYNAK, ETIKETLER, ''].join('\n');
+          '', CAGRI, KAYNAK, ETIKETLER, ''].join('\n');
 }
 
 async function gorselYaz(svg: string, hedef: string) {
@@ -85,19 +84,22 @@ async function yerlestir(klasor: string, kart: Kart, deneme: boolean): Promise<s
   const ad = path.basename(klasor);
   const etiket = kart.bolum.replace(/^Bölüm\s*\d+\s*—\s*/, '').slice(0, 28);
 
-  const kareler: string[] = [];
-  if (kart.tur === 'karusel') {
-    const toplam = kart.maddeler.length + 2;
-    kareler.push(kareSvg({ bicim: 'karusel', ustEtiket: etiket, baslik: kart.baslik,
-                           vurguRenk: GOLD, sayfa: { su: 1, toplam } }));
-    kart.maddeler.forEach((m, i) =>
-      kareler.push(kareSvg({ bicim: 'karusel', ustEtiket: etiket, baslik: m,
-                             vurguRenk: GOLD, sayfa: { su: i + 2, toplam } })));
-    kareler.push(kapanisSvg('karusel', GOLD, { su: toplam, toplam }));
-  } else {
-    kareler.push(kareSvg({ bicim: 'kare', ustEtiket: etiket, baslik: kart.baslik,
-                           maddeler: kart.maddeler.slice(0, 4), vurguRenk: GOLD }));
-  }
+  // HER KART SLAYT SLAYT — kare de. Kartlar 14 Eyl 2026'dan beri Instagram
+  // Reels olarak çıkıyor (icerik/kart-reels.py slaytları videoya diziyor).
+  // Kare eskiden tek görsele dört madde sığdırıyordu ve sığdıramıyordu:
+  // 85 karakteri aşan madde "…" ile kesiliyor, dördüncü madde alt bilgiye
+  // taştığı için hiç çizilmiyordu. Videoda görsel tek bilgi kaynağı; her
+  // madde kendi slaytında tam cümle olarak duruyor.
+  const maddeler = kart.tur === 'kare' ? kart.maddeler.slice(0, 4) : kart.maddeler;
+  const toplam = maddeler.length + 2;
+  const kareler: string[] = [
+    kareSvg({ bicim: 'karusel', ustEtiket: etiket, baslik: kart.baslik,
+              vurguRenk: GOLD, sayfa: { su: 1, toplam } }),
+    ...maddeler.map((m, i) =>
+      kareSvg({ bicim: 'karusel', ustEtiket: etiket, baslik: m,
+                vurguRenk: GOLD, sayfa: { su: i + 2, toplam } })),
+    kapanisSvg('karusel', GOLD, { su: toplam, toplam }),
+  ];
 
   if (!deneme) {
     // Eski PNG'ler silinmeli: yeni karusel eskisinden az kareliyse artakalan

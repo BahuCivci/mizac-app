@@ -70,13 +70,17 @@ class IslerTesti(unittest.TestCase):
 
 
 class BicimTesti(unittest.TestCase):
-    def test_alti_bicim_taniniyor(self):
+    def test_yedi_bicim_taniniyor(self):
         self.assertEqual(
             set(gunluk.BICIM),
             {"instagram-karusel", "instagram-kare",
-             "instagram-reels", "tiktok-tiktok",
+             "instagram-reels", "instagram-kart", "tiktok-tiktok",
              "youtube-shorts", "youtube-uzun"},
         )
+
+    def test_kart_reels_olarak_gider(self):
+        # Kartlar 14 Eyl 2026'dan beri video; akış gönderisi değil Reels.
+        self.assertEqual(gunluk.BICIM["instagram-kart"], ("instagram", "reels"))
 
 
 if __name__ == "__main__":

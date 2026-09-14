@@ -129,6 +129,24 @@ class GercekTesti(Temel):
         self.assertEqual(cagrilar[2][1]["caption"], "altyazı")
         self.assertTrue(cagrilar[3][0].endswith("/42/media_publish"))
 
+    def test_reels_akista_da_gorunur(self):
+        # "Herkes görsün" (14 Eyl 2026): Reels yalnız Reels sekmesine değil
+        # profil akışına da düşmeli; varsayılana bırakılmıyor.
+        (self.klasor / "video.mp4").write_bytes(b"mp4")
+        self.metin("reel")
+        cagrilar = []
+
+        def gonder(url, **k):
+            if "status_code" in url:
+                return {"status_code": "FINISHED"}
+            cagrilar.append((url, k.get("form", {})))
+            return {"id": "YAYIN" if url.endswith("/media_publish") else "K"}
+
+        instagram.paylas("reels", self.klasor, TABAN, "42", "tok",
+                         kuru=False, gonder=gonder, bekle=False)
+        kapsayici = next(f for _, f in cagrilar if f.get("media_type") == "REELS")
+        self.assertEqual(kapsayici["share_to_feed"], "true")
+
     def test_tek_gorsel_tek_kapsayici(self):
         self.gorsel(1)
         self.metin("tek")

@@ -135,8 +135,12 @@ def paylas(tur: str, klasor: Path, taban_url: str, ig_id: str, token: str,
         ana = _kapsayici(gonder, taban, ig_id, token,
                          {"image_url": urller[0], "caption": metin})
     else:
+        # share_to_feed AÇIKÇA: Reels hem Reels sekmesinde hem profil
+        # akışında görünsün. Varsayılana güvenmiyoruz — "herkes görsün"
+        # istendi (14 Eyl 2026), yalnız Reels sekmesine düşmesi yetmez.
         ana = _kapsayici(gonder, taban, ig_id, token, {
             "media_type": "REELS", "video_url": urller[0], "caption": metin,
+            "share_to_feed": "true",
         })
 
     # HER kapsayıcı için bekleniyor, yalnız videolar için değil.

@@ -24,6 +24,10 @@ BICIM: dict[str, tuple[str, str]] = {
     "instagram-karusel": ("instagram", "karusel"),
     "instagram-kare": ("instagram", "tek"),
     "instagram-reels": ("instagram", "reels"),
+    # Kartın slaytlarından yapılmış video (icerik/kart-reels.py). Kitap
+    # videosunun Reels'iyle aynı gün çıkabildiği için ayrı klasör adı —
+    # defter anahtarı "<gün>/<klasör>" ve ikisi çakışmamalı.
+    "instagram-kart": ("instagram", "reels"),
     "tiktok-tiktok": ("tiktok", "video"),
     "youtube-shorts": ("youtube", "shorts"),
     "youtube-uzun": ("youtube", "uzun"),

@@ -221,7 +221,16 @@ Site içeriği Instagram, TikTok ve YouTube'a **Publer** üzerinden paylaşılı
 429 gönderi (24 Ağu 2026 → 23 Ağu 2027) hazır, her günde en az bir gönderi var.
 
 **15 Eyl 2026'dan itibaren HER GÜN AYNI VİDEO ÜÇ PLATFORMA** (Reels +
-TikTok + Shorts), kartlar olduğu günlerde Instagram'a ikinci gönderi.
+TikTok + Shorts), kartlar olduğu günlerde Instagram'a İKİNCİ REELS.
+
+**Kartlar da Reels (14 Eyl 2026).** Kullanıcı: "reels olarak paylaşılmalı,
+gönderi değil ki herkes görsün." `icerik/kart-reels.py` kartın slaytlarını
+9:16 sessiz videoya diziyor → `<gün>/instagram-kart/` (BICIM'de
+`("instagram", "reels")`). Kare kartlar da artık slayt slayt çiziliyor:
+tek görsele dört madde sığmıyordu, 85 karakteri aşan madde "…" ile
+kesiliyor, dördüncüsü hiç çizilmiyordu. Instagram sessiz slayt videosunu
+ve `share_to_feed=true`'yu kabul ediyor — yayınlanmayan kapsayıcıyla
+ölçüldü (30 sn'de FINISHED).
 Önceki takvim platformları sırayla döndürüyordu: bir yılda YouTube yalnız
 60 gün paylaşım görüyordu. Kullanıcının isteğiyle değişti (14 Eyl).
 `icerik/takvime-yerlestir.py` bugün ve öncesini dondurup yarından itibaren
@@ -266,6 +275,7 @@ böyle bir engel yok.
 ```bash
 python3 icerik/takvime-yerlestir.py                         # video yuvaları
 node --import ./icerik/kayit.mjs icerik/kart-yerlestir.ts   # kart yuvaları
+python3 icerik/kart-reels.py                                # kartlar → Reels videosu
 python3 -m paylasim.dizin --uret     # içerik dizini — YOKSA Actions günü atlar
 /usr/bin/python3 icerik/pencere.py   # yaklaşan günlerin medyası GitHub'a
 # sonra commit ve MAIN'e geçir — runner main'i okuyor

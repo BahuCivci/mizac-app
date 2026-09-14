@@ -13,7 +13,8 @@ Son güncelleme: 14 Eylül 2026.
 
 **15 Eyl 2026'dan itibaren her gün aynı kitap videosu üç platforma**
 (Reels + TikTok + Shorts); kartlar olduğu günlerde Instagram'a ikinci
-gönderi. Takvim `icerik/takvime-yerlestir.py` ile yeniden dizildi: 313 gün
+Reels — kartlar 14 Eyl'den beri slayt videosu (`icerik/kart-reels.py`),
+akış gönderisi değil. Takvim `icerik/takvime-yerlestir.py` ile yeniden dizildi: 313 gün
 video, 98 karusel, 49 kare. **Kitap 24 Tem 2027'de bitiyor** — ondan önce
 yeni video üretilip betik yeniden çalıştırılmalı; 25 Tem sonrası kartı
 olmayan günler dizinde hiç yok ve runner o günleri "dizinde yok" diye

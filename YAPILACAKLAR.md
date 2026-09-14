@@ -97,11 +97,21 @@ kaldı (Publer'ın kuyruğunda).
 
 ---
 
-## 2. TikTok incelemesi — cevap bekleniyor
+## 2. TikTok incelemesi — REDDEDİLDİ (14 Eyl), düzeltildi, yeniden gönderilecek
 
-**Durum:** In review (6 Eyl 00:05). App ID `7682004239296038919`.
-13 Eyl'de panele bakıldı: hâlâ In review, Review comments boş, üstte
-"high volume of requests" gecikme uyarısı. Yapılacak bir şey yok.
+**Durum:** 14 Eyl 12:41'de "Not approved". App ID `7682004239296038919`.
+İncelemecinin notu (panelde banner → "See why"; Review comments sekmesi
+değil): *"The app icon submitted in the Basic Info does not match the icon
+displayed on the website. Please ensure the same icon is used consistently
+across both the TikTok, the website and Browser tab (favicon)."*
+
+Sebep gerçekti: `app/favicon.ico` Create Next App'in varsayılanıydı (siyah
+daire, beyaz üçgen — ilk commit'ten beri hiç değişmemiş) ve sekmede o
+görünüyordu; başlıkta yalnız metin "✦" vardı. TikTok'a giden ikon ise
+`app/icon.tsx`'in altın zeminli beyaz yıldızı. Düzeltme: favicon.ico
+`/icon`'dan üretildi (16-256 px), başlıktaki logo ikonun birebir küçüğü oldu.
+Uygulama ikonu değişmedi. Sonraki adım: panelde "Return to Draft", açıklama
+metnine revizyon notu, yeniden gönder.
 Talep: `video.publish` (Direct Post), yani günlük dokunuşun kalkması.
 
 Cevap nereye gelir: panelde **Review comments**, ve `safra943@gmail.com`.

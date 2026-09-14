@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLang } from '@/lib/lang-context';
+import { OgStar } from '@/lib/og-star';
 
 export function Header() {
   const { lang, setLang } = useLang();
@@ -22,7 +23,21 @@ export function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-lg" style={{ color: 'var(--earth)' }}
           onClick={() => setMenuAcik(false)}>
-          <span style={{ color: 'var(--gold)' }}>✦</span>
+          {/* Uygulama ikonunun (app/icon.tsx) birebir küçüğü. TikTok incelemesi
+              14 Eyl 2026'da "sitedeki ikon, favicon ve uygulama ikonu aynı
+              değil" diye reddetti; üçü tek tasarımda tutuluyor. */}
+          <span
+            aria-hidden
+            className="flex items-center justify-center shrink-0"
+            style={{
+              width: 28,
+              height: 28,
+              borderRadius: 6,
+              background: 'linear-gradient(135deg, #c4973a 0%, #8b5e1e 100%)',
+            }}
+          >
+            <OgStar size={16} color="white" />
+          </span>
           <span>Mizaç</span>
         </Link>
 

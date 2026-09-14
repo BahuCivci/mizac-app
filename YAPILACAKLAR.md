@@ -97,7 +97,18 @@ kaldı (Publer'ın kuyruğunda).
 
 ---
 
-## 2. TikTok incelemesi — REDDEDİLDİ (14 Eyl), düzeltildi, yeniden gönderilecek
+## 2. TikTok incelemesi — REDDEDİLDİ (14 Eyl), düzeltildi, YENİDEN GÖNDERİLDİ (14 Eyl 13:55)
+
+**Yeniden gönderildi, kullanıcı onayıyla:** durum yine "In review". Açıklama
+metninin başına revizyon notu kondu (957/1000) ve demo videosunun yanına
+8 sn'lik `revizyon-ikon.mp4` eklendi (uygulama ikonu, favicon, canlı başlık
+yan yana). Gönderim penceresi ayrıca 120 karakterlik "sebep" istiyor.
+
+**TUZAK: "Return to Draft" uygulama ikonunu SİLİYOR** — Save "App icon is
+required" diye reddetti. 1024×1024 ikon yeniden yüklendi: `icon.tsx`'in
+tasarımı Pillow ile 4096'da çizilip indirildi; 512'ye küçültülünce canlı
+`/icon` ile ortalama piksel farkı <1/255. Bir dahaki revizyonda ikonu
+elde hazır tut.
 
 **Durum:** 14 Eyl 12:41'de "Not approved". App ID `7682004239296038919`.
 İncelemecinin notu (panelde banner → "See why"; Review comments sekmesi

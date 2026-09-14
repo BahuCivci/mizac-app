@@ -1,44 +1,61 @@
 #!/usr/bin/env python3
 """
-Kitaptan üretilen videoları takvimdeki video yuvalarına yerleştirir.
+Kitaptan üretilen videoları takvime yerleştirir: HER GÜN bir video, ÜÇ
+platforma birden (Instagram Reels, TikTok, YouTube Shorts).
 
     python3 icerik/takvime-yerlestir.py --deneme    # hiçbir şeye dokunma, yaz
     python3 icerik/takvime-yerlestir.py
 
-NE YAPIYOR
-Her yuvadaki (`<gün>/<biçim>/video.mp4`) eski videoyu yenisiyle değiştiriyor
-ve METIN.txt'i tarifin anlatımından yeniden yazıyor. Görsel gönderiler
-(karusel, kare) ELLENMİYOR — onlar dikey videonun yerini tutmuyor ve
-Instagram'da kaydetme oranı yüksek biçimler.
+NEDEN ÜÇ PLATFORM AYNI GÜN (14 Eyl 2026)
+Önceki takvim her güne tek platform veriyordu ve platformlar sırayla
+dönüyordu: bir yılda Instagram 197, TikTok 147, YouTube yalnız 60 gün
+paylaşım görüyordu. Oysa videolar 1080x1920, ~35 saniye — üçü de aynı
+dosyayı kabul ediyor. Kullanıcı "her gün üçüne atsak" dedi; aynı video üç
+yuvaya SABİT BAĞLANTIYLA konuyor, yani disk üç kat dolmuyor.
+
+Görsel gönderiler (karusel, kare) ELLENMİYOR — `kart-yerlestir.ts`'in işi.
+Olduğu günlerde Instagram'a videonun yanında ikinci gönderi olarak çıkıyorlar.
+
+BUGÜN VE ÖNCESİ DONMUŞ
+`--baslangic` (varsayılan bugün) ve öncesindeki günlere dokunulmuyor: bugünün
+koşusu sürüyor olabilir, geçmiş günün videosu ya paylaşıldı ya da kaçan
+olarak telafi bekliyor. O günlerdeki videolar "kullanılmış" sayılıyor ve bir
+daha verilmiyor; paylaşılmış yuvalardakiler de öyle. Tanıma inode ile:
+yuvadaki `video.mp4` asıla sabit bağlantı olduğu için dosya adı değil
+inode aynı videoyu gösteriyor.
 
 SIRA: KİTAP SIRASI = TAKVİM SIRASI
-Videolar pasaj numarasına, yuvalar tarihe göre sıralanıp eşleştiriliyor.
-Böylece takvip boyunca kitap baştan sona anlatılıyor; rastgele dağıtmak
-bunu kaybettirirdi.
+Kalan videolar pasaj numarasıyla, günler tarihle sıralanıp eşleştiriliyor;
+takvim boyunca kitap baştan sona anlatılıyor.
 
-17 EYLÜL'DEN ÖNCESİNE DOKUNULMUYOR
-O güne kadarki gönderiler Publer kuyruğunda ve oradan çıkacak. Publer
-medyayı içeri aldığı anda kendi tarafına kopyalıyor; dosyayı şimdi
-değiştirmek ya hiçbir şeyi değiştirmez ya da yarısı eski yarısı yeni bir
-takvim doğurur. İkisini de istemiyoruz.
+TEKRAR ÇALIŞTIRMAK GÜVENLİ
+Yerinde olan video yeniden bağlanmıyor. Ertesi gün çalıştırılırsa bugün
+donmuş olduğu için eşleşme aynen korunuyor. Videolar bitince kalan günlerin
+video yuvaları kaldırılıyor (kart yuvaları kalıyor); yeni video üretilince
+betik yeniden çalıştırılır ve o günler dolar.
 
-`youtube-uzun` YUVALARI `youtube-shorts` OLUYOR
-Yeni içeriğin tamamı 1080x1920 ve ~35 saniye; YouTube bunu zaten Short
-sayıyor. "uzun" olarak bırakılırsa açıklamaya `#Shorts` eklenmiyor ve
-gönderi keşfedilme yolunu kaybediyor. Yuvanın türü içeriğe uymalı.
+`kapak.png` KALDIRILIYOR
+Video yuvalarındaki kapaklar eski şablondan kalma, içindeki kitap videosuyla
+ilgisi yok — ve paylaşım kodu hiçbir platformda kapak kullanmıyor. Durdukça
+yalnız GitHub'a boşuna yükleniyordu.
+
+`youtube-uzun` YUVASI KALDIRILIYOR
+Yeni içeriğin tamamı dikey ve kısa; YouTube bunu Short sayıyor ve aynı gün
+`youtube-shorts` zaten var. İkincisi aynı günü YouTube'da ikiletirdi.
 
 MEDYA BARINDIRMASI AYRI İŞ
 Yerleştirilen video `icerik/pencere.py` ile GitHub Releases'e çıkıyor; o
 betik release'teki dosyayı ad VE boyutla karşılaştırdığı için değişen video
-kendiliğinden yeniden yükleniyor. Blob dönemindeki "defterden kaydı düş"
-adımına gerek kalmadı.
+kendiliğinden yeniden yükleniyor.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import shutil
 import sys
+from datetime import date
 from pathlib import Path
 
 KOK = Path(__file__).resolve().parent.parent
@@ -46,13 +63,6 @@ GUNLUK = KOK / "icerik" / "cikti" / "gunluk"
 GONDERILER = KOK / "icerik" / "cikti" / "gonderiler"
 TARIFLER = KOK / "icerik" / "cikti" / "tarifler"
 
-# Publer kuyruğunun son günü. Bu tarihe kadar olan gönderiler oradan çıkıyor.
-# SINIR TARİHİ DEĞİL, DEFTER. 11 Eyl 2026'ya kadar burada "2026-09-17"
-# yazıyordu — o güne kadarki her günün Publer'da olduğu varsayılıyordu.
-# Yanlıştı: yalnız 17 Eylül Publer'daydı, 12-16 Eylül bizim modülün işiydi ve
-# eski şablon içeriğiyle bekliyordu. Şimdi yuva, ancak iki defterden birinde
-# paylaşılmış görünüyorsa korunuyor; tarih yalnız alt sınır.
-SON_PULER_GUNU = "2026-09-11"
 DEFTERLER = (
     Path.home() / "mizac-paylasim-durum" / "durum" / "paylasildi.json",  # Actions'ın
     KOK / "paylasim" / "veri" / "paylasildi.json",                       # yerelin
@@ -69,8 +79,10 @@ def paylasilmislar() -> set:
             pass
     return anahtarlar
 
-VIDEO_BICIMLERI = ("instagram-reels", "tiktok-tiktok", "youtube-shorts",
-                   "youtube-uzun")
+
+# Her güne bu üçü, aynı videoyla.
+UCLU = ("instagram-reels", "tiktok-tiktok", "youtube-shorts")
+VIDEO_BICIMLERI = UCLU + ("youtube-uzun",)
 
 ETIKETLER = ("#mizaç #mizaçtesti #tıbbınebevi #kişilikanalizi "
              "#huy #kendinitanı #keşfet")
@@ -150,9 +162,8 @@ def bugun_yaz(gun_yolu: Path) -> None:
     eskisi "VIDEO ÇEKİLECEK" diyor ve video artık hazır — yanlış bilgi
     vermektense yeniden kurmak daha ucuz.
     """
-    import datetime
     gun = gun_yolu.name
-    tarih = datetime.date.fromisoformat(gun)
+    tarih = date.fromisoformat(gun)
     kayitlar = []
     for klasor in sorted(gun_yolu.iterdir()):
         if not klasor.is_dir():
@@ -181,108 +192,126 @@ def bugun_yaz(gun_yolu: Path) -> None:
                                          encoding="utf-8")
 
 
-def yuvalar(baslangic: str) -> list[Path]:
-    """Değiştirilecek video klasörleri, tarihe göre sıralı."""
-    bulunan = []
-    paylasilmis = paylasilmislar()
-    for gun in sorted(GUNLUK.iterdir()):
-        if not gun.is_dir() or gun.name <= baslangic:
+def donmus_videolar(baslangic: str, paylasilmis: set) -> set[int]:
+    """Bir daha verilmeyecek videoların inode'ları: donmuş günlerde ve
+    paylaşılmış yuvalarda duranlar."""
+    ino: set[int] = set()
+    for gun in GUNLUK.iterdir():
+        if not gun.is_dir():
             continue
         for bicim in VIDEO_BICIMLERI:
-            if f"{gun.name}/{bicim}" in paylasilmis:
-                continue
-            klasor = gun / bicim
-            if (klasor / "video.mp4").exists():
-                bulunan.append(klasor)
-    return bulunan
+            v = gun / bicim / "video.mp4"
+            if v.exists() and (gun.name <= baslangic
+                               or f"{gun.name}/{bicim}" in paylasilmis):
+                ino.add(v.stat().st_ino)
+    return ino
 
 
-def videolar() -> list[Path]:
-    """Kurgulanmış videolar, pasaj sırasında."""
-    return sorted(GONDERILER.glob("*.mp4"))
+def videolar(donmus: set[int]) -> list[Path]:
+    """Henüz verilmemiş kurgulanmış videolar, pasaj sırasında."""
+    return [v for v in sorted(GONDERILER.glob("*.mp4"))
+            if v.stat().st_ino not in donmus]
 
 
-def yerlestir(klasor: Path, video: Path, deneme: bool) -> str:
-    """Bir yuvayı doldurur; ne yapıldığını anlatan bir satır döndürür."""
+def gun_doldur(gun_yolu: Path, video: Path, paylasilmis: set, deneme: bool) -> str:
+    """Günün üç video yuvasını aynı videoyla doldurur; özet satırı döndürür."""
     tarif = json.loads((TARIFLER / f"{video.stem}.json").read_text(encoding="utf-8"))
-
-    hedef = klasor
-    if klasor.name == "youtube-uzun":
-        yeni_yol = klasor.parent / "youtube-shorts"
-        if yeni_yol.exists():
-            # Aynı günde ikisi birden varsa taşıma çakışır. Bugünkü takvimde
-            # böyle bir gün yok; yine de sessizce üzerine yazmaktansa atla.
-            return f"  {klasor.parent.name}/{klasor.name}: ATLANDI (shorts zaten var)"
-        hedef = yeni_yol
-
-    # ZATEN YERİNDE OLANI YENİDEN KOPYALAMA. Betik üretim sürerken de
-    # çalıştırılabiliyor (eşleşme kararlı: videolar sırayla kurgulanıyor,
-    # her tur öncekinin önekini aynı yuvalara veriyor). Koruma olmasaydı
-    # ikinci tur bütün blob kayıtlarını silip yüklenmiş yüzlerce videoyu
-    # yeniden yükletirdi. Metin ve senaryo yine de yazılıyor: ikisi de
-    # ucuz, ve önceki turda eksik kalmışlarsa burada tamamlanıyorlar.
-    varolan = hedef / "video.mp4"
-    zaten = varolan.exists() and varolan.stat().st_size == video.stat().st_size
-
-    if not deneme:
-        if not zaten:
-            if hedef is not klasor:
-                klasor.rename(hedef)
-            # KOPYA DEĞİL SABİT BAĞLANTI. Asıl `cikti/gonderiler/` altında;
-            # kopyalayınca aynı 26 MB iki kez yer kaplıyordu — 254 gönderide
-            # 6.5 GB. İkisi aynı disk bölümünde olduğu için `os.link` bunu
-            # bedavaya çözüyor ve dosya her iki yerden de normal görünüyor.
-            # Güvenli, çünkü bu dosyalar bir kez yazılıp bir daha
-            # değiştirilmiyor; yerine yenisi konurken de `os.replace` ile
-            # bağlantı koparılıyor, aslın üzerine yazılmıyor.
-            hedef_video = hedef / "video.mp4"
+    gun = gun_yolu.name
+    yeni, zaten, korunan = [], [], []
+    for bicim in UCLU:
+        if f"{gun}/{bicim}" in paylasilmis:
+            korunan.append(bicim)
+            continue
+        hedef = gun_yolu / bicim
+        yerindeki = hedef / "video.mp4"
+        ayni = yerindeki.exists() and os.path.samefile(yerindeki, video)
+        (zaten if ayni else yeni).append(bicim)
+        if deneme:
+            continue
+        hedef.mkdir(exist_ok=True)
+        if not ayni:
+            # KOPYA DEĞİL SABİT BAĞLANTI: asıl `cikti/gonderiler/` altında,
+            # üç yuva + asıl aynı diski paylaşıyor. `os.replace` bağlantıyı
+            # koparıp yenisini koyuyor; aslın üzerine asla yazılmıyor.
             gecici = hedef / "video.mp4.yeni"
             gecici.unlink(missing_ok=True)
             os.link(video, gecici)
-            os.replace(gecici, hedef_video)
+            os.replace(gecici, yerindeki)
+        (hedef / "kapak.png").unlink(missing_ok=True)
         (hedef / "METIN.txt").write_text(metin_uret(tarif), encoding="utf-8")
-        (hedef / "SENARYO.md").write_text(
-            senaryo_uret(tarif, hedef.parent.name, hedef.name), encoding="utf-8")
+        (hedef / "SENARYO.md").write_text(senaryo_uret(tarif, gun, bicim),
+                                          encoding="utf-8")
+    uzun = gun_yolu / "youtube-uzun"
+    if not deneme and uzun.exists() and f"{gun}/youtube-uzun" not in paylasilmis:
+        shutil.rmtree(uzun)
 
+    ayrinti = []
+    if yeni:
+        ayrinti.append(f"yeni: {', '.join(b.split('-')[0] for b in yeni)}")
     if zaten:
-        return f"  {hedef.parent.name}/{hedef.name} zaten yerinde ({video.name})"
-    tur = "→shorts " if hedef is not klasor else ""
-    return (f"  {hedef.parent.name}/{hedef.name} {tur}← {video.name} "
-            f"(pasaj {tarif['pasaj_no']}, {tarif['bolum'][:28]})")
+        ayrinti.append(f"zaten: {', '.join(b.split('-')[0] for b in zaten)}")
+    if korunan:
+        ayrinti.append(f"PAYLAŞILMIŞ, dokunulmadı: {', '.join(korunan)}")
+    return (f"  {gun} ← {video.name} (pasaj {tarif['pasaj_no']}, "
+            f"{tarif['bolum'][:24]}) — {'; '.join(ayrinti)}")
+
+
+def bosalt(gun_yolu: Path, paylasilmis: set, deneme: bool) -> list[str]:
+    """Video kalmayan günün paylaşılmamış video yuvalarını kaldırır."""
+    silinen = []
+    for bicim in VIDEO_BICIMLERI:
+        klasor = gun_yolu / bicim
+        if klasor.exists() and f"{gun_yolu.name}/{bicim}" not in paylasilmis:
+            silinen.append(bicim)
+            if not deneme:
+                shutil.rmtree(klasor)
+    return silinen
 
 
 def main() -> int:
     a = argparse.ArgumentParser(prog="takvime-yerlestir")
     a.add_argument("--deneme", action="store_true", help="dosyalara dokunma")
-    a.add_argument("--baslangic", default=SON_PULER_GUNU,
-                   help="bu günden SONRAKİ günler değişir")
-    a.add_argument("--kac", type=int, help="yalnız ilk N yuva (deneme için)")
+    a.add_argument("--baslangic", default=date.today().isoformat(),
+                   help="bu günden SONRAKİ günler değişir; o gün ve öncesi donmuş")
     k = a.parse_args()
 
-    yv, vd = yuvalar(k.baslangic), videolar()
+    paylasilmis = paylasilmislar()
+    vd = videolar(donmus_videolar(k.baslangic, paylasilmis))
     if not vd:
-        print("kurgulanmış video yok", file=sys.stderr)
+        print("verilecek video yok", file=sys.stderr)
         return 1
+    gunler = [g for g in sorted(GUNLUK.iterdir())
+              if g.is_dir() and g.name > k.baslangic]
 
-    ciftler = list(zip(yv, vd))
-    if k.kac:
-        ciftler = ciftler[: k.kac]
+    dolan: list[tuple[Path, str]] = []
+    bosalan: list[tuple[Path, list[str]]] = []
+    for g in gunler:
+        if all(f"{g.name}/{b}" in paylasilmis for b in UCLU):
+            continue   # günün üç yuvası da çoktan paylaşılmış
+        if len(dolan) < len(vd):
+            dolan.append((g, gun_doldur(g, vd[len(dolan)], paylasilmis, k.deneme)))
+        else:
+            silinen = bosalt(g, paylasilmis, k.deneme)
+            if silinen:
+                bosalan.append((g, silinen))
 
-    print(f"{len(yv)} yuva, {len(vd)} video → {len(ciftler)} eşleşme"
+    print(f"{len(vd)} video, {len(gunler)} gün (> {k.baslangic})"
           f"{'  [DENEME]' if k.deneme else ''}")
-
-    for klasor, video in ciftler:
-        print(yerlestir(klasor, video, k.deneme))
+    if dolan:
+        print(f"{len(dolan)} gün dolu: {dolan[0][0].name} → {dolan[-1][0].name}")
+        for _, satir in dolan[:8]:
+            print(satir)
+        if len(dolan) > 8:
+            print("  …")
+            print(dolan[-1][1])
+    if bosalan:
+        print(f"\n{len(bosalan)} günde video kalmadı ({bosalan[0][0].name} → "
+              f"{bosalan[-1][0].name}); video yuvaları kaldırıldı, kartlar duruyor. "
+              "Yeni video üretilince bu betiği yeniden çalıştır.")
 
     if not k.deneme:
-        for gun_yolu in {klasor.parent for klasor, _ in ciftler}:
-            bugun_yaz(gun_yolu)
-
-    artan = len(vd) - len(yv)
-    if artan > 0:
-        print(f"\n{artan} video yuva bulamadı — takvimi uzatmak için duruyor.")
-    elif artan < 0:
-        print(f"\n{-artan} yuva boş kaldı — o kadar video kurgulanmamış.")
+        for g in {g for g, _ in dolan} | {g for g, _ in bosalan}:
+            bugun_yaz(g)
     print("\nSonraki adım: python3 -m paylasim.dizin --uret  ve  "
           "/usr/bin/python3 icerik/pencere.py")
     return 0

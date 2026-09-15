@@ -145,7 +145,18 @@ ediyor; açıklama alanına "bu sürümde ne değişti" yazılıyor).
 
 ---
 
-## 3. YouTube — ek kanıt istendi ve **gönderildi (11 Eyl 2026)**, cevap bekleniyor
+## 3. YouTube — DENETİM TAMAMLANDI (15 Eyl 2026), videolar artık herkese açık
+
+**15 Eyl sabahı YouTube API Services:** "We have completed your review and
+don't require any further actions from you at this time." Aynı sabah
+`YOUTUBE_GIZLILIK=public` yapıldı — özel deponun iş akışı ve yerel `.env`.
+Kilit gerçekten kalktı mı, ilk public Short çıkınca Studio'da görünürlüğe
+bakılarak doğrulanmalı (kalkmadıysa video yine gizli kilitlenir, zararı
+bugünküyle aynı). Gösterim videosu `q6IZlzMdKnc` artık silinebilir —
+yetkimiz yalnız `youtube.upload`, silmeyi kullanıcı Studio'dan yapar.
+Denetim sonra yeniden yapılabilir ("we may reach out again").
+
+Önceki durum:
 
 **11 Eyl 13:28, YouTube API Services:** denetim için "api istemcisinin
 YouTube'a nasıl yüklediğini baştan sona gösteren, İngilizce ayrıntılı bir

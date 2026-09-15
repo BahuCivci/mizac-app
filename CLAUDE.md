@@ -426,6 +426,13 @@ görmezden gelmek yerine onunla aynı şeyi istiyoruz.
 
 Başvuru metni ve eksikler: `paylasim/youtube-basvuru.md`.
 
+**DENETİM TAMAMLANDI — 15 Eyl 2026.** YouTube API Services: "We have
+completed your review and don't require any further actions". Aynı gün
+`YOUTUBE_GIZLILIK=public` (özel deponun iş akışı + yerel `.env`). Kod
+varsayılanı bilerek `private` kalıyor: ortam değişkeni unutulursa sonuç
+"gizli yüklendi", "kilitlendi" değil. YouTube denetimi ileride yeniden
+açabileceğini yazdı; o olursa aynı yazışmadan gelir.
+
 **Denetim ekibi senaryo/ekran kaydı istedi ve gönderildi (11 Eyl 2026).**
 Kanıtlar `paylasim/youtube-basvuru-ekler/gosterim/`. Gösterim için kanala
 gerçek bir video yüklendi: `q6IZlzMdKnc`, "API demonstration" başlıklı, gizli,

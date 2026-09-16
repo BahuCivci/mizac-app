@@ -20,19 +20,19 @@ test.afterEach(() => {
   onbellegiSifirla();
 });
 
-test('kitap dosyası yoksa arama boş döner, hata fırlatmaz', () => {
+test('kitap dosyası yoksa arama boş döner, hata fırlatmaz', async () => {
   process.env.MIZAC_KITAP = path.join(process.cwd(), 'kaynak', 'olmayan-kitap.txt');
   onbellegiSifirla();
 
-  expect(kitaptaAra('mizaç nedir')).toEqual([]);
-  expect(gecerliSayfa(1)).toBe(false);
+  expect(await kitaptaAra('mizaç nedir')).toEqual([]);
+  expect(await gecerliSayfa(1)).toBe(false);
 });
 
-test('kitap varsa arama sonuç döndürüyor', () => {
+test('kitap varsa arama sonuç döndürüyor', async () => {
   test.skip(!existsSync(KITAP), 'kitap metni yerelde yok');
   onbellegiSifirla();
 
-  const bulgular = kitaptaAra('balgami uyku', 2);
+  const bulgular = await kitaptaAra('balgami uyku', 2);
   expect(bulgular.length).toBeGreaterThan(0);
   expect(bulgular[0].metin.length).toBeGreaterThan(80);
 });

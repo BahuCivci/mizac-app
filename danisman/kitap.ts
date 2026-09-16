@@ -3,8 +3,15 @@
  *
  * Bugüne kadar danışman kitabın yalnız **damıtılmış** hâlini kullanıyordu:
  * `lib/mizac-data.ts`'teki 240 puanlanmış gösterge. 432 KB'lık asıl metin
- * (`kaynak/kitap_tam_metin.txt`, 244 sayfa) hiç açılmamıştı. Burası onu
- * açıyor: danışman derinlik gerektiğinde ilgili pasajı bulup alıntılayabilsin.
+ * (244 sayfa) hiç açılmamıştı. Burası onu açıyor: danışman derinlik
+ * gerektiğinde ilgili pasajı bulup alıntılayabilsin.
+ *
+ * METİN NEREDE (16 Eyl 2026)
+ * Kitap telifli; `kaynak/` hem `.gitignore` hem `.vercelignore` dışında ve
+ * Vercel siteyi depodan derlediği için üretimde o dosya YOK. Önce yerel
+ * dosyaya bakılıyor (geliştirme), yoksa danışmanın zaten kullandığı vekilden
+ * (`danisman/sunucu/vekil.py` → `GET /kitap`) aynı anahtarla çekiliyor.
+ * Böylece public depoya tek satır kitap girmiyor ve yeni bir sır gerekmiyor.
  *
  * Neden gömme (embedding) değil de sözcük tabanlı arama:
  * gömme için ayrı bir model indirmek, yüklemek ve her istekte çağırmak
@@ -18,7 +25,7 @@
  * verilmez — "kitapta şöyle anlatılıyor" ve bölüm başlığı yeterli, üstelik
  * okura daha faydalı. Bu alan yalnız hata ayıklama ve izlenebilirlik için.
  */
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
 export interface Pasaj {
@@ -57,19 +64,50 @@ function kokle(metin: string): string[] {
     .map((k) => k.slice(0, 4));
 }
 
-let onbellek: { pasajlar: Pasaj[]; df: Map<string, number>; ortUzunluk: number } | null = null;
+interface Dizin {
+  pasajlar: Pasaj[];
+  df: Map<string, number>;
+  ortUzunluk: number;
+}
+
+const BOS: Dizin = { pasajlar: [], df: new Map(), ortUzunluk: 1 };
+
+let sozu: Promise<Dizin> | null = null;
 
 /** Test kancası: dizin bir kez kurulup önbelleğe alınıyor, testler sıfırlayabilsin. */
 export function onbellegiSifirla(): void {
-  onbellek = null;
+  sozu = null;
 }
 
-function kitabiOku(): Pasaj[] {
-  // Yol dışarıdan verilebiliyor ki "kitap yok" hâli test edilebilsin
-  // (üretimde gerçekten yok — bkz. `dizin()`).
-  const yol = process.env.MIZAC_KITAP
-    ?? path.join(process.cwd(), 'kaynak', 'kitap_tam_metin.txt');
-  const ham = readFileSync(yol, 'utf-8');
+function yerelYol(): string | null {
+  // MIZAC_KITAP açıkça verilmişse YALNIZ ona bakılır: testler "kitap yok"
+  // hâlini böyle kuruyor, uzak sunucuya kaçış o durumu gizlerdi.
+  const acik = process.env.MIZAC_KITAP;
+  if (acik) return existsSync(acik) ? acik : null;
+  const varsayilan = path.join(process.cwd(), 'kaynak', 'kitap_tam_metin.txt');
+  return existsSync(varsayilan) ? varsayilan : null;
+}
+
+async function metniGetir(): Promise<string> {
+  const yerel = yerelYol();
+  if (yerel) return readFileSync(yerel, 'utf-8');
+  if (process.env.MIZAC_KITAP) throw new Error(`kitap yok: ${process.env.MIZAC_KITAP}`);
+
+  const uzak = process.env.MIZAC_OLLAMA;
+  const anahtar = process.env.MIZAC_OLLAMA_ANAHTAR;
+  if (!uzak || !anahtar) throw new Error('kitap ne yerelde ne uzakta bulunabildi');
+
+  // Vekil kimlik doğruluyor; anahtar zaten model çağrılarında kullanılan.
+  const cevap = await fetch(`${uzak.replace(/\/+$/, '')}/kitap`, {
+    headers: { Authorization: `Bearer ${anahtar}` },
+    cache: 'no-store',
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!cevap.ok) throw new Error(`kitap ${cevap.status}`);
+  return cevap.text();
+}
+
+function ayristir(ham: string): Pasaj[] {
   const parcalar = ham.split(/=== SAYFA: (\S+) ===/);
 
   const pasajlar: Pasaj[] = [];
@@ -106,36 +144,33 @@ function kitabiOku(): Pasaj[] {
 /**
  * KİTAP YOKSA DANIŞMAN ÖLMEZ, KİTAPSIZ DEVAM EDER (16 Eyl 2026).
  *
- * `kaynak/` `.gitignore`'da: kitabın tam metni telifli ve depo herkese açık.
- * Vercel siteyi depodan derlediği için üretimde bu dosya HİÇ YOK ve
- * `readFileSync` `ENOENT` fırlatıyordu. Rota bunu yakalamıyordu; sonuç:
- * kullanıcı soru sorduğu her seferde (soru işareti ya da "nedir/nasıl"
- * geçtiğinde `kitaptaAra` çağrılıyor) danışman 503 verip
- * "Danışmana şu an ulaşılamıyor" diyordu. Sohbetin geri kalanı çalıştığı
- * için arıza aralıklı sanılıyordu.
+ * Rota kitabı yalnız kullanıcı SORU sorduğunda açıyor; o gün metin üretimde
+ * bulunamayınca `readFileSync` ENOENT fırlattı, istek 503 döndü ve ekranda
+ * "Danışmana şu an ulaşılamıyor" çıktı. Soru içermeyen turlar çalıştığı için
+ * arıza günlerce "aralıklı" sanıldı. Getirim bir EK; yokluğu danışmanı
+ * durdurmamalı.
  *
- * Kitap getirimi bir EK; olmadığında danışman kendi bilgisiyle cevap
- * verebiliyor. Bu yüzden eksik dosya artık boş dizin demek.
+ * Başarısızlık ÖNBELLEĞE ALINMIYOR: geçici bir ağ hatası lambda'nın ömrü
+ * boyunca kitabı kapatmasın, sonraki istek yeniden denesin.
  */
-function dizin() {
-  if (onbellek) return onbellek;
-  let pasajlar: Pasaj[];
-  try {
-    pasajlar = kitabiOku();
-  } catch (e) {
+async function dizin(): Promise<Dizin> {
+  if (sozu) return sozu;
+  sozu = (async () => {
+    const pasajlar = ayristir(await metniGetir());
+    const df = new Map<string, number>();
+    let toplam = 0;
+    for (const p of pasajlar) {
+      const kokler = kokle(p.metin);
+      toplam += kokler.length;
+      for (const k of new Set(kokler)) df.set(k, (df.get(k) ?? 0) + 1);
+    }
+    return { pasajlar, df, ortUzunluk: toplam / (pasajlar.length || 1) };
+  })().catch((e) => {
     console.warn('kitap okunamadı, danışman kitapsız devam ediyor:', e);
-    onbellek = { pasajlar: [], df: new Map(), ortUzunluk: 1 };
-    return onbellek;
-  }
-  const df = new Map<string, number>();
-  let toplam = 0;
-  for (const p of pasajlar) {
-    const kokler = new Set(kokle(p.metin));
-    toplam += kokle(p.metin).length;
-    for (const k of kokler) df.set(k, (df.get(k) ?? 0) + 1);
-  }
-  onbellek = { pasajlar, df, ortUzunluk: toplam / pasajlar.length };
-  return onbellek;
+    sozu = null;
+    return BOS;
+  });
+  return sozu;
 }
 
 /**
@@ -145,10 +180,10 @@ function dizin() {
 const K1 = 1.5;
 const B = 0.75;
 
-export function kitaptaAra(sorgu: string, adet = 3): Bulgu[] {
-  const { pasajlar, df, ortUzunluk } = dizin();
+export async function kitaptaAra(sorgu: string, adet = 3): Promise<Bulgu[]> {
+  const { pasajlar, df, ortUzunluk } = await dizin();
   const sorguKokleri = kokle(sorgu);
-  if (!sorguKokleri.length) return [];
+  if (!sorguKokleri.length || !pasajlar.length) return [];
 
   const N = pasajlar.length;
   const bulgular: Bulgu[] = [];
@@ -183,6 +218,7 @@ export function pasajlariBicimle(bulgular: Bulgu[], enFazlaKarakter = 700): stri
 }
 
 /** Modelin uydurduğu kaynak numarasını yakalamak için: geçerli mi? */
-export function gecerliSayfa(no: number): boolean {
-  return Number.isInteger(no) && no >= 1 && no <= dizin().pasajlar.length;
+export async function gecerliSayfa(no: number): Promise<boolean> {
+  const { pasajlar } = await dizin();
+  return Number.isInteger(no) && no >= 1 && no <= pasajlar.length;
 }

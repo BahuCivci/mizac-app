@@ -155,7 +155,7 @@ export async function POST(req: NextRequest) {
     const soruSoruyor = /\?|neden|niye|nasıl|nedir|ne demek|why|what is|how come/i.test(son.metin);
     const pasajlar =
       soruSoruyor || oncekiKanaatVar
-        ? kitaptaAra(`${son.metin} ${oncekiDurum?.kazanan ?? ''}`, 2)
+        ? await kitaptaAra(`${son.metin} ${oncekiDurum?.kazanan ?? ''}`, 2)
         : [];
 
     const kitapNotu = pasajlar.length

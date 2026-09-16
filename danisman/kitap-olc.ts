@@ -27,12 +27,12 @@ const DENEMELER: Deneme[] = [
   { sorgu: 'mizaç nasıl belirlenir tespit', beklenen: /mizaç|mizac/i },
 ];
 
-function main() {
+async function main() {
   let gecen = 0;
   console.log('sorgu → ilk 3 pasaj (tarama sırası) · isabet\n');
 
   for (const d of DENEMELER) {
-    const bulgular = kitaptaAra(d.sorgu, 3);
+    const bulgular = await kitaptaAra(d.sorgu, 3);
     if (!bulgular.length) {
       console.log(`✗ "${d.sorgu}" → hiç sonuç yok`);
       continue;
@@ -54,7 +54,7 @@ function main() {
   console.log(`\n${gecen}/${DENEMELER.length} sorgu ilgili pasajı getirdi`);
 
   // Prompt'a ne kadar yük bindiği de kararın parçası.
-  const ornek = pasajlariBicimle(kitaptaAra('balgami uyku', 2));
+  const ornek = pasajlariBicimle(await kitaptaAra('balgami uyku', 2));
   console.log(`prompt yükü (2 pasaj): ${ornek.length} karakter`);
 
   process.exit(gecen === DENEMELER.length ? 0 : 1);

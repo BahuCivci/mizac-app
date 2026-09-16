@@ -491,15 +491,14 @@ başlatıyor; iki müdahale arası en az 10 dakika. Bakmak:
 `.vercelignore`). Artık kitap okunamazsa kitapsız devam ediyor; gerekçe ve
 teşhis yolu CLAUDE.md'de, testi `tests/kitap.spec.ts`.
 
-**Karar bekleyen:** danışman kitaptan alıntı yapamıyor, yalnız damıtılmış
-göstergelerle çalışıyor. Seçenekler:
-1. **Alıntı dizini** üret (sayfa başına ~400 karakter + BM25 sayaçları) ve
-   public depoya koy — ~100 KB kitap metni herkese açık olur, telif kararı
-   kullanıcınındır.
-2. **Çalışma anında çek:** tam metni özel bir yerden (ör. özel deponun
-   release'i) Vercel'deki bir token'la indir, lambda'da önbelleğe al. Public
-   depoya metin girmez; bedeli bir sır daha ve soğuk açılışta ~430 KB.
-3. **Kitapsız bırak** — bugünkü hâl. Danışman çalışıyor, alıntı yok.
+**Karar verildi ve uygulandı (kullanıcı: "özel yerden çek").** Tam metin
+sunucuda `~/mizac-lab/kaynak/` altında (mod 600); vekil `GET /kitap` ile
+yalnız anahtarlı isteğe veriyor, site onu bir kez çekip bellekte tutuyor.
+Yeni sır gerekmedi: model çağrılarının anahtarı kullanılıyor. Public depoya
+kitap metni girmiyor. Ayrıntı CLAUDE.md → "KİTAP VEKİLDEN GELİYOR".
+
+Elenen seçenekler: alıntı dizinini public depoya koymak (telif), özel
+depodan indirmek (ayrı bir PAT gerektiriyordu).
 
 ---
 

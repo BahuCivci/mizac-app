@@ -110,8 +110,17 @@ Teşhis şuradan çıktı: `vercel logs --no-branch --environment production`.
 dalına göre süzüyor; `paylasim` dalındayken üretim logları boş görünüyor.
 
 Artık kitap okunamazsa dizin boş kalıyor ve danışman kitapsız cevap
-veriyor (`tests/kitap.spec.ts` bunu kilitliyor). Kitabı üretime taşımanın
-yolu ayrı bir karar — telif: tam metin public depoya konamaz.
+veriyor (`tests/kitap.spec.ts` bunu kilitliyor).
+
+**KİTAP VEKİLDEN GELİYOR (16 Eyl 2026, kullanıcı kararı).** Tam metin
+sunucuda `~/mizac-lab/kaynak/kitap_tam_metin.txt` (mod 600), vekil onu
+`GET /kitap` ile YALNIZ anahtarlı isteğe veriyor (`vekil.py`, yol
+`MIZAC_KITAP_YOL`, vekilin çalışma dizinine göre). Site önce yerel dosyaya
+bakıyor (geliştirme), yoksa `MIZAC_OLLAMA` + `MIZAC_OLLAMA_ANAHTAR` ile
+vekilden çekip lambda ömrü boyunca bellekte tutuyor. **Yeni sır yok** —
+model çağrılarının anahtarı kullanılıyor. Public depoya kitap girmiyor.
+Başarısızlık önbelleğe alınmıyor: geçici ağ hatası kitabı kalıcı kapatmasın.
+Alternatif (özel depodan indirmek) elendi: ayrı bir PAT gerekiyordu.
 
 **Ollama'nın kartı ARTIK SABİT DEĞİL — en boşu seçiliyor.** 6 Eyl 2026'da
 ölçüldü: `CUDA_VISIBLE_DEVICES=5` yazılıydı, ama başka bir kullanıcı

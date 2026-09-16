@@ -49,6 +49,14 @@ IZINLI = {
     ("GET", "/api/ps"),     # modelin bellekte olup olmadığı
 }
 
+# KİTAP METNİ — Ollama'ya değil, buradaki dosyaya gider (16 Eyl 2026).
+#
+# Kitap telifli: `kaynak/` public depoda da Vercel yüklemesinde de yok, bu
+# yüzden danışman üretimde kitaptan alıntı yapamıyordu. Metin artık burada
+# duruyor ve siteye yalnız anahtarla veriliyor — public depoya tek satır
+# kitap girmiyor. Yol vekilin çalışma dizinine göre (`~/mizac-lab`).
+KITAP_YOLU = os.environ.get("MIZAC_KITAP_YOL", "kaynak/kitap_tam_metin.txt")
+
 # İstek gövdesi üst sınırı. Ollama'ya devasa bir bağlam gönderip belleği
 # şişirmeyi engelliyor; danışmanın en uzun istemi bunun çok altında.
 EN_FAZLA_GOVDE = 512 * 1024
@@ -109,6 +117,19 @@ class Kapi(http.server.BaseHTTPRequestHandler):
         # ölçülebilir kılan zamanlama farkını kapatıyor.
         return secrets.compare_digest(basli[7:], self.anahtar)
 
+    def kitap_ver(self):
+        """Kitabın tam metni — yalnız yetkili isteğe, yalnız okuma."""
+        if not self.yetkili_mi():
+            self.yaz(401, b'{"error":"yetkisiz"}')
+            return
+        try:
+            with open(KITAP_YOLU, "rb") as d:
+                govde = d.read()
+        except OSError as e:
+            self.yaz(404, json.dumps({"error": f"kitap yok: {e}"}).encode())
+            return
+        self.yaz(200, govde, "text/plain; charset=utf-8")
+
     def gecir(self, yontem: str):
         if (yontem, self.path.split("?")[0]) not in IZINLI:
             self.yaz(404, b'{"error":"yol kapali"}')
@@ -161,6 +182,9 @@ class Kapi(http.server.BaseHTTPRequestHandler):
         self.gecir("POST")
 
     def do_GET(self):
+        if self.path.split("?")[0] == "/kitap":
+            self.kitap_ver()
+            return
         self.gecir("GET")
 
 

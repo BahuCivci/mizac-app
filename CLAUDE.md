@@ -210,6 +210,16 @@ Kullanıcıya soruldu, karar bekleniyor.
 bir kurulumu `pgrep -f "pip install"` ile yoklarken desen kendi ssh komut
 satırımı yakaladı ve hep "sürüyor" döndü. Desen `"pip insta[l]l"` yazılmalı.
 
+**AYNI TUZAĞIN AĞIR HÂLİ: `ssh ... 'pkill -f ...'` KENDİ OTURUMUNU ÖLDÜRÜR**
+(16 Eyl 2026). Vekili `ssh sunucu 'pkill -f "vekil.p[y]"; nohup python3
+vekil.py ...'` diye yeniden başlatmak iki kez 255 ile düştü: uzak kabuğun
+komut satırı o metnin tamamını taşıdığı için `pkill` ssh oturumunu da
+eşleştirdi. Köşeli parantez yalnız DESENİN kendisini korur, komut satırında
+gerçekten geçen `vekil.py` metnini değil. Çözüm: yeniden başlatmayı sunucuda
+bir betiğe koy — `danisman/sunucu/vekil-yeniden-baslat.sh`, çağrısı
+`ssh ... 'bash ~/mizac-lab/vekil-yeniden-baslat.sh'`. Uzak komut satırında
+desen geçmiyor, betik hem öldürüp başlatıyor hem sağlığı yazıyor.
+
 **GPU durumu değişken, ölçmeden varsayma.** 6 Eyl 2026 ölçümü: kart 4-7
 %71-97 doluluk ve ~29 GB'la BAŞKASI tarafından kullanılıyor, 0'da da 29.5 GB'lık
 bir iş var. **Boş olan yalnız 2 ve 3.** Eski plan notlarında "6 kart boş"

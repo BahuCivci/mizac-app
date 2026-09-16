@@ -484,6 +484,25 @@ başlatıyor; iki müdahale arası en az 10 dakika. Bakmak:
 
 ---
 
+## 8b. Danışman kitapsız — kitabı üretime taşıma kararı bekliyor (16 Eyl 2026)
+
+**Arıza kapatıldı:** kullanıcı soru sorduğunda danışman 503 veriyordu, çünkü
+`kaynak/kitap_tam_metin.txt` üretimde yok (telifli, `.gitignore` +
+`.vercelignore`). Artık kitap okunamazsa kitapsız devam ediyor; gerekçe ve
+teşhis yolu CLAUDE.md'de, testi `tests/kitap.spec.ts`.
+
+**Karar bekleyen:** danışman kitaptan alıntı yapamıyor, yalnız damıtılmış
+göstergelerle çalışıyor. Seçenekler:
+1. **Alıntı dizini** üret (sayfa başına ~400 karakter + BM25 sayaçları) ve
+   public depoya koy — ~100 KB kitap metni herkese açık olur, telif kararı
+   kullanıcınındır.
+2. **Çalışma anında çek:** tam metni özel bir yerden (ör. özel deponun
+   release'i) Vercel'deki bir token'la indir, lambda'da önbelleğe al. Public
+   depoya metin girmez; bedeli bir sır daha ve soğuk açılışta ~430 KB.
+3. **Kitapsız bırak** — bugünkü hâl. Danışman çalışıyor, alıntı yok.
+
+---
+
 ## 9. Şifre değiştir — iş bitince
 
 VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de

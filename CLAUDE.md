@@ -95,6 +95,24 @@ curl -s -m 60 -X POST https://mizac.xyz/api/danisman \
 
 Boş dönüyorsa onarım adımları: `danisman/sunucu/KURULUM.md`.
 
+**KİTAP ÜRETİMDE YOK — danışman kitapsız çalışıyor (16 Eyl 2026).**
+`kaynak/` hem `.gitignore` hem `.vercelignore` dışında (telifli metin, depo
+public). Vercel siteyi depodan derlediği için `danisman/kitap.ts`'in okuduğu
+`kaynak/kitap_tam_metin.txt` lambda'da hiç yok. Rota bunu yakalamıyordu:
+kullanıcı SORU sorduğunda (`?` ya da "nedir/nasıl/neden") `kitaptaAra`
+çağrılıyor, `readFileSync` ENOENT fırlatıyor, istek **503** dönüyordu —
+ekranda "Danışmana şu an ulaşılamıyor. Biraz sonra tekrar dene." Soru
+içermeyen turlar çalıştığı için arıza günlerce "aralıklı" sanıldı; asıl
+ayrım tünel ya da model değil, mesajda soru olup olmamasıymış.
+
+Teşhis şuradan çıktı: `vercel logs --no-branch --environment production`.
+**Dal filtresi tuzağı:** `vercel logs` varsayılan olarak bulunduğun git
+dalına göre süzüyor; `paylasim` dalındayken üretim logları boş görünüyor.
+
+Artık kitap okunamazsa dizin boş kalıyor ve danışman kitapsız cevap
+veriyor (`tests/kitap.spec.ts` bunu kilitliyor). Kitabı üretime taşımanın
+yolu ayrı bir karar — telif: tam metin public depoya konamaz.
+
 **Ollama'nın kartı ARTIK SABİT DEĞİL — en boşu seçiliyor.** 6 Eyl 2026'da
 ölçüldü: `CUDA_VISIBLE_DEVICES=5` yazılıydı, ama başka bir kullanıcı
 (`ahmet_ozcan`) 5. karta 28 GB'lık bir iş koymuştu. Ollama oraya ancak

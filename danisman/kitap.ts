@@ -59,8 +59,16 @@ function kokle(metin: string): string[] {
 
 let onbellek: { pasajlar: Pasaj[]; df: Map<string, number>; ortUzunluk: number } | null = null;
 
+/** Test kancası: dizin bir kez kurulup önbelleğe alınıyor, testler sıfırlayabilsin. */
+export function onbellegiSifirla(): void {
+  onbellek = null;
+}
+
 function kitabiOku(): Pasaj[] {
-  const yol = path.join(process.cwd(), 'kaynak', 'kitap_tam_metin.txt');
+  // Yol dışarıdan verilebiliyor ki "kitap yok" hâli test edilebilsin
+  // (üretimde gerçekten yok — bkz. `dizin()`).
+  const yol = process.env.MIZAC_KITAP
+    ?? path.join(process.cwd(), 'kaynak', 'kitap_tam_metin.txt');
   const ham = readFileSync(yol, 'utf-8');
   const parcalar = ham.split(/=== SAYFA: (\S+) ===/);
 
@@ -95,9 +103,30 @@ function kitabiOku(): Pasaj[] {
   return pasajlar;
 }
 
+/**
+ * KİTAP YOKSA DANIŞMAN ÖLMEZ, KİTAPSIZ DEVAM EDER (16 Eyl 2026).
+ *
+ * `kaynak/` `.gitignore`'da: kitabın tam metni telifli ve depo herkese açık.
+ * Vercel siteyi depodan derlediği için üretimde bu dosya HİÇ YOK ve
+ * `readFileSync` `ENOENT` fırlatıyordu. Rota bunu yakalamıyordu; sonuç:
+ * kullanıcı soru sorduğu her seferde (soru işareti ya da "nedir/nasıl"
+ * geçtiğinde `kitaptaAra` çağrılıyor) danışman 503 verip
+ * "Danışmana şu an ulaşılamıyor" diyordu. Sohbetin geri kalanı çalıştığı
+ * için arıza aralıklı sanılıyordu.
+ *
+ * Kitap getirimi bir EK; olmadığında danışman kendi bilgisiyle cevap
+ * verebiliyor. Bu yüzden eksik dosya artık boş dizin demek.
+ */
 function dizin() {
   if (onbellek) return onbellek;
-  const pasajlar = kitabiOku();
+  let pasajlar: Pasaj[];
+  try {
+    pasajlar = kitabiOku();
+  } catch (e) {
+    console.warn('kitap okunamadı, danışman kitapsız devam ediyor:', e);
+    onbellek = { pasajlar: [], df: new Map(), ortUzunluk: 1 };
+    return onbellek;
+  }
   const df = new Map<string, number>();
   let toplam = 0;
   for (const p of pasajlar) {

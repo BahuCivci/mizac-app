@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
       `<!DOCTYPE html><html><body style="font-family:sans-serif;text-align:center;padding:60px;background:#1a1207;color:#f5f0e8;">
         <h1 style="color:#c4973a;">Bağlantı Süresi Doldu</h1>
         <p>Bu indirme linki 7 günlük süresini tamamladı.</p>
-        <p>Yeniden indirme için <a href="mailto:destek@mizac.xyz" style="color:#c4973a;">destek@mizac.xyz</a> adresine e-posta gönderin.</p>
+        <p>Yeniden indirme için <a href="mailto:safra943@gmail.com" style="color:#c4973a;">safra943@gmail.com</a> adresine e-posta gönderin.</p>
       </body></html>`,
       { status: 410, headers: { 'Content-Type': 'text/html; charset=utf-8' } }
     );

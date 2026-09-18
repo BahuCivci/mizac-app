@@ -181,7 +181,7 @@ export default function KullanimKosullariPage() {
                   Buna rağmen, aşağıdaki durumlarda satın alma tarihinden itibaren <strong>14 gün</strong> içinde
                   başvurmanız hâlinde ücretinizi koşulsuz iade ediyoruz: rapor hiç ulaşmadıysa, dosya açılmıyorsa
                   veya yanlış mizaç için üretilmişse. Talebinizi{' '}
-                  <a href="mailto:destek@mizac.xyz" style={{ color: 'var(--earth)' }}>destek@mizac.xyz</a>{' '}
+                  <a href="mailto:safra943@gmail.com" style={{ color: 'var(--earth)' }}>safra943@gmail.com</a>{' '}
                   adresine iletin; iade, ödemeyi yaptığınız yönteme yapılır.
                 </p>
               </div>
@@ -242,7 +242,7 @@ export default function KullanimKosullariPage() {
             <h2 className="font-bold text-base mb-3" style={{ color: 'var(--earth)' }}>11. İletişim</h2>
             <p className="opacity-80">
               Bu koşullar, siparişiniz veya iade talebiniz hakkında sorularınız için:{' '}
-              <a href="mailto:destek@mizac.xyz" style={{ color: 'var(--earth)' }}>destek@mizac.xyz</a>.
+              <a href="mailto:safra943@gmail.com" style={{ color: 'var(--earth)' }}>safra943@gmail.com</a>.
               Kişisel verilerinizin nasıl işlendiğini{' '}
               <Link href="/gizlilik" style={{ color: 'var(--earth)' }}>Gizlilik Politikası</Link>{' '}
               sayfasında bulabilirsiniz.

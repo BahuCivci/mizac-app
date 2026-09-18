@@ -13,6 +13,7 @@ const sayfalar = [
   { url: '/sonuc/safravi', baslik: 'Safravî', kontrol: 'Safravî' },
   { url: '/blog', baslik: 'Blog', kontrol: 'Blog' },
   { url: '/sss', baslik: 'SSS', kontrol: 'Sık' },
+  { url: '/iletisim', baslik: 'İletişim', kontrol: 'İletişim' },
   { url: '/hiltlar', baslik: 'Hılt', kontrol: 'Hılt' },
   { url: '/bitkiler', baslik: 'Bitki', kontrol: 'Bitki' },
   { url: '/peygamber-mizaci', baslik: 'Peygamber', kontrol: 'Peygamber' },

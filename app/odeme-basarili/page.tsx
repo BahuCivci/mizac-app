@@ -57,7 +57,7 @@ export default function OdemeBasariliPage() {
           {tr
             ? 'Email gelmezse: '
             : 'If email doesn\'t arrive: '}
-          <a href="mailto:destek@mizac.xyz" style={{ color: '#c4973a' }}>destek@mizac.xyz</a>
+          <a href="mailto:safra943@gmail.com" style={{ color: '#c4973a' }}>safra943@gmail.com</a>
         </p>
 
         {/* Butonlar */}

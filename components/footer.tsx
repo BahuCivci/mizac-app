@@ -148,6 +148,16 @@ export function Footer() {
               {tr ? 'Kullanım Koşulları' : 'Terms of Service'}
             </Link>
             <span>·</span>
+            {/* İletişim ve Hakkında alt bilgide de duruyor: ziyaretçinin (ve
+                AdSense incelemesinin) aradığı ilk yer burası. */}
+            <Link href="/iletisim" className="hover:text-amber-600 transition-colors">
+              {tr ? 'İletişim' : 'Contact'}
+            </Link>
+            <span>·</span>
+            <Link href="/hakkinda" className="hover:text-amber-600 transition-colors">
+              {tr ? 'Hakkında' : 'About'}
+            </Link>
+            <span>·</span>
             <span>{tr ? 'İbn-i Sina geleneğine dayalı · Tıbbi tavsiye değildir' : 'Not medical advice'}</span>
           </div>
         </div>

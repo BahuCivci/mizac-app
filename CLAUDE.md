@@ -635,6 +635,24 @@ panelin son güncellemesi 30 Ağu 21:56. Yapılacak bir şey yok.
 **Reklam nereye konmaz — bilinçli:** test, sonuç, danışman ve ödeme
 sayfalarında reklam yok. Gerekçe `lib/reklam.ts`'in başında.
 
+**18 Eyl 2026 kontrolü: site HÂLÂ "Hazırlanıyor".** Panelde son güncelleme
+30 Ağu 21:56'da donmuş, yani inceleme 18+ gündür sürüyor. Bizden bekleyen
+iş YOK: onboarding "tüm adımları tamamladınız" diyor, ads.txt "Yetki
+verildi", `<ins>` kutuları canlı sayfada basılıyor (ölçüldü: makale
+sayfasında 2 kutu, doğru pub ve slot). Yani reklamın boş kalması kodda
+değil, Google'ın onayında. Yapılabilecek tek şey siteyi onay ölçütlerine
+yaklaştırmak.
+
+**SİTEDE YAYINLANAN ADRES POSTA ALMIYORDU (18 Eyl 2026).**
+`destek@mizac.xyz` dört yerde yazılıydı — ödeme sonrası sayfası ve rapor
+indirme e-postası dahil — ama `mizac.xyz`'in MX kaydı YOK; o adrese yazılan
+her posta geri dönüyordu. Yani parasını ödemiş bir müşteri "sorun olursa
+buraya yazın" denen yere yazıp boşluğa konuşuyordu. Adres kullanıcının
+kendi kutusuyla değiştirildi (`safra943@gmail.com`) ve `/iletisim` sayfası
+eklendi (alt bilgide İletişim + Hakkında linkleri). **Ders: siteye bir
+adres yazmadan önce alan adının MX kaydına bak** — `dig +short MX <alan>`
+boşsa o adres yoktur.
+
 ## Tailwind v4 Uyarıları
 - `bg-gradient-to-b` → **`bg-linear-to-b`** kullan (Tailwind v4'te değişti)
 - `bg-gradient-to-r` → `bg-linear-to-r` vb.

@@ -3,7 +3,7 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 14 Eylül 2026.
+Son güncelleme: 18 Eylül 2026.
 
 ---
 
@@ -20,9 +20,8 @@ yeni video üretilip betik yeniden çalıştırılmalı; 25 Tem sonrası kartı
 olmayan günler dizinde hiç yok ve runner o günleri "dizinde yok" diye
 düşürür.
 
-YouTube videoları denetim bitene kadar gizli (kilitli) yükleniyor; onay
-gelince `YOUTUBE_GIZLILIK=public`. Onaydan önceki günlerin videoları
-istenirse yeniden yüklenebilir — dosyalar Mac'te.
+YouTube denetimi 15 Eyl'de geçildi; `YOUTUBE_GIZLILIK=public` ve çıkan
+Shorts'ların herkese açık olduğu dışarıdan doğrulandı.
 
 Tetikleyen **GitHub Actions** (özel depo `mizac-paylasim-durum`, her sabah
 10:00 Europe/Istanbul). Mac'teki launchd bilerek kapatıldı — madde 1.
@@ -31,7 +30,7 @@ Tetikleyen **GitHub Actions** (özel depo `mizac-paylasim-durum`, her sabah
 |---|---|---|
 | Instagram | Çalışıyor, gerçek post atıldı | Hayır |
 | TikTok | Çalışıyor (sandbox) | **Evet — günde bir dokunuş** |
-| YouTube | Kimlik tamam, denetim yok — video gizli kalır | Hayır |
+| YouTube | Denetim geçildi (15 Eyl), videolar herkese açık | Hayır |
 
 ---
 
@@ -499,6 +498,25 @@ kitap metni girmiyor. Ayrıntı CLAUDE.md → "KİTAP VEKİLDEN GELİYOR".
 
 Elenen seçenekler: alıntı dizinini public depoya koymak (telif), özel
 depodan indirmek (ayrı bir PAT gerektiriyordu).
+
+---
+
+## 8c. AdSense — inceleme sürüyor, bizden bekleyen iş yok (18 Eyl 2026)
+
+**Durum:** mizac.xyz panelde "Hazırlanıyor"; son güncelleme 30 Ağu 21:56'da
+donmuş, yani 18+ gündür inceleniyor. Onboarding "tüm adımları tamamladınız"
+diyor, ads.txt "Yetki verildi", reklam kutuları canlı sayfada basılıyor.
+Reklamın boş görünmesi bu yüzden: Google henüz onaylamadı. Panelde
+"incelemeye gönder" gibi bir düğme de yok.
+
+**18 Eyl'de yapılan:** `/iletisim` sayfası eklendi ve alt bilgiye İletişim +
+Hakkında linkleri kondu — inceleme ölçütlerinde "ziyaretçi sana nasıl
+ulaşacak" maddesi var ve sitede hiç iletişim sayfası yoktu. Bunun onayı
+hızlandıracağının garantisi yok; eksik olduğu içindi.
+
+**Beklerken yapılabilecek:** içerik hacmi ve özgünlüğü zaten yüksek (31 blog
+yazısı + onlarca sayfa). Onay birkaç hafta daha sürerse AdSense yardım
+formundan durum sorulabilir.
 
 ---
 

@@ -25,7 +25,14 @@ LOG=nobetci.log
 # taşındı; oraya geri konursa sorun geri gelir.
 if ! curl -s -o /dev/null -m 5 127.0.0.1:11434/api/tags; then
   echo "$(date -u +%FT%TZ) ollama ölü, başlatılıyor" >> "$LOG"
-  CUDA_VISIBLE_DEVICES=5 nohup ollama serve > ollama.log 2>&1 < /dev/null &
+  # KART SABİT DEĞİL, EN BOŞ OLAN SEÇİLİYOR (6 Eyl 2026).
+  # Önceden 5 yazıyordu. Makine paylaşımlı: başka bir kullanıcı 5. karta
+  # 28 GB'lık iş koyunca Ollama oraya ancak 540 MiB sığdırdı, model fiilen
+  # CPU'ya düştü ve hız 0.5 JETON/SN oldu. Danışman "çalışıyor" görünüyordu
+  # ama kullanılamaz haldeydi. Sabit kart er geç yanlış karta işaret eder.
+  KART=$(nvidia-smi --query-gpu=index,memory.free --format=csv,noheader,nounits | sort -t, -k2 -nr | head -1 | cut -d, -f1 | tr -d " ")
+  echo "$(date -u +%FT%TZ) secilen kart: ${KART:-5}" >> "$LOG"
+  CUDA_VISIBLE_DEVICES=${KART:-5} nohup "$HOME/llm/ollama/bin/ollama" serve > ollama.log 2>&1 < /dev/null &
   sleep 8
 fi
 
@@ -36,13 +43,18 @@ if ! curl -s -o /dev/null -m 5 -w '' 127.0.0.1:11500/api/tags; then
   sleep 2
 fi
 
-if ! pgrep -u "$USER" -f "cloudflare[d]" > /dev/null; then
-  ESKI=$(grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' tunel.log 2>/dev/null | tail -1)
+# $USER cron ortamında TANIMLI DEĞİL. Boş kullanıcıyla pgrep hep
+# başarısız dönüyordu, nöbetçi de her 5 dakikada bir "tünel ölü"
+# sanıp yenisini açıyordu — eskisini öldürmeden. 8 Eyl 2026'da
+# 2181 cloudflared süreci birikmişti ve tünel adresi her turda
+# değiştiği için danışman sürekli ölüyordu. id -un her yerde çalışır.
+if ! pgrep -u "$(id -un)" -f "cloudflare[d]" > /dev/null; then
+  ESKI=$(grep -o 'https://[a-z0-9]\+-[a-z0-9-]\+\.trycloudflare\.com' tunel.log 2>/dev/null | tail -1)
   echo "$(date -u +%FT%TZ) tünel ölü, başlatılıyor (önceki: $ESKI)" >> "$LOG"
   mv -f tunel.log "tunel-$(date +%s).log" 2>/dev/null
   nohup ~/bin/cloudflared tunnel --url http://127.0.0.1:11500 > tunel.log 2>&1 < /dev/null &
   sleep 15
-  YENI=$(grep -o 'https://[a-z0-9-]*\.trycloudflare\.com' tunel.log 2>/dev/null | head -1)
+  YENI=$(grep -o 'https://[a-z0-9]\+-[a-z0-9-]\+\.trycloudflare\.com' tunel.log 2>/dev/null | head -1)
   if [ "$YENI" != "$ESKI" ]; then
     echo "$(date -u +%FT%TZ) TÜNEL ADRESİ DEĞİŞTİ: $YENI — Vercel MIZAC_OLLAMA elle güncellenmeli!" >> "$LOG"
   fi

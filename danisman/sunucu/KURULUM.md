@@ -5,6 +5,28 @@
 
 Aşağısı hem nasıl kurulduğunu hem de bozulduğunda nasıl onarılacağını anlatıyor.
 
+## Sunucu gidip geri gelirse — tek komut
+
+```bash
+bash danisman/sunucu/sunucu-kur.sh --deneme     # ne yapacağını yazar, dokunmaz
+bash danisman/sunucu/sunucu-kur.sh --danisman   # yalnız danışman (~20-40 dk)
+bash danisman/sunucu/sunucu-kur.sh --tam        # + video/ses üretimi (+1-2 saat)
+```
+
+Mac'te çalışır, sunucuya kendisi bağlanır; tekrar çalıştırılabilir (var olanı
+atlar). Kurduğu şeyler: betikler, kitap metni, Ollama (`~/llm`, sudo yok),
+gemma3:27b, vekil anahtarı, cloudflared, crontab'daki nöbetçi, istenirse iki
+sanal ortam ve 315 tarif dosyası. Sonunda tünel adresini ve yeni anahtarı
+Vercel'e yazıp siteyi yeniden dağıtır.
+
+**Sunucu yokken ne bozulur:** yalnız `mizac.xyz/danisman` (model orada) ve
+yeni video/ses üretimi. **Bozulmayan:** günlük sosyal medya paylaşımı —
+videolar üretilmiş, medya GitHub Releases'te, zamanlayıcı GitHub Actions'ta.
+24 Tem 2027'ye kadarki takvim sunucuya hiç ihtiyaç duymuyor.
+
+**Süre indirmeden ibaret:** gemma3:27b 17 GB, Wan 2.2 ~32 GB, torch ~5 GB.
+"Hemen" olan kısım kurulum; beklenen kısım indirme.
+
 ## En kırılgan yer — önce bunu bil
 
 Tünel `trycloudflare.com` üzerinde **geçici** bir adres kullanıyor. Tünel

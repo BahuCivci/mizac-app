@@ -525,6 +525,25 @@ formundan durum sorulabilir.
 
 ---
 
+## 8d. Sunucudan ayrılıp geri dönmek — HAZIR (3 Eki 2026)
+
+**Soru:** Kapadokya sunucusundan bir süre çekilsek ne bozulur?
+**Cevap:** paylaşım bozulmaz, danışman durur. Ayrıntı CLAUDE.md.
+
+**Geri dönüş:** `bash danisman/sunucu/sunucu-kur.sh --deneme` (önce bu),
+sonra `--danisman` ya da `--tam`. Mac'ten çalışır, tekrar çalıştırılabilir.
+
+**Çekilmeden önce yapılacak tek şey kalmadı** — sunucudaki 23 betik, üç
+ortamın paket listesi ve tarifler artık depoda/Mac'te. Sunucuda SAKLANMASI
+gereken bir şey yok: modeller yeniden inebilir, anahtar yeniden üretilir
+(betik Vercel'i de günceller).
+
+**Geri dönünce kontrol:** `python3 -m paylasim.durum` (paylaşım zaten
+çalışıyor olmalı) ve danışmana bir soru sor — ilk cevap model yüklenirken
+15-20 sn sürebilir.
+
+---
+
 ## 9. Şifre değiştir — iş bitince
 
 VPN (`mta.vpn@kun.edu.tr`) ve sunucu (`mta_kullanici`) şifreleri 6 Eylül'de

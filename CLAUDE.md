@@ -122,6 +122,23 @@ model çağrılarının anahtarı kullanılıyor. Public depoya kitap girmiyor.
 Başarısızlık önbelleğe alınmıyor: geçici ağ hatası kitabı kalıcı kapatmasın.
 Alternatif (özel depodan indirmek) elendi: ayrı bir PAT gerekiyordu.
 
+**SUNUCU GİDERSE: paylaşım değil, DANIŞMAN durur (3 Eki 2026'da çıkarıldı).**
+Üniversite hesabı kapanırsa ya da bir süre kullanılmazsa duran şeyler:
+`mizac.xyz/danisman` (model orada) ve yeni video/ses üretimi. Günlük paylaşım
+etkilenmez: videolar üretilmiş, medya GitHub Releases'te, zamanlayıcı GitHub
+Actions'ta — takvim 24 Tem 2027'ye kadar sunucusuz yürür. Geri dönüş tek
+komut: `bash danisman/sunucu/sunucu-kur.sh --danisman` (ayrıntı KURULUM.md).
+
+**SUNUCUDAKİ BETİKLERİN YARISI DEPODA YOKTU (3 Eki 2026).** 23 betiğin 14'ü
+yalnız sunucuda duruyordu; hesap silinse geri getirilemezdi. Hepsi
+`danisman/sunucu/` altına alındı (deneme/onarım artıkları `eski/` içinde),
+üç sanal ortamın paket sürümleri `gereksinimler/` altına donduruldu.
+**Daha kötüsü: depodaki `nobetci.sh` ESKİYDİ** — sunucudaki sürümde olan üç
+düzeltme (en boş kartı seçme, cron'da `$USER` boş olduğu için 2181 süreç
+biriktiren hatanın onarımı, adres deseni) depoda yoktu, yani "yedek" geri
+kurulsa o hatalar geri gelirdi. Sunucuda bir betiği elle düzeltirsen
+depodakini de güncelle; ikisi sessizce ayrışıyor.
+
 **Ollama'nın kartı ARTIK SABİT DEĞİL — en boşu seçiliyor.** 6 Eyl 2026'da
 ölçüldü: `CUDA_VISIBLE_DEVICES=5` yazılıydı, ama başka bir kullanıcı
 (`ahmet_ozcan`) 5. karta 28 GB'lık bir iş koymuştu. Ollama oraya ancak

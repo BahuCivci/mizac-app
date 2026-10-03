@@ -221,6 +221,21 @@ else
   yaz "   vercel bulunamadı; adresi elle yaz: $ADRES"
 fi
 
+# --- 9b. Mac'teki ajanlar ----------------------------------------------------
+# Sunucudan çekilirken durdurulmuşlardı (3 Eki 2026): tünel adresini güncelleyen
+# ajan ve SSH tüneli. Sunucu geri geldiğinde ikisi de gerekli.
+yaz "== Mac'teki ajanlar"
+for a in xyz.mizac.tunel xyz.mizac.tunel-adres; do
+  if launchctl print "gui/$(id -u)/$a" >/dev/null 2>&1; then
+    yaz "   $a zaten yüklü"
+  elif [ -f "$HOME/Library/LaunchAgents/$a.plist" ]; then
+    launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/$a.plist" 2>/dev/null \
+      && yaz "   $a yüklendi"
+  else
+    yaz "   $a.plist yok — depodan kopyala: danisman/sunucu/$a.plist"
+  fi
+done
+
 # --- 10. Doğrulama -----------------------------------------------------------
 yaz "== doğrulama"
 yaz "   ollama : $(uzak "curl -s -o /dev/null -w %{http_code} -m 10 127.0.0.1:11434/api/tags")"

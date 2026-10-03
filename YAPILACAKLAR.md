@@ -525,7 +525,24 @@ formundan durum sorulabilir.
 
 ---
 
-## 8d. Sunucudan ayrılıp geri dönmek — HAZIR (3 Eki 2026)
+## 8d. Sunucudan ÇEKİLDİK (3 Eki 2026) — geri dönüş tek komut
+
+**Yapıldı:** sunucudaki proje dosyalarının tamamı silindi (121 GB boşaldı),
+süreçler durduruldu, crontab temizlendi, Mac'teki iki tünel ajanı kapatıldı.
+Sunucuda duran tek şey ONLARIN Ollama kurulumu ve modelleri (8 Haz tarihli,
+bizden önce vardı) — onlara dokunulmadı, Vulkan kütüphaneleri de yerine kondu.
+
+**Şu an:** danışman kapalı ("Danışmana şu an ulaşılamıyor" diyor, çökmüyor).
+Paylaşım normal çalışıyor ve 24 Tem 2027'ye kadar sunucuya ihtiyacı yok.
+
+**Geri dönerken:** `bash danisman/sunucu/sunucu-kur.sh --deneme` ile başla,
+sonra `--danisman` (~20-40 dk) ya da `--tam` (+1-2 saat). Betik Mac'teki iki
+ajanı da geri açıyor ve Vercel'i yeni adres/anahtarla güncelliyor.
+
+**Kalan tek yük:** VPN nöbetçisi (`xyz.mizac.vpn-saglik`) hâlâ çalışıyor ve
+VPN kopunca yeniden bağlıyor. Sunucu kullanılmadığı sürece gereksiz; kapatmak
+istersen `sudo launchctl bootout system/xyz.mizac.vpn-saglik` (geri açmak:
+`danisman/sunucu/vpn-saglik-kur.sh`).
 
 **Soru:** Kapadokya sunucusundan bir süre çekilsek ne bozulur?
 **Cevap:** paylaşım bozulmaz, danışman durur. Ayrıntı CLAUDE.md.

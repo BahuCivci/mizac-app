@@ -122,6 +122,18 @@ model çağrılarının anahtarı kullanılıyor. Public depoya kitap girmiyor.
 Başarısızlık önbelleğe alınmıyor: geçici ağ hatası kitabı kalıcı kapatmasın.
 Alternatif (özel depodan indirmek) elendi: ayrı bir PAT gerekiyordu.
 
+**SUNUCUDAN ÇEKİLDİK — 3 Eki 2026.** Üniversite makinesinde projeye ait
+hiçbir şey kalmadı: `~/mizac-lab` (86 GB), HuggingFace önbelleği (36 GB),
+cloudflared ve crontab'daki nöbetçi silindi, vekil ile tünel süreçleri
+durduruldu; 121 GB boşaldı. **Dokunulmayanlar bilerek:** `~/.ollama`
+(201 GB model) ve `~/llm`'deki Ollama ikilisi — ikisi de 8 Haz 2026 tarihli,
+yani projeden önce oradaydı ve bizim değil. Kurulumlarından çıkardığımız
+Vulkan kütüphanesi de yerine kondu, makine bulduğumuz hâle döndü.
+Mac'te `xyz.mizac.tunel` ve `xyz.mizac.tunel-adres` ajanları durduruldu;
+`xyz.mizac.medya-pencere` AÇIK kalmalı, paylaşımı o besliyor.
+Sonuç: `mizac.xyz/danisman` şu an "ulaşılamıyor" diyor (düzgün hata, çökme
+değil), paylaşım etkilenmedi. Geri dönüş: `bash danisman/sunucu/sunucu-kur.sh`.
+
 **SUNUCU GİDERSE: paylaşım değil, DANIŞMAN durur (3 Eki 2026'da çıkarıldı).**
 Üniversite hesabı kapanırsa ya da bir süre kullanılmazsa duran şeyler:
 `mizac.xyz/danisman` (model orada) ve yeni video/ses üretimi. Günlük paylaşım

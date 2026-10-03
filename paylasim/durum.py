@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import subprocess
 import sys
+import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -72,6 +73,41 @@ def ozel_durum(depo: Path = OZEL_DEPO) -> tuple[Path | None, Path | None, str]:
     return defter_yol, token, "" if tamam else "özel depo çekilemedi — son çekilen hâl okunuyor"
 
 
+def medya_var_mi(url: str, ac=None, bekle: float = 1.0) -> str:
+    """
+    Dosya barındırmada duruyor mu — "var" | "yok" | "bilinmiyor".
+
+    NEDEN ÜÇ DURUM (3 Eki 2026): GitHub release dosyaları ara sıra 500
+    dönüyor. Ölçüldü: 27 HEAD isteğinin 16.'sı 500 aldı, aynı dosya saniyeler
+    sonra ve `curl` ile 200 veriyordu. Eskiden 200 dışındaki HER yanıt
+    "dosya yok" sayılıyordu; rapor "medya penceresi 5 gün yetiyor" diye
+    yanlış alarm verdi, gerçek 21+ gündü. Yanlış alarm sessiz arızadan daha
+    az zararlı değil: iki kez bağırırsa üçüncüde kimse bakmaz.
+
+    Yalnız 404/410 yokluktur. 5xx/429 bir kez daha denenir; yine olmazsa
+    cevap "bilinmiyor" — rapor o zaman "ölçülemedi" der, gün uydurmaz.
+    """
+    from urllib.error import HTTPError, URLError
+    from urllib.request import Request, urlopen
+
+    ac = ac or (lambda u: urlopen(Request(u, method="HEAD"), timeout=15))
+    for deneme in range(2):
+        try:
+            with ac(url) as c:
+                if c.status == 200:
+                    return "var"
+                kod = c.status
+        except HTTPError as e:
+            kod = e.code
+        except (URLError, TimeoutError, OSError):
+            return "bilinmiyor"
+        if kod in (404, 410):
+            return "yok"
+        if deneme == 0 and bekle:
+            time.sleep(bekle)
+    return "bilinmiyor"
+
+
 def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
     """
     Blob'daki videolar kaç gün ileriye yetiyor — ölçerek.
@@ -84,9 +120,6 @@ def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
 
     İlk eksik günü buluyor; hepsi yerindeyse None döndürüyor.
     """
-    from urllib.error import HTTPError, URLError
-    from urllib.request import Request, urlopen
-
     try:
         temel = secenek("MEDYA_TABAN_URL", "").rstrip("/")
     except Exception:
@@ -114,13 +147,10 @@ def pencere_ucu(bugun: date, taban, paylasilan=None) -> tuple[int | None, str]:
                 if dosya.suffix.lower() not in (".png", ".jpg", ".jpeg", ".mp4"):
                     continue
                 url = medya_adresi(temel, gun, is_.klasor.name, dosya.name, duzen)
-                try:
-                    with urlopen(Request(url, method="HEAD"), timeout=15) as c:
-                        if c.status == 200:
-                            continue
-                except HTTPError:
-                    pass
-                except (URLError, TimeoutError, OSError):
+                sonuc = medya_var_mi(url)
+                if sonuc == "var":
+                    continue
+                if sonuc == "bilinmiyor":
                     return None, "medya barındırmasına ulaşılamadı, pencere ölçülemedi"
                 return ileri, f"{gun}/{is_.klasor.name}/{dosya.name}"
     return None, ""

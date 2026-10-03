@@ -142,5 +142,66 @@ class VideoTesti(Temel):
         self.assertNotIn("video.mp4 yok", self.rapor())
 
 
+class SahteCevap:
+    """`urlopen` gibi davranan en küçük şey: durum kodu ve bağlam yöneticisi."""
+
+    def __init__(self, kod):
+        self.status = kod
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+
+class MedyaVarMiTesti(unittest.TestCase):
+    """
+    GitHub release dosyaları ara sıra 500 dönüyor (3 Eki 2026'da ölçüldü:
+    27 istekten biri). Geçici hatayı "dosya yok" saymak raporu yanlış
+    alarma düşürüyordu — "pencere 5 gün" dedi, gerçek 21+ gündü.
+    """
+
+    def test_ikiyuz_var(self):
+        self.assertEqual(durum.medya_var_mi("u", lambda u: SahteCevap(200)), "var")
+
+    def test_dortyuzdort_yok(self):
+        from urllib.error import HTTPError
+
+        def ac(u):
+            raise HTTPError(u, 404, "yok", {}, None)
+
+        self.assertEqual(durum.medya_var_mi("u", ac, bekle=0), "yok")
+
+    def test_besyuz_sonra_ikiyuz_var(self):
+        from urllib.error import HTTPError
+        kodlar = [500, 200]
+
+        def ac(u):
+            kod = kodlar.pop(0)
+            if kod >= 500:
+                raise HTTPError(u, kod, "sunucu", {}, None)
+            return SahteCevap(kod)
+
+        self.assertEqual(durum.medya_var_mi("u", ac, bekle=0), "var")
+
+    def test_israrli_besyuz_bilinmiyor(self):
+        from urllib.error import HTTPError
+
+        def ac(u):
+            raise HTTPError(u, 500, "sunucu", {}, None)
+
+        # "yok" DEĞİL: olmayan bir eksik gün uydurmaktansa ölçemediğini söyle.
+        self.assertEqual(durum.medya_var_mi("u", ac, bekle=0), "bilinmiyor")
+
+    def test_ulasilamiyorsa_bilinmiyor(self):
+        from urllib.error import URLError
+
+        def ac(u):
+            raise URLError("ağ yok")
+
+        self.assertEqual(durum.medya_var_mi("u", ac, bekle=0), "bilinmiyor")
+
+
 if __name__ == "__main__":
     unittest.main()

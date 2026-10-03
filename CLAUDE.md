@@ -360,6 +360,17 @@ için dosyayı indirmek zorunda. Instagram'ın doğrudan yükleme yolu
 açık; biz Instagram Login yolundayız (hesap Creator, Facebook Sayfası yok —
 App Review'u atlayan şey bu). Belgeden doğrulandı.
 
+**SAĞLIK RAPORU GEÇİCİ 500'Ü "DOSYA YOK" SAYIYORDU (3 Eki 2026).** GitHub
+release dosyaları ara sıra 500 dönüyor: 27 HEAD isteğinin 16.'sı 500 aldı,
+aynı dosya saniyeler sonra ve `curl` ile 200 verdi. Rapor 200 dışındaki her
+yanıtı yokluk saydığı için "Medya penceresi: 5 gün yetiyor" dedi — gerçek
+22 gündü ve `icerik/pencere.py` "76 dosya gerekli, 76'sı release'te" diyordu.
+İki ölçüm çeliştiğinde ikisini de doğrula. Artık `durum.medya_var_mi` üç
+durum döndürüyor: yalnız 404/410 "yok", 5xx/429 bir kez daha deneniyor,
+yine olmazsa "bilinmiyor" ve rapor gün uydurmak yerine "ölçülemedi" diyor.
+Yanlış alarm sessiz arıza kadar zararlı: iki kez bağıran rapora üçüncüde
+kimse bakmaz.
+
 **Mac 21 günden uzun kapalı kalırsa** o günün medyası release'te olmaz ve
 runner indirmede GÜRÜLTÜLÜ düşer. `python3 -m paylasim.durum` her oturumda
 "Medya penceresi: N gün yetiyor" diye kalan tamponu yazıyor.
@@ -560,6 +571,14 @@ ETMEDİ (`runs = 0`). Belgelerin vaadi buydu, pratikte olmadı. Bu yüzden
 `StartInterval 3600` eklendi — makine gün içinde bir kez uyanırsa gönderi
 çıkıyor. Fazladan çalışma zararsız: defter aynı postu iki kez atmıyor.
 Bedeli, Mac 10:00'da uykudaysa postun daha geç saatte çıkması.
+
+**PROJE ARTIK `~/mizac-app` (3 Eki 2026).** `~/Documents`'tan taşındı:
+aşağıdaki TCC tuzaklarının tamamı o klasörden geliyordu ve ev dizini korumalı
+değil. Taşıma `mv` ile anında oldu (aynı APFS bölümü), 314 videonun sabit
+bağlantıları korundu. Üç launchd plist'i, `.claude/` komutları ve iki betik
+yeni yola çevrildi; `launchctl kickstart` ile medya penceresi yeni konumdan
+hatasız koştu. Aşağısı TARİHÇE olarak duruyor: `/bin/bash`'in Tam Disk
+Erişimi hâlâ verili ve zamanlanmış işler hâlâ bash üzerinden çağrılıyor.
 
 **TCC tuzağı — tekrar kurulursa gerekecek.** macOS `~/Documents`'ı koruyor ve
 zamanlanmış iş terminalin iznini devralmıyor. İzin verilmeden şöyle görünüyor:

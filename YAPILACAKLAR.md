@@ -3,13 +3,18 @@
 Bağlam sıkıştığında ya da yeni bir oturum açıldığında **önce burayı oku**.
 Ayrıntı `CLAUDE.md`, `paylasim/README.md` ve `paylasim/basvuru.md`'de.
 
-Son güncelleme: 18 Eylül 2026.
+Son güncelleme: 3 Ekim 2026.
 
 ---
 
 ## Şu an çalışan sistem
 
 `paylasim/` modülü Publer'ın yerini aldı. Kontrol: `python3 -m paylasim.durum`.
+
+**Proje 3 Eki 2026'da `~/Documents/mizac-app`'ten `~/mizac-app`'e taşındı.**
+Sebep: macOS `~/Documents`'ı koruyor, zamanlanmış işler orayı okumakta
+sürekli takılıyordu. Launchd ajanları, `.claude/` komutları ve betikler yeni
+yola çevrildi; doğrulandı (ajan kickstart'ta 0 ile bitti, 206 test geçti).
 
 **15 Eyl 2026'dan itibaren her gün aynı kitap videosu üç platforma**
 (Reels + TikTok + Shorts); kartlar olduğu günlerde Instagram'a ikinci

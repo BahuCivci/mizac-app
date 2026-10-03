@@ -7,7 +7,7 @@
 
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/bahu/Documents/mizac-app/paylasim/gunluk-calistir.sh</string>
+    <string>/Users/bahu/mizac-app/paylasim/gunluk-calistir.sh</string>
   </array>
 
   <!-- Tercih edilen saat: 10:00. -->

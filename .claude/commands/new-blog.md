@@ -9,12 +9,12 @@ argument-hint: <konu>
 
 ## Mevcut blog yazıları
 ```!
-grep "slug:" /Users/bahu/Documents/mizac-app/lib/blog-data.ts | head -35
+grep "slug:" /Users/bahu/mizac-app/lib/blog-data.ts | head -35
 ```
 
 ## BlogYazisi tipi
 ```!
-head -25 /Users/bahu/Documents/mizac-app/lib/blog-data.ts
+head -25 /Users/bahu/mizac-app/lib/blog-data.ts
 ```
 
 `lib/blog-data.ts` içindeki `blogYazilari` dizisinin **başına** yeni bir yazı ekle.

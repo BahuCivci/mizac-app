@@ -9,7 +9,7 @@ argument-hint: <slug>
 
 ## Mevcut sayfa içeriği
 ```!
-cat /Users/bahu/Documents/mizac-app/app/$ARGUMENTS/layout.tsx 2>/dev/null || echo "layout.tsx bulunamadı"
+cat /Users/bahu/mizac-app/app/$ARGUMENTS/layout.tsx 2>/dev/null || echo "layout.tsx bulunamadı"
 ```
 
 `app/$ARGUMENTS/opengraph-image.tsx` dosyasını oluştur.

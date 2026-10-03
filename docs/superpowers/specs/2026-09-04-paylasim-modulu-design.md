@@ -195,7 +195,7 @@ Hatalar bugünkü `Durdur` istisnasıyla taşınıyor; sınıf `http.py`'a geçi
 ## Cron
 
 ```
-0 10 * * *  cd /Users/bahu/Documents/mizac-app && \
+0 10 * * *  cd /Users/bahu/mizac-app && \
             /usr/bin/python3 -m paylasim.paylas --gercek >> paylasim/veri/gun.log 2>&1
 ```
 

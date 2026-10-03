@@ -84,7 +84,7 @@ Bu görev `icerik/paylas.py`'ı `git mv` ile taşıyor ki geçmiş takip etsin, 
 - [ ] **Step 1: Bugünkü çıktıyı kaydet (regresyon çıpası)**
 
 ```bash
-cd /Users/bahu/Documents/mizac-app
+cd /Users/bahu/mizac-app
 MEDYA_TABAN_URL=https://6khfg6gwjc8v5js8.public.blob.vercel-storage.com \
   python3 icerik/paylas.py --gun 2026-08-24 > /tmp/paylas-onceki.txt 2>&1
 cat /tmp/paylas-onceki.txt
@@ -2670,7 +2670,7 @@ yenileyemezse **hiçbir şey paylaşmıyor**.
 
 ### 3. Cron
 
-    0 10 * * *  cd /Users/bahu/Documents/mizac-app && \
+    0 10 * * *  cd /Users/bahu/mizac-app && \
                 /usr/bin/python3 -m paylasim.paylas --gercek \
                 >> paylasim/veri/gun.log 2>&1
 

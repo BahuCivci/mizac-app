@@ -16,7 +16,7 @@ diye bu komut var.
 ## Sırada ne var
 
 ```!
-cd /Users/bahu/Documents/mizac-app && python3 icerik/sirada.py
+cd /Users/bahu/mizac-app && python3 icerik/sirada.py
 ```
 
 ## Ne yapmalı

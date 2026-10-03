@@ -13,7 +13,7 @@ hiçbir şey gitmez, hiçbir servise ödeme yapılmaz.
 ## Durum
 
 ```!
-cd /Users/bahu/Documents/mizac-app
+cd /Users/bahu/mizac-app
 if [ ! -d icerik/cikti/gunluk ]; then
   echo "İçerik üretilmemiş. Önce: npm run icerik"
 else

@@ -18,7 +18,7 @@
       "Bash(git push:*)",
       "Bash(vercel --prod --yes)",
       "Bash(vercel --version)",
-      "Bash(ls /Users/bahu/Documents/mizac-app/app/**)",
+      "Bash(ls /Users/bahu/mizac-app/app/**)",
       "Bash(mkdir -p:*)",
       "Bash(chmod +x:*)",
       "Bash(npm run icerik:*)",
@@ -42,11 +42,11 @@
       "Bash(open:*)"
     ],
     "additionalDirectories": [
-      "/Users/bahu/Documents/mizac-app/app",
-      "/Users/bahu/Documents/mizac-app/lib",
-      "/Users/bahu/Documents/mizac-app/components",
-      "/Users/bahu/Documents/mizac-app/tests",
-      "/Users/bahu/Documents/mizac-app/kaynak"
+      "/Users/bahu/mizac-app/app",
+      "/Users/bahu/mizac-app/lib",
+      "/Users/bahu/mizac-app/components",
+      "/Users/bahu/mizac-app/tests",
+      "/Users/bahu/mizac-app/kaynak"
     ]
   },
   "mcpServers": {

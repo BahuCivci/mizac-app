@@ -38,7 +38,7 @@
   <array>
     <string>/bin/bash</string>
     <string>-c</string>
-    <string>/usr/bin/python3 /Users/bahu/Documents/mizac-app/icerik/pencere.py; exit $?</string>
+    <string>/usr/bin/python3 /Users/bahu/mizac-app/icerik/pencere.py; exit $?</string>
   </array>
 
   <key>RunAtLoad</key>

@@ -25,7 +25,7 @@ set -u
 # düşüyor. 10 Eyl 2026'da tam bu oldu: ajan adresi güncelleyemedi, danışman
 # eskimiş adresle saatlerce ölü kaldı.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-KOK="$HOME/Documents/mizac-app"
+KOK="$HOME/mizac-app"
 SUNUCU="mta_kullanici@192.168.1.40"
 LOG="/tmp/mizac-tunel-adres.log"
 SON="$HOME/.mizac-son-tunel-adresi"

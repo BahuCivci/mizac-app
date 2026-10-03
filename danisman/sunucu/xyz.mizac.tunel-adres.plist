@@ -25,7 +25,7 @@
   <key>ProgramArguments</key>
   <array>
     <string>/bin/bash</string>
-    <string>/Users/bahu/Documents/mizac-app/danisman/sunucu/tunel-adres-guncelle.sh</string>
+    <string>/Users/bahu/mizac-app/danisman/sunucu/tunel-adres-guncelle.sh</string>
   </array>
 
   <key>RunAtLoad</key>

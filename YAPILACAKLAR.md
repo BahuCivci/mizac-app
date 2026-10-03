@@ -449,7 +449,7 @@ uyku arasındaki başarısızlıkları "üst üste" sayıyor. Mac pilde ve uyku
 boşuna yeniden başlatıldı. Depodaki betik düzeltildi (son başarısızlık
 300 sn'den eskiyse seri sıfırlanıyor). Zararı küçük — o anlarda VPN zaten
 kopuk — ama kurulum aynı tek komut:
-`cd /Users/bahu/Documents/mizac-app && sudo bash danisman/sunucu/vpn-saglik-kur.sh`
+`cd /Users/bahu/mizac-app && sudo bash danisman/sunucu/vpn-saglik-kur.sh`
 
 Sebebi 7 Eylül'de görüldü: VPN süreci yaşıyordu, `ppp0` ayaktaydı, log
 "Tunnel is up" diyordu ama tek paket geçmiyordu. Eski nöbetçi yalnız süreç

@@ -9,7 +9,7 @@ argument-hint: [pages|forms|flow|all]
 
 ## Mevcut test durumu
 ```!
-cd /Users/bahu/Documents/mizac-app && ls tests/
+cd /Users/bahu/mizac-app && ls tests/
 ```
 
 Argüman: **$ARGUMENTS**

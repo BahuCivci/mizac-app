@@ -9,12 +9,12 @@ argument-hint: <slug>
 
 ## Mevcut proje durumu
 ```!
-cd /Users/bahu/Documents/mizac-app && echo "Mevcut sayfalar:" && ls app/ | grep -v "\." | sort
+cd /Users/bahu/mizac-app && echo "Mevcut sayfalar:" && ls app/ | grep -v "\." | sort
 ```
 
 ## Sitemap mevcut URL'leri
 ```!
-grep "siteUrl}" /Users/bahu/Documents/mizac-app/app/sitemap.ts | head -20
+grep "siteUrl}" /Users/bahu/mizac-app/app/sitemap.ts | head -20
 ```
 
 `$ARGUMENTS` slug'ı için şu dosyaları oluştur:

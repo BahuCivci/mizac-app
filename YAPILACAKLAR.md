@@ -7,6 +7,25 @@ Son güncelleme: 3 Ekim 2026.
 
 ---
 
+## PAYLAŞIM DURDURULDU — 4 Eki 2026
+
+Kullanıcı: "artık mizaçla ilgili sosyal medyada paylaşımlar yapmanı
+istemiyorum çünkü videolar çok abuk sabuk ve izleyici yok."
+
+Kapatılanlar: GitHub Actions iş akışı (`disabled_manually`), Mac'teki
+`xyz.mizac.medya-pencere` ajanı (plist `.devre-disi`). Son çıkan gönderiler
+4 Eki sabahı (Reels + TikTok + Shorts). Hiçbir içerik silinmedi: 313 günlük
+video, kartlar, içerik dizini ve GitHub Releases'teki medya duruyor.
+
+**Yeniden açmak:** `gh workflow enable "Günlük paylaşım" -R
+BahuCivci/mizac-paylasim-durum` + plist adını eski hâline getirip
+`launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/xyz.mizac.medya-pencere.plist`.
+Defter aynı gönderiyi iki kez atmaz, yani ara verilen günler atlanır.
+
+Aşağısı durdurulmadan önceki düzeni anlatıyor; tarihçe olarak duruyor.
+
+---
+
 ## Şu an çalışan sistem
 
 `paylasim/` modülü Publer'ın yerini aldı. Kontrol: `python3 -m paylasim.durum`.
